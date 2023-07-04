@@ -1,0 +1,14 @@
+{
+  "languages": [
+    "java"
+  ],
+  "build": [
+    {
+      "tool": "maven",
+      "command": ". mvn clean install -DskipTests=true -Dfindbugs.skip=true -DskipITs=true -Dcheckstyle.skip -Dspotbugs.skip -Dpmd.skip -Dclirr.skip -Djacoco.skip -Dmaven.javadoc.skip -Dmaven.source.skip=true -Dmaven.wagon.http.retryHandler.count=3 -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.test.skip -Dmaven.exec.skip.swagger=true -Denforcer.skip=true -Ddockerfile.build.skip=true -Ddocker.skip -Dskip.npm -Dskip.yarn -Dskip.bower -Dskip.grunt -Dskip.gulp -Dskip.jspm -Dskip.karma -Dskip.webpack -Dmaven.gitcommitid.skip=true -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DrpmPackagePhase=none"
+    }
+  ],
+  "dependencies": {
+    "jdk": 17
+  }
+}

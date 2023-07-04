@@ -1,0 +1,89 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#email-service]
+== Email Service
+
+Spring has a built-in support to send e-mails based on the https://www.oracle.com/technetwork/java/javamail/index.html[Java Mail API] to avoid any static method calls while using the Java Mail API. This section illustrates samples to configure `JavaMailSender` to work with OCI Email Service.
+
+=== Configuring the mail sender
+
+Maven coordinates,
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+
+Once the dependency is in place, the next step is to specify the mail server properties in the application.properties file using the spring.mail.* namespace.
+
+We can specify the properties for the OCI Email Service SMTP server this way:
+
+```
+spring.mail.host=smtp.email.<REGION>.oci.oraclecloud.com
+spring.mail.port=587
+spring.mail.username=<login user to smtp server>
+spring.mail.password=<login password to smtp server>
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+```
+
+Replace `<REGION>` with actual region identifier (eg: us-ashburn-1) where the email service configured.
+
+=== Sending Simple Emails
+
+Once dependency management and configuration are in place, we can use the `JavaMailSender` to send an email as below.
+
+```
+@Component
+public class EmailServiceImpl implements EmailService {
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    public void sendSimpleMessage(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage(); 
+        message.setFrom("<FROM_ADDRESS>");
+        message.setTo(to); 
+        message.setSubject(subject); 
+        message.setText(text);
+        emailSender.send(message);
+    }
+}
+```
+
+Note that the `<FROM_ADDRESS>` should match to the approved senders of the OCI email service.
+
+=== Sending with attachments
+
+We can send mails with attachments as below.
+
+```
+@Component
+public class EmailServiceImpl implements EmailService {
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    public void sendMailMessage() {
+        this.emailSender.send(new MimeMessagePreparator() {
+
+            @Override
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper helper =
+                    new MimeMessageHelper(mimeMessage, true, "UTF-8");
+                helper.addTo("foo@bar.com");
+                helper.setFrom("bar@baz.com");
+                helper.addAttachment("test.txt", ...);
+                helper.setSubject("test subject with attachment");
+                helper.setText("mime body", false);
+            }
+        });
+    }
+}
+```
+
+=== Email Service References
+
+* https://blogs.oracle.com/cloud-infrastructure/post/step-by-step-instructions-to-send-email-with-oci-email-delivery[Configuring Email Service]

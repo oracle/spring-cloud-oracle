@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2023, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.oracle.cloud.spring</groupId>
+    <artifactId>spring-cloud-oci</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <licenses>
+        <license>
+            <name>The Universal Permissive License (UPL), Version 1.0</name>
+            <url>https://oss.oracle.com/licenses/upl/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <modules>
+        <module>spring-cloud-oci-core</module>
+        <module>spring-cloud-oci-autoconfigure</module>
+        <module>spring-cloud-oci-samples</module>
+        <module>spring-cloud-oci-starters</module>
+        <module>spring-cloud-oci-storage</module>
+        <module>spring-cloud-oci-notification</module>
+        <module>spring-cloud-oci-logging</module>
+        <module>docs</module>
+    </modules>
+    <properties>
+        <tomcat.version>8.0.33</tomcat.version>
+        <javax-mail.version>1.5.5</javax-mail.version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+        <javax.activation.version>1.2.0</javax.activation.version>
+        <spring-cloud-commons.version>3.1.0</spring-cloud-commons.version>
+        <testcontainers.version>1.17.2</testcontainers.version>
+        <spotless.version>2.22.0</spotless.version>
+        <awssdk.version>2.17.172</awssdk.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.33</version>
+        </dependency>
+    </dependencies>
+
+    <!-- <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+	</build> -->
+
+    <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.1</version>
+				<configuration>
+					<skip>false</skip>
+					<links>
+						<link>https://docs.oracle.com/javase/8/docs/api/</link>
+						<link>https://javaee.github.io/javaee-spec/javadocs/</link>
+						<link>https://fasterxml.github.io/jackson-core/javadoc/2.8/</link>
+						<link>https://docs.spring.io/spring/docs/5.3.x/javadoc-api/</link>
+					</links>
+					<author>true</author>
+					<header>${project.name}</header>
+					<reportOutputDirectory>${project.build.directory}/site/${project.version}/apidocs</reportOutputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+    <profiles>
+        <profile>
+			<id>docs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<skip>false</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+    </profiles>
+
+</project>
