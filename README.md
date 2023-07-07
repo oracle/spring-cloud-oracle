@@ -2,6 +2,12 @@
 
 [![License: UPL](https://img.shields.io/badge/license-UPL-green)](https://img.shields.io/badge/license-UPL-green)
 
+> **Warning**  
+>
+> Code in this repository is work-in-progress and has not been released officially.
+> 
+> Not recommended for personal or production use at this point.
+
 ## Introduction
 Spring Cloud for OCI, eases the integration with OCI services with the help of OCI Java SDK internally. It offers a convenient way to interact with OCI-provided services using well-known Spring idioms and APIs, such as the messaging or storage API. Developers can build their applications around the hosted services without having to care about infrastructure or maintenance. Spring Cloud for OCI contains auto-configuration support for OCI-managed services.
 
