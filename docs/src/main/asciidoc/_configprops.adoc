@@ -1,0 +1,22 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+|===
+|Name | Default | Description
+
+|spring.cloud.oci.config.profile | `DEFAULT` |  
+|spring.cloud.oci.config.file |  |  
+|spring.cloud.oci.config.type |  |
+|spring.cloud.oci.config.userId |  |  
+|spring.cloud.oci.config.tenantId |  |  
+|spring.cloud.oci.config.fingerprint |  |  
+|spring.cloud.oci.config.privateKey |  |  
+|spring.cloud.oci.config.passPhrase |  |
+|spring.cloud.oci.config.region |  |
+|spring.cloud.oci.region.staticRegion |  |  
+|spring.cloud.oci.compartment.staticCompartment |  |  
+|spring.cloud.oci.storage.enabled | `true` |
+|spring.cloud.oci.notification.enabled | `true` |
+|spring.cloud.oci.logging.enabled | `true` |
+
+|===
