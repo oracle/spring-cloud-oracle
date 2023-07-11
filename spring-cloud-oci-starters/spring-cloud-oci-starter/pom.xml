@@ -10,10 +10,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <artifactId>spring-cloud-oci-starters</artifactId>
         <groupId>com.oracle.cloud.spring</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <licenses>
         <license>
             <name>The Universal Permissive License (UPL), Version 1.0</name>
@@ -28,7 +28,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <dependency>
             <groupId>com.oracle.cloud.spring</groupId>
             <artifactId>spring-cloud-oci-autoconfigure</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

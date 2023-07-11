@@ -10,12 +10,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <groupId>com.oracle.cloud.spring</groupId>
         <artifactId>spring-cloud-oci-samples</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
 <!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
     </parent>
     <groupId>com.oracle.cloud.spring.sample.s3</groupId>
     <artifactId>spring-cloud-oci-s3-sample</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>spring-cloud-oci-s3-sample</name>
     <description>spring-cloud-oci-s3-sample</description>
     <licenses>
@@ -32,7 +32,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <dependency>
             <groupId>com.oracle.cloud.spring</groupId>
             <artifactId>spring-cloud-oci-starter-storage</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
