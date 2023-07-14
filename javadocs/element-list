@@ -3,9 +3,5 @@ com.oracle.cloud.spring.core.compartment
 com.oracle.cloud.spring.core.region
 com.oracle.cloud.spring.core.util
 com.oracle.cloud.spring.logging
-com.oracle.cloud.spring.logging.springcloudociloggingsample
 com.oracle.cloud.spring.notification
-com.oracle.cloud.spring.notification.springcloudocinotificationsample
-com.oracle.cloud.spring.sample.email
-com.oracle.cloud.spring.sample.s3.springcloudocis3sample
 com.oracle.cloud.spring.storage
