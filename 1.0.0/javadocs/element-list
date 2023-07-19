@@ -1,0 +1,7 @@
+com.oracle.cloud.spring.autoconfigure.core
+com.oracle.cloud.spring.core.compartment
+com.oracle.cloud.spring.core.region
+com.oracle.cloud.spring.core.util
+com.oracle.cloud.spring.logging
+com.oracle.cloud.spring.notification
+com.oracle.cloud.spring.storage
