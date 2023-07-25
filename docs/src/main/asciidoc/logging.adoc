@@ -4,7 +4,7 @@
 [#cloud-logging]
 == Cloud Logging
 
-https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm/[Oracle Cloud Infrastructure (OCI) Logging] service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from Oracle Cloud Infrastructure resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId
+https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm/[Oracle Cloud Infrastructure (OCI) Logging] service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from Oracle Cloud Infrastructure resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
 A Spring Boot starter is provided to auto-configure the Logging component.
 
 Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
@@ -30,17 +30,17 @@ This starter is also available from https://start.spring.io/[Spring Initializr] 
 
 === Using Cloud Logging
 
-The starter automatically configures and registers a `LoggingSvc` bean in the Spring application context.
-The `LoggingSvc` bean (link[Javadoc]) can be used to ingest logs associated with a logId.
+The starter automatically configures and registers a `Logging` bean in the Spring application context.
+The `Logging` bean (link[Javadoc]) can be used to ingest logs associated with a logId.
 
 [source,java]
 ----
 @Autowired
-private LoggingSvc loggingSvc;
+private Logging logging;
 
 public void putLogs() {
 
-    PutLogsResponse response = loggingSvc.putLogs("log-text");
+    PutLogsResponse response = logging.putLogs("log-text");
 }
 ----
 

@@ -7,7 +7,6 @@ package com.oracle.cloud.spring.logging;
 
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
-import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.LoggingClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -17,15 +16,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 /**
- * Auto-configuration for initializing the OCI LoggingSvc component.
+ * Auto-configuration for initializing the OCI Logging component.
  *  Depends on {@link com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration} and
  *  {@link com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration}
  *  for loading the Authentication configuration
  *
- * @see com.oracle.cloud.spring.logging.LoggingSvc
+ * @see Logging
  */
 @AutoConfiguration
-@ConditionalOnClass({LoggingSvc.class})
+@ConditionalOnClass({Logging.class})
 @EnableConfigurationProperties(LoggingProperties.class)
 @ConditionalOnProperty(name = "spring.cloud.oci.logging.enabled", havingValue = "true", matchIfMissing = true)
 public class LoggingAutoConfiguration {
@@ -37,16 +36,16 @@ public class LoggingAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(LoggingSvc.class)
-    LoggingSvc getLoggingImpl(Logging logging) {
+    @ConditionalOnMissingBean(Logging.class)
+    Logging getLoggingImpl(com.oracle.bmc.loggingingestion.Logging logging) {
         return new LoggingImpl(logging, properties.getLogId());
     }
 
     @Bean
     @ConditionalOnMissingBean
-    Logging loggingClient(BasicAuthenticationDetailsProvider adp,
-                          RegionProvider regionProvider) {
-        Logging logging = new LoggingClient(adp);
+    com.oracle.bmc.loggingingestion.Logging loggingClient(RegionProvider regionProvider,
+                                                          BasicAuthenticationDetailsProvider adp) {
+        com.oracle.bmc.loggingingestion.Logging logging = new LoggingClient(adp);
         if (regionProvider.getRegion() != null) logging.setRegion(regionProvider.getRegion());
         return logging;
     }

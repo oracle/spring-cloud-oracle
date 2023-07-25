@@ -8,6 +8,8 @@ This project sample showcases the sample code to send email using OCI Email Serv
 * Create Approved Senders in Email Delivery. [[Refer Here]](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/managingapprovedsenders.htm)
 Note: For non-prod testing, you may use `noreply@notification.<region>.oci.oraclecloud.com` example `noreply@notification.us-ashburn-1.oci.oraclecloud.com`.
 * Create SMTP Credentials [[Refer Here]](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm#Working3)
+* Get the SMTP hostname from "Public Endpoint" under SMTP configuration [[Refer here]](https://docs.oracle.com/en-us/iaas/Content/Email/Reference/gettingstarted_topic-Configure_the_SMTP_connection.htm)
+
 
 ## Quick Launch
 
@@ -49,10 +51,10 @@ Send POST request to `http://localhost:8080/send` with below body contents.
 
 ```
 {
-    "from": "<FROM_EMAIL_ADDRESS>"
+    "from": "<FROM_EMAIL_ADDRESS>",
     "to": "<YOUR_EMAIL>",
     "subject": "Test subject",
-    "body": "Hello World - Sample Body Content"
+    "text": "Hello World - Sample Body Content"
 }
 ```
 

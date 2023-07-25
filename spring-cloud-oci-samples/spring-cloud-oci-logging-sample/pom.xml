@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2023, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
@@ -9,7 +14,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.oracle.cloud.spring.sample.logging</groupId>
 	<artifactId>spring-cloud-oci-logging-sample</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 	<name>spring-cloud-oci-logging-sample</name>
 	<description>spring-cloud-oci-logging-sample</description>
 	<licenses>
@@ -26,18 +30,20 @@
 		<dependency>
 			<groupId>com.oracle.cloud.spring</groupId>
 			<artifactId>spring-cloud-oci-starter-logging</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>2.7.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>2.7.4</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.cloud.spring.sample.common</groupId>
+			<artifactId>spring-cloud-oci-common-sample</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -51,10 +57,19 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.7.4</version>
 			</plugin>
 		</plugins>
 	</build>
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.oracle.cloud.spring</groupId>
+				<artifactId>spring-cloud-oci-dependencies</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>

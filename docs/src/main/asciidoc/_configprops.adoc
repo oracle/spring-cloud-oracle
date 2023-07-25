@@ -13,8 +13,8 @@
 |spring.cloud.oci.config.privateKey |  |  
 |spring.cloud.oci.config.passPhrase |  |
 |spring.cloud.oci.config.region |  |
-|spring.cloud.oci.region.staticRegion |  |  
-|spring.cloud.oci.compartment.staticCompartment |  |  
+|spring.cloud.oci.region.static |  |
+|spring.cloud.oci.compartment.static |  |
 |spring.cloud.oci.storage.enabled | `true` |
 |spring.cloud.oci.notification.enabled | `true` |
 |spring.cloud.oci.logging.enabled | `true` |

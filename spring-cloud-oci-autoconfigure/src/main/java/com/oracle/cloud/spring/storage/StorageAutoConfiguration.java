@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -49,7 +48,8 @@ public class StorageAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    ObjectStorageClient objectStorageClient(BasicAuthenticationDetailsProvider adp, RegionProvider regionProvider) throws IOException {
+    ObjectStorageClient objectStorageClient(RegionProvider regionProvider,
+                                            BasicAuthenticationDetailsProvider adp) {
         ObjectStorageClient osClient = new ObjectStorageClient(adp);
         if (regionProvider.getRegion() != null) osClient.setRegion(regionProvider.getRegion());
         return osClient;

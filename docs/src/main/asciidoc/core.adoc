@@ -51,6 +51,7 @@ spring.cloud.oci.config.privateKey = <PRIVATE_KEY_FILE_PATH>
 spring.cloud.oci.config.passPhrase = <PASS_PHRASE>
 spring.cloud.oci.config.region = <REGION>
 ----
+Note: spring.cloud.oci.config.passPhrase is optional
 
 ==== Instance Principal Configuration
 
@@ -73,15 +74,15 @@ spring.cloud.oci.config.type = RESOURCE_PRINCIPAL
 OCI services are available in different regions. Based on the custom requirements, the user can host the application on different OCI regions. The below configuration allows to set specific region for the entire application.
 
 ----
-spring.cloud.oci.region.staticRegion = us-ashburn-1
+spring.cloud.oci.region.static = us-ashburn-1
 ----
 
 === Compartment Configuration
 
-A compartment is a logical container, to organize and control access to the Oracle Cloud Infrastructure (OCI) Resources (Compute, Storage, Network, Load Balancer, etc) created within that compartmen. Below configuration allows you to set default compartment for your application.
+A compartment is a logical container, to organize and control access to the Oracle Cloud Infrastructure (OCI) Resources (Compute, Storage, Network, Load Balancer, etc) created within that compartment. Below configuration allows you to set default compartment for your application.
 
 ----
-spring.cloud.oci.compartment.staticCompartment = <COMPARTMENT_OCID>
+spring.cloud.oci.compartment.static = <COMPARTMENT_OCID>
 ----
 
 === Spring Initializr

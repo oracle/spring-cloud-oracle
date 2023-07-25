@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import java.io.IOException;
 
 /**
  * Auto-configuration for initializing the OCI Notification component.
@@ -39,8 +38,8 @@ public class NotificationAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    NotificationDataPlane notificationDataPlaneClient(BasicAuthenticationDetailsProvider adp,
-                                                      RegionProvider regionProvider) throws IOException {
+    NotificationDataPlane notificationDataPlaneClient(RegionProvider regionProvider,
+                                                      BasicAuthenticationDetailsProvider adp) {
         NotificationDataPlane notificationDataPlaneClient = new NotificationDataPlaneClient(adp);
         if (regionProvider.getRegion() != null) notificationDataPlaneClient.setRegion(regionProvider.getRegion());
         return notificationDataPlaneClient;
@@ -48,8 +47,8 @@ public class NotificationAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    NotificationControlPlane notificationControlPlaneClient(BasicAuthenticationDetailsProvider adp,
-                                                            RegionProvider regionProvider) throws IOException {
+    NotificationControlPlane notificationControlPlaneClient(RegionProvider regionProvider,
+                                                            BasicAuthenticationDetailsProvider adp) {
         NotificationControlPlane notificationControlPlaneClient = new NotificationControlPlaneClient(adp);
         if (regionProvider.getRegion() != null) notificationControlPlaneClient.setRegion(regionProvider.getRegion());
         return notificationControlPlaneClient;

@@ -43,7 +43,7 @@ public class OracleStorageProtocolResolver implements ProtocolResolver, Resource
      */
     @Override
     public Resource resolve(String location, ResourceLoader resourceLoader) {
-        ObjectStorageClient osClient = getS3Client();
+        ObjectStorageClient osClient = getStorageClient();
         if (osClient == null) {
             LOGGER.warn("Could not resolve ObjectStorageClient. Resource {} could not be resolved", location);
             return null;
@@ -83,7 +83,7 @@ public class OracleStorageProtocolResolver implements ProtocolResolver, Resource
      * @return ObjectStorageClient
      */
     @Nullable
-    private ObjectStorageClient getS3Client() {
+    private ObjectStorageClient getStorageClient() {
         if (osClient != null) {
             return osClient;
         }
