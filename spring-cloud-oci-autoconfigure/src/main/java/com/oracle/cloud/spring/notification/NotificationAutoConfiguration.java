@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -31,12 +32,14 @@ import org.springframework.context.annotation.Bean;
 public class NotificationAutoConfiguration {
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean(Notification.class)
     Notification getNotificationImpl(NotificationDataPlane notificationDataPlane, NotificationControlPlane notificationControlPlane ) {
         return new NotificationImpl(notificationDataPlane, notificationControlPlane);
     }
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean
     NotificationDataPlane notificationDataPlaneClient(RegionProvider regionProvider,
                                                       BasicAuthenticationDetailsProvider adp) {
@@ -46,6 +49,7 @@ public class NotificationAutoConfiguration {
     }
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean
     NotificationControlPlane notificationControlPlaneClient(RegionProvider regionProvider,
                                                             BasicAuthenticationDetailsProvider adp) {

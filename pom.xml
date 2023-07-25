@@ -32,7 +32,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>docs</module>
     </modules>
     <properties>
-        <!-- spring-cloud-dependencies.version>2022.0.1</spring-cloud-dependencies.version -->
+        <spring-cloud-dependencies.version>2022.0.1</spring-cloud-dependencies.version>
         <spring-framework.version>5.3.23</spring-framework.version>
         <spring-boot-dependencies.version>2.7.4</spring-boot-dependencies.version>
         <oci-sdk.version>3.19.0</oci-sdk.version>
@@ -154,14 +154,14 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <!-- dependency>
+            <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency -->
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

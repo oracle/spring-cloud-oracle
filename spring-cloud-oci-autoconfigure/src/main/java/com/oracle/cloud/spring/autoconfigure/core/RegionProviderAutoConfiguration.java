@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -29,6 +30,7 @@ public class RegionProviderAutoConfiguration {
     }
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean
     public RegionProvider regionProvider() {
         return createRegionProvider(properties);

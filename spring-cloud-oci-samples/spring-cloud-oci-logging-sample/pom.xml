@@ -50,6 +50,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.13</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

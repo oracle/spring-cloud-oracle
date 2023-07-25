@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -36,12 +37,14 @@ public class LoggingAutoConfiguration {
     }
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean(Logging.class)
     Logging getLoggingImpl(com.oracle.bmc.loggingingestion.Logging logging) {
         return new LoggingImpl(logging, properties.getLogId());
     }
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean
     com.oracle.bmc.loggingingestion.Logging loggingClient(RegionProvider regionProvider,
                                                           BasicAuthenticationDetailsProvider adp) {
