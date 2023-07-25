@@ -17,7 +17,6 @@ This application has below classes:
 Configuration needed to run the Application to be configured in application.properties
 
 * spring.cloud.oci.region.static - OCI Region name(Ex: us-phoenix-1) where the OCI resources needs to be created
-* spring.cloud.oci.compartment.static - OCID of the OCI Compartment where the OCI resources needs to be created
 * spring.cloud.oci.config.type - Authentication type to be used for OCI. It could be either of RESOURCE_PRINCIPAL, INSTANCE_PRINCIPAL, SIMPLE and FILE. If nothing is specified, FILE type is used by default
 * spring.cloud.oci.config.file - The file path set to this property will be used as config file for FILE type authentication which used OCI config file. If nothing is specified, OCI config file from user home directory will be used
 * spring.cloud.oci.config.profile - Profile to be used in the OCI config file for Authentication. By default DEFAULT profile will be used

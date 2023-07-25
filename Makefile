@@ -15,7 +15,7 @@ clean:
 	mvnd clean
 
 docs:
-	mvnd verify -Pdocs -DskipTests=true
+	mvnd verify -Pasciidocs -DskipTests=true
 
 javadocs:
 	mvnd clean package javadoc:aggregate -DskipTests=true -e

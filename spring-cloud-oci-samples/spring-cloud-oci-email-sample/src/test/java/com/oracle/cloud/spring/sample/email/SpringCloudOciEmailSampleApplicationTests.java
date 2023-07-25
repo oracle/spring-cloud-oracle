@@ -5,14 +5,22 @@
 
 package com.oracle.cloud.spring.sample.email;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class SpringCloudOciEmailSampleApplicationTests {
 
+    @BeforeAll
+    static void beforeAll() {
+        System.setProperty("MAIL_SMTP_HOST", "dummySmtpHost");
+        System.setProperty("MAIL_SMTP_USER", "dummySmtpUser");
+    }
+
     @Test
     void contextLoads() {
+
     }
 
 }

@@ -36,6 +36,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
 		<!--maven-resources-plugin:3.2.0:copy-resources fails: https://issues.apache.org/jira/browse/MSHARED-966-->
 		<maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
+		<asciidoctor.maven.plugin.version>2.2.4</asciidoctor.maven.plugin.version>
+		<asciidoctorj.version>2.5.10</asciidoctorj.version>
+		<jruby.version>9.4.2.0</jruby.version>
 	</properties>
 
 	<repositories>
@@ -61,36 +64,89 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
 	<profiles>
 		<profile>
-			<id>docs</id>
+			<id>asciidocs</id>
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>pl.project13.maven</groupId>
-						<artifactId>git-commit-id-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>${maven-resources-plugin.version}</version>
-					</plugin>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-					</plugin>
-					<plugin>
 						<groupId>org.asciidoctor</groupId>
 						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<version>${asciidoctor.maven.plugin.version}</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.jruby</groupId>
+								<artifactId>jruby</artifactId>
+								<version>${jruby.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.asciidoctor</groupId>
+								<artifactId>asciidoctorj</artifactId>
+								<version>${asciidoctorj.version}</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<sourceDirectory>src/main/asciidoc</sourceDirectory>
+							<attributes>
+								<endpoint-url>https://github.com/oracle/spring-cloud-oci</endpoint-url>
+								<sourcedir>${project.build.sourceDirectory}</sourcedir>
+								<project-version>${project.version}</project-version>
+							</attributes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>asciidoc-to-html</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<backend>html5</backend>
+									<attributes>
+										<source-highlighter>rouge</source-highlighter>
+										<imagesdir>./images</imagesdir>
+										<toc>left</toc>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix/>
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
-					<!-- <plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-					</plugin> -->
 				</plugins>
 			</build>
 		</profile>
 	</profiles>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<configuration>
+							<skip>${disable.checks}</skip>
+						</configuration>
+						<goals>
+							<goal>apply</goal>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.oracle.cloud.spring</groupId>
+				<artifactId>spring-cloud-oci-dependencies</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

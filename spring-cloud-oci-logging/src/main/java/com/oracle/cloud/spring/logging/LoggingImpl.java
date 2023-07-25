@@ -5,7 +5,6 @@
 
 package com.oracle.cloud.spring.logging;
 
-import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.model.LogEntry;
 import com.oracle.bmc.loggingingestion.model.LogEntryBatch;
 import com.oracle.bmc.loggingingestion.model.PutLogsDetails;
@@ -20,17 +19,17 @@ import java.util.UUID;
 /**
  * Implementation for the OCI Logging module
  */
-public class LoggingImpl implements LoggingSvc {
+public class LoggingImpl implements Logging {
 
     private final String logSpecVersion = "1.0";
     private final String logSource = "Spring application";
     private final String logType = "custom.application";
     private final String subject = "custom.logging";
 
-    private Logging logging;
+    private com.oracle.bmc.loggingingestion.Logging logging;
 
     private String logId;
-    public LoggingImpl(Logging logging, String logId) {
+    public LoggingImpl(com.oracle.bmc.loggingingestion.Logging logging, String logId) {
         this.logging = logging;
         this.logId = logId;
     }
@@ -41,7 +40,7 @@ public class LoggingImpl implements LoggingSvc {
      * @return Logging
      */
     @Override
-    public Logging getClient() {
+    public com.oracle.bmc.loggingingestion.Logging getClient() {
         return logging;
     }
 

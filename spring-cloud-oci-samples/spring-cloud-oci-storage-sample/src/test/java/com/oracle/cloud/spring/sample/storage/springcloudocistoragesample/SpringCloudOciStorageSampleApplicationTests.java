@@ -3,14 +3,15 @@
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
-package com.oracle.cloud.spring.sample.s3.springcloudocis3sample;
+package com.oracle.cloud.spring.sample.storage.springcloudocistoragesample;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringCloudOciS3SampleApplicationTests {
-
+/** @EnabledIfSystemProperty(named = "it.storage", matches = "true") **/
+class SpringCloudOciStorageSampleApplicationTests {
     @Test
     void contextLoads() {
     }

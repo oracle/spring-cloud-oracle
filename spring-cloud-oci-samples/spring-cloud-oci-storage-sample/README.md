@@ -28,7 +28,6 @@ git clone https://github.com/oracle/spring-cloud-oci.git spring-cloud-oci
 
 2. Set appropriate values at `application.properties` for the below properties. (Refer Spring Cloud OCI docs for more details.)
 ```
-spring.cloud.oci.storage.enabled = true
 spring.cloud.oci.region.static = US_ASHBURN_1
 spring.cloud.oci.compartment.static = <COMPARTMENT_OCID>
 ```
