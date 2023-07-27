@@ -6,17 +6,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ $default-branch ]  
-  workflow_dispatch:
-    inputs:
-      releaseVersion:
-        description: "Define the release version"
-        required: true
-        default: ""
-      developmentVersion:
-        description: "Define the snapshot version"
-        required: true
-        default: ""
+    branches: [ main ]
 
 jobs:
   build:
