@@ -22,18 +22,18 @@ jobs:
           cache: 'maven'
       - name: Run Maven Build and Test
         run: |
-          mvn clean \
-            -Pspring-cloud-oci-ci-it \
-            -DuserId=${{ secrets.userId }} \
-            -DtenantId=${{ secrets.tenantId }} \
-            -Dfingerprint=${{ secrets.fingerprint }} \
-            -Dregion=${{ env.region }} \
-            -DprivateKeyContent=${{ secrets.privateKeyContent }} \
-            -Dit.notification=${{ env.it_notification }} \
-            -DtopicName=${{ env.topicName }} \
-            -DcompartmentId=${{ secrets.compartmentId }} \
-            -Dit.logging=${{ env.it_logging }} \
-            -DlogId=${{ env.logId }} \
-            -Dit.storage=${{ env.it_storage }} \
-            -DbucketName=${{ env.bucketName }} \
-            install
+          mvn clean install \
+          -Pspring-cloud-oci-ci-it \
+          -DuserId=${{ secrets.userId }} \
+          -DtenantId=${{ secrets.tenantId }} \
+          -Dfingerprint=${{ secrets.fingerprint }} \
+          -Dregion=${{ vars.region }} \
+          -DprivateKeyContent=${{ secrets.privateKeyContent }} \
+          -Dit.notification=${{ vars.it_notification }} \
+          -DtopicName=${{ vars.topicName }} \
+          -DcompartmentId=${{ secrets.compartmentId }} \
+          -Dit.logging=${{ vars.it_logging }} \
+          -DlogId=${{ vars.logId }} \
+          -Dit.storage=${{ vars.it_storage }} \
+          -DbucketName=${{ vars.bucketName }} \
+            
