@@ -50,6 +50,13 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.oracle.cloud.spring.sample.common</groupId>
+			<artifactId>spring-cloud-oci-common-sample</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.13</version>

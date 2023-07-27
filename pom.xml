@@ -33,7 +33,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </modules>
     <properties>
         <!-- spring-cloud-dependencies.version>2022.0.1</spring-cloud-dependencies.version -->
-        <spring-framework.version>5.3.23</spring-framework.version>
         <spring-boot-dependencies.version>2.7.4</spring-boot-dependencies.version>
         <oci-sdk.version>3.19.0</oci-sdk.version>
         <tomcat.version>8.0.33</tomcat.version>
@@ -137,13 +136,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <groupId>com.oracle.oci.sdk</groupId>
                 <artifactId>oci-java-sdk-bom</artifactId>
                 <version>${oci-sdk.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>${spring-framework.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

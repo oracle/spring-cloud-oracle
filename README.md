@@ -13,13 +13,22 @@ Spring Cloud for OCI, eases the integration with OCI services with the help of O
 
 All Spring Cloud for OCI artifacts are made available through Maven Central. Developers can bootstrap their application with Spring Initializr and add the OCI Support dependency. With Spring Cloud for OCI, the developers only need to add some annotations and a small number of configurations to connect Spring Cloud applications to the OCI services.
 
+## Spring Cloud OCI documentation
+
+For a deep dive into the project, refer to the Spring Cloud OCI documentation:
+
+| Version                | Reference Docs                                                                              | API Docs                                                                        |
+|------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| Spring Cloud OCI 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) | 
+
+
 ## Compatibility with Spring Project Versions
 
 This project has dependency and transitive dependencies on Spring Projects. The table below outlines the versions of Spring Cloud, Spring Boot and Spring Framework versions that are compatible with certain Spring Cloud OCI version.
 
-| Spring Cloud OCI  | Spring Cloud    | Spring Boot         | Spring Framework | OCI Java SDK |
-|-------------------|-----------------|---------------------|------------------|--------------|
-| 1.0.0  	        | <to-be-checked> | 2.7.x, 3.0.x, 3.1.x | 5.3.23           | 3.19.0       |
+| Spring Cloud OCI  | Spring Cloud    | Spring Boot         | OCI Java SDK |
+|-------------------|-----------------|---------------------|--------------|
+| 1.0.0  	        | <to-be-checked> | 2.7.x, 3.0.x, 3.1.x  |  3.19.0      |
 
 
 ## Try out samples
