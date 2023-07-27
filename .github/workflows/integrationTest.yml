@@ -1,0 +1,39 @@
+# This workflow will build a Java project with Maven
+
+name: Run the Integration Tests for Spring Cloud OCI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Java 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          java-package: 'jdk'
+          cache: 'maven'
+      - name: Run Maven Build and Test
+        run: |
+          mvn clean \
+            -Pspring-cloud-oci-ci-it \
+            -DuserId=${{ secrets.userId }} \
+            -DtenantId=${{ secrets.tenantId }} \
+            -Dfingerprint=${{ secrets.fingerprint }} \
+            -Dregion=${{ env.region }} \
+            -DprivateKeyContent=${{ secrets.privateKeyContent }} \
+            -Dit.notification=${{ env.it_notification }} \
+            -DtopicName=${{ env.topicName }} \
+            -DcompartmentId=${{ secrets.compartmentId }} \
+            -Dit.logging=${{ env.it_logging }} \
+            -DlogId=${{ env.logId }} \
+            -Dit.storage=${{ env.it_storage }} \
+            -DbucketName=${{ env.bucketName }} \
+            install
