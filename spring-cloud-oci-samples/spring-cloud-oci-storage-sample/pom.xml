@@ -33,6 +33,18 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <artifactId>spring-cloud-oci-starter-storage</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.oracle.cloud.spring.sample.common</groupId>
+            <artifactId>spring-cloud-oci-common-sample</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.cloud.spring.sample.common</groupId>
+            <artifactId>spring-cloud-oci-common-sample</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
