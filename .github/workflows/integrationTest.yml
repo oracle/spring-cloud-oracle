@@ -22,7 +22,7 @@ jobs:
           cache: 'maven'
       - name: Run Maven Build and Test
         run: |
-          mvn clean install \
+          mvn clean \
           -Pspring-cloud-oci-ci-it \
           -DuserId=${{ secrets.userId }} \
           -DtenantId=${{ secrets.tenantId }} \
@@ -36,4 +36,4 @@ jobs:
           -DlogId=${{ vars.logId }} \
           -Dit.storage=${{ vars.it_storage }} \
           -DbucketName=${{ vars.bucketName }} \
-            
+          install
