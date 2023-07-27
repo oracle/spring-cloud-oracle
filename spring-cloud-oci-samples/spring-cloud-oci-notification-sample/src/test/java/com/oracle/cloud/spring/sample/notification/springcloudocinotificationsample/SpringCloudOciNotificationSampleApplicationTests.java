@@ -17,9 +17,7 @@ import com.oracle.bmc.ons.responses.DeleteTopicResponse;
 import com.oracle.bmc.ons.responses.PublishMessageResponse;
 
 import com.oracle.cloud.spring.notification.Notification;
-import com.oracle.cloud.spring.sample.common.util.FileUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import com.oracle.cloud.spring.sample.common.base.SpringCloudSampleApplicationTestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.Assert;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -40,19 +37,7 @@ import java.util.List;
 @SpringBootTest
 @EnabledIfSystemProperty(named = "it.notification", matches = "true")
 @TestPropertySource(locations="classpath:application-test.properties")
-class SpringCloudOciNotificationSampleApplicationTests {
-
-	public static final String PRIVATE_KEY_PATH = "privateKey";
-	public static final String PRIVATE_KEY_CONTENT = "privateKeyContent";
-	public static final String privateKeyFilePath = System.getProperty("user.home") + File.separator + "privatekey.pem";
-	public static final String privateKeyContent = System.getProperty(PRIVATE_KEY_CONTENT) != null ? System.getProperty(PRIVATE_KEY_CONTENT) :
-			System.getenv().get(PRIVATE_KEY_CONTENT);
-	@BeforeAll
-	static void beforeAll() throws Exception {
-		System.setProperty(PRIVATE_KEY_PATH, privateKeyFilePath);
-		FileUtils.createFile(privateKeyFilePath, privateKeyContent.replace("\\n", "\n"));
-	}
-
+class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSampleApplicationTestBase {
 	@Autowired
 	Notification notification;
 
@@ -73,7 +58,8 @@ class SpringCloudOciNotificationSampleApplicationTests {
 	}
 
 	private String testCreateTopic() {
-		CreateTopicResponse response = notification.createTopic(topicName, compartmentId);
+		long time = System.currentTimeMillis();
+		CreateTopicResponse response = notification.createTopic(topicName + time, compartmentId);
 		String topicOcid = response.getNotificationTopic().getTopicId();
 		Assert.notNull(topicOcid);
 		return topicOcid;
@@ -115,10 +101,5 @@ class SpringCloudOciNotificationSampleApplicationTests {
 		NotificationControlPlane controlPlane = notification.getNotificationControlPlaneClient();
 		DeleteTopicResponse response = controlPlane.deleteTopic(request);
 		Assert.notNull(response.getOpcRequestId());
-	}
-
-	@AfterAll
-	static void AfterAll() {
-		FileUtils.deleteFile(privateKeyFilePath);
 	}
 }
