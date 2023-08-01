@@ -29,6 +29,8 @@ import java.io.IOException;
 @EnableConfigurationProperties(CredentialsProperties.class)
 public class CredentialsProviderAutoConfiguration {
 
+    public static final String credentialsProviderQualifier = "credentialsProvider";
+
     private static final String PROFILE_DEFAULT = "DEFAULT";
     private final CredentialsProperties properties;
 
@@ -41,7 +43,7 @@ public class CredentialsProviderAutoConfiguration {
      * @return
      * @throws IOException
      */
-    @Bean
+    @Bean (name = credentialsProviderQualifier)
     @ConditionalOnMissingBean
     public BasicAuthenticationDetailsProvider credentialsProvider() throws IOException {
         return createCredentialsProvider(properties);

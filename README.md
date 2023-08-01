@@ -5,7 +5,7 @@
 > **Warning**  
 >
 > Code in this repository is work-in-progress and has not been released officially.
-> 
+>
 > Not recommended for personal or production use at this point.
 
 ## Introduction
@@ -19,7 +19,7 @@ For a deep dive into the project, refer to the Spring Cloud OCI documentation:
 
 | Version                | Reference Docs                                                                              | API Docs                                                                        |
 |------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
-| Spring Cloud OCI 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) | 
+| Spring Cloud OCI 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) |
 
 
 ## Compatibility with Spring Project Versions
@@ -28,7 +28,7 @@ This project has dependency and transitive dependencies on Spring Projects. The 
 
 | Spring Cloud OCI  | Spring Cloud    | Spring Boot         | OCI Java SDK |
 |-------------------|-----------------|---------------------|--------------|
-| 1.0.0  	        | <to-be-checked> | 2.7.x, 3.0.x, 3.1.x  |  3.19.0      |
+| 1.0.0  	        | <to-be-checked> | 3.0.x, 3.1.x  |  3.19.0      |
 
 
 ## Try out samples
@@ -102,4 +102,3 @@ Copyright (c) 2023 Oracle and/or its affiliates.
 
 Released under the Universal Permissive License v1.0 as shown at
 <https://oss.oracle.com/licenses/upl/>.
-

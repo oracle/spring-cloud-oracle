@@ -22,13 +22,14 @@ import org.springframework.context.annotation.Bean;
 @EnableConfigurationProperties(RegionProperties.class)
 public class RegionProviderAutoConfiguration {
 
+    public static final String regionProviderQualifier = "regionProvider";
     private final RegionProperties properties;
 
     public RegionProviderAutoConfiguration(RegionProperties properties) {
         this.properties = properties;
     }
 
-    @Bean
+    @Bean (name = regionProviderQualifier)
     @ConditionalOnMissingBean
     public RegionProvider regionProvider() {
         return createRegionProvider(properties);

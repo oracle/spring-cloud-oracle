@@ -10,6 +10,7 @@ import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.cloud.spring.core.compartment.CompartmentProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -19,6 +20,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 import java.util.Optional;
+
+import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration.credentialsProviderQualifier;
+import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration.regionProviderQualifier;
 
 /**
  * Auto-configuration for initializing the OCI Storage component.
@@ -48,7 +52,8 @@ public class StorageAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    ObjectStorageClient objectStorageClient(RegionProvider regionProvider,
+    ObjectStorageClient objectStorageClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
+                                            @Qualifier(credentialsProviderQualifier)
                                             BasicAuthenticationDetailsProvider adp) {
         ObjectStorageClient osClient = new ObjectStorageClient(adp);
         if (regionProvider.getRegion() != null) osClient.setRegion(regionProvider.getRegion());
