@@ -5,6 +5,7 @@
 
 package com.oracle.cloud.spring.logging;
 
+import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.model.LogEntry;
 import com.oracle.bmc.loggingingestion.model.LogEntryBatch;
 import com.oracle.bmc.loggingingestion.model.PutLogsDetails;
@@ -19,17 +20,17 @@ import java.util.UUID;
 /**
  * Implementation for the OCI Logging module
  */
-public class LoggingImpl implements Logging {
+public class LogServiceImpl implements LogService {
 
     private final String logSpecVersion = "1.0";
     private final String logSource = "Spring application";
     private final String logType = "custom.application";
     private final String subject = "custom.logging";
 
-    private com.oracle.bmc.loggingingestion.Logging logging;
+    private final Logging logging;
 
-    private String logId;
-    public LoggingImpl(com.oracle.bmc.loggingingestion.Logging logging, String logId) {
+    private final String logId;
+    public LogServiceImpl(Logging logging, String logId) {
         this.logging = logging;
         this.logId = logId;
     }
@@ -40,16 +41,16 @@ public class LoggingImpl implements Logging {
      * @return Logging
      */
     @Override
-    public com.oracle.bmc.loggingingestion.Logging getClient() {
+    public Logging getClient() {
         return logging;
     }
 
     /**
      * Ingest logs associated with a Log OCID
      * @param logText Content of the log to be ingested
-     * @return
+     * @return PutLogsResponse
      */
-    public PutLogsResponse putLogs(String logText) {
+    public PutLogsResponse putLog(String logText) {
 
         PutLogsDetails putLogsDetails = PutLogsDetails.builder()
                 .specversion(logSpecVersion)

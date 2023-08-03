@@ -42,10 +42,10 @@ public class StorageAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(Storage.class)
     @ConditionalOnBean(StorageObjectConverter.class)
-    Storage storageActions(ObjectStorageClient osClient, StorageOutputStreamProvider storageOutputStreamProvider,
-                           StorageObjectConverter storageObjectConverter, Optional<StorageContentTypeResolver> contentTypeResolver,
+    Storage storageActions(ObjectStorageClient osClient, StorageObjectConverter storageObjectConverter,
+                           Optional<StorageContentTypeResolver> contentTypeResolver,
                            CompartmentProvider compartmentProvider) {
-        return new StorageImpl(osClient, storageOutputStreamProvider, storageObjectConverter,
+        return new StorageImpl(osClient, storageObjectConverter,
                 contentTypeResolver.orElseGet(StorageContentTypeResolverImpl::new),
                 (compartmentProvider == null ? null : compartmentProvider.getCompartmentOCID()));
     }
@@ -58,13 +58,6 @@ public class StorageAutoConfiguration {
         ObjectStorageClient osClient = new ObjectStorageClient(adp);
         if (regionProvider.getRegion() != null) osClient.setRegion(regionProvider.getRegion());
         return osClient;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    StorageOutputStreamProvider inMemoryBufferingStorageStreamProvider(ObjectStorageClient osClient) {
-        //TODO: Param ObjectContentTypeResolver is skipped
-        return new DefaultStorageOutputStreamProvider(osClient);
     }
 
     @AutoConfiguration

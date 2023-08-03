@@ -6,7 +6,7 @@
 package com.oracle.cloud.spring.sample.logging.springcloudociloggingsample;
 
 import com.oracle.bmc.loggingingestion.responses.PutLogsResponse;
-import com.oracle.cloud.spring.logging.Logging;
+import com.oracle.cloud.spring.logging.LogService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class LoggingController {
 
     @Autowired
-    Logging logging;
+    LogService logService;
 
-    @PostMapping(value = "putlogs")
-    ResponseEntity<?> putLogs(@Parameter(required = true, example = "logText") @RequestParam String logText) {
-        PutLogsResponse response = logging.putLogs(logText);
+    @PostMapping(value = "putlog")
+    ResponseEntity<?> putLog(@Parameter(required = true, example = "logText") @RequestParam String logText) {
+        PutLogsResponse response = logService.putLog(logText);
         return ResponseEntity.ok().body("opc request Id for posting the logs : " + response.getOpcRequestId());
     }
 

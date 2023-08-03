@@ -28,24 +28,20 @@ import java.io.InputStream;
  */
 public class StorageImpl implements Storage {
     private final ObjectStorageClient osClient;
-    private final StorageOutputStreamProvider storageOutputStreamProvider;
     private final StorageObjectConverter storageObjectConverter;
     private final StorageContentTypeResolver contentTypeResolver;
     private final String defaultCompartmentOCID;
 
     public StorageImpl(
             ObjectStorageClient osClient,
-            StorageOutputStreamProvider storageOutputStreamProvider,
             StorageObjectConverter storageObjectConverter,
             StorageContentTypeResolver contentTypeResolver,
             String defaultCompartmentOCID) {
         Assert.notNull(osClient, "ObjectStorageClient is required");
-        Assert.notNull(storageOutputStreamProvider, "storageOutputStreamProvider is required");
         Assert.notNull(storageObjectConverter, "storageObjectConverter is required");
         Assert.notNull(contentTypeResolver, "contentTypeResolver is required");
 
         this.osClient = osClient;
-        this.storageOutputStreamProvider = storageOutputStreamProvider;
         this.storageObjectConverter = storageObjectConverter;
         this.contentTypeResolver = contentTypeResolver;
         this.defaultCompartmentOCID = defaultCompartmentOCID;
@@ -63,7 +59,7 @@ public class StorageImpl implements Storage {
         Assert.notNull(bucketName, "bucketName is required");
         Assert.notNull(key, "key is required");
 
-        return new OracleStorageResource(bucketName, key, version, osClient, storageOutputStreamProvider);
+        return new OracleStorageResource(bucketName, key, version, osClient);
     }
 
     /**

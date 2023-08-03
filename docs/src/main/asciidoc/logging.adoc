@@ -36,11 +36,11 @@ The `Logging` bean (link[Javadoc]) can be used to ingest logs associated with a 
 [source,java]
 ----
 @Autowired
-private Logging logging;
+private LogService logService;
 
-public void putLogs() {
+public void putLog() {
 
-    PutLogsResponse response = logging.putLogs("log-text");
+    PutLogsResponse response = logService.putLog("log-text");
 }
 ----
 

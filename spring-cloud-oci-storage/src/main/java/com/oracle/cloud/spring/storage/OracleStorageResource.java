@@ -21,51 +21,38 @@ import java.io.InputStream;
  */
 public class OracleStorageResource extends AbstractResource {
 
-    ObjectStorageClient osClient;
-    StorageOutputStreamProvider storageOutputStreamProvider;
+    private final ObjectStorageClient osClient;
     StorageLocation location;
-
-    @Nullable
-    private StorageObjectMetadata objectMetadata;
 
     /**
      * Creates new OracleStorageResource identified by location URI and other information.
      * @param location Object URI
      * @param osClient OCI Storage SDK Client instance
-     * @param storageOutputStreamProvider Output Stream Provider
      * @return OracleStorageResource
      */
     @Nullable
-    public static OracleStorageResource create(String location, ObjectStorageClient osClient,
-                                               StorageOutputStreamProvider storageOutputStreamProvider) {
+    public static OracleStorageResource create(String location, ObjectStorageClient osClient) {
         StorageLocation locationObject = StorageLocation.resolve(location);
         if (locationObject != null) {
-            return new OracleStorageResource(locationObject, osClient, storageOutputStreamProvider);
+            return new OracleStorageResource(locationObject, osClient);
         }
 
         return null;
     }
 
-    public OracleStorageResource(String bucketName, String objectName, ObjectStorageClient osClient,
-                                 StorageOutputStreamProvider storageOutputStreamProvider) {
-        this(bucketName, objectName, null, osClient, storageOutputStreamProvider);
-    }
-
     public OracleStorageResource(String bucketName, String objectName, String version,
-                                 ObjectStorageClient osClient, StorageOutputStreamProvider storageOutputStreamProvider) {
-        this(new StorageLocation(bucketName, objectName, version), osClient, storageOutputStreamProvider);
+                                 ObjectStorageClient osClient) {
+        this(new StorageLocation(bucketName, objectName, version), osClient);
     }
 
-    public OracleStorageResource(StorageLocation location, ObjectStorageClient osClient,
-                                 StorageOutputStreamProvider storageOutputStreamProvider) {
+    public OracleStorageResource(StorageLocation location, ObjectStorageClient osClient) {
         this.location = location;
         this.osClient = osClient;
-        this.storageOutputStreamProvider = storageOutputStreamProvider;
     }
 
     /**
      * Get the description
-     * @return
+     * @return String
      */
     @Override
     public String getDescription() {
@@ -92,13 +79,5 @@ public class OracleStorageResource extends AbstractResource {
                                 .versionId(location.getVersion())
                                 .build());
         return getResponse.getInputStream();
-    }
-
-    /**
-     * Sets the custom Object Metadata
-     * @param objectMetadata meta information of the OCI storage object.
-     */
-    public void setObjectMetadata(@Nullable StorageObjectMetadata objectMetadata) {
-        this.objectMetadata = objectMetadata;
     }
 }
