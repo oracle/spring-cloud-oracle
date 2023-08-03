@@ -708,7 +708,7 @@ pre.rouge {
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>1.0.0</strong></p>
+<p><strong>1.0.0-SNAPSHOT</strong></p>
 </div>
 </div>
 </div>
@@ -1336,11 +1336,11 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nd">@Autowired</span>
-<span class="kd">private</span> <span class="nc">Logging</span> <span class="n">logging</span><span class="o">;</span>
+<span class="kd">private</span> <span class="nc">LogService</span> <span class="n">logService</span><span class="o">;</span>
 
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">putLogs</span><span class="o">()</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">putLog</span><span class="o">()</span> <span class="o">{</span>
 
-    <span class="nc">PutLogsResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="na">putLogs</span><span class="o">(</span><span class="s">"log-text"</span><span class="o">);</span>
+    <span class="nc">PutLogsResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">logService</span><span class="o">.</span><span class="na">putLog</span><span class="o">(</span><span class="s">"log-text"</span><span class="o">);</span>
 <span class="o">}</span></code></pre>
 </div>
 </div>
@@ -1392,7 +1392,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-27 11:58:28 +0530
+Last updated 2023-07-27 13:03:17 +0530
 </div>
 </div>
 </body>
