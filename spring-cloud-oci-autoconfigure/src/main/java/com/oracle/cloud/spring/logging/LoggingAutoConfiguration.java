@@ -7,7 +7,9 @@ package com.oracle.cloud.spring.logging;
 
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
+import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.LoggingClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -16,16 +18,19 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
+import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration.credentialsProviderQualifier;
+import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration.regionProviderQualifier;
+
 /**
  * Auto-configuration for initializing the OCI Logging component.
  *  Depends on {@link com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration} and
  *  {@link com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration}
  *  for loading the Authentication configuration
  *
- * @see Logging
+ * @see LogService
  */
 @AutoConfiguration
-@ConditionalOnClass({Logging.class})
+@ConditionalOnClass({LogService.class})
 @EnableConfigurationProperties(LoggingProperties.class)
 @ConditionalOnProperty(name = "spring.cloud.oci.logging.enabled", havingValue = "true", matchIfMissing = true)
 public class LoggingAutoConfiguration {
@@ -38,17 +43,18 @@ public class LoggingAutoConfiguration {
 
     @Bean
     @RefreshScope
-    @ConditionalOnMissingBean(Logging.class)
-    Logging getLoggingImpl(com.oracle.bmc.loggingingestion.Logging logging) {
-        return new LoggingImpl(logging, properties.getLogId());
+    @ConditionalOnMissingBean(LogService.class)
+    LogService getLoggingImpl(Logging logging) {
+        return new LogServiceImpl(logging, properties.getLogId());
     }
 
     @Bean
     @RefreshScope
     @ConditionalOnMissingBean
-    com.oracle.bmc.loggingingestion.Logging loggingClient(RegionProvider regionProvider,
+    Logging loggingClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
+                                                          @Qualifier(credentialsProviderQualifier)
                                                           BasicAuthenticationDetailsProvider adp) {
-        com.oracle.bmc.loggingingestion.Logging logging = new LoggingClient(adp);
+        Logging logging = new LoggingClient(adp);
         if (regionProvider.getRegion() != null) logging.setRegion(regionProvider.getRegion());
         return logging;
     }

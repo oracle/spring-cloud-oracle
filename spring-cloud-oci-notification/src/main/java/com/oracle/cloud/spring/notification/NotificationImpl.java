@@ -19,8 +19,8 @@ import com.oracle.cloud.spring.core.util.OCIObjectMapper;
  * Implementation for the OCI Notification module
  */
 public class NotificationImpl implements Notification {
-    NotificationDataPlane notificationDataPlane;
-    NotificationControlPlane notificationControlPlane;
+    private final NotificationDataPlane notificationDataPlane;
+    private final NotificationControlPlane notificationControlPlane;
 
     public NotificationImpl(NotificationDataPlane notificationDataPlane, NotificationControlPlane notificationControlPlane) {
         this.notificationDataPlane = notificationDataPlane;
@@ -48,7 +48,7 @@ public class NotificationImpl implements Notification {
      * @param topicId OCID of the topic
      * @param title Message title
      * @param message Message content
-     * @return
+     * @return PublishMessageResponse
      */
     @Override
     public PublishMessageResponse publishMessage(String topicId, String title, String message) {
@@ -73,7 +73,7 @@ public class NotificationImpl implements Notification {
      * @param topicId Topic OCID where the Subscription needs to be created
      * @param protocol Subscription type. Ex: EMAIL
      * @param endpoint Subscription endpoint. Ex: Email ID in case of EMAIL as protocol
-     * @return
+     * @return CreateSubscriptionResponse
      */
     @Override
     public CreateSubscriptionResponse createSubscription(String compartmentId, String topicId, String protocol, String endpoint) {
@@ -87,7 +87,7 @@ public class NotificationImpl implements Notification {
     /**
      * Get the Subscription Resource JSON as a String
      * @param subscriptionId OCID of the subscription
-     * @return
+     * @return String
      */
     @Override
     public String getSubscription(String subscriptionId) {
@@ -102,7 +102,7 @@ public class NotificationImpl implements Notification {
      * List subscriptions in a Topic as a JSON String
      * @param topicId Topic OCID where to list the Subscriptions
      * @param compartmentId Compartment OCID where the topic is present
-     * @return
+     * @return String
      */
     @Override
     public String listSubscriptions(String topicId, String compartmentId) {
@@ -118,7 +118,7 @@ public class NotificationImpl implements Notification {
      * Create a OCI Notification Topic
      * @param topicName Name of the Topic to be created
      * @param compartmentId Compartment OCID where the Topic needs to be created
-     * @return
+     * @return CreateTopicResponse
      */
     @Override
     public CreateTopicResponse createTopic(String topicName, String compartmentId) {

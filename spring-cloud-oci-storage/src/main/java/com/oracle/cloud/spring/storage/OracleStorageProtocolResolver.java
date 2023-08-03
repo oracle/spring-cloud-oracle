@@ -32,9 +32,6 @@ public class OracleStorageProtocolResolver implements ProtocolResolver, Resource
     @Nullable
     private BeanFactory beanFactory;
 
-    @Nullable
-    private StorageOutputStreamProvider storageOutputStreamProvider;
-
     /**
      * Resolves OCI storage location URI to Resource.
      * @param location URI starting with protocol prefix.
@@ -49,9 +46,7 @@ public class OracleStorageProtocolResolver implements ProtocolResolver, Resource
             return null;
         }
 
-        StorageOutputStreamProvider storageOutputStreamProvider = getStorageOutputStreamProvider();
-
-        return OracleStorageResource.create(location, osClient, storageOutputStreamProvider);
+        return OracleStorageResource.create(location, osClient);
     }
 
     /**
@@ -97,22 +92,4 @@ public class OracleStorageProtocolResolver implements ProtocolResolver, Resource
         return null;
     }
 
-    /**
-     * Get the StorageOutputStreamProvider instance.
-     * @return StorageOutputStreamProvider
-     */
-    @Nullable
-    private StorageOutputStreamProvider getStorageOutputStreamProvider() {
-        if (storageOutputStreamProvider != null) {
-            return storageOutputStreamProvider;
-        }
-
-        if (beanFactory != null) {
-            StorageOutputStreamProvider storageOutputStreamProvider = beanFactory.getBean(StorageOutputStreamProvider.class);
-            this.storageOutputStreamProvider = storageOutputStreamProvider;
-            return storageOutputStreamProvider;
-        }
-
-        return null;
-    }
 }

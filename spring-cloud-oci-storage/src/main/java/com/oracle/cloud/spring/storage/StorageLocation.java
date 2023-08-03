@@ -75,7 +75,7 @@ public class StorageLocation {
     /**
      * Checks wheter the location URI starts with protocol prefix (oci://).
      * @param location String contains storage URI.
-     * @return
+     * @return Boolean
      */
     static boolean isSimpleStorageResource(String location) {
         Assert.notNull(location, "Location must not be null");

@@ -31,7 +31,7 @@ public interface Notification {
      * @param topicId OCID of the topic
      * @param title Message title
      * @param message Message content
-     * @return
+     * @return PublishMessageResponse
      */
     PublishMessageResponse publishMessage(String topicId, String title, String message);
 
@@ -41,14 +41,14 @@ public interface Notification {
      * @param topicId Topic OCID where the Subscription needs to be created
      * @param protocol Subscription type. Ex: EMAIL
      * @param endpoint Subscription endpoint. Ex: Email ID in case of EMAIL as protocol
-     * @return
+     * @return CreateSubscriptionResponse
      */
     CreateSubscriptionResponse createSubscription(String compartmentId, String topicId, String protocol, String endpoint);
 
     /**
      * Get the Subscription Resource JSON as a String
      * @param subscriptionId OCID of the subscription
-     * @return
+     * @return String
      */
     String getSubscription(String subscriptionId);
 
@@ -56,7 +56,7 @@ public interface Notification {
      * List subscriptions in a Topic as a JSON String
      * @param topicId Topic OCID where to list the Subscriptions
      * @param compartmentId Compartment OCID where the topic is present
-     * @return
+     * @return String
      */
     String listSubscriptions(String topicId, String compartmentId);
 
@@ -64,7 +64,7 @@ public interface Notification {
      * Create a OCI Notification Topic
      * @param topicName Name of the Topic to be created
      * @param compartmentId Compartment OCID where the Topic needs to be created
-     * @return
+     * @return CreateTopicResponse
      */
     CreateTopicResponse createTopic(String topicName, String compartmentId);
 }

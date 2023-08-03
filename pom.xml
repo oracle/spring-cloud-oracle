@@ -35,14 +35,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-cloud-dependencies.version>2022.0.1</spring-cloud-dependencies.version>
         <spring-boot-dependencies.version>2.7.4</spring-boot-dependencies.version>
         <oci-sdk.version>3.19.0</oci-sdk.version>
-        <tomcat.version>8.0.33</tomcat.version>
-        <javax-mail.version>1.5.5</javax-mail.version>
-        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <javax.activation.version>1.2.0</javax.activation.version>
-        <spring-cloud-commons.version>3.1.0</spring-cloud-commons.version>
-        <testcontainers.version>1.17.2</testcontainers.version>
-        <spotless.version>2.22.0</spotless.version>
-        <awssdk.version>2.17.172</awssdk.version>
+        <spring-boot-maven-plugin.version>3.1.2</spring-boot-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>

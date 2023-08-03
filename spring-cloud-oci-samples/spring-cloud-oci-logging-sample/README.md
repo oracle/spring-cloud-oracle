@@ -58,9 +58,9 @@ The base URL for all the APIs exposed in this application is http://localhost:80
 
 Using the above base URL, below APIs can be invoked:
 
-|API | Method | URI | Request Params|
-|:-------|:--------|:------|:-------|
-| Put Logs | POST | putlogs | logText |
+| API     | Method | URI    | Request Params|
+|:--------|:--------|:-------|:-------|
+| Put Log | POST | putlog | logText |
 
 ## References
 * [OCI Logging Service](https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm)

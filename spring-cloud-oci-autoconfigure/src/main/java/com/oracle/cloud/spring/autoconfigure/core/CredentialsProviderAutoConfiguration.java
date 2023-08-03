@@ -5,6 +5,7 @@
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
+import com.oracle.bmc.ClientRuntime;
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
@@ -30,6 +31,10 @@ import java.io.IOException;
 @EnableConfigurationProperties(CredentialsProperties.class)
 public class CredentialsProviderAutoConfiguration {
 
+    public static final String USER_AGENT_SPRING_CLOUD = "Oracle-SpringCloud";
+
+    public static final String credentialsProviderQualifier = "credentialsProvider";
+
     private static final String PROFILE_DEFAULT = "DEFAULT";
     private final CredentialsProperties properties;
 
@@ -39,10 +44,10 @@ public class CredentialsProviderAutoConfiguration {
 
     /**
      * Creates a Authentication provider based on {@link CredentialsProperties.ConfigType} type
-     * @return
+     * @return BasicAuthenticationDetailsProvider
      * @throws IOException
      */
-    @Bean
+    @Bean (name = credentialsProviderQualifier)
     @RefreshScope
     @ConditionalOnMissingBean
     public BasicAuthenticationDetailsProvider credentialsProvider() throws IOException {
@@ -82,7 +87,7 @@ public class CredentialsProviderAutoConfiguration {
 
                 break;
         }
-
+        ClientRuntime.setClientUserAgent(USER_AGENT_SPRING_CLOUD);
         return authenticationDetailsProvider;
     }
 

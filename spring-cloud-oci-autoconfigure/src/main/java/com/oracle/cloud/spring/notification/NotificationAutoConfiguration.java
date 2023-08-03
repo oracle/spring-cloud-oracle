@@ -11,12 +11,16 @@ import com.oracle.bmc.ons.NotificationControlPlane;
 import com.oracle.bmc.ons.NotificationControlPlaneClient;
 import com.oracle.bmc.ons.NotificationDataPlane;
 import com.oracle.bmc.ons.NotificationDataPlaneClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
+
+import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration.credentialsProviderQualifier;
+import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration.regionProviderQualifier;
 
 /**
  * Auto-configuration for initializing the OCI Notification component.
@@ -41,7 +45,8 @@ public class NotificationAutoConfiguration {
     @Bean
     @RefreshScope
     @ConditionalOnMissingBean
-    NotificationDataPlane notificationDataPlaneClient(RegionProvider regionProvider,
+    NotificationDataPlane notificationDataPlaneClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
+                                                      @Qualifier(credentialsProviderQualifier)
                                                       BasicAuthenticationDetailsProvider adp) {
         NotificationDataPlane notificationDataPlaneClient = new NotificationDataPlaneClient(adp);
         if (regionProvider.getRegion() != null) notificationDataPlaneClient.setRegion(regionProvider.getRegion());
@@ -51,7 +56,8 @@ public class NotificationAutoConfiguration {
     @Bean
     @RefreshScope
     @ConditionalOnMissingBean
-    NotificationControlPlane notificationControlPlaneClient(RegionProvider regionProvider,
+    NotificationControlPlane notificationControlPlaneClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
+                                                            @Qualifier(credentialsProviderQualifier)
                                                             BasicAuthenticationDetailsProvider adp) {
         NotificationControlPlane notificationControlPlaneClient = new NotificationControlPlaneClient(adp);
         if (regionProvider.getRegion() != null) notificationControlPlaneClient.setRegion(regionProvider.getRegion());

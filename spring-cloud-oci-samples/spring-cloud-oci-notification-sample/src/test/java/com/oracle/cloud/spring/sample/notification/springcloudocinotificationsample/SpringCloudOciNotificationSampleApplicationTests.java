@@ -18,7 +18,10 @@ import com.oracle.bmc.ons.responses.PublishMessageResponse;
 
 import com.oracle.cloud.spring.notification.Notification;
 import com.oracle.cloud.spring.sample.common.base.SpringCloudSampleApplicationTestBase;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +38,7 @@ import java.util.List;
  * compartmentId
  */
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @EnabledIfSystemProperty(named = "it.notification", matches = "true")
 @TestPropertySource(locations="classpath:application-test.properties")
 class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSampleApplicationTestBase {
@@ -47,41 +51,39 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 	@Value("${compartmentId}")
 	String compartmentId;
 
-	@Test
-	void testNotificationApis() throws Exception {
-		String topicOcid = testCreateTopic();
-		String subscriptionOcid = testCreatSubscription(topicOcid);
-		testGetSubscription(subscriptionOcid);
-		testListSubscriptions(topicOcid);
-		testPublishMessage(topicOcid);
-		testDeleteTopic(topicOcid);
-	}
+	private static String topicOcid;
+	private static String subscriptionOcid;
 
-	private String testCreateTopic() {
+	@Test
+	@Order(1)
+	void testCreateTopic() {
 		long time = System.currentTimeMillis();
 		CreateTopicResponse response = notification.createTopic(topicName + time, compartmentId);
-		String topicOcid = response.getNotificationTopic().getTopicId();
+		topicOcid = response.getNotificationTopic().getTopicId();
 		Assert.notNull(topicOcid);
-		return topicOcid;
 	}
 
-	private String testCreatSubscription(String topicOcid) {
+	@Test
+	@Order(2)
+	void testCreatSubscription() {
 		CreateSubscriptionResponse response = notification.createSubscription(compartmentId, topicOcid, "EMAIL",
 				"springcloud@oracle.com");
-		String subscriptionOcid = response.getSubscription().getId();
+		subscriptionOcid = response.getSubscription().getId();
 		Assert.notNull(subscriptionOcid);
-		return subscriptionOcid;
 	}
 
-	private Subscription testGetSubscription(String subscriptionOcid) throws Exception {
+	@Test
+	@Order(3)
+	void testGetSubscription() throws Exception {
 		String response = notification.getSubscription(subscriptionOcid);
 		ObjectMapper objectMapper = new ObjectMapper();
 		Subscription subscription = objectMapper.readValue(response, new TypeReference<Subscription>(){});
 		Assert.notNull(subscription);
-		return subscription;
 	}
 
-	private void testListSubscriptions(String topicOcid) throws Exception {
+	@Test
+	@Order(4)
+	void testListSubscriptions() throws Exception {
 		String listSubscriptions = notification.listSubscriptions(topicOcid,
 				compartmentId);
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -90,13 +92,17 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 		Assert.isTrue(notificationList.size() > 0);
 	}
 
-	private void testPublishMessage(String topicOcid) {
+	@Test
+	@Order(5)
+	void testPublishMessage() {
 		PublishMessageResponse response = notification.publishMessage(topicOcid,
 				"integration-test-subject", "integration-test-message");
 		Assert.notNull(response.getPublishResult().getMessageId());
 	}
 
-	private void testDeleteTopic(String topicOcid) {
+	@Test
+	@Order(6)
+	void testDeleteTopic() {
 		DeleteTopicRequest request = DeleteTopicRequest.builder().topicId(topicOcid).build();
 		NotificationControlPlane controlPlane = notification.getNotificationControlPlaneClient();
 		DeleteTopicResponse response = controlPlane.deleteTopic(request);

@@ -52,6 +52,7 @@ public class NotificationController {
     ResponseEntity<?> listNotificationSubscriptions(@Parameter(required = true, example = "topicId") @RequestParam String topicId,
                                                     @Parameter(required = true, example = "compartmentId") @RequestParam String compartmentId) {
         String response = notification.listSubscriptions(topicId, compartmentId);
+
         return ResponseEntity.ok().body(response);
     }
 

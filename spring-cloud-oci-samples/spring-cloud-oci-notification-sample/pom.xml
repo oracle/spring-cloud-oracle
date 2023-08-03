@@ -10,7 +10,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		<groupId>com.oracle.cloud.spring</groupId>
 		<artifactId>spring-cloud-oci-samples</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
-		</parent>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.oracle.cloud.spring.sample.notification</groupId>
 	<artifactId>spring-cloud-oci-notification-sample</artifactId>
@@ -76,15 +76,4 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		</plugins>
 	</build>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.oracle.cloud.spring</groupId>
-				<artifactId>spring-cloud-oci-dependencies</artifactId>
-				<version>${project.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>

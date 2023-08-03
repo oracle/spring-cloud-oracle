@@ -7,7 +7,7 @@ package com.oracle.cloud.spring.sample.logging.springcloudociloggingsample;
 
 import com.oracle.bmc.loggingingestion.responses.PutLogsResponse;
 
-import com.oracle.cloud.spring.logging.Logging;
+import com.oracle.cloud.spring.logging.LogService;
 import com.oracle.cloud.spring.sample.common.base.SpringCloudSampleApplicationTestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
@@ -27,11 +27,11 @@ import org.springframework.util.Assert;
 @TestPropertySource(locations="classpath:application-test.properties")
 class SpringCloudOciLoggingSampleApplicationTests extends SpringCloudSampleApplicationTestBase {
 	@Autowired
-	Logging logging;
+	LogService logService;
 
 	@Test
-	void testLoggingApis() {
-		PutLogsResponse response = logging.putLogs("error starting logging application");
+	void testLogMessage() {
+		PutLogsResponse response = logService.putLog("error starting logging application");
 		Assert.notNull(response.getOpcRequestId());
 	}
 
