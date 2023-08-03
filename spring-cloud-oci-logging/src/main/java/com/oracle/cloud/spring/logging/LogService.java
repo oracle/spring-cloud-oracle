@@ -5,23 +5,24 @@
 
 package com.oracle.cloud.spring.logging;
 
+import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.responses.PutLogsResponse;
 
 /**
  * Interface for defining OCI logging module
  */
-public interface Logging {
+public interface LogService {
 
     /**
      * Direct instance of OCI Java SDK Logging Client.
      * @return Logging
      */
-    com.oracle.bmc.loggingingestion.Logging getClient();
+    Logging getClient();
 
     /**
      * Ingest logs associated with a Log OCID
      * @param logText Content of the log to be ingested
-     * @return
+     * @return PutLogsResponse
      */
-    PutLogsResponse putLogs(String logText);
+    PutLogsResponse putLog(String logText);
 }

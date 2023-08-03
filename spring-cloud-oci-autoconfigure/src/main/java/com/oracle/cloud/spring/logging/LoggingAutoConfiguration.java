@@ -7,6 +7,7 @@ package com.oracle.cloud.spring.logging;
 
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
+import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.LoggingClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -25,10 +26,10 @@ import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfi
  *  {@link com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration}
  *  for loading the Authentication configuration
  *
- * @see Logging
+ * @see LogService
  */
 @AutoConfiguration
-@ConditionalOnClass({Logging.class})
+@ConditionalOnClass({LogService.class})
 @EnableConfigurationProperties(LoggingProperties.class)
 @ConditionalOnProperty(name = "spring.cloud.oci.logging.enabled", havingValue = "true", matchIfMissing = true)
 public class LoggingAutoConfiguration {
@@ -40,17 +41,17 @@ public class LoggingAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(Logging.class)
-    Logging getLoggingImpl(com.oracle.bmc.loggingingestion.Logging logging) {
-        return new LoggingImpl(logging, properties.getLogId());
+    @ConditionalOnMissingBean(LogService.class)
+    LogService getLoggingImpl(Logging logging) {
+        return new LogServiceImpl(logging, properties.getLogId());
     }
 
     @Bean
     @ConditionalOnMissingBean
-    com.oracle.bmc.loggingingestion.Logging loggingClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
+    Logging loggingClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                                                           @Qualifier(credentialsProviderQualifier)
                                                           BasicAuthenticationDetailsProvider adp) {
-        com.oracle.bmc.loggingingestion.Logging logging = new LoggingClient(adp);
+        Logging logging = new LoggingClient(adp);
         if (regionProvider.getRegion() != null) logging.setRegion(regionProvider.getRegion());
         return logging;
     }
