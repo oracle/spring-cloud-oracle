@@ -678,29 +678,21 @@ pre.rouge {
 <li><a href="#sample">4.4. Sample</a></li>
 </ul>
 </li>
-<li><a href="#email-service">5. Email Service</a>
+<li><a href="#cloud-notifications">5. Cloud Notifications</a>
 <ul class="sectlevel2">
-<li><a href="#configuring-the-mail-sender">5.1. Configuring the mail sender</a></li>
-<li><a href="#sending-simple-emails">5.2. Sending Simple Emails</a></li>
-<li><a href="#sending-with-attachments">5.3. Sending with attachments</a></li>
-<li><a href="#email-service-references">5.4. Email Service References</a></li>
+<li><a href="#using-cloud-notifications">5.1. Using Cloud Notifications</a></li>
+<li><a href="#configuration-2">5.2. Configuration</a></li>
+<li><a href="#sample-2">5.3. Sample</a></li>
 </ul>
 </li>
-<li><a href="#cloud-notifications">6. Cloud Notifications</a>
+<li><a href="#cloud-logging">6. Cloud Logging</a>
 <ul class="sectlevel2">
-<li><a href="#using-cloud-notifications">6.1. Using Cloud Notifications</a></li>
-<li><a href="#configuration-2">6.2. Configuration</a></li>
-<li><a href="#sample-2">6.3. Sample</a></li>
+<li><a href="#using-cloud-logging">6.1. Using Cloud Logging</a></li>
+<li><a href="#configuration-3">6.2. Configuration</a></li>
+<li><a href="#sample-3">6.3. Sample</a></li>
 </ul>
 </li>
-<li><a href="#cloud-logging">7. Cloud Logging</a>
-<ul class="sectlevel2">
-<li><a href="#using-cloud-logging">7.1. Using Cloud Logging</a></li>
-<li><a href="#configuration-3">7.2. Configuration</a></li>
-<li><a href="#sample-3">7.3. Sample</a></li>
-</ul>
-</li>
-<li><a href="#configuration-properties">8. Configuration properties</a></li>
+<li><a href="#configuration-properties">7. Configuration properties</a></li>
 </ul>
 </div>
 </div>
@@ -852,10 +844,6 @@ The table below highlights several samples of the most commonly used integration
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Logging</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">spring-cloud-oci-logging-sample</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Email</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-email-sample">spring-cloud-oci-email-sample</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1101,118 +1089,7 @@ Spring Cloud OCI adds a new resource type: a Oracle Cloud Storage (OCS) object.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="email-service"><a class="anchor" href="#email-service"></a>5. Email Service</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Spring has a built-in support to send e-mails based on the <a href="https://www.oracle.com/technetwork/java/javamail/index.html">Java Mail API</a> to avoid any static method calls while using the Java Mail API. This section illustrates samples to configure <code>JavaMailSender</code> to work with OCI Email Service.</p>
-</div>
-<div class="sect2">
-<h3 id="configuring-the-mail-sender"><a class="anchor" href="#configuring-the-mail-sender"></a>5.1. Configuring the mail sender</h3>
-<div class="paragraph">
-<p>Maven coordinates,</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-mail&lt;/artifactId&gt;
-&lt;/dependency&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Once the dependency is in place, the next step is to specify the mail server properties in the application.properties file using the spring.mail.* namespace.</p>
-</div>
-<div class="paragraph">
-<p>We can specify the properties for the OCI Email Service SMTP server this way:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>spring.mail.host=smtp.email.&lt;REGION&gt;.oci.oraclecloud.com
-spring.mail.port=587
-spring.mail.username=&lt;login user to smtp server&gt;
-spring.mail.password=&lt;login password to smtp server&gt;
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Replace <code>&lt;REGION&gt;</code> with actual region identifier (eg: us-ashburn-1) where the email service configured.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="sending-simple-emails"><a class="anchor" href="#sending-simple-emails"></a>5.2. Sending Simple Emails</h3>
-<div class="paragraph">
-<p>Once dependency management and configuration are in place, we can use the <code>JavaMailSender</code> to send an email as below.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>@Component
-public class EmailServiceImpl implements EmailService {
-
-    @Autowired
-    private JavaMailSender emailSender;
-
-    public void sendSimpleMessage(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("&lt;FROM_ADDRESS&gt;");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        emailSender.send(message);
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note that the <code>&lt;FROM_ADDRESS&gt;</code> should match to the approved senders of the OCI email service.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="sending-with-attachments"><a class="anchor" href="#sending-with-attachments"></a>5.3. Sending with attachments</h3>
-<div class="paragraph">
-<p>We can send mails with attachments as below.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>@Component
-public class EmailServiceImpl implements EmailService {
-
-    @Autowired
-    private JavaMailSender emailSender;
-
-    public void sendMailMessage() {
-        this.emailSender.send(new MimeMessagePreparator() {
-
-            @Override
-            public void prepare(MimeMessage mimeMessage) throws Exception {
-                MimeMessageHelper helper =
-                    new MimeMessageHelper(mimeMessage, true, "UTF-8");
-                helper.addTo("foo@bar.com");
-                helper.setFrom("bar@baz.com");
-                helper.addAttachment("test.txt", ...);
-                helper.setSubject("test subject with attachment");
-                helper.setText("mime body", false);
-            }
-        });
-    }
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="email-service-references"><a class="anchor" href="#email-service-references"></a>5.4. Email Service References</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://blogs.oracle.com/cloud-infrastructure/post/step-by-step-instructions-to-send-email-with-oci-email-delivery">Configuring Email Service</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="cloud-notifications"><a class="anchor" href="#cloud-notifications"></a>6. Cloud Notifications</h2>
+<h2 id="cloud-notifications"><a class="anchor" href="#cloud-notifications"></a>5. Cloud Notifications</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://www.oracle.com/in/devops/notifications/">Oracle Cloud Infrastructure (OCI) Notifications</a> is a highly available, low-latency publish/subscribe (pub/sub) service that sends alerts and messages to Oracle Cloud Functions, email, SMS, and message delivery partners, including Slack, PagerDuty and custom HTTPS endpoint. Spring Cloud module for Oracle Cloud Notifications allows to create a Topic and create and publish messages to multiple subsctiption types like Oracle Cloud Functions, email, SMS, Slack, PagerDuty and custom HTTPS endpoint.
@@ -1243,7 +1120,7 @@ A Spring Boot starter is provided to auto-configure the various Notification com
 <p>This starter is also available from <a href="https://start.spring.io/">Spring Initializr</a> through the <code>OCI Notifications</code> entry.</p>
 </div>
 <div class="sect2">
-<h3 id="using-cloud-notifications"><a class="anchor" href="#using-cloud-notifications"></a>6.1. Using Cloud Notifications</h3>
+<h3 id="using-cloud-notifications"><a class="anchor" href="#using-cloud-notifications"></a>5.1. Using Cloud Notifications</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Notification</code> bean in the Spring application context.
 The <code>Notification</code> bean (link[Javadoc]) can be used to create Topic, create/list/get Subscription and publish message to the Subscriptions in a Topic.</p>
@@ -1261,7 +1138,7 @@ The <code>Notification</code> bean (link[Javadoc]) can be used to create Topic, 
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration-2"><a class="anchor" href="#configuration-2"></a>6.2. Configuration</h3>
+<h3 id="configuration-2"><a class="anchor" href="#configuration-2"></a>5.2. Configuration</h3>
 <div class="paragraph">
 <p>The Spring Boot Starter for Oracle Cloud Notifications provides the following configuration options:</p>
 </div>
@@ -1289,7 +1166,7 @@ The <code>Notification</code> bean (link[Javadoc]) can be used to create Topic, 
 </table>
 </div>
 <div class="sect2">
-<h3 id="sample-2"><a class="anchor" href="#sample-2"></a>6.3. Sample</h3>
+<h3 id="sample-2"><a class="anchor" href="#sample-2"></a>5.3. Sample</h3>
 <div class="paragraph">
 <p>A <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">sample application</a> is available.</p>
 </div>
@@ -1297,7 +1174,7 @@ The <code>Notification</code> bean (link[Javadoc]) can be used to create Topic, 
 </div>
 </div>
 <div class="sect1">
-<h2 id="cloud-logging"><a class="anchor" href="#cloud-logging"></a>7. Cloud Logging</h2>
+<h2 id="cloud-logging"><a class="anchor" href="#cloud-logging"></a>6. Cloud Logging</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm/">Oracle Cloud Infrastructure (OCI) Logging</a> service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from Oracle Cloud Infrastructure resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
@@ -1328,7 +1205,7 @@ A Spring Boot starter is provided to auto-configure the Logging component.</p>
 <p>This starter is also available from <a href="https://start.spring.io/">Spring Initializr</a> through the <code>OCI Logging</code> entry.</p>
 </div>
 <div class="sect2">
-<h3 id="using-cloud-logging"><a class="anchor" href="#using-cloud-logging"></a>7.1. Using Cloud Logging</h3>
+<h3 id="using-cloud-logging"><a class="anchor" href="#using-cloud-logging"></a>6.1. Using Cloud Logging</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Logging</code> bean in the Spring application context.
 The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associated with a logId.</p>
@@ -1346,7 +1223,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration-3"><a class="anchor" href="#configuration-3"></a>7.2. Configuration</h3>
+<h3 id="configuration-3"><a class="anchor" href="#configuration-3"></a>6.2. Configuration</h3>
 <div class="paragraph">
 <p>The Spring Boot Starter for Oracle Cloud Logging provides the following configuration options:</p>
 </div>
@@ -1374,7 +1251,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </table>
 </div>
 <div class="sect2">
-<h3 id="sample-3"><a class="anchor" href="#sample-3"></a>7.3. Sample</h3>
+<h3 id="sample-3"><a class="anchor" href="#sample-3"></a>6.3. Sample</h3>
 <div class="paragraph">
 <p>A <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">sample application</a> is available.</p>
 </div>
@@ -1382,7 +1259,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration-properties"><a class="anchor" href="#configuration-properties"></a>8. Configuration properties</h2>
+<h2 id="configuration-properties"><a class="anchor" href="#configuration-properties"></a>7. Configuration properties</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To see the list of all OCI related configuration properties please check <a href="appendix.html">the Appendix page</a>.</p>
@@ -1392,7 +1269,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-27 13:03:17 +0530
+Last updated 2023-08-04 12:41:44 +0530
 </div>
 </div>
 </body>
