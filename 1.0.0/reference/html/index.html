@@ -667,7 +667,6 @@ pre.rouge {
 <li><a href="#authentication-configuration">3.1. Authentication Configuration</a></li>
 <li><a href="#region-configuration">3.2. Region Configuration</a></li>
 <li><a href="#compartment-configuration">3.3. Compartment Configuration</a></li>
-<li><a href="#spring-initializr-2">3.4. Spring Initializr</a></li>
 </ul>
 </li>
 <li><a href="#cloud-storage">4. Cloud Storage</a>
@@ -786,27 +785,6 @@ You do <strong>not</strong> need to include the underlying <code>spring-cloud-oc
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="spring-initializr"><a class="anchor" href="#spring-initializr"></a>2.1.2. Spring Initializr</h4>
-<div class="paragraph">
-<p><a href="https://start.spring.io/">Spring Initializr</a> is a tool which generates the scaffolding code for a new Spring Boot project.
-It handles the work of generating the Maven or Gradle build file so you do not have to manually add the dependencies yourself.</p>
-</div>
-<div class="paragraph">
-<p>Spring Initializr offers below modules from Spring Cloud OCI that you can use to generate your project.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>OCI Support</strong>: The OCI Support module contains auto-configuration support for every Spring Cloud OCI integration.
-Most of the autoconfiguration code is only enabled if the required dependency is added to your project.</p>
-</li>
-<li>
-<p><strong>OCI Storage</strong>: OCI Storage integrations work out of the box.</p>
-</li>
-</ul>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -964,12 +942,6 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="spring-initializr-2"><a class="anchor" href="#spring-initializr-2"></a>3.4. Spring Initializr</h3>
-<div class="paragraph">
-<p>This starter is available from <a href="https://start.spring.io/">Spring Initializr</a> through the <code>OCI Support</code> entry.</p>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -999,9 +971,6 @@ A Spring Boot starter is provided to auto-configure the various Storage componen
     implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-storage")
 }</code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>This starter is also available from <a href="https://start.spring.io/">Spring Initializr</a> through the <code>OCI Storage</code> entry.</p>
 </div>
 <div class="sect2">
 <h3 id="using-cloud-storage"><a class="anchor" href="#using-cloud-storage"></a>4.1. Using Cloud Storage</h3>
@@ -1116,9 +1085,6 @@ A Spring Boot starter is provided to auto-configure the various Notification com
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>This starter is also available from <a href="https://start.spring.io/">Spring Initializr</a> through the <code>OCI Notifications</code> entry.</p>
-</div>
 <div class="sect2">
 <h3 id="using-cloud-notifications"><a class="anchor" href="#using-cloud-notifications"></a>5.1. Using Cloud Notifications</h3>
 <div class="paragraph">
@@ -1201,9 +1167,6 @@ A Spring Boot starter is provided to auto-configure the Logging component.</p>
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>This starter is also available from <a href="https://start.spring.io/">Spring Initializr</a> through the <code>OCI Logging</code> entry.</p>
-</div>
 <div class="sect2">
 <h3 id="using-cloud-logging"><a class="anchor" href="#using-cloud-logging"></a>6.1. Using Cloud Logging</h3>
 <div class="paragraph">
@@ -1269,7 +1232,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-04 12:41:44 +0530
+Last updated 2023-08-07 13:42:40 +0530
 </div>
 </div>
 </body>
