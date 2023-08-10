@@ -3,19 +3,23 @@
 #  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 # ----------------------------------------------------------------------------
 
-.PHONY: format build docs
+.PHONY: clean build docs
 
-format:
-	mvnd spotless:apply
+mvncmd=mvnd
+
+ifeq (, $(shell which ${mvncmd}))
+mvncmd=mvn
+endif
+
 
 build:
-	mvnd verify -DskipTests
+	${mvncmd} verify -DskipTests
 
 clean:
-	mvnd clean
+	${mvncmd} clean
 
 docs:
-	mvnd verify -Pasciidocs -DskipTests=true
+	${mvncmd} verify -Pasciidocs -DskipTests=true
 
 javadocs:
-	mvnd clean package javadoc:aggregate -DskipTests=true -e
+	${mvncmd} clean package javadoc:aggregate -DskipTests=true -e

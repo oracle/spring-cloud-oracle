@@ -26,8 +26,6 @@ dependencies {
 }
 ----
 
-This starter is also available from https://start.spring.io/[Spring Initializr] through the `OCI Storage` entry.
-
 === Using Cloud Storage
 
 The starter automatically configures and registers a `Storage` bean in the Spring application context.

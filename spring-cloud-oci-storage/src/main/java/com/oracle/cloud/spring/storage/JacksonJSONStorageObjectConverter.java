@@ -17,9 +17,10 @@ import java.io.InputStream;
  */
 public class JacksonJSONStorageObjectConverter implements StorageObjectConverter {
     private final ObjectMapper objectMapper;
+    static final String ERROR_OBJECTMAPPER_REQUIRED = "objectMapper is required";
 
     public JacksonJSONStorageObjectConverter(ObjectMapper objectMapper) {
-        Assert.notNull(objectMapper, "objectMapper is required");
+        Assert.notNull(objectMapper, ERROR_OBJECTMAPPER_REQUIRED);
         this.objectMapper = objectMapper;
     }
 

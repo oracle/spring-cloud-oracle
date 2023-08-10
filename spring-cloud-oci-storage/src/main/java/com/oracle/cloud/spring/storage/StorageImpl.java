@@ -31,13 +31,14 @@ public class StorageImpl implements Storage {
     private final StorageObjectConverter storageObjectConverter;
     private final StorageContentTypeResolver contentTypeResolver;
     private final String defaultCompartmentOCID;
+    static final String ERROR_OSCLIENT_REQUIRED = "ObjectStorageClient is required";
 
     public StorageImpl(
             ObjectStorageClient osClient,
             StorageObjectConverter storageObjectConverter,
             StorageContentTypeResolver contentTypeResolver,
             String defaultCompartmentOCID) {
-        Assert.notNull(osClient, "ObjectStorageClient is required");
+        Assert.notNull(osClient, ERROR_OSCLIENT_REQUIRED);
         Assert.notNull(storageObjectConverter, "storageObjectConverter is required");
         Assert.notNull(contentTypeResolver, "contentTypeResolver is required");
 
