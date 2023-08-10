@@ -84,7 +84,3 @@ A compartment is a logical container, to organize and control access to the Orac
 ----
 spring.cloud.oci.compartment.static = <COMPARTMENT_OCID>
 ----
-
-=== Spring Initializr
-
-This starter is available from https://start.spring.io/[Spring Initializr] through the `OCI Support` entry.

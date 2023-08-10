@@ -44,16 +44,6 @@ A summary of these artifacts are provided below.
 
 |===
 
-==== Spring Initializr
-
-https://start.spring.io/[Spring Initializr] is a tool which generates the scaffolding code for a new Spring Boot project.
-It handles the work of generating the Maven or Gradle build file so you do not have to manually add the dependencies yourself.
-
-Spring Initializr offers below modules from Spring Cloud OCI that you can use to generate your project.
-
-- *OCI Support*: The OCI Support module contains auto-configuration support for every Spring Cloud OCI integration.
-Most of the autoconfiguration code is only enabled if the required dependency is added to your project.
-- *OCI Storage*: OCI Storage integrations work out of the box.
 
 === Learning Spring Cloud OCI
 
@@ -76,9 +66,6 @@ The table below highlights several samples of the most commonly used integration
 
 | Cloud Logging
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample[spring-cloud-oci-logging-sample]
-
-| Cloud Email
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-email-sample[spring-cloud-oci-email-sample]
 
 |===
 

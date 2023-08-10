@@ -3,6 +3,5 @@
 Each code sample in this folder exemplifies how to use one Spring Framework with OCI.
 
 * [OCI Storage Service Sample](./spring-cloud-oci-storage-sample/)
-* [OCI Email Service Sample](./spring-cloud-oci-email-sample/)
 * [OCI Notification Service Sample](./spring-cloud-oci-notification-sample/)
 * [OCI Logging Service Sample](./spring-cloud-oci-logging-sample/)

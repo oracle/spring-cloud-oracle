@@ -14,13 +14,14 @@ import org.springframework.util.Assert;
  */
 public class StaticRegionProvider implements RegionProvider {
 
+    public static final String INVALID_REGION_MSG = "The region '%s' is not a valid region!";
     private Region region;
 
     public StaticRegionProvider(String regionName) {
         try {
             region = Region.valueOf(regionName);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("The region '" + regionName + "' is not a valid region!", e);
+            throw new IllegalArgumentException(String.format(INVALID_REGION_MSG, regionName), e);
         }
     }
 

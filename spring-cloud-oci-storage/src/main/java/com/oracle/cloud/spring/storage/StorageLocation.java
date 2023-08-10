@@ -19,6 +19,12 @@ public class StorageLocation {
 
     private static final String VERSION_DELIMITER = "^";
 
+    static final String ERROR_BUCKET_REQUIRED = "bucket is required";
+
+    static final String ERROR_OBJECT_REQUIRED = "object is required";
+
+    static final String ERROR_INVALID_BUCKET = "does not contain a valid bucket name";
+
     private final String bucket;
 
     private final String object;
@@ -31,8 +37,8 @@ public class StorageLocation {
     }
 
     StorageLocation(String bucket, String object, @Nullable String version) {
-        Assert.notNull(bucket, "bucket is required");
-        Assert.notNull(object, "object is required");
+        Assert.notNull(bucket, ERROR_BUCKET_REQUIRED);
+        Assert.notNull(object, ERROR_OBJECT_REQUIRED);
 
         this.bucket = bucket;
         this.object = object;
@@ -85,7 +91,7 @@ public class StorageLocation {
     private static String resolveBucketName(String location) {
         int bucketEndIndex = location.indexOf(PATH_DELIMITER, OCS_PROTOCOL_PREFIX.length());
         if (bucketEndIndex == -1 || bucketEndIndex == OCS_PROTOCOL_PREFIX.length()) {
-            throw new IllegalArgumentException("The location :'" + location + "' does not contain a valid bucket name");
+            throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
         }
         return location.substring(OCS_PROTOCOL_PREFIX.length(), bucketEndIndex);
     }
@@ -93,7 +99,7 @@ public class StorageLocation {
     private static String resolveObjectName(String location) {
         int bucketEndIndex = location.indexOf(PATH_DELIMITER, OCS_PROTOCOL_PREFIX.length());
         if (bucketEndIndex == -1 || bucketEndIndex == OCS_PROTOCOL_PREFIX.length()) {
-            throw new IllegalArgumentException("The location :'" + location + "' does not contain a valid bucket name");
+            throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
         }
 
         if (location.contains(VERSION_DELIMITER)) {
@@ -120,7 +126,7 @@ public class StorageLocation {
         }
 
         if (objectNameEndIndex == OCS_PROTOCOL_PREFIX.length()) {
-            throw new IllegalArgumentException("The location :'" + location + "' does not contain a valid bucket name");
+            throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
         }
 
         return location.substring(++objectNameEndIndex, location.length());
