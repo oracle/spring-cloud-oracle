@@ -7,13 +7,16 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>spring-cloud-oci</artifactId>
         <groupId>com.oracle.cloud.spring</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-cloud-oci-starters</artifactId>
     <packaging>pom</packaging>
+
     <licenses>
         <license>
             <name>The Universal Permissive License (UPL), Version 1.0</name>
@@ -27,16 +30,5 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-starter-notification</module>
         <module>spring-cloud-oci-starter-logging</module>
     </modules>
-    <artifactId>spring-cloud-oci-starters</artifactId>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.oracle.cloud.spring</groupId>
-                <artifactId>spring-cloud-oci-dependencies</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+
 </project>

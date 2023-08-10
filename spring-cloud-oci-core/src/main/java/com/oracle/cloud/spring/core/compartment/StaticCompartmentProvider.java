@@ -12,10 +12,11 @@ import org.springframework.util.Assert;
  */
 public class StaticCompartmentProvider implements CompartmentProvider {
 
+    public static final String COMPARTMENT_MISSING_MSG = "compartmentOCID is required";
     private final String compartmentOCID;
 
     public StaticCompartmentProvider(String compartmentOCID) {
-        Assert.notNull(compartmentOCID, "compartmentOCID is required");
+        Assert.notNull(compartmentOCID, COMPARTMENT_MISSING_MSG);
         this.compartmentOCID = compartmentOCID;
     }
 

@@ -11,8 +11,13 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <groupId>com.oracle.cloud.spring</groupId>
     <artifactId>spring-cloud-oci</artifactId>
-    <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Spring Cloud OCI</name>
+    <description>Spring Cloud OCI</description>
+    <url>https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html</url>
+
     <licenses>
         <license>
             <name>The Universal Permissive License (UPL), Version 1.0</name>
@@ -20,6 +25,21 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <id>oracle</id>
+            <name>Oracle</name>
+            <organizationUrl>https://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/oracle/spring-cloud-oci</url>
+        <connection>scm:git:https://github.com/oracle/spring-cloud-oci.git</connection>
+        <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oci.git</developerConnection>
+    </scm>
+
     <modules>
         <module>spring-cloud-oci-dependencies</module>
         <module>spring-cloud-oci-core</module>
@@ -31,20 +51,103 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-logging</module>
         <module>docs</module>
     </modules>
+
     <properties>
+        <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2022.0.1</spring-cloud-dependencies.version>
         <spring-boot-dependencies.version>2.7.4</spring-boot-dependencies.version>
         <oci-sdk.version>3.19.0</oci-sdk.version>
         <spring-boot-maven-plugin.version>3.1.2</spring-boot-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <springdoc-openapi-ui.version>1.6.13</springdoc-openapi-ui.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <jackson-core.version>2.13.1</jackson-core.version>
+        <lombok.version>1.18.20</lombok.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <slf4j-simple.version>1.7.33</slf4j-simple.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.oracle.oci.sdk</groupId>
+                <artifactId>oci-java-sdk-bom</artifactId>
+                <version>${oci-sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.oci.sdk</groupId>
+                <artifactId>oci-java-sdk-objectstorage-extensions</artifactId>
+                <version>${oci-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>${springdoc-openapi-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-dependencies</artifactId>
+                <version>${spring-cloud-oci-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.33</version>
+            <version>${slf4j-simple.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -53,15 +156,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>${maven-javadoc-plugin.version}</version>
 				<configuration>
 					<skip>false</skip>
-					<!--<links>
-						<link>https://docs.oracle.com/javase/8/docs/api/</link>
-						<link>https://javaee.github.io/javaee-spec/javadocs/</link>
-						<link>https://fasterxml.github.io/jackson-core/javadoc/2.8/</link>
-						<link>https://docs.spring.io/spring/docs/5.3.x/javadoc-api/</link>
-					</links> -->
 					<author>true</author>
 					<header>${project.name}</header>
 					<reportOutputDirectory>${project.build.directory}/site/${project.version}/apidocs</reportOutputDirectory>
@@ -79,7 +176,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -90,20 +187,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <configuration>
-                            <skip>${disable.checks}</skip>
-                        </configuration>
-                        <goals>
-                            <goal>apply</goal>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
 		</plugins>
 	</build>
@@ -123,30 +209,4 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			</build>
 		</profile>
     </profiles>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.oracle.oci.sdk</groupId>
-                <artifactId>oci-java-sdk-bom</artifactId>
-                <version>${oci-sdk.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
 </project>

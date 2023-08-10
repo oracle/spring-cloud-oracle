@@ -26,8 +26,6 @@ dependencies {
 }
 ----
 
-This starter is also available from https://start.spring.io/[Spring Initializr] through the `OCI Notifications` entry.
-
 === Using Cloud Notifications
 
 The starter automatically configures and registers a `Notification` bean in the Spring application context.

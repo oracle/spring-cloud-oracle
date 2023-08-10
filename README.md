@@ -11,7 +11,7 @@
 ## Introduction
 Spring Cloud for OCI, eases the integration with OCI services with the help of OCI Java SDK internally. It offers a convenient way to interact with OCI-provided services using well-known Spring idioms and APIs, such as the messaging or storage API. Developers can build their applications around the hosted services without having to care about infrastructure or maintenance. Spring Cloud for OCI contains auto-configuration support for OCI-managed services.
 
-All Spring Cloud for OCI artifacts are made available through Maven Central. Developers can bootstrap their application with Spring Initializr and add the OCI Support dependency. With Spring Cloud for OCI, the developers only need to add some annotations and a small number of configurations to connect Spring Cloud applications to the OCI services.
+All Spring Cloud for OCI artifacts are made available through Maven Central. With Spring Cloud for OCI, the developers only need to add some annotations and a small number of configurations to connect Spring Cloud applications to the OCI services.
 
 ## Spring Cloud OCI documentation
 
@@ -35,7 +35,6 @@ This project has dependency and transitive dependencies on Spring Projects. The 
 You may checkout samples for the each service supported by Spring Cloud OCI below.
 
 * [OCI Storage Sample](./spring-cloud-oci-samples/spring-cloud-oci-storage-sample/)
-* [OCI Email Service Sample](./spring-cloud-oci-samples/spring-cloud-oci-email-sample/)
 * [OCI Notification Service Sample](./spring-cloud-oci-samples/spring-cloud-oci-notification-sample/)
 * [OCI Logging Service Sample](./spring-cloud-oci-samples/spring-cloud-oci-logging-sample/)
 
@@ -71,11 +70,6 @@ make build
 Clean:
 ```
 make clean
-```
-
-Format code:
-```
-make format
 ```
 
 ## Documentation

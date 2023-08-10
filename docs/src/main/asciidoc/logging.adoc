@@ -26,8 +26,6 @@ dependencies {
 }
 ----
 
-This starter is also available from https://start.spring.io/[Spring Initializr] through the `OCI Logging` entry.
-
 === Using Cloud Logging
 
 The starter automatically configures and registers a `Logging` bean in the Spring application context.

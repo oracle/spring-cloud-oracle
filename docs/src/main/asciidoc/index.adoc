@@ -22,8 +22,6 @@ include::core.adoc[]
 
 include::storage.adoc[]
 
-include::email.adoc[]
-
 include::notifications.adoc[]
 
 include::logging.adoc[]

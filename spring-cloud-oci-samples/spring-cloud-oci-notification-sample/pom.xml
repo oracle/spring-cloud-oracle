@@ -40,26 +40,17 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>com.oracle.cloud.spring.sample.common</groupId>
+			<artifactId>spring-cloud-oci-common-samples-utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.cloud.spring.sample.common</groupId>
-			<artifactId>spring-cloud-oci-common-sample</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.cloud.spring.sample.common</groupId>
-			<artifactId>spring-cloud-oci-common-sample</artifactId>
-			<version>${project.version}</version>
+			<artifactId>spring-cloud-oci-common-samples-utils</artifactId>
 			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.13</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
