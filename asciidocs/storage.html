@@ -670,7 +670,7 @@ pre.rouge {
 <h2 id="cloud-storage"><a class="anchor" href="#cloud-storage"></a>Cloud Storage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://www.oracle.com/in/cloud/storage/">Oracle Cloud Storage</a> allows storing any types of files in single or multiple regions.
+<p><a href="https://www.oracle.com/in/cloud/storage/">Oracle Cloud Storage</a> allows storing any types of files.
 A Spring Boot starter is provided to auto-configure the various Storage components.</p>
 </div>
 <div class="paragraph">
@@ -705,7 +705,7 @@ The <code>Storage</code> bean (link[Javadoc]) can be used to list/create/update/
 <pre class="rouge highlight"><code data-lang="java"><span class="nd">@Autowired</span>
 <span class="kd">private</span> <span class="nc">Storage</span> <span class="n">storage</span><span class="o">;</span>
 
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createFile</span><span class="o">()</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createBucketAndUploadFile</span><span class="o">()</span> <span class="o">{</span>
     <span class="nc">Bucket</span> <span class="n">bucket</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="na">createBucket</span><span class="o">(</span><span class="s">"my-bucket"</span><span class="o">)</span>
 
     <span class="n">storage</span><span class="o">.</span><span class="na">upload</span><span class="o">(</span><span class="s">"my-bucket"</span><span class="o">,</span> <span class="s">"my-file.txt"</span><span class="o">,</span> <span class="n">inputStream</span><span class="o">,</span> <span class="nc">StorageObjectMetadata</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">contentType</span><span class="o">(</span><span class="s">"text/plain"</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
@@ -782,7 +782,7 @@ Spring Cloud OCI adds a new resource type: a Oracle Cloud Storage (OCS) object.<
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-08 13:32:04 +0530
+Last updated 2023-08-11 11:49:34 +0530
 </div>
 </div>
 </body>

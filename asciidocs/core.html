@@ -700,7 +700,7 @@ pre.rouge {
 <div class="sect3">
 <h4 id="config-file-based-authentication"><a class="anchor" href="#config-file-based-authentication"></a>Config File Based Authentication</h4>
 <div class="paragraph">
-<p>By default config file based authentication is enabled. There are below optional configuration to choose custom config profile name and config file name.</p>
+<p>By default config file based authentication is enabled, to set it explicitly set the property spring.cloud.oci.config.type to <code>FILE</code>. There are below optional configuration to choose custom config profile name and config file name.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -708,17 +708,20 @@ pre.rouge {
 spring.cloud.oci.config.file = &lt;FILE_PATH&gt;</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>For further details about the Authentication config file refer <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm">SDK and CLI Configuration File</a></p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="simple-authentication"><a class="anchor" href="#simple-authentication"></a>Simple Authentication</h4>
 <div class="paragraph">
-<p>Set the config.type to <code>SIMPLE</code> and set related required properties as below. All the below properties are mandatory.</p>
+<p>Set the property spring.cloud.oci.config.type to <code>SIMPLE</code> and add below properties:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>spring.cloud.oci.config.type = SIMPLE
-spring.cloud.oci.config.userId = &lt;USER_ID&gt;
-spring.cloud.oci.config.tenantId = &lt;TENANT_ID&gt;
+spring.cloud.oci.config.userId = ocid1.user.oc1..&lt;unique_ID&gt;
+spring.cloud.oci.config.tenantId = ocid1.tenancy.oc1..&lt;unique_ID&gt;
 spring.cloud.oci.config.fingerprint = &lt;FINGERPRINT&gt;
 spring.cloud.oci.config.privateKey = &lt;PRIVATE_KEY_FILE_PATH&gt;
 spring.cloud.oci.config.passPhrase = &lt;PASS_PHRASE&gt;
@@ -726,7 +729,7 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note: spring.cloud.oci.config.passPhrase is optional</p>
+<p>Note: All the above properties are mandatory except spring.cloud.oci.config.passPhrase</p>
 </div>
 </div>
 <div class="sect3">
@@ -739,6 +742,9 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 <pre>spring.cloud.oci.config.type = INSTANCE_PRINCIPAL</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>For further details refer <a href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm">OCI Instance Principal Authentication</a></p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="resource-principal-configuration"><a class="anchor" href="#resource-principal-configuration"></a>Resource Principal Configuration</h4>
@@ -749,6 +755,9 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 <div class="content">
 <pre>spring.cloud.oci.config.type = RESOURCE_PRINCIPAL</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>For further details refer <a href="https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal">OCI Resource Principal Authentication</a></p>
 </div>
 </div>
 </div>
@@ -761,6 +770,9 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 <div class="content">
 <pre>spring.cloud.oci.region.static = us-ashburn-1</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Region value set in the above property takes precedence over the property <code>spring.cloud.oci.config.region</code> and <code>region</code> from the Authentication config file</p>
 </div>
 </div>
 <div class="sect2">
@@ -779,7 +791,7 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-08 13:32:04 +0530
+Last updated 2023-08-11 11:49:34 +0530
 </div>
 </div>
 </body>
