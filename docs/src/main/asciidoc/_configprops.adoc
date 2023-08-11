@@ -4,19 +4,19 @@
 |===
 |Name | Default | Description
 
-|spring.cloud.oci.config.profile | `DEFAULT` |  
-|spring.cloud.oci.config.file |  |  
-|spring.cloud.oci.config.type |  |
-|spring.cloud.oci.config.userId |  |  
-|spring.cloud.oci.config.tenantId |  |  
-|spring.cloud.oci.config.fingerprint |  |  
-|spring.cloud.oci.config.privateKey |  |  
-|spring.cloud.oci.config.passPhrase |  |
-|spring.cloud.oci.config.region |  |
-|spring.cloud.oci.region.static |  |
-|spring.cloud.oci.compartment.static |  |
-|spring.cloud.oci.storage.enabled | `true` |
-|spring.cloud.oci.notification.enabled | `true` |
-|spring.cloud.oci.logging.enabled | `true` |
+|spring.cloud.oci.config.profile | `DEFAULT` | Name of the profile in OCI Auth config file
+|spring.cloud.oci.config.file | NA | Location of the OCI Auth config file
+|spring.cloud.oci.config.type | FILE | Config/Auth type to be used. Allowed values are FILE, SIMPLE, INSTANCE_PRINCIPAL and RESOURCE_PRINCIPAL
+|spring.cloud.oci.config.userId | NA | OCID of the user used for creating the API key. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
+|spring.cloud.oci.config.tenantId | NA | Tenancy OCID where the API key is created. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
+|spring.cloud.oci.config.fingerprint | NA | Fingerprint for the public key that was added to the user mentioned in `spring.cloud.oci.config.userId`. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
+|spring.cloud.oci.config.privateKey | NA | Full path and filename of the private key used for generating the `spring.cloud.oci.config.fingerprint`. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
+|spring.cloud.oci.config.passPhrase | NA | Passphrase used for `spring.cloud.oci.config.privateKey`, if it is encrypted. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
+|spring.cloud.oci.config.region | NA | An OCI region which will be used for Authentication. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
+|spring.cloud.oci.region.static | NA | An OCI region which will be used for making API calls. This will take precedence over `spring.cloud.oci.config.region`
+|spring.cloud.oci.compartment.static | NA | Default OCI Compartment OCID
+|spring.cloud.oci.storage.enabled | `true` | Flag to enable the OCI Spring Cloud Storage module
+|spring.cloud.oci.notification.enabled | `true` | Flag to enable the OCI Spring Cloud Notification module
+|spring.cloud.oci.logging.enabled | `true` | Flag to enable the OCI Spring Cloud Logging module
 
 |===

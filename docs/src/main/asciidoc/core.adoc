@@ -31,27 +31,29 @@ Spring Cloud OCI allows you to authenticate with OCI with various following avai
 
 ==== Config File Based Authentication
 
-By default config file based authentication is enabled. There are below optional configuration to choose custom config profile name and config file name.
+By default config file based authentication is enabled, to set it explicitly set the property spring.cloud.oci.config.type to `FILE`. There are below optional configuration to choose custom config profile name and config file name.
 
 ----
 spring.cloud.oci.config.profile = DEFAULT
 spring.cloud.oci.config.file = <FILE_PATH>
 ----
 
+For further details about the Authentication config file refer https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm[SDK and CLI Configuration File]
+
 ==== Simple Authentication
 
-Set the config.type to `SIMPLE` and set related required properties as below. All the below properties are mandatory.
+Set the property spring.cloud.oci.config.type to `SIMPLE` and add below properties:
 
 ----
 spring.cloud.oci.config.type = SIMPLE
-spring.cloud.oci.config.userId = <USER_ID>
-spring.cloud.oci.config.tenantId = <TENANT_ID>
+spring.cloud.oci.config.userId = ocid1.user.oc1..<unique_ID>
+spring.cloud.oci.config.tenantId = ocid1.tenancy.oc1..<unique_ID>
 spring.cloud.oci.config.fingerprint = <FINGERPRINT>
 spring.cloud.oci.config.privateKey = <PRIVATE_KEY_FILE_PATH>
 spring.cloud.oci.config.passPhrase = <PASS_PHRASE>
 spring.cloud.oci.config.region = <REGION>
 ----
-Note: spring.cloud.oci.config.passPhrase is optional
+Note: All the above properties are mandatory except spring.cloud.oci.config.passPhrase
 
 ==== Instance Principal Configuration
 
@@ -60,6 +62,7 @@ Set the config.type to `INSTANCE_PRINCIPAL` as below.
 ----
 spring.cloud.oci.config.type = INSTANCE_PRINCIPAL
 ----
+For further details refer https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm[OCI Instance Principal Authentication]
 
 ==== Resource Principal Configuration
 
@@ -69,6 +72,8 @@ Set the config.type to `RESOURCE_PRINCIPAL` as below.
 spring.cloud.oci.config.type = RESOURCE_PRINCIPAL
 ----
 
+For further details refer https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal[OCI Resource Principal Authentication]
+
 === Region Configuration
 
 OCI services are available in different regions. Based on the custom requirements, the user can host the application on different OCI regions. The below configuration allows to set specific region for the entire application.
@@ -76,6 +81,8 @@ OCI services are available in different regions. Based on the custom requirement
 ----
 spring.cloud.oci.region.static = us-ashburn-1
 ----
+
+Region value set in the above property takes precedence over the property `spring.cloud.oci.config.region` and `region` from the Authentication config file
 
 === Compartment Configuration
 

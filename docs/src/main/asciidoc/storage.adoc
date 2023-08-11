@@ -4,7 +4,7 @@
 [#cloud-storage]
 == Cloud Storage
 
-https://www.oracle.com/in/cloud/storage/[Oracle Cloud Storage] allows storing any types of files in single or multiple regions.
+https://www.oracle.com/in/cloud/storage/[Oracle Cloud Storage] allows storing any types of files.
 A Spring Boot starter is provided to auto-configure the various Storage components.
 
 Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
@@ -36,7 +36,7 @@ The `Storage` bean (link[Javadoc]) can be used to list/create/update/delete buck
 @Autowired
 private Storage storage;
 
-public void createFile() {
+public void createBucketAndUploadFile() {
     Bucket bucket = storage.createBucket("my-bucket")
 
     storage.upload("my-bucket", "my-file.txt", inputStream, StorageObjectMetadata.builder().contentType("text/plain").build());
