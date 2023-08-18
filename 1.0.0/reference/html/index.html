@@ -691,7 +691,11 @@ pre.rouge {
 <li><a href="#sample-3">6.3. Sample</a></li>
 </ul>
 </li>
-<li><a href="#configuration-properties">7. Configuration properties</a></li>
+<li><a href="#configuration-properties">7. Configuration properties</a>
+<ul class="sectlevel2">
+<li><a href="#configuration-refresh">7.1. Configuration Refresh</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1239,12 +1243,110 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 <div class="paragraph">
 <p>To see the list of all OCI related configuration properties please check <a href="appendix.html">the Appendix page</a>.</p>
 </div>
+<div class="sect2">
+<h3 id="configuration-refresh"><a class="anchor" href="#configuration-refresh"></a>7.1. Configuration Refresh</h3>
+<div class="paragraph">
+<p>The following properties are supported for Configuration auto-refresh at runtime without the need to restart applications</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.profile</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DEFAULT</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.file</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.userId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.tenantId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.fingerprint</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.privateKey</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.passPhrase</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.region</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.region.static</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.compartment.static</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.logging.logId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Spring Boot Actuator can be used to explicitly refresh the externalized configuration during runtime. Add the corresponding build dependency to enable the Actuator:</p>
+</div>
+<div class="paragraph">
+<p>Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set <code>management.endpoints.web.exposure.include=refresh</code> in the externalized configuration file of the Spring Boot Application to enable /actuator/refresh endpoint.</p>
+</div>
+<div class="paragraph">
+<p>To refresh the updated Configuration properties at runtime make a POST API call to /actuator/refresh endpoint</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-09 14:54:47 +0530
+Last updated 2023-08-18 11:58:42 +0530
 </div>
 </div>
 </body>
