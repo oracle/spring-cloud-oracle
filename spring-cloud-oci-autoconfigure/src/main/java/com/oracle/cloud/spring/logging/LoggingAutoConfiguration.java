@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
 import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration.credentialsProviderQualifier;
@@ -41,12 +42,14 @@ public class LoggingAutoConfiguration {
     }
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean(LogService.class)
     LogService getLoggingImpl(Logging logging) {
         return new LogServiceImpl(logging, properties.getLogId());
     }
 
     @Bean
+    @RefreshScope
     @ConditionalOnMissingBean
     Logging loggingClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                                                           @Qualifier(credentialsProviderQualifier)

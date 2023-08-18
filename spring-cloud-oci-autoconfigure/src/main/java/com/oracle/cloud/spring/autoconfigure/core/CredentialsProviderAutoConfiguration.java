@@ -18,6 +18,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class CredentialsProviderAutoConfiguration {
      * @throws IOException
      */
     @Bean (name = credentialsProviderQualifier)
+    @RefreshScope
     @ConditionalOnMissingBean
     public BasicAuthenticationDetailsProvider credentialsProvider() throws IOException {
         return createCredentialsProvider(properties);
