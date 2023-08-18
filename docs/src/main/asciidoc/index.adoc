@@ -29,3 +29,46 @@ include::logging.adoc[]
 == Configuration properties
 
 To see the list of all OCI related configuration properties please check link:appendix.html[the Appendix page].
+
+=== Configuration Refresh
+
+The following properties are supported for Configuration auto-refresh at runtime without the need to restart applications
+
+|===
+|Name | Default
+
+|spring.cloud.oci.config.profile | `DEFAULT`
+|spring.cloud.oci.config.file | NA
+|spring.cloud.oci.config.type | NA
+|spring.cloud.oci.config.userId | NA
+|spring.cloud.oci.config.tenantId | NA
+|spring.cloud.oci.config.fingerprint | NA
+|spring.cloud.oci.config.privateKey | NA
+|spring.cloud.oci.config.passPhrase | NA
+|spring.cloud.oci.config.region | NA
+|spring.cloud.oci.region.static | NA
+|spring.cloud.oci.compartment.static | NA
+|spring.cloud.oci.logging.logId | NA
+
+|===
+
+Spring Boot Actuator can be used to explicitly refresh the externalized configuration during runtime. Add the corresponding build dependency to enable the Actuator:
+
+Maven:
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+----
+
+Gradle:
+----
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+}
+----
+
+Set `management.endpoints.web.exposure.include=refresh` in the externalized configuration file of the Spring Boot Application to enable /actuator/refresh endpoint.
+
+To refresh the updated Configuration properties at runtime make a POST API call to /actuator/refresh endpoint
