@@ -8,7 +8,7 @@ package com.oracle.cloud.spring.storage;
 import org.springframework.lang.Nullable;
 
 /**
- * Exception thrown from any OCI storage related API invocation failures.
+ * Exception thrown from any OCI storage-related API invocation failures.
  */
 public class StorageException extends RuntimeException {
 

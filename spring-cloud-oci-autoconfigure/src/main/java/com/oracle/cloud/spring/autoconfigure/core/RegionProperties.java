@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
- * Auto-configure settings related to a Region
+ * Auto-configuration settings related to a Region.
  */
 @ConfigurationProperties(prefix = RegionProperties.PREFIX)
 public class RegionProperties {

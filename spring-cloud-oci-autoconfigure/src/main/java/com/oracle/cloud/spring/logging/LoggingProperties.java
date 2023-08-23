@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.lang.Nullable;
 
 /**
- * Auto-configure settings related to Logging component
+ * Auto-configuration settings related to Logging component.
  */
 @ConfigurationProperties(prefix = LoggingProperties.PREFIX)
 public class LoggingProperties {

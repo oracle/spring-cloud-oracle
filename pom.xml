@@ -8,7 +8,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <parent>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-build</artifactId>
+        <version>4.0.4</version>
+        <relativePath/>
+    </parent>
     <groupId>com.oracle.cloud.spring</groupId>
     <artifactId>spring-cloud-oci</artifactId>
     <version>1.0.0-SNAPSHOT</version>
@@ -16,7 +21,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <name>Spring Cloud OCI</name>
     <description>Spring Cloud OCI</description>
-    <url>https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html</url>
+    <url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
 
     <licenses>
         <license>
@@ -70,6 +75,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <lombok.version>1.18.20</lombok.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
         <slf4j-simple.version>1.7.33</slf4j-simple.version>
+        <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
+        <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -152,6 +159,21 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>net.nicoulaj.maven.plugins</groupId>
+                    <artifactId>checksum-maven-plugin</artifactId>
+                    <version>${checksum-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${flatten-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -185,6 +207,67 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                        <configuration>
+                            <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
+                            <updatePomFile>true</updatePomFile>
+                            <flattenMode>oss</flattenMode>
+                            <pomElements>
+                                <parent>expand</parent>
+                                <organization>remove</organization>
+                                <distributionManagement>remove</distributionManagement>
+                                <repositories>remove</repositories>
+                            </pomElements>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.nicoulaj.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>checksum-maven-plugin-files</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>files</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <fileSets>
+                        <fileSet>
+                            <directory>${project.build.directory}</directory>
+                            <includes>
+                                <include>*.jar</include>
+                                <include>*.pom</include>
+                            </includes>
+                        </fileSet>
+                    </fileSets>
+                    <algorithms>
+                        <algorithm>SHA-1</algorithm>
+                        <algorithm>md5</algorithm>
+                    </algorithms>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

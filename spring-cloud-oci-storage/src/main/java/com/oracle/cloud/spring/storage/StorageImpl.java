@@ -49,7 +49,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Download specific object from OCI Object Storage.
+     * Downloads a specific object from OCI Object Storage.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param version Version of the object
@@ -64,7 +64,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Download latest version of specific object from OCI Object Storage.
+     * Downloads the latest version of a specific object from OCI Object Storage.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @return {@link com.oracle.cloud.spring.storage.OracleStorageResource}
@@ -75,7 +75,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Upload new object (via InputStream) to OCI Object Storage.
+     * Uploads a new object (using InputStream) to OCI Object Storage.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param inputStream Object data with InputStream data type.
@@ -116,7 +116,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Upload Java POJO as JSON object.
+     * Uploads a Java POJO as a JSON object.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param object POJO object to be stored as json.
@@ -132,7 +132,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Read JSON file stored on Object storage and convert to Java POJO.
+     * Reads a JSON file stored on Object storage and converts it to a Java POJO.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param clazz Type of the Java POJO.
@@ -153,7 +153,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Direct instance of OCI Java SDK Storage Client.
+     * Directs an instance of OCI Java SDK Storage Client.
      * @return ObjectStorageClient
      */
     @Override
@@ -162,7 +162,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Create new bucket with the specified bucket name.
+     * Creates a new bucket with the specified bucket name.
      * @param bucketName OCI storage bucket name.
      * @return CreateBucketResponse
      */
@@ -172,7 +172,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Create new bucket with the specified bucket name on a specific OCI compartment.
+     * Creates a new bucket with the specified bucket name on a specific OCI compartment.
      * @param bucketName OCI storage bucket name.
      * @param compartmentId OCI compartment OCID.
      * @return CreateBucketResponse
@@ -197,7 +197,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Delete storage bucket.
+     * Deletes a storage bucket.
      * @param bucketName OCI storage bucket name.
      */
     @Override
@@ -213,7 +213,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Delete storage object based on bucket name and object key.
+     * Deletes a storage object based on bucket name and object key.
      * @param bucketName OCI storage bucket name.
      * @param key Object name/key.s
      */
@@ -233,7 +233,7 @@ public class StorageImpl implements Storage {
     }
 
     /**
-     * Get the current OCI storage namespace.
+     * Gets the current OCI storage namespace.
      * @return name of the namespace.
      */
     @Override

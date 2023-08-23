@@ -12,7 +12,7 @@ import java.io.InputStream;
  */
 public interface StorageObjectConverter {
     /**
-     * Converts Java POJO to byte array.
+     * Converts a Java POJO to byte array.
      * @param object Java POJO
      * @param <T> Type of the Java POJO
      * @return byte[]
@@ -20,7 +20,7 @@ public interface StorageObjectConverter {
     <T> byte[] write(T object);
 
     /**
-     * Read InputStream and create Java POJO instance of the class T.
+     * Reads InputStream and creates a Java POJO instance of the class T.
      * @param is InputStream to read data from.
      * @param clazz Class instance of the type of Java POJO
      * @param <T> Type of the Java POJO

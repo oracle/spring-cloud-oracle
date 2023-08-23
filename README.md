@@ -26,9 +26,9 @@ For a deep dive into the project, refer to the Spring Cloud OCI documentation:
 
 This project has dependency and transitive dependencies on Spring Projects. The table below outlines the versions of Spring Cloud, Spring Boot and Spring Framework versions that are compatible with certain Spring Cloud OCI version.
 
-| Spring Cloud OCI  | Spring Cloud    | Spring Boot         | OCI Java SDK |
-|-------------------|-----------------|---------------------|--------------|
-| 1.0.0  	        | 2021.0.x        | 2.7.x               |  3.19.0      |
+| Spring Cloud OCI  | Spring Cloud              | Spring Boot         | OCI Java SDK |
+|-------------------|---------------------------|---------------------|--------------|
+| 1.0.0  	        | 2021.0.x                  | 2.7.x               |  3.19.0      |
 
 
 ## Try out samples

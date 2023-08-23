@@ -27,22 +27,22 @@ dependencies {
 
 === Authentication Configuration
 
-Spring Cloud OCI allows you to authenticate with OCI with various following available options.
+Spring Cloud OCI allows you to authenticate with OCI using various available options.
 
-==== Config File Based Authentication
+==== Configuration File Based Authentication
 
-By default config file based authentication is enabled, to set it explicitly set the property spring.cloud.oci.config.type to `FILE`. There are below optional configuration to choose custom config profile name and config file name.
+By default, configuration file based authentication is enabled. To set it explicitly, set the property `spring.cloud.oci.config.type` to `FILE`. The following are optional configurations to set a custom configuration profile name and file name.
 
 ----
 spring.cloud.oci.config.profile = DEFAULT
 spring.cloud.oci.config.file = <FILE_PATH>
 ----
 
-For further details about the Authentication config file refer https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm[SDK and CLI Configuration File]
+For further details about the Authentication configuration file, refer https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm[SDK and CLI Configuration File]
 
 ==== Simple Authentication
 
-Set the property spring.cloud.oci.config.type to `SIMPLE` and add below properties:
+Set the property `spring.cloud.oci.config.type` to `SIMPLE` and add the following properties:
 
 ----
 spring.cloud.oci.config.type = SIMPLE
@@ -53,40 +53,40 @@ spring.cloud.oci.config.privateKey = <PRIVATE_KEY_FILE_PATH>
 spring.cloud.oci.config.passPhrase = <PASS_PHRASE>
 spring.cloud.oci.config.region = <REGION>
 ----
-Note: All the above properties are mandatory except spring.cloud.oci.config.passPhrase
+Note: All the preceding properties are mandatory except `spring.cloud.oci.config.passPhrase`
 
 ==== Instance Principal Configuration
 
-Set the config.type to `INSTANCE_PRINCIPAL` as below.
+Set the config.type to `INSTANCE_PRINCIPAL` as shown here.
 
 ----
 spring.cloud.oci.config.type = INSTANCE_PRINCIPAL
 ----
-For further details refer https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm[OCI Instance Principal Authentication]
+For further details, refer to https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm[OCI Instance Principal Authentication]
 
 ==== Resource Principal Configuration
 
-Set the config.type to `RESOURCE_PRINCIPAL` as below.
+Set the config.type to `RESOURCE_PRINCIPAL` as shown here.
 
 ----
 spring.cloud.oci.config.type = RESOURCE_PRINCIPAL
 ----
 
-For further details refer https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal[OCI Resource Principal Authentication]
+For further details, refer to https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal[OCI Resource Principal Authentication]
 
 === Region Configuration
 
-OCI services are available in different regions. Based on the custom requirements, the user can host the application on different OCI regions. The below configuration allows to set specific region for the entire application.
+OCI services are available in different regions. Based on the custom requirements, you can host the application on different OCI regions. The following configuration allows you to set a specific region for the entire application.
 
 ----
 spring.cloud.oci.region.static = us-ashburn-1
 ----
 
-Region value set in the above property takes precedence over the property `spring.cloud.oci.config.region` and `region` from the Authentication config file
+Region value set in the preceding property takes precedence over the property `spring.cloud.oci.config.region` and `region` from the Authentication configuration file
 
 === Compartment Configuration
 
-A compartment is a logical container, to organize and control access to the Oracle Cloud Infrastructure (OCI) Resources (Compute, Storage, Network, Load Balancer, etc) created within that compartment. Below configuration allows you to set default compartment for your application.
+A compartment is a logical container, used to organize and control access to the OCI Resources (Compute, Storage, Network, Load Balancer, etc.) created within that compartment. The following configuration allows you to set the default compartment for your application.
 
 ----
 spring.cloud.oci.compartment.static = <COMPARTMENT_OCID>

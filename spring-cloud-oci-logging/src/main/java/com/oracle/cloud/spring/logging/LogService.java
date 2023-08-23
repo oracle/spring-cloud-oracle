@@ -9,7 +9,7 @@ import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.responses.PutLogsResponse;
 
 /**
- * Interface for defining OCI logging module
+ * Interface for defining the OCI logging module.
  */
 public interface LogService {
 

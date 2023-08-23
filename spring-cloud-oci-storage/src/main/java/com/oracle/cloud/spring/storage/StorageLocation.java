@@ -79,7 +79,7 @@ public class StorageLocation {
     }
 
     /**
-     * Checks wheter the location URI starts with protocol prefix (oci://).
+     * Checks whether the location URI starts with protocol prefix (oci://).
      * @param location String contains storage URI.
      * @return Boolean
      */

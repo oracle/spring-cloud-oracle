@@ -17,7 +17,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <artifactId>spring-cloud-oci-autoconfigure</artifactId>
     <name>Spring Cloud OCI Autoconfigure Module</name>
     <description>Spring Cloud OCI Autoconfigure Module</description>
-    <url>https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html</url>
+    <url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
 
     <licenses>
         <license>
