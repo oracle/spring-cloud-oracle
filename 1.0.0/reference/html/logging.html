@@ -669,7 +669,7 @@ pre.rouge {
 <h2 id="cloud-logging"><a class="anchor" href="#cloud-logging"></a>Cloud Logging</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm/">Oracle Cloud Infrastructure (OCI) Logging</a> service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from Oracle Cloud Infrastructure resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm/">OCI Logging</a> service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from OCI resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service, and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
 A Spring Boot starter is provided to auto-configure the Logging component.</p>
 </div>
 <div class="paragraph">
@@ -697,7 +697,7 @@ A Spring Boot starter is provided to auto-configure the Logging component.</p>
 <h3 id="using-cloud-logging"><a class="anchor" href="#using-cloud-logging"></a>Using Cloud Logging</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Logging</code> bean in the Spring application context.
-The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associated with a logId set in the property <code>spring.cloud.oci.logging.logId</code> in the application configuration file</p>
+The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associated with a logId specified in the property <code>spring.cloud.oci.logging.logId</code> within the application configuration file</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -725,10 +725,10 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Default value</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.logging.enabled</code></p></td>
@@ -742,7 +742,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 <div class="sect2">
 <h3 id="sample"><a class="anchor" href="#sample"></a>Sample</h3>
 <div class="paragraph">
-<p>A <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">sample application</a> is available.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Logging module.</p>
 </div>
 </div>
 </div>
@@ -750,7 +750,7 @@ The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associa
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-11 11:49:34 +0530
+Last updated 2023-08-23 14:05:13 +0530
 </div>
 </div>
 </body>

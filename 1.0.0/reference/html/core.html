@@ -695,12 +695,12 @@ pre.rouge {
 <div class="sect2">
 <h3 id="authentication-configuration"><a class="anchor" href="#authentication-configuration"></a>Authentication Configuration</h3>
 <div class="paragraph">
-<p>Spring Cloud OCI allows you to authenticate with OCI with various following available options.</p>
+<p>Spring Cloud OCI allows you to authenticate with OCI using various available options.</p>
 </div>
 <div class="sect3">
-<h4 id="config-file-based-authentication"><a class="anchor" href="#config-file-based-authentication"></a>Config File Based Authentication</h4>
+<h4 id="configuration-file-based-authentication"><a class="anchor" href="#configuration-file-based-authentication"></a>Configuration File Based Authentication</h4>
 <div class="paragraph">
-<p>By default config file based authentication is enabled, to set it explicitly set the property spring.cloud.oci.config.type to <code>FILE</code>. There are below optional configuration to choose custom config profile name and config file name.</p>
+<p>By default, configuration file based authentication is enabled. To set it explicitly, set the property <code>spring.cloud.oci.config.type</code> to <code>FILE</code>. The following are optional configurations to set a custom configuration profile name and file name.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -709,13 +709,13 @@ spring.cloud.oci.config.file = &lt;FILE_PATH&gt;</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>For further details about the Authentication config file refer <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm">SDK and CLI Configuration File</a></p>
+<p>For further details about the Authentication configuration file, refer <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm">SDK and CLI Configuration File</a></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="simple-authentication"><a class="anchor" href="#simple-authentication"></a>Simple Authentication</h4>
 <div class="paragraph">
-<p>Set the property spring.cloud.oci.config.type to <code>SIMPLE</code> and add below properties:</p>
+<p>Set the property <code>spring.cloud.oci.config.type</code> to <code>SIMPLE</code> and add the following properties:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -729,13 +729,13 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note: All the above properties are mandatory except spring.cloud.oci.config.passPhrase</p>
+<p>Note: All the preceding properties are mandatory except <code>spring.cloud.oci.config.passPhrase</code></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="instance-principal-configuration"><a class="anchor" href="#instance-principal-configuration"></a>Instance Principal Configuration</h4>
 <div class="paragraph">
-<p>Set the config.type to <code>INSTANCE_PRINCIPAL</code> as below.</p>
+<p>Set the config.type to <code>INSTANCE_PRINCIPAL</code> as shown here.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -743,13 +743,13 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>For further details refer <a href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm">OCI Instance Principal Authentication</a></p>
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm">OCI Instance Principal Authentication</a></p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="resource-principal-configuration"><a class="anchor" href="#resource-principal-configuration"></a>Resource Principal Configuration</h4>
 <div class="paragraph">
-<p>Set the config.type to <code>RESOURCE_PRINCIPAL</code> as below.</p>
+<p>Set the config.type to <code>RESOURCE_PRINCIPAL</code> as shown here.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -757,14 +757,14 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>For further details refer <a href="https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal">OCI Resource Principal Authentication</a></p>
+<p>For further details, refer to <a href="https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal">OCI Resource Principal Authentication</a></p>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="region-configuration"><a class="anchor" href="#region-configuration"></a>Region Configuration</h3>
 <div class="paragraph">
-<p>OCI services are available in different regions. Based on the custom requirements, the user can host the application on different OCI regions. The below configuration allows to set specific region for the entire application.</p>
+<p>OCI services are available in different regions. Based on the custom requirements, you can host the application on different OCI regions. The following configuration allows you to set a specific region for the entire application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -772,13 +772,13 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Region value set in the above property takes precedence over the property <code>spring.cloud.oci.config.region</code> and <code>region</code> from the Authentication config file</p>
+<p>Region value set in the preceding property takes precedence over the property <code>spring.cloud.oci.config.region</code> and <code>region</code> from the Authentication configuration file</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="compartment-configuration"><a class="anchor" href="#compartment-configuration"></a>Compartment Configuration</h3>
 <div class="paragraph">
-<p>A compartment is a logical container, to organize and control access to the Oracle Cloud Infrastructure (OCI) Resources (Compute, Storage, Network, Load Balancer, etc) created within that compartment. Below configuration allows you to set default compartment for your application.</p>
+<p>A compartment is a logical container, used to organize and control access to the OCI Resources (Compute, Storage, Network, Load Balancer, etc.) created within that compartment. The following configuration allows you to set the default compartment for your application.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -791,7 +791,7 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-11 11:49:34 +0530
+Last updated 2023-08-23 14:05:13 +0530
 </div>
 </div>
 </body>

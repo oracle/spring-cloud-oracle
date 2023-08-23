@@ -657,7 +657,7 @@ pre.rouge {
 <li><a href="#cloud-storage">Cloud Storage</a>
 <ul class="sectlevel2">
 <li><a href="#using-cloud-storage">Using Cloud Storage</a></li>
-<li><a href="#cloud-storage-objects-as-spring-resources">Cloud Storage Objects As Spring Resources</a></li>
+<li><a href="#cloud-storage-objects-spring-resources">Cloud Storage Objects Spring Resources</a></li>
 <li><a href="#configuration">Configuration</a></li>
 <li><a href="#sample">Sample</a></li>
 </ul>
@@ -670,7 +670,7 @@ pre.rouge {
 <h2 id="cloud-storage"><a class="anchor" href="#cloud-storage"></a>Cloud Storage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://www.oracle.com/in/cloud/storage/">Oracle Cloud Storage</a> allows storing any types of files.
+<p><a href="https://www.oracle.com/in/cloud/storage/">Oracle Cloud Storage</a> allows you to store any types of file.
 A Spring Boot starter is provided to auto-configure the various Storage components.</p>
 </div>
 <div class="paragraph">
@@ -698,7 +698,7 @@ A Spring Boot starter is provided to auto-configure the various Storage componen
 <h3 id="using-cloud-storage"><a class="anchor" href="#using-cloud-storage"></a>Using Cloud Storage</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Storage</code> bean in the Spring application context.
-The <code>Storage</code> bean (link[Javadoc]) can be used to list/create/update/delete buckets and objects.</p>
+The <code>Storage</code> bean (link[Javadoc]) can be used to list, create, update or delete buckets and objects.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -714,22 +714,19 @@ The <code>Storage</code> bean (link[Javadoc]) can be used to list/create/update/
 </div>
 </div>
 <div class="sect2">
-<h3 id="cloud-storage-objects-as-spring-resources"><a class="anchor" href="#cloud-storage-objects-as-spring-resources"></a>Cloud Storage Objects As Spring Resources</h3>
+<h3 id="cloud-storage-objects-spring-resources"><a class="anchor" href="#cloud-storage-objects-spring-resources"></a>Cloud Storage Objects Spring Resources</h3>
 <div class="paragraph">
-<p><a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html">Spring Resources</a> are an abstraction for a number of low-level resources, such as file system files, classpath files, servlet context-relative files, etc.
-Spring Cloud OCI adds a new resource type: a Oracle Cloud Storage (OCS) object.</p>
+<p><a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html">Spring Resources</a> are an abstraction for several low-level resources, such as file system files, classpath files, servlet context-relative files, etc.
+Spring Cloud OCI adds a new resource type: an Oracle Cloud Storage (OCS) object.</p>
 </div>
 <div class="paragraph">
-<p>The Spring Resource Abstraction for Oracle Cloud Storage allows OCS objects to be accessed by their OCS URL using the <code>@Value</code> annotation:</p>
+<p>The Spring Resource Abstraction for Oracle Cloud Storage allows OCS objects to be accessed by their OCS URL using the <code>@Value</code> annotation or the Spring application context:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nd">@Value</span><span class="o">(</span><span class="s">"ocs://[YOUR_OCS_BUCKET]/[OCS_FILE_NAME]"</span><span class="o">)</span>
 <span class="kd">private</span> <span class="nc">Resource</span> <span class="n">ocsResource</span><span class="o">;</span></code></pre>
 </div>
-</div>
-<div class="paragraph">
-<p>&#8230;&#8203;or the Spring application context</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -757,10 +754,10 @@ Spring Cloud OCI adds a new resource type: a Oracle Cloud Storage (OCS) object.<
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Default value</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.storage.enabled</code></p></td>
@@ -774,7 +771,7 @@ Spring Cloud OCI adds a new resource type: a Oracle Cloud Storage (OCS) object.<
 <div class="sect2">
 <h3 id="sample"><a class="anchor" href="#sample"></a>Sample</h3>
 <div class="paragraph">
-<p>A <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">sample application</a> is available.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">here</a> contains the examples to demonstrate the usage of OCI Spring Cloud Storage module.</p>
 </div>
 </div>
 </div>
@@ -782,7 +779,7 @@ Spring Cloud OCI adds a new resource type: a Oracle Cloud Storage (OCS) object.<
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-11 11:49:34 +0530
+Last updated 2023-08-23 14:05:13 +0530
 </div>
 </div>
 </body>
