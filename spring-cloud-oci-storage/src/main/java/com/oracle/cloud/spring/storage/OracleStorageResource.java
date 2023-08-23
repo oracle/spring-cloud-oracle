@@ -51,7 +51,7 @@ public class OracleStorageResource extends AbstractResource {
     }
 
     /**
-     * Get the description
+     * Gets the description of the resource.
      * @return String
      */
     @Override

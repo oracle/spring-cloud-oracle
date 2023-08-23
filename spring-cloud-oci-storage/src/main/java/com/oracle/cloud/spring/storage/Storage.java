@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Interface for defining OCI storage module
+ * Interface for defining OCI storage module.
  */
 public interface Storage {
 
     /**
-     * Download latest version of specific object from OCI Object Storage.
+     * Download the latest version of specific object from OCI Object Storage.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @return {@link com.oracle.cloud.spring.storage.OracleStorageResource}
@@ -26,7 +26,7 @@ public interface Storage {
     OracleStorageResource download(String bucketName, String key);
 
     /**
-     * Download specific object from OCI Object Storage.
+     * Download a specific object from OCI Object Storage.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param version Version of the object
@@ -35,7 +35,7 @@ public interface Storage {
     OracleStorageResource download(String bucketName, String key, String version);
 
     /**
-     * Upload new object (via InputStream) to OCI Object Storage.
+     * Upload a new object (using InputStream) to OCI Object Storage.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param inputStream Object data with InputStream data type.
@@ -46,7 +46,7 @@ public interface Storage {
                                  @Nullable StorageObjectMetadata objectMetadata) throws IOException;
 
     /**
-     * Upload new object (via InputStream) to OCI Object Storage with default metadata.
+     * Upload a new object (using InputStream) to OCI Object Storage with default metadata.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param inputStream Object data with InputStream data type.
@@ -57,7 +57,7 @@ public interface Storage {
     }
 
     /**
-     * Upload Java POJO as JSON object.
+     * Upload a Java POJO as a JSON object.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param object POJO object to be stored as json.
@@ -66,7 +66,7 @@ public interface Storage {
     OracleStorageResource store(String bucketName, String key, Object object) throws IOException;
 
     /**
-     * Read JSON file stored on Object storage and convert to Java POJO.
+     * Read a JSON file stored on Object storage and convert to a Java POJO.
      * @param bucketName OCI storage bucket name.
      * @param key Object name
      * @param clazz Type of the Java POJO.
@@ -75,20 +75,20 @@ public interface Storage {
     <T> T read(String bucketName, String key, Class<T> clazz);
 
     /**
-     * Direct instance of OCI Java SDK Storage Client.
+     * Gets the instance of OCI Java SDK Storage Client.
      * @return ObjectStorageClient
      */
     ObjectStorageClient getClient();
 
     /**
-     * Create new bucket with the specified bucket name.
+     * Create a new bucket with the specified bucket name.
      * @param bucketName OCI storage bucket name.
      * @return CreateBucketResponse
      */
     CreateBucketResponse createBucket(String bucketName);
 
     /**
-     * Create new bucket with the specified bucket name on a specific OCI compartment.
+     * Create a new bucket with the specified bucket name on a specific OCI compartment.
      * @param bucketName OCI storage bucket name.
      * @param compartmentId OCI compartment OCID.
      * @return CreateBucketResponse
@@ -96,13 +96,13 @@ public interface Storage {
     CreateBucketResponse createBucket(String bucketName, String compartmentId);
 
     /**
-     * Delete storage bucket.
+     * Delete a storage bucket.
      * @param bucketName OCI storage bucket name.
      */
     void deleteBucket(String bucketName);
 
     /**
-     * Delete storage object based on bucket name and object key.
+     * Delete a storage object based on bucket name and object key.
      * @param bucketName OCI storage bucket name.
      * @param key Object name/key.s
      */

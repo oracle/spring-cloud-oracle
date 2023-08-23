@@ -10,7 +10,7 @@ import com.oracle.bmc.ons.NotificationDataPlane;
 import com.oracle.bmc.ons.responses.*;
 
 /**
- * Interface for defining OCI logging module
+ * Interface for defining OCI logging module.
  */
 public interface Notification {
 
@@ -27,7 +27,7 @@ public interface Notification {
     NotificationControlPlane getNotificationControlPlaneClient();
 
     /**
-     * Publish message to a Topic
+     * Publish a message to a Topic.
      * @param topicId OCID of the topic
      * @param title Message title
      * @param message Message content
@@ -36,7 +36,7 @@ public interface Notification {
     PublishMessageResponse publishMessage(String topicId, String title, String message);
 
     /**
-     * Create a Notification subscription in a Topic
+     * Create a Notification subscription in a Topic.
      * @param compartmentId Compartment OCID where the Subscription needs to be created
      * @param topicId Topic OCID where the Subscription needs to be created
      * @param protocol Subscription type. Ex: EMAIL
@@ -46,14 +46,14 @@ public interface Notification {
     CreateSubscriptionResponse createSubscription(String compartmentId, String topicId, String protocol, String endpoint);
 
     /**
-     * Get the Subscription Resource JSON as a String
+     * Get the Subscription Resource JSON as a String.
      * @param subscriptionId OCID of the subscription
      * @return String
      */
     String getSubscription(String subscriptionId);
 
     /**
-     * List subscriptions in a Topic as a JSON String
+     * List subscriptions in a Topic as a JSON String.
      * @param topicId Topic OCID where to list the Subscriptions
      * @param compartmentId Compartment OCID where the topic is present
      * @return String
@@ -61,7 +61,7 @@ public interface Notification {
     String listSubscriptions(String topicId, String compartmentId);
 
     /**
-     * Create a OCI Notification Topic
+     * Create an OCI Notification Topic.
      * @param topicName Name of the Topic to be created
      * @param compartmentId Compartment OCID where the Topic needs to be created
      * @return CreateTopicResponse

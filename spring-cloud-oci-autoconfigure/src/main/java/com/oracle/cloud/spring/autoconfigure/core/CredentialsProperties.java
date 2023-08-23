@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProperties.ConfigType.FILE;
 
 /**
- * Auto-configure settings related to Credentials
+ * Auto-configuration settings related to Credentials.
  */
 @ConfigurationProperties(prefix = CredentialsProperties.PREFIX)
 public class CredentialsProperties {

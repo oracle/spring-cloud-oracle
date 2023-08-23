@@ -1,42 +1,39 @@
 # OCI Logging Service - Spring Framework Sample
 
-This sample application demonstrates how to use the OCI Logging Spring Cloud APIs to:
+This sample application demonstrates how to use the OCI Logging Spring Cloud APIs to ingest logs into the OCI Logging Service.
 
-* Ingest logs into OCI Logging Service
+This application has the following classes:
 
-This application has below classes:
-
-* `LoggingController`- REST Container class which contains the REST APIs for performing each of the operations in the above section
-* `SpringCloudOciLoggingSampleApplication` - Spring Boot application class, which when run will launch the application
+* `LoggingController`- REST Container class which contains the REST APIs for performing each of the operations in the previous section.
+* `SpringCloudOciLoggingSampleApplication` - Spring Boot application class, which when run, will launch the application.
 
 ## Prerequisites
-Configuration needed to run the Application to be configured in application.properties
+Configuration items that are needed to run the Application can be configured in `application.properties`. These include the following:
 
-* spring.cloud.oci.region.static - OCI Region name(Ex: us-phoenix-1) where the OCI resources needs to be created
-* spring.cloud.oci.config.type - Authentication type to be used for OCI. It could be either of RESOURCE_PRINCIPAL, INSTANCE_PRINCIPAL, SIMPLE and FILE. If nothing is specified, FILE type is used by default
-* spring.cloud.oci.config.file - The file path set to this property will be used as config file for FILE type authentication which used OCI config file. If nothing is specified, OCI config file from user home directory will be used
-* spring.cloud.oci.config.profile - Profile to be used in the OCI config file for Authentication. By default DEFAULT profile will be used
-* spring.cloud.oci.logging.logId - OCID of OCI Log where the logs need to be injested
+* `spring.cloud.oci.region.static` - OCI Region name(Ex: us-phoenix-1) where the OCI resources need to be created.
+* `spring.cloud.oci.config.type` - Authentication type to be used for OCI. It could be one of the following: RESOURCE_PRINCIPAL, INSTANCE_PRINCIPAL, SIMPLE and FILE. If nothing is specified, FILE type is used by default.
+* `spring.cloud.oci.config.file` - The file path set to this property will be used as a configuration file for FILE type authentication which uses the OCI configuration file. If nothing is specified, the OCI configuration file from the user's home directory will be used.
+* `spring.cloud.oci.config.profile` - Profile to be used in the OCI configuration file for Authentication. If a profile is not specified, a DEFAULT profile will be used.
+* `spring.cloud.oci.logging.logId` - OCID of the OCI Log where the logs need to be ingested.
 
-If the spring.cloud.oci.config.type is SIMPLE, then below properties also needs to be set in the application.properties
+If the `spring.cloud.oci.config.type` is SIMPLE, then the following properties also need to be set in the `application.properties`.
 
-* spring.cloud.oci.config.userId
-* spring.cloud.oci.config.tenantId
-* spring.cloud.oci.config.fingerprint
-* spring.cloud.oci.config.privateKey
-* spring.cloud.oci.config.passPhrase
-* spring.cloud.oci.config.region
+* `spring.cloud.oci.config.userId`
+* `spring.cloud.oci.config.tenantId`
+* `spring.cloud.oci.config.fingerprint`
+* `spring.cloud.oci.config.privateKey`
+* `spring.cloud.oci.config.passPhrase`
+* `spring.cloud.oci.config.region`
 
-Please refer [OCI SDK Authentication Methods
-](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm) for more details on the Authentication types supported by OCI
+Refer to [OCI SDK Authentication Methods](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm) for more details on the Authentication types supported by OCI.
 
 ## Quick Launch
 
-If you like to try out this sample in your OCI tenancy, click on 'Open in Code Editor' button below to clone and launch OCI Code Editor for this sample.
+To try out this sample in your OCI tenancy, click on the **Open in Code Editor** button below to clone and launch the OCI Code Editor for this sample.
 
 [<img src="https://raw.githubusercontent.com/oracle-devrel/oci-code-editor-samples/main/images/open-in-code-editor.png" />](https://cloud.oracle.com/?region=home&cs_repo_url=https://github.com/oracle/spring-cloud-oci.git&cs_open_ce=true&cs_readme_path=spring-cloud-oci-samples/spring-cloud-oci-storage/README.md)
 
-or You may clone the repository manually with below instructions.
+You can also clone the repository manually with the following instructions.
 
 ```
 git clone https://github.com/oracle/spring-cloud-oci.git spring-cloud-oci
@@ -44,19 +41,19 @@ git clone https://github.com/oracle/spring-cloud-oci.git spring-cloud-oci
 
 ## Let's start
 
-1. Run `mvn clean install` from root directory of the repository code.
-2. To start the application, run the below command from sample root directory.
+1. Run `mvn clean install` from the root directory of the code repository.
+2. To start the application, run the following command from the sample root directory.
 ```
 mvn spring-boot:run
 ```
 
-Note: Default service port is `8080`. You may change this with `server.port` property.
+The default service port is `8080`. You can change this with the `server.port` property.
 
-## Try out sample
+## Try the Sample
 
-The base URL for all the APIs exposed in this application is http://localhost:8080//demoapp/api/logging/
+The base URL for all the APIs exposed in this application is `http://localhost:8080//demoapp/api/logging/`
 
-Using the above base URL, below APIs can be invoked:
+Using the base URL, the following APIs can be invoked:
 
 | API     | Method | URI    | Request Params|
 |:--------|:--------|:-------|:-------|
@@ -69,7 +66,7 @@ Using the above base URL, below APIs can be invoked:
 * [OCI SDK - Documentation](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdks.htm)
 
 ## Contributing
-This project is open source.  Please submit your contributions by forking this repository and submitting a pull request!  Oracle appreciates any contributions that are made by the open source community.
+This project is open source.  Submit your contributions by forking this repository and submitting a pull request.  Oracle appreciates any contributions that are made by the open source community.
 
 ## License
 Copyright (c) 2023 Oracle and/or its affiliates.

@@ -3,11 +3,11 @@
 
 == Getting Started
 
-This section describes how to get up to speed with Spring Cloud OCI libraries.
+This section describes how to get started using Spring Cloud OCI libraries.
 
-=== Spring Cloud OCI maven dependency management
+=== Spring Cloud OCI
 
-Spring Cloud OCI module dependencies can be used directly in Maven with a direct configuration of the particular module. The Spring Cloud OCI module includes all transitive dependencies for the Spring modules and also the OCI SDK that are needed to operate the modules. The general dependency configuration will look like this:
+Spring Cloud OCI module dependencies can be used directly in Maven with a direct configuration of the module. The Spring Cloud OCI module includes all transitive dependencies for the Spring modules, and the OCI SDK that are needed to operate the modules. The general dependency configuration will look like this:
 
 ----
 <dependencies>
@@ -19,20 +19,20 @@ Spring Cloud OCI module dependencies can be used directly in Maven with a direct
 </dependencies>
 ----
 
-Different modules can be included by replacing the module name with the respective one (e.g. `spring-cloud-oci-starter-storage` instead of `spring-cloud-oci-starter`)
+Different modules can be included by replacing the module name with the respective one (for example, `spring-cloud-oci-starter-storage` instead of `spring-cloud-oci-starter`)
 
 ==== Starter Dependencies
 
 Spring Cloud OCI offers https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-starters[starter dependencies] through Maven to easily depend on different modules of the library.
 Each starter contains all the dependencies and transitive dependencies needed to begin using their corresponding Spring Cloud OCI module.
 
-For example, if you wish to write a Spring application with Cloud Storage, you would include the `spring-cloud-oci-starter-storage` dependency in your project.
+For example, to write a Spring application with Cloud Storage, you include the `spring-cloud-oci-starter-storage` dependency in your project.
 You do *not* need to include the underlying `spring-cloud-oci-storage` dependency, because the `starter` dependency includes it.
 
-A summary of these artifacts are provided below.
+A summary of these artifacts is provided here.
 
 |===
-| Spring Cloud OCI Starter | Description | Maven Artifact Name
+^| Spring Cloud OCI Starter ^| Description ^| Maven Artifact Name
 
 | Core
 | Automatically configure authentication
@@ -53,10 +53,10 @@ There are a variety of resources to help you learn how to use Spring Cloud OCI l
 
 The easiest way to learn how to use Spring Cloud OCI is to consult the https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples[sample applications on Github].
 Spring Cloud OCI provides sample applications which demonstrate how to use every integration in the library.
-The table below highlights several samples of the most commonly used integrations in Spring Cloud OCI.
+The following table highlights several samples of the most used integrations in Spring Cloud OCI.
 
 |===
-| OCI Integration | Sample Application
+^| OCI Integration ^| Sample Application
 
 | Cloud Storage
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample[spring-cloud-oci-storage-sample]

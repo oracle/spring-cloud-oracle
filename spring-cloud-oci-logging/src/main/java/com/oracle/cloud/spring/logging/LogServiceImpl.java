@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Implementation for the OCI Logging module
+ * Implementation of the OCI Logging module.
  */
 public class LogServiceImpl implements LogService {
 
@@ -46,7 +46,7 @@ public class LogServiceImpl implements LogService {
     }
 
     /**
-     * Ingest logs associated with a Log OCID
+     * Ingest logs associated with a Log OCID.
      * @param logText Content of the log to be ingested
      * @return PutLogsResponse
      */

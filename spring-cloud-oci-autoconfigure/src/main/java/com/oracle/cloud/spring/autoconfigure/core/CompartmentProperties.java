@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
- * Auto-configure settings related to a Compartment
+ * Auto-configuration settings related to a Compartment.
  */
 @ConfigurationProperties(prefix = CompartmentProperties.PREFIX)
 public class CompartmentProperties {
