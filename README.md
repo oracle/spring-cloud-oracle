@@ -28,7 +28,7 @@ This project has dependency and transitive dependencies on Spring Projects. The 
 
 | Spring Cloud OCI  | Spring Cloud              | Spring Boot         | OCI Java SDK |
 |-------------------|---------------------------|---------------------|--------------|
-| 1.0.0  	        | 2021.0.x                  | 2.7.x               |  3.19.0      |
+| 1.0.0  	        | 2022.0.x                  | 3.1.x, 3.0.x        |  3.19.0      |
 
 
 ## Try out samples
