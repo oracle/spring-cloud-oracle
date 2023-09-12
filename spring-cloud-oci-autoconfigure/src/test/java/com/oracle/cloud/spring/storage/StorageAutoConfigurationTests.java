@@ -16,15 +16,15 @@ import org.springframework.util.Assert;
 
 import static org.mockito.Mockito.mock;
 
-public class StorageAutoConfigurationTests {
-    private ApplicationContextRunner contextRunner =
+class StorageAutoConfigurationTests {
+    private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class))
                     .withUserConfiguration(TestCommonConfigurationBeans.class)
                     .withUserConfiguration(TestSpecificConfigurationBeans.class);
 
     @Test
     void testConfigurationValueDefaultsAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .run(
                         context -> {
                             String[] storageBeanNames = context.getBeanNamesForType(Storage.class);
@@ -36,7 +36,7 @@ public class StorageAutoConfigurationTests {
 
     @Test
     void testConfigurationValueConfiguredAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .withPropertyValues("spring.cloud.oci.storage.enabled=false")
                 .run(
                         context -> {
@@ -48,7 +48,7 @@ public class StorageAutoConfigurationTests {
     @Configuration
     static class TestSpecificConfigurationBeans {
         @Bean
-        public ObjectStorageClient objectStorageClient() {
+        ObjectStorageClient objectStorageClient() {
             return mock(ObjectStorageClient.class);
         }
 

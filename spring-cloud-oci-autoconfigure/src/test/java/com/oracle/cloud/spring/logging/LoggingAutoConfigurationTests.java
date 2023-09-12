@@ -16,15 +16,15 @@ import org.springframework.util.Assert;
 
 import static org.mockito.Mockito.mock;
 
-public class LoggingAutoConfigurationTests {
-    private ApplicationContextRunner contextRunner =
+class LoggingAutoConfigurationTests {
+    private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(LoggingAutoConfiguration.class))
                     .withUserConfiguration(TestCommonConfigurationBeans.class)
                     .withUserConfiguration(TestSpecificConfigurationBeans.class);
 
     @Test
     void testConfigurationValueDefaultsAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .run(
                         context -> {
                             LoggingProperties config = context.getBean(LoggingProperties.class);
@@ -34,7 +34,7 @@ public class LoggingAutoConfigurationTests {
 
     @Test
     void testConfigurationValueConfiguredAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .withPropertyValues("spring.cloud.oci.logging.logId=demoLogId")
                 .run(
                         context -> {
@@ -45,7 +45,7 @@ public class LoggingAutoConfigurationTests {
 
     @Test
     void testConfigurationDefaultsAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .run(
                         context -> {
                             String[] logServiceBeanNames = context.getBeanNamesForType(LogService.class);
@@ -57,7 +57,7 @@ public class LoggingAutoConfigurationTests {
 
     @Test
     void testConfigurationConfiguredAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .withPropertyValues("spring.cloud.oci.logging.enabled=false")
                 .run(
                         context -> {
@@ -69,7 +69,7 @@ public class LoggingAutoConfigurationTests {
     @Configuration
     static class TestSpecificConfigurationBeans {
         @Bean
-        public Logging logging() {
+        Logging logging() {
             return mock(Logging.class);
         }
     }

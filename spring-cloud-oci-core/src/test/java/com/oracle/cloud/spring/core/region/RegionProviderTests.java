@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RegionProviderTests {
+class RegionProviderTests {
 
     @Test
-    public void testInvalidRegion(){
+    void testInvalidRegion(){
         final String region = "foo";
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new StaticRegionProvider(region);
@@ -24,7 +24,7 @@ public class RegionProviderTests {
     }
 
     @Test
-    public void testValidRegion(){
+    void testValidRegion(){
         final String region = "us-ashburn-1";
         StaticRegionProvider regionProvider = new StaticRegionProvider(region);
 

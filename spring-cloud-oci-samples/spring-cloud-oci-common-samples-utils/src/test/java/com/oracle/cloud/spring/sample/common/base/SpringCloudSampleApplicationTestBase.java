@@ -19,10 +19,10 @@ import java.io.File;
 
 public class SpringCloudSampleApplicationTestBase {
 
-	public static final String PRIVATE_KEY_PATH = "privateKey";
-	public static final String PRIVATE_KEY_CONTENT = "privateKeyContent";
-	public static final String privateKeyFilePath = System.getProperty("user.home") + File.separator + "privatekey.pem";
-	public static final String privateKeyContent = System.getProperty(PRIVATE_KEY_CONTENT) != null ? System.getProperty(PRIVATE_KEY_CONTENT) :
+	static final String PRIVATE_KEY_PATH = "privateKey";
+	static final String PRIVATE_KEY_CONTENT = "privateKeyContent";
+	static final String privateKeyFilePath = System.getProperty("user.home") + File.separator + "privatekey.pem";
+	static final String privateKeyContent = System.getProperty(PRIVATE_KEY_CONTENT) != null ? System.getProperty(PRIVATE_KEY_CONTENT) :
 			System.getenv().get(PRIVATE_KEY_CONTENT);
 	@BeforeAll
 	static void beforeAll() throws Exception {

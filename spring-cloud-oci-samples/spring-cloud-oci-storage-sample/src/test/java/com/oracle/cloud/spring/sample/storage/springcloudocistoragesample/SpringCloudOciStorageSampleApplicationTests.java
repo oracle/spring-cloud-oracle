@@ -19,9 +19,9 @@ import java.io.IOException;
 @EnabledIfSystemProperty(named = "it.storage", matches = "true")
 @TestPropertySource(locations="classpath:application-test.properties")
 class SpringCloudOciStorageSampleApplicationTests extends SpringCloudSampleApplicationTestBase {
-    public static final String TEST_BUCKET = "bucketName";
+    static final String TEST_BUCKET = "bucketName";
 
-    public static final String testBucket = System.getProperty(TEST_BUCKET) != null ? System.getProperty(TEST_BUCKET) :
+    static final String testBucket = System.getProperty(TEST_BUCKET) != null ? System.getProperty(TEST_BUCKET) :
             System.getenv().get(TEST_BUCKET);
 
     @Autowired
@@ -37,17 +37,17 @@ class SpringCloudOciStorageSampleApplicationTests extends SpringCloudSampleAppli
         long time = System.currentTimeMillis();
         String message;
 
-        public ActivityInfo(String message) { this.message = message; }
+        ActivityInfo(String message) { this.message = message; }
 
-        public String getFileName() {
+        String getFileName() {
             return "activity_" + time + ".json";
         }
 
-        public long getTime() {
+        long getTime() {
             return time;
         }
 
-        public String getMessage() {
+        String getMessage() {
             return message;
         }
     }

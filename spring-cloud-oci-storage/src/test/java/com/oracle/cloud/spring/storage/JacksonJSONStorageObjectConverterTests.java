@@ -14,12 +14,12 @@ import java.io.ByteArrayInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JacksonJSONStorageObjectConverterTests {
+class JacksonJSONStorageObjectConverterTests {
 
     String expectedValue = "{\"name\":\"testName\"}";
 
     @Test
-    public void testStorageObjectConverterWithNullObjectMapper() {
+    void testStorageObjectConverterWithNullObjectMapper() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new JacksonJSONStorageObjectConverter(null);
         });
@@ -27,7 +27,7 @@ public class JacksonJSONStorageObjectConverterTests {
     }
 
     @Test
-    public void testWriteStorageObject() {
+    void testWriteStorageObject() {
         Person person = new Person();
         person.setName("testName");
         byte[] out = new JacksonJSONStorageObjectConverter(new ObjectMapper()).write(person);
@@ -36,7 +36,7 @@ public class JacksonJSONStorageObjectConverterTests {
     }
 
     @Test
-    public void testReadStorageObject() throws Exception {
+    void testReadStorageObject() throws Exception {
         Person person = new JacksonJSONStorageObjectConverter(new ObjectMapper()).read(new ByteArrayInputStream(expectedValue.getBytes()), Person.class);
         assertTrue("testName".equals(person.getName()));
     }

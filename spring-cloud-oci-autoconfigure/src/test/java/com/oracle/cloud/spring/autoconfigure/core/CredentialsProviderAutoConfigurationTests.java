@@ -15,14 +15,14 @@ import org.springframework.util.Assert;
 
 import static org.mockito.Mockito.mock;
 
-public class CredentialsProviderAutoConfigurationTests {
-    private ApplicationContextRunner contextRunner =
+class CredentialsProviderAutoConfigurationTests {
+    private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
                     CredentialsProviderAutoConfiguration.class)).withUserConfiguration(TestConfigurationBean.class);
 
     @Test
     void testConfigurationValueDefaultsAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .run(
                         context -> {
                             CredentialsProperties config = context.getBean(CredentialsProperties.class);
@@ -34,7 +34,7 @@ public class CredentialsProviderAutoConfigurationTests {
 
     @Test
     void testConfigurationValueConfiguredAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .withPropertyValues("spring.cloud.oci.config.type=SIMPLE")
                 .withPropertyValues("spring.cloud.oci.config.userId=userId")
                 .withPropertyValues("spring.cloud.oci.config.tenantId=tenantId")
@@ -62,7 +62,7 @@ public class CredentialsProviderAutoConfigurationTests {
     @Configuration
     static class TestConfigurationBean {
         @Bean
-        public BasicAuthenticationDetailsProvider credentialsProvider() {
+        BasicAuthenticationDetailsProvider credentialsProvider() {
             return mock(BasicAuthenticationDetailsProvider.class);
         }
     }

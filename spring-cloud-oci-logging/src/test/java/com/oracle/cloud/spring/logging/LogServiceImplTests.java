@@ -15,31 +15,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.mockito.Mockito.*;
 
-public class LogServiceImplTests {
+class LogServiceImplTests {
 
     @Test
-    public void testLogServiceImplWithNullLogId() {
-        LogService logService = getLogService(null);
-        assertThrows(NullPointerException.class, ()-> { logService.putLog("sample log");});
+    void testLogServiceImplWithNullLogId() {
+        assertThrows(IllegalArgumentException.class, ()-> { getLogService(null);});
     }
 
     @Test
-    public void testLogServiceImplWithNonNullLogId() {
+    void testLogServiceImplWithNonNullLogId() {
         LogService logService = getLogService("demoLogId");
         assertNotNull(logService.putLog("sample log"));
     }
 
     private LogService getLogService(String logId) {
-        if (logId == null) {
-            Logging logging = getMockedLogging();
-            when(logging.putLogs(any())).thenCallRealMethod();
-            LogService logService = new LogServiceImpl(logging, logId);
-            return logService;
-        }
-
-        LogService logService = mock(LogService.class);
+        Logging logging = getMockedLogging();
         PutLogsResponse response = mock(PutLogsResponse.class);
-        when(logService.putLog(anyString())).thenReturn(response);
+        when(logging.putLogs(any())).thenReturn(response);
+        LogService logService = new LogServiceImpl(logging, logId);
         return logService;
     }
 

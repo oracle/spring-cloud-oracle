@@ -17,15 +17,15 @@ import org.springframework.util.Assert;
 
 import static org.mockito.Mockito.mock;
 
-public class NotificationAutoConfigurationTests {
-    private ApplicationContextRunner contextRunner =
+class NotificationAutoConfigurationTests {
+    private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(NotificationAutoConfiguration.class))
                     .withUserConfiguration(TestCommonConfigurationBeans.class)
                     .withUserConfiguration(TestSpecificConfigurationBeans.class);
 
     @Test
     void testConfigurationDefaultsAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .run(
                         context -> {
                             String[] notificationBeanNames = context.getBeanNamesForType(Notification.class);
@@ -37,7 +37,7 @@ public class NotificationAutoConfigurationTests {
 
     @Test
     void testConfigurationConfiguredAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .withPropertyValues("spring.cloud.oci.notification.enabled=false")
                 .run(
                         context -> {
@@ -49,12 +49,12 @@ public class NotificationAutoConfigurationTests {
     @Configuration
     static class TestSpecificConfigurationBeans {
         @Bean
-        public NotificationDataPlane notificationDPClient() {
+        NotificationDataPlane notificationDPClient() {
             return mock(NotificationDataPlane.class);
         }
 
         @Bean
-        public NotificationControlPlane notificationCPClient() {
+        NotificationControlPlane notificationCPClient() {
             return mock(NotificationControlPlane.class);
         }
     }

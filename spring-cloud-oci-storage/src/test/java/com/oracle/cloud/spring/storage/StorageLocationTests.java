@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StorageLocationTests {
+class StorageLocationTests {
 
     @Test
-    public void testStorageLocationWithNullBucketName() {
+    void testStorageLocationWithNullBucketName() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new StorageLocation(null, "Test Object");
         });
@@ -20,7 +20,7 @@ public class StorageLocationTests {
     }
 
     @Test
-    public void testStorageLocationWithNullObjectName() {
+    void testStorageLocationWithNullObjectName() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new StorageLocation("Test Bucket", null);
         });
@@ -28,12 +28,12 @@ public class StorageLocationTests {
     }
 
     @Test
-    public void testStorageLocationWithValidInput() {
+    void testStorageLocationWithValidInput() {
         assertNotNull(StorageLocation.resolve("ocs://test/bucket"));
     }
 
     @Test
-    public void testStorageLocationWithInvalidInput() {
+    void testStorageLocationWithInvalidInput() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             assertNotNull(StorageLocation.resolve("ocs://test"));
         });
