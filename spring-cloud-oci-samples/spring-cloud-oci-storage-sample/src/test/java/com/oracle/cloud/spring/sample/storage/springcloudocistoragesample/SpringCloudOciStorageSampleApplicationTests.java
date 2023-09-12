@@ -37,17 +37,17 @@ class SpringCloudOciStorageSampleApplicationTests extends SpringCloudSampleAppli
         long time = System.currentTimeMillis();
         String message;
 
-        ActivityInfo(String message) { this.message = message; }
+        public ActivityInfo(String message) { this.message = message; }
 
-        String getFileName() {
+        public String getFileName() {
             return "activity_" + time + ".json";
         }
 
-        long getTime() {
+        public long getTime() {
             return time;
         }
 
-        String getMessage() {
+        public String getMessage() {
             return message;
         }
     }
