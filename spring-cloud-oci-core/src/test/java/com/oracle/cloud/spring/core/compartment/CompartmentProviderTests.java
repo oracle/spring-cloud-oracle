@@ -8,10 +8,10 @@ package com.oracle.cloud.spring.core.compartment;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CompartmentProviderTests {
+class CompartmentProviderTests {
 
     @Test
-    public void testCompartmentProviderWithNullCompartmentId(){
+    void testCompartmentProviderWithNullCompartmentId(){
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new StaticCompartmentProvider(null);
         });
@@ -22,7 +22,7 @@ public class CompartmentProviderTests {
     }
 
     @Test
-    public void testCompartmentProviderWithCompartmentId(){
+    void testCompartmentProviderWithCompartmentId(){
 
         CompartmentProvider compartmentProvider =
                 new StaticCompartmentProvider("dummyCompartmentId");

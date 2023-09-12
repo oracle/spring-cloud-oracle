@@ -43,7 +43,7 @@ public class CredentialsProviderAutoConfiguration {
     }
 
     /**
-     * Creates a Authentication provider based on {@link CredentialsProperties.ConfigType} type
+     * Creates an Authentication provider based on {@link CredentialsProperties.ConfigType} type
      * @return BasicAuthenticationDetailsProvider
      * @throws IOException
      */

@@ -22,7 +22,7 @@ import java.io.InputStream;
 public class OracleStorageResource extends AbstractResource {
 
     private final ObjectStorageClient osClient;
-    StorageLocation location;
+    private final StorageLocation location;
 
     /**
      * Creates new OracleStorageResource identified by location URI and other information.

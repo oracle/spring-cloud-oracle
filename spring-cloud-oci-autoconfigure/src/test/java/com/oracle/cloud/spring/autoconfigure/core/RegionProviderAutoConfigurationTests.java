@@ -10,14 +10,14 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.util.Assert;
 
-public class RegionProviderAutoConfigurationTests {
-    private ApplicationContextRunner contextRunner =
+class RegionProviderAutoConfigurationTests {
+    private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
                     RegionProviderAutoConfiguration.class));
 
     @Test
     void testConfigurationValueDefaultsAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .run(
                         context -> {
                             RegionProperties config = context.getBean(RegionProperties.class);
@@ -28,7 +28,7 @@ public class RegionProviderAutoConfigurationTests {
 
     @Test
     void testConfigurationValueConfiguredAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .withPropertyValues("spring.cloud.oci.region.static=us-phoenix-1")
                 .run(
                         context -> {

@@ -16,17 +16,17 @@ import static org.mockito.Mockito.mock;
 @Configuration
 public class TestCommonConfigurationBeans {
     @Bean
-    public BasicAuthenticationDetailsProvider credentialsProvider() {
+    BasicAuthenticationDetailsProvider credentialsProvider() {
         return mock(BasicAuthenticationDetailsProvider.class);
     }
 
     @Bean
-    public RegionProvider regionProvider() {
+    RegionProvider regionProvider() {
         return mock(RegionProvider.class);
     }
 
     @Bean
-    public CompartmentProvider compartmentProvider() {
+    CompartmentProvider compartmentProvider() {
         return mock(CompartmentProvider.class);
     }
 

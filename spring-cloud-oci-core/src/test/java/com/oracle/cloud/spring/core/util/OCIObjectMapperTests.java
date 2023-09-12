@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OCIObjectMapperTests {
+class OCIObjectMapperTests {
 
     @Test
-    public void testObjectMapper() throws JSONException {
+    void testObjectMapper() throws JSONException {
         TestJsonObject inputJson = new TestJsonObject(12, "fee", "foo");
         String jsonToStr = OCIObjectMapper.toPrintableString(inputJson);
         JSONObject strToJson = new JSONObject(jsonToStr);
@@ -30,7 +30,7 @@ public class OCIObjectMapperTests {
     @NoArgsConstructor
     @AllArgsConstructor
     @ToString
-    public static final class TestJsonObject {
+    static final class TestJsonObject {
         private int id;
         private String firstName;
         private String lastName;

@@ -11,6 +11,7 @@ import com.oracle.bmc.loggingingestion.model.LogEntryBatch;
 import com.oracle.bmc.loggingingestion.model.PutLogsDetails;
 import com.oracle.bmc.loggingingestion.requests.PutLogsRequest;
 import com.oracle.bmc.loggingingestion.responses.PutLogsResponse;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class LogServiceImpl implements LogService {
 
     private final String logId;
     public LogServiceImpl(Logging logging, String logId) {
+        Assert.notNull(logId, "logId is required");
         this.logging = logging;
         this.logId = logId;
     }

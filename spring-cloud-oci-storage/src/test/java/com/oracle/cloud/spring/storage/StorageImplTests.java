@@ -15,14 +15,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class StorageImplTests {
+class StorageImplTests {
 
     final ObjectStorageClient objectStorageClient = mock(ObjectStorageClient.class);
     final StorageObjectConverter storageObjectConverter = mock(StorageObjectConverter.class);
     final StorageContentTypeResolver storageContentTypeResolver = mock(StorageContentTypeResolver.class);
 
     @Test
-    public void testStorageImplWithNullObjectStorageClient() {
+    void testStorageImplWithNullObjectStorageClient() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new StorageImpl(null, storageObjectConverter, storageContentTypeResolver, "compartment-ocid");
         });
@@ -30,19 +30,19 @@ public class StorageImplTests {
     }
 
     @Test
-    public void testCreateBucket() {
+    void testCreateBucket() {
         when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
         when(objectStorageClient.createBucket(any())).thenReturn(mock(CreateBucketResponse.class));
         assertNotNull(getStorage().createBucket("testBucket"));
     }
 
     @Test
-    public void testDownloadObject() {
+    void testDownloadObject() {
         assertNotNull(getStorage().download("testObject", "testKey"));
     }
 
     @Test
-    public void testDeleteObject() {
+    void testDeleteObject() {
         when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
         assertDoesNotThrow(() -> {
             getStorage().deleteObject("testObject", "testKey");
@@ -50,7 +50,7 @@ public class StorageImplTests {
     }
 
     @Test
-    public void testDeleteBucket() {
+    void testDeleteBucket() {
         when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
         assertDoesNotThrow(() -> {
             getStorage().deleteBucket("testBucket");

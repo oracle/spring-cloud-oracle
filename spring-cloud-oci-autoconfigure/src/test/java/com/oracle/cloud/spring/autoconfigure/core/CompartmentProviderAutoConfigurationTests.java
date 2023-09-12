@@ -10,14 +10,14 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.util.Assert;
 
-public class CompartmentProviderAutoConfigurationTests {
-    private ApplicationContextRunner contextRunner =
+class CompartmentProviderAutoConfigurationTests {
+    private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
                     CompartmentProviderAutoConfiguration.class));
 
     @Test
     void testConfigurationValueDefaultsAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .run(
                         context -> {
                             CompartmentProperties config = context.getBean(CompartmentProperties.class);
@@ -28,7 +28,7 @@ public class CompartmentProviderAutoConfigurationTests {
 
     @Test
     void testConfigurationValueConfiguredAreAsExpected() {
-        this.contextRunner
+        contextRunner
                 .withPropertyValues("spring.cloud.oci.compartment.static=demoCompartment")
                 .run(
                         context -> {
