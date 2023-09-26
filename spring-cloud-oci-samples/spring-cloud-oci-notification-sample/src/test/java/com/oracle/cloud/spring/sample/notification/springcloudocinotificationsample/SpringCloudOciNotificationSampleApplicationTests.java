@@ -27,9 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.util.Assert;
+
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Environment variables needed to run this tests are :
@@ -60,7 +63,7 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 		long time = System.currentTimeMillis();
 		CreateTopicResponse response = notification.createTopic(topicName + time, compartmentId);
 		topicOcid = response.getNotificationTopic().getTopicId();
-		Assert.notNull(topicOcid);
+		assertNotNull(topicOcid);
 	}
 
 	@Test
@@ -69,7 +72,7 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 		CreateSubscriptionResponse response = notification.createSubscription(compartmentId, topicOcid, "EMAIL",
 				"springcloud@oracle.com");
 		subscriptionOcid = response.getSubscription().getId();
-		Assert.notNull(subscriptionOcid);
+		assertNotNull(subscriptionOcid);
 	}
 
 	@Test
@@ -78,7 +81,7 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 		String response = notification.getSubscription(subscriptionOcid);
 		ObjectMapper objectMapper = new ObjectMapper();
 		Subscription subscription = objectMapper.readValue(response, new TypeReference<Subscription>(){});
-		Assert.notNull(subscription);
+		assertNotNull(subscription);
 	}
 
 	@Test
@@ -89,7 +92,7 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<SubscriptionSummary> notificationList =
 				objectMapper.readValue(listSubscriptions, new TypeReference<List<SubscriptionSummary>>(){});
-		Assert.isTrue(notificationList.size() > 0);
+		assertEquals(notificationList.size(), 1);
 	}
 
 	@Test
@@ -97,7 +100,7 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 	void testPublishMessage() {
 		PublishMessageResponse response = notification.publishMessage(topicOcid,
 				"integration-test-subject", "integration-test-message");
-		Assert.notNull(response.getPublishResult().getMessageId());
+		assertNotNull(response.getPublishResult().getMessageId());
 	}
 
 	@Test
@@ -106,6 +109,6 @@ class SpringCloudOciNotificationSampleApplicationTests extends SpringCloudSample
 		DeleteTopicRequest request = DeleteTopicRequest.builder().topicId(topicOcid).build();
 		NotificationControlPlane controlPlane = notification.getNotificationControlPlaneClient();
 		DeleteTopicResponse response = controlPlane.deleteTopic(request);
-		Assert.notNull(response.getOpcRequestId());
+		assertNotNull(response.getOpcRequestId());
 	}
 }

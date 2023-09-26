@@ -22,7 +22,8 @@ public class CredentialsProperties {
         FILE,
         INSTANCE_PRINCIPAL,
         RESOURCE_PRINCIPAL,
-        SIMPLE
+        SIMPLE,
+        SESSION_TOKEN
     }
 
     @Nullable

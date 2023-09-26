@@ -10,6 +10,25 @@ Spring Cloud for OCI, eases the integration of OCI services with the help of int
 
 OCI provides customers with high-performance computing and low-cost cloud storage options. Through on-demand local, object, file, block, and archive storage, OCI addresses key storage workload requirements and use cases. Customers can use the storage gateway and data transfer service to safely and securely move their data to the cloud.
 
+## Prerequisites
+Configuration items that are needed to run the Application can be configured in `application.properties`.
+
+* `spring.cloud.oci.region.static` - OCI Region name(Ex: us-phoenix-1) where the OCI resources need to be created.
+* `spring.cloud.oci.config.type` - Authentication type to be used for OCI. It could be one of the following: RESOURCE_PRINCIPAL, INSTANCE_PRINCIPAL, SESSION_TOKEN, SIMPLE and FILE. If nothing is specified, FILE type is used by default.
+* `spring.cloud.oci.config.file` - The file path set to this property will be used as the configuration file for FILE type authentication which uses the OCI configuration file. If nothing is specified, the OCI configuration file from the user's home directory will be used.
+* `spring.cloud.oci.config.profile` - Profile to be used in the OCI config file for Authentication. If a profile is not specified, a DEFAULT profile will be used.
+
+If the `spring.cloud.oci.config.type` is SIMPLE, then the following properties also need to be set in the `application.properties`.
+
+* `spring.cloud.oci.config.userId`
+* `spring.cloud.oci.config.tenantId`
+* `spring.cloud.oci.config.fingerprint`
+* `spring.cloud.oci.config.privateKey`
+* `spring.cloud.oci.config.passPhrase`
+* `spring.cloud.oci.config.region`
+
+Refer to [OCI SDK Authentication Methods](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm) for more details on the Authentication types supported by OCI.
+
 ## Quick Launch
 
 Click on 'Open in Code Editor' button below to clone and launch OCI Code Editor for this sample and try the sample out in your tenancy.

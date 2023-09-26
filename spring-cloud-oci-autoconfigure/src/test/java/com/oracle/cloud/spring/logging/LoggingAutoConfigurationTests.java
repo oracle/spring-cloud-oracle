@@ -12,9 +12,13 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.Assert;
+
 
 import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LoggingAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
@@ -28,7 +32,7 @@ class LoggingAutoConfigurationTests {
                 .run(
                         context -> {
                             LoggingProperties config = context.getBean(LoggingProperties.class);
-                            Assert.isTrue(config.getLogId() == null);
+                            assertNull(config.getLogId());
                         });
     }
 
@@ -39,7 +43,7 @@ class LoggingAutoConfigurationTests {
                 .run(
                         context -> {
                             LoggingProperties config = context.getBean(LoggingProperties.class);
-                            Assert.isTrue(config.getLogId().equals("demoLogId"));
+                            assertEquals(config.getLogId(), "demoLogId");
                         });
     }
 
@@ -49,9 +53,9 @@ class LoggingAutoConfigurationTests {
                 .run(
                         context -> {
                             String[] logServiceBeanNames = context.getBeanNamesForType(LogService.class);
-                            Assert.isTrue(logServiceBeanNames.length > 0);
+                            assertTrue(logServiceBeanNames.length > 0);
                             LogService logService = context.getBean(LogService.class);
-                            Assert.isTrue(logService != null);
+                            assertNotNull(logService);
                         });
     }
 
@@ -62,7 +66,7 @@ class LoggingAutoConfigurationTests {
                 .run(
                         context -> {
                             String[] logServiceBeanNames = context.getBeanNamesForType(LogService.class);
-                            Assert.isTrue(logServiceBeanNames.length == 0);
+                            assertEquals(logServiceBeanNames.length, 0);
                         });
     }
 

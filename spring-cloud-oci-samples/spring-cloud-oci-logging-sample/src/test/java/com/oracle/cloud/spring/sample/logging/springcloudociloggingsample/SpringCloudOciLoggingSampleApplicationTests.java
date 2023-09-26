@@ -14,7 +14,8 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.util.Assert;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 /**
@@ -32,7 +33,7 @@ class SpringCloudOciLoggingSampleApplicationTests extends SpringCloudSampleAppli
 	@Test
 	void testLogMessage() {
 		PutLogsResponse response = logService.putLog("error starting logging application");
-		Assert.notNull(response.getOpcRequestId());
+		assertNotNull(response.getOpcRequestId());
 	}
 
 }

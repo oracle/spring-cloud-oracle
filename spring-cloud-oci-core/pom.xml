@@ -68,6 +68,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <artifactId>oci-java-sdk-identity</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.oracle.oci.sdk</groupId>
+            <artifactId>oci-java-sdk-common-httpclient-jersey</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
         </dependency>
