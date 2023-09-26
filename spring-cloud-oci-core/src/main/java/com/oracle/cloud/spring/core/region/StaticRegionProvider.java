@@ -7,7 +7,7 @@ package com.oracle.cloud.spring.core.region;
 
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.RegionProvider;
-import org.springframework.util.Assert;
+
 
 /**
  * Provider to wrap Region details like name for Region configuration

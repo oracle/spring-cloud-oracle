@@ -11,10 +11,11 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.Assert;
 
 import static org.mockito.Mockito.mock;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 class CredentialsProviderAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
@@ -26,9 +27,9 @@ class CredentialsProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             CredentialsProperties config = context.getBean(CredentialsProperties.class);
-                            Assert.isTrue(config.getTenantId() == null);
-                            Assert.isTrue(config.getType() != null);
-                            Assert.isTrue(config.getType() == CredentialsProperties.ConfigType.FILE);
+                            assertNull(config.getTenantId());
+                            assertNotNull(config.getType());
+                            assertEquals(config.getType(), CredentialsProperties.ConfigType.FILE);
                         });
     }
 
@@ -47,15 +48,15 @@ class CredentialsProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             CredentialsProperties config = context.getBean(CredentialsProperties.class);
-                            Assert.isTrue(config.getType() == CredentialsProperties.ConfigType.SIMPLE);
-                            Assert.isTrue(config.getUserId().equals("userId"));
-                            Assert.isTrue(config.getTenantId().equals("tenantId"));
-                            Assert.isTrue(config.getFingerprint().equals("fingerprint"));
-                            Assert.isTrue(config.getPrivateKey().equals("privateKey"));
-                            Assert.isTrue(config.getProfile().equals("profile"));
-                            Assert.isTrue(config.getFile().equals("file"));
-                            Assert.isTrue(config.getPassPhrase().equals("passPhrase"));
-                            Assert.isTrue(config.getRegion().equals("region"));
+                            assertEquals(config.getType(), CredentialsProperties.ConfigType.SIMPLE);
+                            assertEquals(config.getUserId(), "userId");
+                            assertEquals(config.getTenantId(), "tenantId");
+                            assertEquals(config.getFingerprint(), "fingerprint");
+                            assertEquals(config.getPrivateKey(), "privateKey");
+                            assertEquals(config.getProfile(), "profile");
+                            assertEquals(config.getFile(), "file");
+                            assertEquals(config.getPassPhrase(), "passPhrase");
+                            assertEquals(config.getRegion(), "region");
                         });
     }
 

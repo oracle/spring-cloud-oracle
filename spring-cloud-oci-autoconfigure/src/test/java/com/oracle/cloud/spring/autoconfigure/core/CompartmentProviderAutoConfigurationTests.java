@@ -8,7 +8,9 @@ package com.oracle.cloud.spring.autoconfigure.core;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.util.Assert;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CompartmentProviderAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
@@ -21,8 +23,8 @@ class CompartmentProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             CompartmentProperties config = context.getBean(CompartmentProperties.class);
-                            Assert.isTrue(config.getStatic() == null);
-                            Assert.isTrue(!config.isStatic());
+                            assertEquals(config.getStatic(), null);
+                            assertEquals(config.isStatic(), false);
                         });
     }
 
@@ -33,8 +35,8 @@ class CompartmentProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             CompartmentProperties config = context.getBean(CompartmentProperties.class);
-                            Assert.isTrue(config.getStatic().equals("demoCompartment"));
-                            Assert.isTrue(config.isStatic());
+                            assertEquals(config.getStatic(), "demoCompartment");
+                            assertEquals(config.isStatic(), true);
                         });
     }
 }

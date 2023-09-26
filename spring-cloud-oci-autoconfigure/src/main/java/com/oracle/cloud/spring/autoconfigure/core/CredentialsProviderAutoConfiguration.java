@@ -14,6 +14,7 @@ import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ResourcePrincipalAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.SimplePrivateKeySupplier;
+import com.oracle.bmc.auth.SessionTokenAuthenticationDetailsProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -75,6 +76,15 @@ public class CredentialsProviderAutoConfiguration {
                     builder.region(Region.valueOf(properties.getRegion()));
                 }
                 authenticationDetailsProvider = builder.build();
+                break;
+            case SESSION_TOKEN:
+                String configProfile = properties.hasProfile() ? properties.getProfile() : PROFILE_DEFAULT;
+
+                if (properties.hasFile()) {
+                    authenticationDetailsProvider = new SessionTokenAuthenticationDetailsProvider(properties.getFile(), configProfile);
+                } else {
+                    authenticationDetailsProvider = new SessionTokenAuthenticationDetailsProvider(configProfile);
+                }
                 break;
             default:
                 String profile = properties.hasProfile() ? properties.getProfile() : PROFILE_DEFAULT;

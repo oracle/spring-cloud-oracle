@@ -8,8 +8,10 @@ package com.oracle.cloud.spring.autoconfigure.core;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.util.Assert;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 class RegionProviderAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
@@ -21,8 +23,8 @@ class RegionProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             RegionProperties config = context.getBean(RegionProperties.class);
-                            Assert.isTrue(!config.isStatic());
-                            Assert.isTrue(config.getStatic() == null);
+                            assertEquals(config.isStatic(), false);
+                            assertNull(config.getStatic());
                         });
     }
 
@@ -33,8 +35,8 @@ class RegionProviderAutoConfigurationTests {
                 .run(
                         context -> {
                            RegionProperties config = context.getBean(RegionProperties.class);
-                           Assert.isTrue(config.getStatic().equals("us-phoenix-1"));
-                           Assert.isTrue(config.isStatic());
+                            assertEquals(config.getStatic(), "us-phoenix-1");
+                            assertEquals(config.isStatic(), true);
                         });
     }
 }

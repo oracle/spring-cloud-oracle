@@ -6,7 +6,7 @@
 
 |spring.cloud.oci.config.profile | `DEFAULT` | Name of the profile in OCI Auth config file
 |spring.cloud.oci.config.file | NA | Location of the OCI Auth config file
-|spring.cloud.oci.config.type | FILE | Config/Auth type to be used. Allowed values are FILE, SIMPLE, INSTANCE_PRINCIPAL and RESOURCE_PRINCIPAL
+|spring.cloud.oci.config.type | FILE | Config/Auth type to be used. Allowed values are FILE, SIMPLE, INSTANCE_PRINCIPAL, RESOURCE_PRINCIPAL and SESSION_TOKEN
 |spring.cloud.oci.config.userId | NA | OCID of the user used for creating the API key. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
 |spring.cloud.oci.config.tenantId | NA | Tenancy OCID where the API key is created. This is needed only if spring.cloud.oci.config.type is `SIMPLE`
 |spring.cloud.oci.config.fingerprint | NA | Fingerprint for the public key that was added to the user mentioned in `spring.cloud.oci.config.userId`. This is needed only if spring.cloud.oci.config.type is `SIMPLE`

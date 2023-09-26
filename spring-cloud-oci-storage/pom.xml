@@ -53,19 +53,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </dependency>
         <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-common-httpclient-jersey</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-objectstorage</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-identity</artifactId>
         </dependency>
         <dependency>
             <groupId>com.oracle.oci.sdk</groupId>

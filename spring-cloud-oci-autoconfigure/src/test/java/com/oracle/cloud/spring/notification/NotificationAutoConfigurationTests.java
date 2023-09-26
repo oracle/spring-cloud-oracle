@@ -13,9 +13,12 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.Assert;
+
 
 import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NotificationAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
@@ -29,9 +32,9 @@ class NotificationAutoConfigurationTests {
                 .run(
                         context -> {
                             String[] notificationBeanNames = context.getBeanNamesForType(Notification.class);
-                            Assert.isTrue(notificationBeanNames.length > 0);
+                            assertTrue(notificationBeanNames.length > 0);
                             Notification notification = context.getBean(Notification.class);
-                            Assert.isTrue(notification != null);
+                            assertNotNull(notification);
                         });
     }
 
@@ -42,7 +45,7 @@ class NotificationAutoConfigurationTests {
                 .run(
                         context -> {
                             String[] notificationBeanNames = context.getBeanNamesForType(Notification.class);
-                            Assert.isTrue(notificationBeanNames.length == 0);
+                            assertEquals(notificationBeanNames.length, 0);
                         });
     }
 

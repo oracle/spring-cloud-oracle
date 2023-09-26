@@ -12,9 +12,11 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.Assert;
 
 import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StorageAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
@@ -28,9 +30,9 @@ class StorageAutoConfigurationTests {
                 .run(
                         context -> {
                             String[] storageBeanNames = context.getBeanNamesForType(Storage.class);
-                            Assert.isTrue(storageBeanNames.length > 0);
+                            assertTrue(storageBeanNames.length > 0);
                             Storage storage = context.getBean(Storage.class);
-                            Assert.isTrue(storage != null);
+                            assertNotNull(storage);
                         });
     }
 
@@ -41,7 +43,7 @@ class StorageAutoConfigurationTests {
                 .run(
                         context -> {
                             String[] storageBeanNames = context.getBeanNamesForType(Storage.class);
-                            Assert.isTrue(storageBeanNames.length == 0);
+                            assertEquals(storageBeanNames.length, 0);
                         });
     }
 
