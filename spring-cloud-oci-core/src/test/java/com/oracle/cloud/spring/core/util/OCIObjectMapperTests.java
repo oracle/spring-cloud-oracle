@@ -21,9 +21,9 @@ class OCIObjectMapperTests {
         String jsonToStr = OCIObjectMapper.toPrintableString(inputJson);
         JSONObject strToJson = new JSONObject(jsonToStr);
 
-        assertTrue(strToJson.get("id").equals(inputJson.getId()));
-        assertTrue(strToJson.getString("firstName").equals(inputJson.getFirstName()));
-        assertTrue(strToJson.getString("lastName").equals(inputJson.getLastName()));
+        assertEquals(strToJson.get("id"), inputJson.getId());
+        assertEquals(strToJson.getString("firstName"), inputJson.getFirstName());
+        assertEquals(strToJson.getString("lastName"), inputJson.getLastName());
     }
 
     @Getter

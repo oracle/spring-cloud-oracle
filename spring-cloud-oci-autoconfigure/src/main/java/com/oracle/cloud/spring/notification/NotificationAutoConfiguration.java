@@ -5,12 +5,12 @@
 
 package com.oracle.cloud.spring.notification;
 
-import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.ons.NotificationControlPlane;
 import com.oracle.bmc.ons.NotificationControlPlaneClient;
 import com.oracle.bmc.ons.NotificationDataPlane;
 import com.oracle.bmc.ons.NotificationDataPlaneClient;
+import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -47,8 +47,8 @@ public class NotificationAutoConfiguration {
     @ConditionalOnMissingBean
     NotificationDataPlane notificationDataPlaneClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                                                       @Qualifier(credentialsProviderQualifier)
-                                                      BasicAuthenticationDetailsProvider adp) {
-        NotificationDataPlane notificationDataPlaneClient = new NotificationDataPlaneClient(adp);
+                                                              CredentialsProvider cp) {
+        NotificationDataPlane notificationDataPlaneClient = NotificationDataPlaneClient.builder().build(cp.getAuthenticationDetailsProvider());
         if (regionProvider.getRegion() != null) notificationDataPlaneClient.setRegion(regionProvider.getRegion());
         return notificationDataPlaneClient;
     }
@@ -58,8 +58,8 @@ public class NotificationAutoConfiguration {
     @ConditionalOnMissingBean
     NotificationControlPlane notificationControlPlaneClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                                                             @Qualifier(credentialsProviderQualifier)
-                                                            BasicAuthenticationDetailsProvider adp) {
-        NotificationControlPlane notificationControlPlaneClient = new NotificationControlPlaneClient(adp);
+                                                                    CredentialsProvider cp) {
+        NotificationControlPlane notificationControlPlaneClient = NotificationControlPlaneClient.builder().build(cp.getAuthenticationDetailsProvider());
         if (regionProvider.getRegion() != null) notificationControlPlaneClient.setRegion(regionProvider.getRegion());
         return notificationControlPlaneClient;
     }

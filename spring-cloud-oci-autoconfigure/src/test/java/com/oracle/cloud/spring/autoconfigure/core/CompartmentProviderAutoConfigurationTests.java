@@ -5,17 +5,18 @@
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
+import com.oracle.cloud.spring.core.compartment.CompartmentProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CompartmentProviderAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
-                    CompartmentProviderAutoConfiguration.class));
+                    CompartmentProviderAutoConfiguration.class, RefreshAutoConfiguration.class));
 
     @Test
     void testConfigurationValueDefaultsAreAsExpected() {
@@ -23,8 +24,8 @@ class CompartmentProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             CompartmentProperties config = context.getBean(CompartmentProperties.class);
-                            assertEquals(config.getStatic(), null);
-                            assertEquals(config.isStatic(), false);
+                            assertNull(config.getStatic());
+                            assertFalse(config.isStatic());
                         });
     }
 
@@ -36,7 +37,18 @@ class CompartmentProviderAutoConfigurationTests {
                         context -> {
                             CompartmentProperties config = context.getBean(CompartmentProperties.class);
                             assertEquals(config.getStatic(), "demoCompartment");
-                            assertEquals(config.isStatic(), true);
+                            assertTrue(config.isStatic());
+                        });
+    }
+
+    @Test
+    void testCompartmentProvider() {
+        contextRunner
+                .withPropertyValues("spring.cloud.oci.compartment.static=demoCompartment")
+                .run(
+                        context -> {
+                            CompartmentProvider provider = context.getBean(CompartmentProvider.class);
+                            assertEquals(provider.getCompartmentOCID(), "demoCompartment");
                         });
     }
 }

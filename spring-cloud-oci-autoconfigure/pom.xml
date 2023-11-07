@@ -85,6 +85,21 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.oracle.cloud.spring</groupId>
+            <artifactId>spring-cloud-oci-function</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.cloud.spring</groupId>
+            <artifactId>spring-cloud-oci-streaming</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.cloud.spring</groupId>
+            <artifactId>spring-cloud-oci-queue</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-common-httpclient-jersey3</artifactId>
         </dependency>

@@ -32,11 +32,8 @@ import java.io.IOException;
 @EnableConfigurationProperties(CredentialsProperties.class)
 public class CredentialsProviderAutoConfiguration {
 
-    public static final String USER_AGENT_SPRING_CLOUD = "Oracle-SpringCloud";
-
     public static final String credentialsProviderQualifier = "credentialsProvider";
 
-    private static final String PROFILE_DEFAULT = "DEFAULT";
     private final CredentialsProperties properties;
 
     public CredentialsProviderAutoConfiguration(CredentialsProperties properties) {
@@ -44,61 +41,16 @@ public class CredentialsProviderAutoConfiguration {
     }
 
     /**
-     * Creates an Authentication provider based on {@link CredentialsProperties.ConfigType} type
-     * @return BasicAuthenticationDetailsProvider
+     * Creates an CredentialsProvider based on {@link CredentialsProperties.ConfigType} type
+     * @return CredentialsProvider
      * @throws IOException
      */
     @Bean (name = credentialsProviderQualifier)
     @RefreshScope
     @ConditionalOnMissingBean
-    public BasicAuthenticationDetailsProvider credentialsProvider() throws IOException {
-        return createCredentialsProvider(properties);
+    public CredentialsProvider credentialsProvider() throws IOException {
+        return new CredentialsProvider(properties);
     }
 
-    public static BasicAuthenticationDetailsProvider createCredentialsProvider(CredentialsProperties properties) throws IOException {
-        BasicAuthenticationDetailsProvider authenticationDetailsProvider;
-
-        switch (properties.getType()) {
-            case RESOURCE_PRINCIPAL:
-                authenticationDetailsProvider = ResourcePrincipalAuthenticationDetailsProvider.builder().build();
-                break;
-            case INSTANCE_PRINCIPAL:
-                authenticationDetailsProvider = InstancePrincipalsAuthenticationDetailsProvider.builder().build();
-                break;
-            case SIMPLE:
-                SimpleAuthenticationDetailsProvider.SimpleAuthenticationDetailsProviderBuilder builder = SimpleAuthenticationDetailsProvider.builder()
-                        .userId(properties.getUserId())
-                        .tenantId(properties.getTenantId())
-                        .fingerprint(properties.getFingerprint())
-                        .privateKeySupplier(new SimplePrivateKeySupplier(properties.getPrivateKey()))
-                        .passPhrase(properties.getPassPhrase());
-                if (properties.getRegion() != null) {
-                    builder.region(Region.valueOf(properties.getRegion()));
-                }
-                authenticationDetailsProvider = builder.build();
-                break;
-            case SESSION_TOKEN:
-                String configProfile = properties.hasProfile() ? properties.getProfile() : PROFILE_DEFAULT;
-
-                if (properties.hasFile()) {
-                    authenticationDetailsProvider = new SessionTokenAuthenticationDetailsProvider(properties.getFile(), configProfile);
-                } else {
-                    authenticationDetailsProvider = new SessionTokenAuthenticationDetailsProvider(configProfile);
-                }
-                break;
-            default:
-                String profile = properties.hasProfile() ? properties.getProfile() : PROFILE_DEFAULT;
-
-                if (properties.hasFile()) {
-                    authenticationDetailsProvider = new ConfigFileAuthenticationDetailsProvider(properties.getFile(), profile);
-                } else {
-                    authenticationDetailsProvider = new ConfigFileAuthenticationDetailsProvider(profile);
-                }
-
-                break;
-        }
-        ClientRuntime.setClientUserAgent(USER_AGENT_SPRING_CLOUD);
-        return authenticationDetailsProvider;
-    }
 
 }

@@ -20,7 +20,7 @@ class RegionProviderTests {
 
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.equals(String.format(StaticRegionProvider.INVALID_REGION_MSG, region)));
+        assertEquals(actualMessage, String.format(StaticRegionProvider.INVALID_REGION_MSG, region));
     }
 
     @Test
@@ -28,6 +28,13 @@ class RegionProviderTests {
         final String region = "us-ashburn-1";
         StaticRegionProvider regionProvider = new StaticRegionProvider(region);
 
-        assertTrue(regionProvider.getRegion()!=null);
+        assertNotNull(regionProvider.getRegion());
+    }
+
+    @Test
+    void testEmptyRegion(){
+        StaticRegionProvider regionProvider = new StaticRegionProvider();
+
+        assertNull(regionProvider.getRegion());
     }
 }

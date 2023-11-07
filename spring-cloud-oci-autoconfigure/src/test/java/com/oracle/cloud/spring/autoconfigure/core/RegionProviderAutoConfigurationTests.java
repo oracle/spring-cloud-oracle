@@ -5,17 +5,20 @@
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
+import com.oracle.bmc.Region;
+import com.oracle.bmc.auth.RegionProvider;
+import com.oracle.cloud.spring.core.compartment.CompartmentProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 class RegionProviderAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
-                    RegionProviderAutoConfiguration.class));
+                    RegionProviderAutoConfiguration.class, RefreshAutoConfiguration.class));
 
     @Test
     void testConfigurationValueDefaultsAreAsExpected() {
@@ -23,7 +26,7 @@ class RegionProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             RegionProperties config = context.getBean(RegionProperties.class);
-                            assertEquals(config.isStatic(), false);
+                            assertFalse(config.isStatic());
                             assertNull(config.getStatic());
                         });
     }
@@ -36,7 +39,18 @@ class RegionProviderAutoConfigurationTests {
                         context -> {
                            RegionProperties config = context.getBean(RegionProperties.class);
                             assertEquals(config.getStatic(), "us-phoenix-1");
-                            assertEquals(config.isStatic(), true);
+                            assertTrue(config.isStatic());
+                        });
+    }
+
+    @Test
+    void testRegionProvider() {
+        contextRunner
+                .withPropertyValues("spring.cloud.oci.region.static=us-phoenix-1")
+                .run(
+                        context -> {
+                            RegionProvider provider = context.getBean(RegionProvider.class);
+                            assertEquals(provider.getRegion(), Region.US_PHOENIX_1);
                         });
     }
 }

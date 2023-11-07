@@ -4,7 +4,7 @@
 [#cloud-logging]
 == Cloud Logging
 
-https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm/[OCI Logging] service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from OCI resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service, and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
+https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm[OCI Logging] service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from OCI resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service, and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
 A Spring Boot starter is provided to auto-configure the Logging component.
 
 Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:

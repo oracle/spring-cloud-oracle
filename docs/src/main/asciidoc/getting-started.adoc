@@ -67,6 +67,14 @@ The following table highlights several samples of the most used integrations in 
 | Cloud Logging
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample[spring-cloud-oci-logging-sample]
 
+| Cloud Streaming
+| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample[spring-cloud-oci-streaming-sample]
+
+| Cloud Function
+| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-function-sample[spring-cloud-oci-function-sample]
+
+| Cloud Queue
+| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample[spring-cloud-oci-queue-sample]
 |===
 
 Each sample application demonstrates how to use Spring Cloud OCI libraries in context and how to setup the dependencies for the project.

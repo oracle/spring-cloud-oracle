@@ -5,18 +5,27 @@
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
-import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
+import com.oracle.bmc.Region;
+import com.oracle.bmc.auth.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.mockito.Mockito.mock;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static com.oracle.bmc.auth.ResourcePrincipalAuthenticationDetailsProvider.ResourcePrincipalAuthenticationDetailsProviderBuilder;
+import static com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider.InstancePrincipalsAuthenticationDetailsProviderBuilder;
+import static com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider.SimpleAuthenticationDetailsProviderBuilder;
+
 class CredentialsProviderAutoConfigurationTests {
+
+    private static final String CONFIG_FILE = "file";
+    private static final String PROFILE = "profile";
     private final ApplicationContextRunner contextRunner =
             new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(
                     CredentialsProviderAutoConfiguration.class)).withUserConfiguration(TestConfigurationBean.class);
@@ -53,18 +62,125 @@ class CredentialsProviderAutoConfigurationTests {
                             assertEquals(config.getTenantId(), "tenantId");
                             assertEquals(config.getFingerprint(), "fingerprint");
                             assertEquals(config.getPrivateKey(), "privateKey");
-                            assertEquals(config.getProfile(), "profile");
-                            assertEquals(config.getFile(), "file");
+                            assertTrue(config.hasProfile());
+                            assertEquals(config.getProfile(), PROFILE);
+                            assertTrue(config.hasFile());
+                            assertEquals(config.getFile(), CONFIG_FILE);
                             assertEquals(config.getPassPhrase(), "passPhrase");
                             assertEquals(config.getRegion(), "region");
                         });
     }
 
+    @Test
+    void testResourcePrincipalProvider() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.RESOURCE_PRINCIPAL);
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(ResourcePrincipalAuthenticationDetailsProvider.class)) {
+            ResourcePrincipalAuthenticationDetailsProviderBuilder builder =
+                    mock(ResourcePrincipalAuthenticationDetailsProviderBuilder.class);
+            when(ResourcePrincipalAuthenticationDetailsProvider.builder()).thenReturn(builder);
+            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+        }
+    }
+
+    @Test
+    void testInstancePrincipalProvider() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.INSTANCE_PRINCIPAL);
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(InstancePrincipalsAuthenticationDetailsProvider.class)) {
+            InstancePrincipalsAuthenticationDetailsProviderBuilder builder =
+                    mock(InstancePrincipalsAuthenticationDetailsProviderBuilder.class);
+            when(InstancePrincipalsAuthenticationDetailsProvider.builder()).thenReturn(builder);
+            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+        }
+    }
+
+    @Test
+    void testSimpleProvider() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.SIMPLE);
+        properties.setRegion(Region.US_PHOENIX_1.getRegionId());
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(SimpleAuthenticationDetailsProvider.class)) {
+            SimpleAuthenticationDetailsProviderBuilder builder =
+                    mock(SimpleAuthenticationDetailsProviderBuilder.class);
+            when(SimpleAuthenticationDetailsProvider.builder()).thenReturn(builder);
+            when(builder.userId(any())).thenReturn(builder);
+            when(builder.tenantId(any())).thenReturn(builder);
+            when(builder.fingerprint(any())).thenReturn(builder);
+            when(builder.passPhrase(any())).thenReturn(builder);
+            when(builder.privateKeySupplier(any())).thenReturn(builder);
+            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+        }
+    }
+
+    @Test
+    void testFileProviderWithProfileOnly() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.FILE);
+        properties.setProfile(PROFILE);
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(ConfigFileAuthenticationDetailsProvider.class)) {
+            try (MockedConstruction<ConfigFileAuthenticationDetailsProvider> mock =
+                         mockConstruction(ConfigFileAuthenticationDetailsProvider.class)) {
+                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                assertNotNull(provider);
+            }
+        }
+    }
+
+    @Test
+    void testFileProviderWithProfileAndCustomConfigFile() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.FILE);
+        properties.setFile(CONFIG_FILE);
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(ConfigFileAuthenticationDetailsProvider.class)) {
+            try (MockedConstruction<ConfigFileAuthenticationDetailsProvider> mock =
+                         mockConstruction(ConfigFileAuthenticationDetailsProvider.class)) {
+                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                assertNotNull(provider);
+            }
+        }
+    }
+
+    @Test
+    void testSessionTokenProviderWithProfileOnly() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.SESSION_TOKEN);
+        properties.setProfile(PROFILE);
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(SessionTokenAuthenticationDetailsProvider.class)) {
+            try (MockedConstruction<SessionTokenAuthenticationDetailsProvider> mock =
+                         mockConstruction(SessionTokenAuthenticationDetailsProvider.class)) {
+                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                assertNotNull(provider);
+            }
+        }
+    }
+
+    @Test
+    void testSessionTokenProviderWithProfileAndCustomConfigFile() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.SESSION_TOKEN);
+        properties.setFile(CONFIG_FILE);
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(SessionTokenAuthenticationDetailsProvider.class)) {
+            try (MockedConstruction<SessionTokenAuthenticationDetailsProvider> mock =
+                         mockConstruction(SessionTokenAuthenticationDetailsProvider.class)) {
+                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                assertNotNull(provider);
+            }
+        }
+    }
+
     @Configuration
     static class TestConfigurationBean {
         @Bean
-        BasicAuthenticationDetailsProvider credentialsProvider() {
-            return mock(BasicAuthenticationDetailsProvider.class);
+        CredentialsProvider credentialsProvider() throws Exception {
+            return mock(CredentialsProvider.class);
         }
     }
 }

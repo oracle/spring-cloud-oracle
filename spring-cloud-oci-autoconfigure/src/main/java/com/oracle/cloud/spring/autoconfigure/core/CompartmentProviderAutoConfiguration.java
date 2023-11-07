@@ -36,7 +36,7 @@ public class CompartmentProviderAutoConfiguration {
         return createCompartmentProvider(properties);
     }
 
-    public static CompartmentProvider createCompartmentProvider(CompartmentProperties properties) {
+    private static CompartmentProvider createCompartmentProvider(CompartmentProperties properties) {
         if (properties.getStatic() != null && properties.isStatic()) {
             return new StaticCompartmentProvider(properties.getStatic().trim());
         }

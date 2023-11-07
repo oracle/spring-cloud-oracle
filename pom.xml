@@ -54,6 +54,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-storage</module>
         <module>spring-cloud-oci-notification</module>
         <module>spring-cloud-oci-logging</module>
+        <module>spring-cloud-oci-function</module>
+        <module>spring-cloud-oci-streaming</module>
+        <module>spring-cloud-oci-queue</module>
         <module>docs</module>
     </modules>
 
@@ -77,8 +80,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
-        <cc.code-coverage-ratio>0.00</cc.code-coverage-ratio>
-        <!--<dependency-check-maven.version>8.4.0</dependency-check-maven.version> -->
+        <cc.code-coverage-ratio>0.90</cc.code-coverage-ratio>
+        <!--<dependency-check-maven.version>8.4.0</dependency-check-maven.version>
+        <failBuildOnCVSS.score>8</failBuildOnCVSS.score> -->
     </properties>
 
     <dependencyManagement>
@@ -100,6 +104,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc-openapi-ui.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -152,6 +157,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -325,7 +336,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <artifactId>dependency-check-maven</artifactId>
                 <version>${dependency-check-maven.version}</version>
                 <configuration>
-                    <failBuildOnCVSS>8</failBuildOnCVSS>
+                    <failBuildOnCVSS>${failBuildOnCVSS.score}</failBuildOnCVSS>
                     <skipProvidedScope>true</skipProvidedScope>
                 </configuration>
                 <executions>

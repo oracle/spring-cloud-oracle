@@ -16,7 +16,7 @@ class StorageLocationTests {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new StorageLocation(null, "Test Object");
         });
-        assertTrue(StorageLocation.ERROR_BUCKET_REQUIRED.equals(exception.getMessage()));
+        assertEquals(StorageLocation.ERROR_BUCKET_REQUIRED, exception.getMessage());
     }
 
     @Test
@@ -24,7 +24,7 @@ class StorageLocationTests {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new StorageLocation("Test Bucket", null);
         });
-        assertTrue(StorageLocation.ERROR_OBJECT_REQUIRED.equals(exception.getMessage()));
+        assertEquals(StorageLocation.ERROR_OBJECT_REQUIRED, exception.getMessage());
     }
 
     @Test
@@ -35,8 +35,45 @@ class StorageLocationTests {
     @Test
     void testStorageLocationWithInvalidInput() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            assertNotNull(StorageLocation.resolve("ocs://test"));
+            StorageLocation.resolve("ocs://test");
         });
         assertTrue(exception.getMessage().contains(StorageLocation.ERROR_INVALID_BUCKET));
+    }
+
+    @Test
+    void testSimpleStorageResource() {
+        assertTrue(StorageLocation.isSimpleStorageResource("ocs://test/bucket"));
+    }
+
+    @Test
+    void testResolveBucketName() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            StorageLocation.resolveBucketName("ocs://test");
+        });
+        assertTrue(exception.getMessage().contains(StorageLocation.ERROR_INVALID_BUCKET));
+        assertNotNull(StorageLocation.resolveBucketName("ocs://test/bucket"));
+    }
+
+    @Test
+    void testResolveObjectName() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            StorageLocation.resolveObjectName("ocs://test");
+        });
+        assertTrue(exception.getMessage().contains(StorageLocation.ERROR_INVALID_BUCKET));
+        assertNotNull(StorageLocation.resolveObjectName("ocs://test/bucket/^"));
+    }
+
+    @Test
+    void testResolveVersionId() {
+        assertNull(StorageLocation.resolveVersionId("ocs://test/bucket/v1"));
+    }
+
+    @Test
+    void testStorageLocation() {
+        StorageLocation storageLocation = new StorageLocation("testBucket", "testObject", "v1");
+        assertEquals("testBucket", storageLocation.getBucket());
+        assertEquals("testObject", storageLocation.getObject());
+        assertEquals("v1", storageLocation.getVersion());
+        assertNotNull(storageLocation.toString());
     }
 }
