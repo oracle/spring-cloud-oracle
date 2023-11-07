@@ -78,7 +78,7 @@ public class OracleStorageProtocolResolver implements ProtocolResolver, Resource
      * @return ObjectStorageClient
      */
     @Nullable
-    private ObjectStorageClient getStorageClient() {
+    public ObjectStorageClient getStorageClient() {
         if (osClient != null) {
             return osClient;
         }

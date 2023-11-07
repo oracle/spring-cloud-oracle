@@ -25,6 +25,7 @@ class LogServiceImplTests {
     @Test
     void testLogServiceImplWithNonNullLogId() {
         LogService logService = getLogService("demoLogId");
+        assertNotNull(logService.getClient());
         assertNotNull(logService.putLog("sample log"));
     }
 

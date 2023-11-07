@@ -24,6 +24,12 @@ include::notifications.adoc[]
 
 include::logging.adoc[]
 
+include::function.adoc[]
+
+include::streaming.adoc[]
+
+include::queues.adoc[]
+
 == Configuration properties
 
 To see the list of all OCI-related configuration properties see the link:appendix.html[Appendix page].

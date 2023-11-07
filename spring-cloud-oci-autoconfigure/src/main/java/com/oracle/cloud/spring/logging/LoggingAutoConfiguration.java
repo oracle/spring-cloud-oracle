@@ -5,10 +5,10 @@
 
 package com.oracle.cloud.spring.logging;
 
-import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.LoggingClient;
+import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -53,8 +53,8 @@ public class LoggingAutoConfiguration {
     @ConditionalOnMissingBean
     Logging loggingClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                                                           @Qualifier(credentialsProviderQualifier)
-                                                          BasicAuthenticationDetailsProvider adp) {
-        Logging logging = new LoggingClient(adp);
+                                                                  CredentialsProvider cp) {
+        Logging logging = LoggingClient.builder().build(cp.getAuthenticationDetailsProvider());
         if (regionProvider.getRegion() != null) logging.setRegion(regionProvider.getRegion());
         return logging;
     }

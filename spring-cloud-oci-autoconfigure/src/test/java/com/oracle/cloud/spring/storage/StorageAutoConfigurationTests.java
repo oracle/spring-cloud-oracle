@@ -5,22 +5,30 @@
 
 package com.oracle.cloud.spring.storage;
 
+import com.oracle.bmc.Region;
+import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.cloud.spring.autoconfigure.TestCommonConfigurationBeans;
+import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
+import com.oracle.cloud.spring.core.region.StaticRegionProvider;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.mockito.Mockito.mock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 class StorageAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =
-            new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class))
+            new ApplicationContextRunner().withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class,
+                            RefreshAutoConfiguration.class))
                     .withUserConfiguration(TestCommonConfigurationBeans.class)
                     .withUserConfiguration(TestSpecificConfigurationBeans.class);
 
@@ -51,7 +59,21 @@ class StorageAutoConfigurationTests {
     static class TestSpecificConfigurationBeans {
         @Bean
         ObjectStorageClient objectStorageClient() {
-            return mock(ObjectStorageClient.class);
+            StorageAutoConfiguration configuration = new StorageAutoConfiguration();
+            ObjectStorageClient storageClient = null;
+            try (MockedStatic mocked = mockStatic(ObjectStorageClient.class)) {
+                ObjectStorageClient.Builder builder = mock(ObjectStorageClient.Builder.class);
+                when(ObjectStorageClient.builder()).thenReturn(builder);
+                ObjectStorageClient mockedStorageClient = mock(ObjectStorageClient.class);
+                CredentialsProvider credentialsProvider =
+                        mock(CredentialsProvider.class);
+                RegionProvider regionProvider = new StaticRegionProvider(Region.US_PHOENIX_1.getRegionId());
+                when(builder.build(credentialsProvider.getAuthenticationDetailsProvider())).thenReturn(mockedStorageClient);
+                storageClient = configuration.objectStorageClient(regionProvider,
+                        credentialsProvider);
+                assertNotNull(storageClient);
+            }
+            return storageClient;
         }
 
     }

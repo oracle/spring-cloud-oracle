@@ -37,7 +37,7 @@ public class RegionProviderAutoConfiguration {
         return createRegionProvider(properties);
     }
 
-    public static RegionProvider createRegionProvider(RegionProperties properties) {
+    private static RegionProvider createRegionProvider(RegionProperties properties) {
         if (properties.getStatic() != null && properties.isStatic()) {
             return new StaticRegionProvider(properties.getStatic().trim());
         }

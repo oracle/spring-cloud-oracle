@@ -88,7 +88,7 @@ public class StorageLocation {
         return location.toLowerCase().startsWith(OCS_PROTOCOL_PREFIX);
     }
 
-    private static String resolveBucketName(String location) {
+    public static String resolveBucketName(String location) {
         int bucketEndIndex = location.indexOf(PATH_DELIMITER, OCS_PROTOCOL_PREFIX.length());
         if (bucketEndIndex == -1 || bucketEndIndex == OCS_PROTOCOL_PREFIX.length()) {
             throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
@@ -96,7 +96,7 @@ public class StorageLocation {
         return location.substring(OCS_PROTOCOL_PREFIX.length(), bucketEndIndex);
     }
 
-    private static String resolveObjectName(String location) {
+    public static String resolveObjectName(String location) {
         int bucketEndIndex = location.indexOf(PATH_DELIMITER, OCS_PROTOCOL_PREFIX.length());
         if (bucketEndIndex == -1 || bucketEndIndex == OCS_PROTOCOL_PREFIX.length()) {
             throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
@@ -119,7 +119,7 @@ public class StorageLocation {
     }
 
     @Nullable
-    private static String resolveVersionId(String location) {
+    public static String resolveVersionId(String location) {
         int objectNameEndIndex = location.indexOf(VERSION_DELIMITER, OCS_PROTOCOL_PREFIX.length());
         if (objectNameEndIndex == -1 || location.endsWith(VERSION_DELIMITER)) {
             return null;

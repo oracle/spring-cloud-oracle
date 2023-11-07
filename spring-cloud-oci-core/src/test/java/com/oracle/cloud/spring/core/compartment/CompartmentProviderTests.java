@@ -18,7 +18,7 @@ class CompartmentProviderTests {
 
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.equals(StaticCompartmentProvider.COMPARTMENT_MISSING_MSG));
+        assertEquals(actualMessage, StaticCompartmentProvider.COMPARTMENT_MISSING_MSG);
     }
 
     @Test

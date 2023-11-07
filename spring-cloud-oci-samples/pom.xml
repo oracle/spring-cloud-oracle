@@ -19,6 +19,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-storage-sample</module>
         <module>spring-cloud-oci-notification-sample</module>
         <module>spring-cloud-oci-logging-sample</module>
+        <module>spring-cloud-oci-streaming-sample</module>
+        <module>spring-cloud-oci-queue-sample</module>
+        <module>spring-cloud-oci-function-sample</module>
     </modules>
 
     <artifactId>spring-cloud-oci-samples</artifactId>
@@ -43,6 +46,13 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>

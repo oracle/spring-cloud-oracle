@@ -32,6 +32,11 @@ public class StorageImpl implements Storage {
     private final StorageContentTypeResolver contentTypeResolver;
     private final String defaultCompartmentOCID;
     static final String ERROR_OSCLIENT_REQUIRED = "ObjectStorageClient is required";
+    static final String ERROR_STORAGE_OBJECT_CONVERTER_REQUIRED = "storageObjectConverter is required";
+    static final String ERROR_CONTENT_TYPE_RESOLVER_REQUIRED = "contentTypeResolver is required";
+    static final String ERROR_BUCKET_NAME_REQUIRED = "bucketName is required";
+    static final String ERROR_COMPARTMENT_REQUIRED = "compartmentId is required";
+    static final String ERROR_KEY_REQUIRED = "key is required";
 
     public StorageImpl(
             ObjectStorageClient osClient,
@@ -57,8 +62,8 @@ public class StorageImpl implements Storage {
      */
     @Override
     public OracleStorageResource download(String bucketName, String key, String version) {
-        Assert.notNull(bucketName, "bucketName is required");
-        Assert.notNull(key, "key is required");
+        Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
+        Assert.notNull(key, ERROR_KEY_REQUIRED);
 
         return new OracleStorageResource(bucketName, key, version, osClient);
     }
@@ -85,8 +90,8 @@ public class StorageImpl implements Storage {
     @Override
     public OracleStorageResource upload(String bucketName, String key, InputStream inputStream,
                                         @Nullable StorageObjectMetadata objectMetadata) throws IOException {
-        Assert.notNull(bucketName, "bucketName is required");
-        Assert.notNull(key, "key is required");
+        Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
+        Assert.notNull(key, ERROR_KEY_REQUIRED);
         Assert.notNull(inputStream, "inputStream is required");
 
         UploadConfiguration uploadConfiguration =
@@ -124,8 +129,8 @@ public class StorageImpl implements Storage {
      */
     @Override
     public OracleStorageResource store(String bucketName, String key, Object object) throws IOException {
-        Assert.notNull(bucketName, "bucketName is required");
-        Assert.notNull(key, "key is required");
+        Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
+        Assert.notNull(key, ERROR_KEY_REQUIRED);
         Assert.notNull(object, "object is required");
 
         return upload(bucketName, key, new ByteArrayInputStream(storageObjectConverter.write(object)), null);
@@ -140,8 +145,8 @@ public class StorageImpl implements Storage {
      */
     @Override
     public <T> T read(String bucketName, String key, Class<T> clazz) {
-        Assert.notNull(bucketName, "bucketName is required");
-        Assert.notNull(key, "key is required");
+        Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
+        Assert.notNull(key, ERROR_KEY_REQUIRED);
         Assert.notNull(clazz, "clazz is required");
 
         try {
@@ -179,8 +184,8 @@ public class StorageImpl implements Storage {
      */
     @Override
     public CreateBucketResponse createBucket(String bucketName, String compartmentId) {
-        Assert.notNull(bucketName, "bucketName is required");
-        Assert.notNull(compartmentId, "compartmentId is required");
+        Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
+        Assert.notNull(compartmentId, ERROR_COMPARTMENT_REQUIRED);
 
         String namespaceName = getNamespaceName();
         CreateBucketDetails.Builder builder = CreateBucketDetails.builder().name(bucketName);
@@ -202,7 +207,7 @@ public class StorageImpl implements Storage {
      */
     @Override
     public void deleteBucket(String bucketName) {
-        Assert.notNull(bucketName, "bucketName is required");
+        Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
 
         DeleteBucketRequest deleteBucketRequest =
                 DeleteBucketRequest.builder()
@@ -219,8 +224,8 @@ public class StorageImpl implements Storage {
      */
     @Override
     public void deleteObject(String bucketName, String key) {
-        Assert.notNull(bucketName, "bucketName is required");
-        Assert.notNull(key, "key is required");
+        Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
+        Assert.notNull(key, ERROR_KEY_REQUIRED);
 
         DeleteObjectRequest deleteObjectRequest =
                 DeleteObjectRequest.builder()
@@ -243,7 +248,7 @@ public class StorageImpl implements Storage {
         return namespaceResponse.getValue();
     }
 
-    private String resolveContentType(String objectName, StorageObjectMetadata metadata) {
+    public String resolveContentType(String objectName, StorageObjectMetadata metadata) {
         if (metadata != null && metadata.getContentType() != null) {
             return metadata.getContentType();
         }

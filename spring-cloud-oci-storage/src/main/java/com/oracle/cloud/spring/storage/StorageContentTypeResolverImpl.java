@@ -19,6 +19,9 @@ import java.util.Properties;
 public class StorageContentTypeResolverImpl implements StorageContentTypeResolver {
     private static final String PROPERTIES_FILE_LOCATION = "/com/oracle/cloud/spring/storage/StorageContentTypeResolver.properties";
 
+    static final String ERROR_PROPS_FILE_REQUIRED = "properties are required";
+    static final String ERROR_FILE_NAME_REQUIRED = "fileName is required";
+
     private final Properties properties;
 
     public StorageContentTypeResolverImpl() {
@@ -36,7 +39,7 @@ public class StorageContentTypeResolverImpl implements StorageContentTypeResolve
     }
 
     public StorageContentTypeResolverImpl(Properties properties) {
-        Assert.notNull(properties, "properties are required");
+        Assert.notNull(properties, ERROR_PROPS_FILE_REQUIRED);
         this.properties = properties;
     }
 
@@ -47,7 +50,7 @@ public class StorageContentTypeResolverImpl implements StorageContentTypeResolve
      */
     @Override
     public String resolveContentType(String fileName) {
-        Assert.notNull(fileName, "fileName is required");
+        Assert.notNull(fileName, ERROR_FILE_NAME_REQUIRED);
 
         String extension = resolveExtension(fileName);
         return extension == null ? null : properties.getProperty(extension);
@@ -55,7 +58,7 @@ public class StorageContentTypeResolverImpl implements StorageContentTypeResolve
 
     @Nullable
     public String resolveExtension(String fileName) {
-        Assert.notNull(fileName, "fileName is required");
+        Assert.notNull(fileName, ERROR_FILE_NAME_REQUIRED);
 
         return fileName.contains(".") ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
     }

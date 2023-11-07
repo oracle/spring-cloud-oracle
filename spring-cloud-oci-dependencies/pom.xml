@@ -57,7 +57,22 @@
             </dependency>
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-streaming</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-storage</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-function</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-queue</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -77,7 +92,22 @@
             </dependency>
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-starter-streaming</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-starter-storage</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-starter-function</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-starter-queue</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

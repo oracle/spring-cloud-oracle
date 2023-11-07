@@ -6,9 +6,9 @@
 package com.oracle.cloud.spring.storage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
+import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
 import com.oracle.cloud.spring.core.compartment.CompartmentProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -49,7 +49,7 @@ public class StorageAutoConfiguration {
                            CompartmentProvider compartmentProvider) {
         return new StorageImpl(osClient, storageObjectConverter,
                 contentTypeResolver.orElseGet(StorageContentTypeResolverImpl::new),
-                (compartmentProvider == null ? null : compartmentProvider.getCompartmentOCID()));
+                compartmentProvider.getCompartmentOCID());
     }
 
     @Bean
@@ -57,8 +57,8 @@ public class StorageAutoConfiguration {
     @ConditionalOnMissingBean
     ObjectStorageClient objectStorageClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                                             @Qualifier(credentialsProviderQualifier)
-                                            BasicAuthenticationDetailsProvider adp) {
-        ObjectStorageClient osClient = new ObjectStorageClient(adp);
+                                                    CredentialsProvider cp) {
+        ObjectStorageClient osClient = ObjectStorageClient.builder().build(cp.getAuthenticationDetailsProvider());
         if (regionProvider.getRegion() != null) osClient.setRegion(regionProvider.getRegion());
         return osClient;
     }

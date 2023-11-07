@@ -5,10 +5,16 @@
 
 package com.oracle.cloud.spring.storage;
 
+import com.oracle.bmc.objectstorage.ObjectStorage;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.responses.CreateBucketResponse;
 import com.oracle.bmc.objectstorage.responses.GetNamespaceResponse;
+import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
+import com.oracle.bmc.objectstorage.transfer.UploadManager;
 import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,44 +26,128 @@ class StorageImplTests {
     final ObjectStorageClient objectStorageClient = mock(ObjectStorageClient.class);
     final StorageObjectConverter storageObjectConverter = mock(StorageObjectConverter.class);
     final StorageContentTypeResolver storageContentTypeResolver = mock(StorageContentTypeResolver.class);
+    final ObjectStorage objectStorage = mock(ObjectStorage.class);
+    final Storage storage = new StorageImpl(objectStorageClient, storageObjectConverter,
+            storageContentTypeResolver, "defaultCompartmentId");
 
     @Test
-    void testStorageImplWithNullObjectStorageClient() {
+    void testStorageImplWithNullValues() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new StorageImpl(null, storageObjectConverter, storageContentTypeResolver, "compartment-ocid");
+            new StorageImpl(null, storageObjectConverter, storageContentTypeResolver, "compartmentId");
         });
-        assertTrue(StorageImpl.ERROR_OSCLIENT_REQUIRED.equals(exception.getMessage()));
+        assertEquals(StorageImpl.ERROR_OSCLIENT_REQUIRED, exception.getMessage());
+
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            new StorageImpl(objectStorageClient, null, storageContentTypeResolver, "compartmentId");
+        });
+        assertEquals(StorageImpl.ERROR_STORAGE_OBJECT_CONVERTER_REQUIRED, exception.getMessage());
+
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            new StorageImpl(objectStorageClient, storageObjectConverter, null, "compartmentId");
+        });
+        assertEquals(StorageImpl.ERROR_CONTENT_TYPE_RESOLVER_REQUIRED, exception.getMessage());
     }
 
     @Test
     void testCreateBucket() {
         when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
         when(objectStorageClient.createBucket(any())).thenReturn(mock(CreateBucketResponse.class));
-        assertNotNull(getStorage().createBucket("testBucket"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.createBucket(null, "compartmentId");
+        });
+        assertEquals(StorageImpl.ERROR_BUCKET_NAME_REQUIRED, exception.getMessage());
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.createBucket("testBucket", null);
+        });
+        assertEquals(StorageImpl.ERROR_COMPARTMENT_REQUIRED, exception.getMessage());
+        assertNotNull(storage.createBucket("testBucket"));
     }
 
     @Test
     void testDownloadObject() {
-        assertNotNull(getStorage().download("testObject", "testKey"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.download(null, "testKey");
+        });
+        assertEquals(StorageImpl.ERROR_BUCKET_NAME_REQUIRED, exception.getMessage());
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.deleteObject("testObject", null);
+        });
+        assertEquals(StorageImpl.ERROR_KEY_REQUIRED, exception.getMessage());
+        assertNotNull(storage.download("testObject", "testKey"));
     }
 
     @Test
     void testDeleteObject() {
         when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.deleteObject(null, "testKey");
+        });
+        assertEquals(StorageImpl.ERROR_BUCKET_NAME_REQUIRED, exception.getMessage());
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.deleteObject("testObject", null);
+        });
+        assertEquals(StorageImpl.ERROR_KEY_REQUIRED, exception.getMessage());
         assertDoesNotThrow(() -> {
-            getStorage().deleteObject("testObject", "testKey");
+            storage.deleteObject("testObject", "testKey");
         });
     }
 
     @Test
     void testDeleteBucket() {
         when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.deleteBucket(null);
+        });
+        assertEquals(StorageImpl.ERROR_BUCKET_NAME_REQUIRED, exception.getMessage());
         assertDoesNotThrow(() -> {
-            getStorage().deleteBucket("testBucket");
+            storage.deleteBucket("testBucket");
         });
     }
 
-    private Storage getStorage() {
-        return new StorageImpl(objectStorageClient, storageObjectConverter, storageContentTypeResolver, "compartment-ocid");
+    @Test
+    void testStore() throws IOException {
+        when(storageObjectConverter.write(any())).thenReturn("sample".getBytes());
+        when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
+        when(mock(UploadManager.class).upload(any())).thenReturn(mock(UploadManager.UploadResponse.class));
+        when(objectStorage.putObject(any())).thenReturn(mock(PutObjectResponse.class));
+        assertNull(storage.store("bucketName", "key", "sample"));
+    }
+
+    @Test
+    void testUpload() throws IOException {
+        when(storageObjectConverter.write(any())).thenReturn("sample".getBytes());
+        when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
+        when(mock(UploadManager.class).upload(any())).thenReturn(mock(UploadManager.UploadResponse.class));
+        when(objectStorage.putObject(any())).thenReturn(mock(PutObjectResponse.class));
+        assertNull(storage.upload("bucketName", "key", new ByteArrayInputStream("sample".getBytes()), StorageObjectMetadata.builder().build()));
+        assertNull(storage.upload("bucketName", "key", new ByteArrayInputStream("sample".getBytes()), StorageObjectMetadata.builder().contentType("application/json").build()));
+    }
+
+    @Test
+    public void testDownload() {
+        assertNotNull(storage.download("testBucket", "testKey"));
+    }
+
+    @Test
+    public void testRead() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            storage.read(null, "testKey", String.class);
+        });
+        assertEquals(StorageImpl.ERROR_BUCKET_NAME_REQUIRED, exception.getMessage());
+
+        when(storageObjectConverter.read(any(), any())).thenThrow(mock(StorageException.class));
+        assertThrows(StorageException.class, () -> {
+            storage.read("testBucket", "testKey", String.class);
+        });
+
+        when(storageObjectConverter.read(any(), any())).thenReturn(mock(String.class));
+        assertNotNull(storage.read("testBucket", "testKey", String.class));
+    }
+
+    @Test
+    public void testGetNamespaceName() {
+        when(objectStorageClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
+        assertNotNull(storage.getNamespaceName());
+        assertNotNull(storage.getClient());
     }
 }

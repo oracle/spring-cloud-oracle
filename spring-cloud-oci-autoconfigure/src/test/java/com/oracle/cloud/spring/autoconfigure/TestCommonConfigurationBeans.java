@@ -5,9 +5,12 @@
 
 package com.oracle.cloud.spring.autoconfigure;
 
+import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.cloud.spring.core.compartment.CompartmentProvider;
+import com.oracle.cloud.spring.core.compartment.StaticCompartmentProvider;
+import com.oracle.cloud.spring.core.region.StaticRegionProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,12 +25,12 @@ public class TestCommonConfigurationBeans {
 
     @Bean
     RegionProvider regionProvider() {
-        return mock(RegionProvider.class);
+        return new StaticRegionProvider(Region.US_PHOENIX_1.getRegionId());
     }
 
     @Bean
     CompartmentProvider compartmentProvider() {
-        return mock(CompartmentProvider.class);
+        return new StaticCompartmentProvider("compartmentOCID");
     }
 
 }

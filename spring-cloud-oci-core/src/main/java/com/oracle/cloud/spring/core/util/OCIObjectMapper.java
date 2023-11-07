@@ -6,6 +6,7 @@
 package com.oracle.cloud.spring.core.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -23,7 +24,10 @@ public final class OCIObjectMapper {
     private static final String DEFAULT_FILTER = "explicitlySetFilter";
     private static final String DEFAULT_TIME_ZONE = "GMT";
 
-    private static final ObjectMapper objectMapper = createObjectMapper(false);
+    private static final ObjectMapper objectMapper = createObjectMapper();
+
+    private OCIObjectMapper() {
+    }
 
     public static String toPrintableString(Object object) {
         try {
@@ -34,11 +38,9 @@ public final class OCIObjectMapper {
         }
     }
 
-    private static ObjectMapper createObjectMapper(boolean excludeNullValues) {
+    private static ObjectMapper createObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        if (excludeNullValues) {
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        }
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
         df.setTimeZone(TimeZone.getTimeZone(DEFAULT_TIME_ZONE));
@@ -46,6 +48,7 @@ public final class OCIObjectMapper {
         final FilterProvider filter = new SimpleFilterProvider()
                 .addFilter(DEFAULT_FILTER, SimpleBeanPropertyFilter.serializeAllExcept(Collections.EMPTY_SET));
         objectMapper.setFilterProvider(filter);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
     }
 }

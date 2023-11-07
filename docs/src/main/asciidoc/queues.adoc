@@ -1,0 +1,58 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#cloud-queues]
+== Cloud Queues
+
+https://docs.oracle.com/en-us/iaas/Content/queue/home.htm[OCI Queues] is a highly available, low latency publish/subscribe (pub/sub) service, handles high volume transactional data that requires independently processed messages without loss or duplication. Spring Cloud module for Oracle Cloud Queues allows you to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
+A Spring Boot starter is provided to auto-configure the various Queue components.
+
+Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.cloud.spring</groupId>
+    <artifactId>spring-cloud-oci-starter-queue</artifactId>
+</dependency>
+----
+
+Gradle coordinates:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-queue")
+}
+----
+
+=== Using Cloud Queues
+
+The starter automatically configures and registers a `Queue` bean in the Spring application context.
+The `Queue` bean (link[Javadoc]) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
+
+[source,java]
+----
+@Autowired
+private Queue queue;
+
+public void createQueue() {
+
+    String queueId = queue.createQueue("my-queue", <<compartmentId>>, <<deadLetterQueueDeliveryCount>>, <<retentionInSeconds>>);
+}
+----
+
+
+=== Configuration
+
+The Spring Boot Starter for Oracle Cloud Queues provides the following configuration options:
+
+|===
+^| Name ^| Description ^| Required ^| Default value
+| `spring.cloud.oci.queue.enabled` | Enables the OCI Queue APIs. | No | `true`
+|===
+
+
+=== Sample
+
+A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Queue module.
