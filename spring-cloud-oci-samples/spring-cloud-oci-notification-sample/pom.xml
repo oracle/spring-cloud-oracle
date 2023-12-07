@@ -40,10 +40,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			<artifactId>spring-cloud-oci-common-samples-utils</artifactId>
 			<type>test-jar</type>
 		</dependency>
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>
