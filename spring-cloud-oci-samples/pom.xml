@@ -46,6 +46,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <build>
         <pluginManagement>
             <plugins>
+                <!-- Settings for dependency check exclusion for sample modules -->
+                <!--
                 <plugin>
                     <groupId>org.owasp</groupId>
                     <artifactId>dependency-check-maven</artifactId>
@@ -53,6 +55,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                         <skip>true</skip>
                     </configuration>
                 </plugin>
+                -->
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
