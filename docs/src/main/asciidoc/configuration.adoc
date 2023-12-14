@@ -1,6 +1,0 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-
-== Configuration properties
-
-To see the list of all OCI related configuration properties please check link:appendix.html[the Appendix page].

@@ -1,9 +1,0 @@
-com.oracle.cloud.spring.autoconfigure.core.CompartmentProviderAutoConfiguration
-com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration
-com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration
-com.oracle.cloud.spring.notification.NotificationAutoConfiguration
-com.oracle.cloud.spring.storage.StorageAutoConfiguration
-com.oracle.cloud.spring.logging.LoggingAutoConfiguration
-com.oracle.cloud.spring.function.FunctionAutoConfiguration
-com.oracle.cloud.spring.streaming.StreamingAutoConfiguration
-com.oracle.cloud.spring.queue.QueueAutoConfiguration
