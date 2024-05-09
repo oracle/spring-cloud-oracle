@@ -18,13 +18,18 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 // TODO: Needs fixing
-// ERROR] com.oracle.cloud.spring.storage.StorageImplTests.testStore -- Time elapsed: 0.168 s <<< ERROR!
+// [ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.599 s <<< FAILURE! -- in com.oracle.cloud.spring.storage.StorageImplTests
+// [ERROR] com.oracle.cloud.spring.storage.StorageImplTests.testStore -- Time elapsed: 0.170 s <<< ERROR!
 // java.lang.NullPointerException: Cannot invoke "com.oracle.bmc.objectstorage.responses.PutObjectResponse.getETag()" because "response" is null
 @Disabled 
 class StorageImplTests {
