@@ -39,7 +39,7 @@ class QueueImplTests {
         when(queueAdminClient.getWaiters().forWorkRequest(any())).thenReturn(mock(Waiter.class));
         when(queueAdminClient.getWorkRequest(any()).getWorkRequest()).thenReturn(mock(WorkRequest.class));
         when(queueAdminClient.getWorkRequest(any()).getWorkRequest().getResources()).thenReturn(Arrays.asList(mock(WorkRequestResource.class)));
-        when(queueAdminClient.getWorkRequest(any()).getWorkRequest().getResources().get(0).getIdentifier()).thenReturn("queueId");
+        when(queueAdminClient.getWorkRequest(any()).getWorkRequest().getResources().getFirst().getIdentifier()).thenReturn("queueId");
         assertNotNull(queue.getQueueAdminClient());
         String queueId = queue.createQueue("test", "compartmentId", 30, 30);
         assertNotNull(queueId);

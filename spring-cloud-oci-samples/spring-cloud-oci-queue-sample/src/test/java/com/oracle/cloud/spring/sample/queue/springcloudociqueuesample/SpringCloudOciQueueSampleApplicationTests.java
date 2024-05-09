@@ -85,7 +85,7 @@ class SpringCloudOciQueueSampleApplicationTests extends SpringCloudSampleApplica
         assertNotNull(response);
         int size = response.getGetMessages().getMessages().size();
         assertEquals(size, 2);
-        messageReceipt = response.getGetMessages().getMessages().get(0).getReceipt();
+        messageReceipt = response.getGetMessages().getMessages().getFirst().getReceipt();
     }
 
     @Test
