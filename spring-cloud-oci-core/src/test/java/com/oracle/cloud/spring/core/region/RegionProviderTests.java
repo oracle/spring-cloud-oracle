@@ -20,7 +20,7 @@ class RegionProviderTests {
 
         String actualMessage = exception.getMessage();
 
-        assertEquals(actualMessage, String.format(StaticRegionProvider.INVALID_REGION_MSG, region));
+        assertEquals(actualMessage, StaticRegionProvider.INVALID_REGION_MSG.formatted(region));
     }
 
     @Test

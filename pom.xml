@@ -62,24 +62,24 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <properties>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
-        <spring-cloud-dependencies.version>2022.0.4</spring-cloud-dependencies.version>
-        <spring-boot-dependencies.version>3.1.2</spring-boot-dependencies.version>
-        <oci-sdk.version>3.24.0</oci-sdk.version>
-        <spring-boot-maven-plugin.version>3.1.2</spring-boot-maven-plugin.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
-        <springdoc-openapi-ui.version>1.6.13</springdoc-openapi-ui.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <lombok.version>1.18.20</lombok.version>
-        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-        <slf4j-simple.version>1.7.33</slf4j-simple.version>
-        <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
+        <spring-cloud-dependencies.version>2023.0.1</spring-cloud-dependencies.version>
+        <spring-boot-dependencies.version>3.2.5</spring-boot-dependencies.version>
+        <oci-sdk.version>3.41.1</oci-sdk.version>
+        <spring-boot-maven-plugin.version>3.2.5</spring-boot-maven-plugin.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
+        <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <springdoc-openapi-ui.version>1.8.0</springdoc-openapi-ui.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <lombok.version>1.18.32</lombok.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+        <slf4j-simple.version>2.0.13</slf4j-simple.version>
+        <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <cc.code-coverage-ratio>0.90</cc.code-coverage-ratio>
         <!--<dependency-check-maven.version>8.4.0</dependency-check-maven.version>
         <failBuildOnCVSS.score>8</failBuildOnCVSS.score> -->
@@ -101,8 +101,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${springdoc-openapi-ui.version}</version>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>2.5.0</version>
             </dependency>
 
             <dependency>
@@ -117,9 +117,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${javax.servlet-api.version}</version>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>6.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -183,6 +183,29 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </pluginManagement>
 
 		<plugins>
+            <!-- OpenRewrite Plugin 
+            Due to a bug, the build has to be executed like this:
+            mvn -U org.openrewrite.maven:rewrite-maven-plugin:dryRun \
+            -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-spring:RELEASE \
+            -Drewrite.activeRecipes=org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2
+             -->
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <version>5.30.0</version>
+                <configuration>
+                <activeRecipes>
+                    <recipe>org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2</recipe>
+                </activeRecipes>
+                </configuration>
+                <dependencies>
+                <dependency>
+                    <groupId>org.openrewrite.recipe</groupId>
+                    <artifactId>rewrite-spring</artifactId>
+                    <version>5.9.0</version>
+                </dependency>
+                </dependencies>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>

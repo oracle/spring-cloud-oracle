@@ -21,7 +21,7 @@ public class StaticRegionProvider implements RegionProvider {
         try {
             region = Region.valueOf(regionName);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(String.format(INVALID_REGION_MSG, regionName), e);
+            throw new IllegalArgumentException(INVALID_REGION_MSG.formatted(regionName), e);
         }
     }
 

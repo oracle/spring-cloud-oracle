@@ -17,7 +17,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <name>spring-cloud-oci-common-samples-utils</name>
     <description>spring-cloud-oci-common-samples-utils</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
     </properties>
 
     <dependencies>
@@ -33,13 +33,14 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.yaml</groupId>
                     <artifactId>snakeyaml</artifactId>
                 </exclusion>
             </exclusions>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

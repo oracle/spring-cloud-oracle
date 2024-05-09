@@ -5,7 +5,10 @@
 
 package com.oracle.cloud.spring.core.util;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
