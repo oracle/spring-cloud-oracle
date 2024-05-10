@@ -43,7 +43,7 @@ public class FunctionController {
                         " with opc request id " + invokeFunctionResponse.getOpcRequestId());
             }
 
-            responseContentType = invokeFunctionResponse.getHeaders().get(CONTENT_TYPE).getFirst();
+            responseContentType = invokeFunctionResponse.getHeaders().get(CONTENT_TYPE).get(0);
             response = new String(invokeFunctionResponse.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         } catch (Exception ex) {
             ex.printStackTrace();

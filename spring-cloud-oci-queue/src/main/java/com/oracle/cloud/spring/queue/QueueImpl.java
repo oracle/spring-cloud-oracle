@@ -154,7 +154,7 @@ public class QueueImpl implements Queue {
             waiter.execute();
             GetWorkRequestResponse workRequestResponse = queueAdminClient.getWorkRequest(workRequestRequest);
             WorkRequest workRequestData = workRequestResponse.getWorkRequest();
-            queueId = workRequestData.getResources().getFirst().getIdentifier();
+            queueId = workRequestData.getResources().get(0).getIdentifier();
         } catch (Exception e) {
             System.out.println(" queue build failed : " + e.getMessage());
         }
