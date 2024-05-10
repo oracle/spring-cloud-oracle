@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-// TODO: Needs fixing -- all test deosn't pass
+// TODO: Needs fixing -- all test doesn't pass
 class StorageImplTests {
 
     final ObjectStorageClient objectStorageClient = mock(ObjectStorageClient.class);

@@ -14,6 +14,7 @@ import com.oracle.cloud.spring.core.region.StaticRegionProvider;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
@@ -23,7 +24,9 @@ import org.springframework.context.annotation.Configuration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 class StreamingAutoConfigurationTests {
@@ -65,7 +68,7 @@ class StreamingAutoConfigurationTests {
             try (MockedConstruction<StreamClient> mock =
                          mockConstruction(StreamClient.class)) {
                 CredentialsProvider credentialsProvider =
-                        mock(CredentialsProvider.class);
+                        Mockito.mock(CredentialsProvider.class);
                 RegionProvider regionProvider = new StaticRegionProvider(Region.US_PHOENIX_1.getRegionId());
                 stream = configuration.streamingClient(regionProvider,
                         credentialsProvider);

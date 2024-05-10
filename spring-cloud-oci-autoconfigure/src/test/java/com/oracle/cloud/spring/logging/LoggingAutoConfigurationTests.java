@@ -12,6 +12,15 @@ import com.oracle.bmc.loggingingestion.LoggingClient;
 import com.oracle.cloud.spring.autoconfigure.TestCommonConfigurationBeans;
 import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
 import com.oracle.cloud.spring.core.region.StaticRegionProvider;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -19,10 +28,6 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class LoggingAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =

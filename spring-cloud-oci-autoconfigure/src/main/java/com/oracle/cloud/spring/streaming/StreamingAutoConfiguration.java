@@ -45,6 +45,7 @@ public class StreamingAutoConfiguration {
         return new StreamingImpl(stream, streamAdmin);
     }
 
+    // TODO: StreamClient has been deprecated
     @Bean
     @RefreshScope
     @ConditionalOnMissingBean

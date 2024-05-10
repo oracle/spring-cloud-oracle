@@ -7,7 +7,13 @@ package com.oracle.cloud.spring.autoconfigure.core;
 
 import com.oracle.bmc.ClientRuntime;
 import com.oracle.bmc.Region;
-import com.oracle.bmc.auth.*;
+import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.ResourcePrincipalAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.SessionTokenAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.SimplePrivateKeySupplier;
 
 import java.io.IOException;
 

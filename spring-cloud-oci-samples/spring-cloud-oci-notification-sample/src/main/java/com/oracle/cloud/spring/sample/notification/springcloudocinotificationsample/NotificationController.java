@@ -5,13 +5,20 @@
 
 package com.oracle.cloud.spring.sample.notification.springcloudocinotificationsample;
 
-import com.oracle.bmc.ons.responses.*;
+import com.oracle.bmc.ons.responses.CreateSubscriptionResponse;
+import com.oracle.bmc.ons.responses.CreateTopicResponse;
+import com.oracle.bmc.ons.responses.PublishMessageResponse;
 import com.oracle.cloud.spring.notification.Notification;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("demoapp/api/notifications")

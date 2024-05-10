@@ -7,7 +7,13 @@ package com.oracle.cloud.spring.queue;
 
 import com.oracle.bmc.queue.QueueAdminClient;
 import com.oracle.bmc.queue.QueueClient;
-import com.oracle.bmc.queue.responses.*;
+import com.oracle.bmc.queue.responses.DeleteMessageResponse;
+import com.oracle.bmc.queue.responses.DeleteQueueResponse;
+import com.oracle.bmc.queue.responses.GetMessagesResponse;
+import com.oracle.bmc.queue.responses.GetQueueResponse;
+import com.oracle.bmc.queue.responses.ListQueuesResponse;
+import com.oracle.bmc.queue.responses.PutMessagesResponse;
+import com.oracle.bmc.queue.responses.UpdateMessagesResponse;
 
 /**
  * Interface for defining OCI Queue module.

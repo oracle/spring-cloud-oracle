@@ -5,14 +5,27 @@
 
 package com.oracle.cloud.spring.sample.queue.springcloudociqueuesample;
 
-import com.oracle.bmc.queue.responses.*;
+import com.oracle.bmc.queue.responses.DeleteMessageResponse;
+import com.oracle.bmc.queue.responses.DeleteQueueResponse;
+import com.oracle.bmc.queue.responses.GetMessagesResponse;
+import com.oracle.bmc.queue.responses.GetQueueResponse;
+import com.oracle.bmc.queue.responses.ListQueuesResponse;
+import com.oracle.bmc.queue.responses.PutMessagesResponse;
+import com.oracle.bmc.queue.responses.UpdateMessagesResponse;
 import com.oracle.cloud.spring.core.util.OCIObjectMapper;
 import com.oracle.cloud.spring.queue.Queue;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("demoapp/api/queues")
