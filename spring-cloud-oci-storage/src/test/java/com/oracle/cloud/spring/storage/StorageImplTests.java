@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2024, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -27,11 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-// TODO: Needs fixing
-// [ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.599 s <<< FAILURE! -- in com.oracle.cloud.spring.storage.StorageImplTests
-// [ERROR] com.oracle.cloud.spring.storage.StorageImplTests.testStore -- Time elapsed: 0.170 s <<< ERROR!
-// java.lang.NullPointerException: Cannot invoke "com.oracle.bmc.objectstorage.responses.PutObjectResponse.getETag()" because "response" is null
-//@Disabled
+// TODO: Needs fixing -- all test deosn't pass
 class StorageImplTests {
 
     final ObjectStorageClient objectStorageClient = mock(ObjectStorageClient.class);

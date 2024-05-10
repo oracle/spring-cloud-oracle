@@ -5,16 +5,7 @@
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
-import com.oracle.bmc.ClientRuntime;
-import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
-import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
-import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
-import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
-import com.oracle.bmc.auth.ResourcePrincipalAuthenticationDetailsProvider;
-import com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider;
-import com.oracle.bmc.auth.SimplePrivateKeySupplier;
-import com.oracle.bmc.auth.SessionTokenAuthenticationDetailsProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

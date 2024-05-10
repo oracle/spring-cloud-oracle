@@ -1,10 +1,10 @@
 # OCI Storage - Spring Cloud OCI Sample
 
-This sample demonstrates getting started quickly with Spring Cloud OCI to work with Oracle Cloud Infrastructre (OCI) Storage Service. This sample implements simple REST service which internally uses Spring Cloud OCI Storage APIs.
+This sample demonstrates getting started quickly with Spring Cloud OCI to work with Oracle Cloud Infrastructure (OCI) Storage Service. This sample implements simple REST service which internally uses Spring Cloud OCI Storage APIs.
 
 ## What is Spring Cloud OCI?
 
-Spring Cloud for OCI, eases the integration of OCI services with the help of internal OCI Java SDK. It offers a convenient way to interact with OCI-provided services using well-known Spring idioms and APIs, such as the messaging or storage API. Developers can build applications around the hosted services without concern for infrastructure or maintenance. Spring Cloud for OCI contains auto-configuration support for OCI-managed services.
+Spring Cloud for OCI, eases the integration of OCI services with the help of internal OCI Java SDK. It offers a convenient way to interact with OCI-provided services using well-known Spring idioms and APIs, such as the messaging or storage API. Developers can build applications around the hosted services without concern for infrastructure or maintenance. Spring Cloud for OCI contains autoconfiguration support for OCI-managed services.
 
 ## What is OCI Storage?
 
@@ -45,13 +45,12 @@ git clone https://github.com/oracle/spring-cloud-oci.git spring-cloud-oci
 
 1. Run `mvn clean install` from the root directory of the repository code.
 
-2. Set appropriate values at `application.properties` for the following properties. (Refer to the Spring Cloud OCI docs for more details.)
+1. Set appropriate values at `application.properties` for the following properties. (Refer to the Spring Cloud OCI docs for more details.)
 ```
 spring.cloud.oci.region.static = US_ASHBURN_1
 spring.cloud.oci.compartment.static = <COMPARTMENT_OCID>
 ```
-
-3. Start the application using the following command from sample root directory.
+1. Start the application using the following command from sample root directory.
 ```
 mvn spring-boot:run
 ```

@@ -7,7 +7,6 @@ package com.oracle.cloud.spring.autoconfigure.core;
 
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.RegionProvider;
-import com.oracle.cloud.spring.core.compartment.CompartmentProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;

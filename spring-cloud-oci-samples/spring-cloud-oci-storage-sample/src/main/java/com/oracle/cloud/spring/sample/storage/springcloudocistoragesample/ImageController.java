@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
-import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
