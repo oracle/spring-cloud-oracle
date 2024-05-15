@@ -5,7 +5,6 @@
 
 package com.oracle.cloud.spring.sample.storage.springcloudocistoragesample;
 
-import com.oracle.cloud.spring.storage.OracleStorageResource;
 import com.oracle.cloud.spring.storage.Storage;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 @RestController
 @RequestMapping("demoapp/api/object")

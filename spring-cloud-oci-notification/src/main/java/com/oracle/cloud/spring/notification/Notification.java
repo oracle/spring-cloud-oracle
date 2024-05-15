@@ -7,7 +7,9 @@ package com.oracle.cloud.spring.notification;
 
 import com.oracle.bmc.ons.NotificationControlPlane;
 import com.oracle.bmc.ons.NotificationDataPlane;
-import com.oracle.bmc.ons.responses.*;
+import com.oracle.bmc.ons.responses.CreateSubscriptionResponse;
+import com.oracle.bmc.ons.responses.CreateTopicResponse;
+import com.oracle.bmc.ons.responses.PublishMessageResponse;
 
 /**
  * Interface for defining OCI logging module.

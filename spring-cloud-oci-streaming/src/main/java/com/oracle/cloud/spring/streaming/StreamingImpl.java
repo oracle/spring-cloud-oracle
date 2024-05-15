@@ -5,14 +5,34 @@
 
 package com.oracle.cloud.spring.streaming;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.oracle.bmc.streaming.Stream;
 import com.oracle.bmc.streaming.StreamAdmin;
-import com.oracle.bmc.streaming.model.*;
-import com.oracle.bmc.streaming.requests.*;
-import com.oracle.bmc.streaming.responses.*;
-import org.springframework.util.Assert;
-
-import java.util.*;
+import com.oracle.bmc.streaming.model.CreateCursorDetails;
+import com.oracle.bmc.streaming.model.CreateGroupCursorDetails;
+import com.oracle.bmc.streaming.model.CreateStreamDetails;
+import com.oracle.bmc.streaming.model.CreateStreamPoolDetails;
+import com.oracle.bmc.streaming.model.PutMessagesDetails;
+import com.oracle.bmc.streaming.model.PutMessagesDetailsEntry;
+import com.oracle.bmc.streaming.requests.CreateCursorRequest;
+import com.oracle.bmc.streaming.requests.CreateGroupCursorRequest;
+import com.oracle.bmc.streaming.requests.CreateStreamPoolRequest;
+import com.oracle.bmc.streaming.requests.CreateStreamRequest;
+import com.oracle.bmc.streaming.requests.DeleteStreamPoolRequest;
+import com.oracle.bmc.streaming.requests.DeleteStreamRequest;
+import com.oracle.bmc.streaming.requests.GetMessagesRequest;
+import com.oracle.bmc.streaming.requests.PutMessagesRequest;
+import com.oracle.bmc.streaming.responses.CreateCursorResponse;
+import com.oracle.bmc.streaming.responses.CreateGroupCursorResponse;
+import com.oracle.bmc.streaming.responses.CreateStreamPoolResponse;
+import com.oracle.bmc.streaming.responses.CreateStreamResponse;
+import com.oracle.bmc.streaming.responses.DeleteStreamPoolResponse;
+import com.oracle.bmc.streaming.responses.DeleteStreamResponse;
+import com.oracle.bmc.streaming.responses.GetMessagesResponse;
+import com.oracle.bmc.streaming.responses.PutMessagesResponse;
 
 /**
  * Implementation of the OCI streaming module.

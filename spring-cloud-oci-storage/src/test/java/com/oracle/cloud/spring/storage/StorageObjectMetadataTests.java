@@ -10,9 +10,10 @@ import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.retrier.RetryConfiguration;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.HashMap;
 
 public class StorageObjectMetadataTests {
     @Test

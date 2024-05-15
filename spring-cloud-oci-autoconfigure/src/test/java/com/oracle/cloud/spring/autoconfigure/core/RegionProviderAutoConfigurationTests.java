@@ -7,13 +7,16 @@ package com.oracle.cloud.spring.autoconfigure.core;
 
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.RegionProvider;
-import com.oracle.cloud.spring.core.compartment.CompartmentProvider;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RegionProviderAutoConfigurationTests {
     private final ApplicationContextRunner contextRunner =

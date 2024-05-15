@@ -11,7 +11,8 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 
 public class OracleStorageProtocolResolverTests {
     final BeanFactory beanFactory = mock(ConfigurableListableBeanFactory.class);

@@ -153,7 +153,7 @@ public class StorageImpl implements Storage {
             return storageObjectConverter.read(download(bucketName, key).getInputStream(), clazz);
         } catch (Exception e) {
             throw new StorageException(
-                    String.format("Failed to read object with a key '%s' from bucket '%s'", key, bucketName), e);
+                    "Failed to read object with a key '%s' from bucket '%s'".formatted(key, bucketName), e);
         }
     }
 

@@ -6,16 +6,18 @@
 package com.oracle.cloud.spring.streaming;
 
 import com.oracle.bmc.streaming.Stream;
-import com.oracle.bmc.streaming.Stream;
 import com.oracle.bmc.streaming.StreamAdmin;
 import com.oracle.bmc.streaming.model.CreateCursorDetails;
 import com.oracle.bmc.streaming.model.CreateGroupCursorDetails;
 import com.oracle.bmc.streaming.model.PutMessagesDetails;
-import com.oracle.bmc.streaming.requests.CreateStreamPoolRequest;
-import com.oracle.bmc.streaming.requests.CreateStreamRequest;
-import com.oracle.bmc.streaming.requests.DeleteStreamPoolRequest;
-import com.oracle.bmc.streaming.requests.DeleteStreamRequest;
-import com.oracle.bmc.streaming.responses.*;
+import com.oracle.bmc.streaming.responses.CreateCursorResponse;
+import com.oracle.bmc.streaming.responses.CreateGroupCursorResponse;
+import com.oracle.bmc.streaming.responses.CreateStreamPoolResponse;
+import com.oracle.bmc.streaming.responses.CreateStreamResponse;
+import com.oracle.bmc.streaming.responses.DeleteStreamPoolResponse;
+import com.oracle.bmc.streaming.responses.DeleteStreamResponse;
+import com.oracle.bmc.streaming.responses.GetMessagesResponse;
+import com.oracle.bmc.streaming.responses.PutMessagesResponse;
 
 import java.util.Date;
 import java.util.List;
