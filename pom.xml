@@ -76,7 +76,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <lombok.version>1.18.32</lombok.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
-        <slf4j-simple.version>2.0.13</slf4j-simple.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
@@ -149,11 +148,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j-simple.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -183,29 +177,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </pluginManagement>
 
 		<plugins>
-            <!-- OpenRewrite Plugin 
-            Due to a bug, the build has to be executed like this:
-            mvn -U org.openrewrite.maven:rewrite-maven-plugin:dryRun \
-            -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-spring:RELEASE \
-            -Drewrite.activeRecipes=org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2
-             -->
-            <plugin>
-                <groupId>org.openrewrite.maven</groupId>
-                <artifactId>rewrite-maven-plugin</artifactId>
-                <version>5.30.0</version>
-                <configuration>
-                <activeRecipes>
-                    <recipe>org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2</recipe>
-                </activeRecipes>
-                </configuration>
-                <dependencies>
-                <dependency>
-                    <groupId>org.openrewrite.recipe</groupId>
-                    <artifactId>rewrite-spring</artifactId>
-                    <version>5.9.0</version>
-                </dependency>
-                </dependencies>
-            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>

@@ -5,11 +5,6 @@
 **/*.rpm
 **/*.jar
 **/*.bin
-*.patch
-env.sh
-labs/.DS_Store
-
-.idea/**
 
 ### STS ###
 .apt_generated
@@ -38,19 +33,10 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+.vscode/**
 /.jpb/**
 
-*.iml
-*.ipr
-*.iws
 *.log
-.DS_Store
-.idea
 .run
 target/
 Thumbs.db
-ocibuild.conf
-sca-config.json
-input_ocibuild*
-output_ocibuild*

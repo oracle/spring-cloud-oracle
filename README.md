@@ -15,14 +15,16 @@ For a deep dive into the project, refer to the Spring Cloud OCI documentation:
 | Version                | Reference Docs                                                                              | API Docs                                                                        |
 |------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
 | Spring Cloud OCI 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) |
+| Spring Cloud OCI 1.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) 
 
 ## Compatibility with Spring Project Versions
 
 This project has dependency and transitive dependencies on Spring Projects. The table below outlines the versions of Spring Cloud, Spring Boot and Spring Framework versions that are compatible with certain Spring Cloud OCI version.
 
-| Spring Cloud OCI | Spring Cloud       | Spring Boot         | OCI Java SDK |
-|------------------|--------------------|---------------------|--------------|
-| 1.0.0           | 2022.0.x, 2023.0.x | 3.2.x, 3.1.x, 3.0.x | 3.41.1       |
+| Spring Cloud OCI | Spring Cloud | Spring Boot  | OCI Java SDK |
+|------------------|--------------|--------------|--------------|
+| 1.0.0            | 2022.0.x     | 3.1.x, 3.0.x | 3.24.0       |
+| 1.0.1            | 2023.0.x     | 3.2.x        | 3.41.1       |
 
 ## Try out samples
 
