@@ -64,7 +64,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2023.0.1</spring-cloud-dependencies.version>
         <spring-boot-dependencies.version>3.2.5</spring-boot-dependencies.version>
-        <oci-sdk.version>3.41.1</oci-sdk.version>
+        <oci-sdk.version>3.41.2</oci-sdk.version>
         <spring-boot-maven-plugin.version>3.2.5</spring-boot-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
