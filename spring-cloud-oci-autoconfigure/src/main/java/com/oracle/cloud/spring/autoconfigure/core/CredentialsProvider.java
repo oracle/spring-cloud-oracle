@@ -14,6 +14,7 @@ import com.oracle.bmc.auth.ResourcePrincipalAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.SessionTokenAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.SimplePrivateKeySupplier;
+import com.oracle.bmc.auth.okeworkloadidentity.OkeWorkloadIdentityAuthenticationDetailsProvider;
 
 import java.io.IOException;
 
@@ -41,6 +42,9 @@ public class CredentialsProvider {
         BasicAuthenticationDetailsProvider authenticationDetailsProvider;
 
         switch (properties.getType()) {
+            case WORKLOAD_IDENTITY:
+                authenticationDetailsProvider = OkeWorkloadIdentityAuthenticationDetailsProvider.builder().build();
+                break;
             case RESOURCE_PRINCIPAL:
                 authenticationDetailsProvider = ResourcePrincipalAuthenticationDetailsProvider.builder().build();
                 break;

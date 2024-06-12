@@ -22,6 +22,7 @@ public class CredentialsProperties {
         FILE,
         INSTANCE_PRINCIPAL,
         RESOURCE_PRINCIPAL,
+        WORKLOAD_IDENTITY,
         SIMPLE,
         SESSION_TOKEN
     }

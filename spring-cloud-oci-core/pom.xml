@@ -69,6 +69,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </dependency>
         <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
+            <artifactId>oci-java-sdk-addons-oke-workload-identity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-common-httpclient-jersey</artifactId>
         </dependency>
         <dependency>

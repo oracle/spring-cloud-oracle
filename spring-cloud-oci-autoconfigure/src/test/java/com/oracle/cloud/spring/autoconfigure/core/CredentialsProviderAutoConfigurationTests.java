@@ -7,6 +7,7 @@ package com.oracle.cloud.spring.autoconfigure.core;
 
 import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.*;
+import com.oracle.bmc.auth.okeworkloadidentity.OkeWorkloadIdentityAuthenticationDetailsProvider;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
@@ -69,6 +70,19 @@ class CredentialsProviderAutoConfigurationTests {
                             assertEquals(config.getPassPhrase(), "passPhrase");
                             assertEquals(config.getRegion(), "region");
                         });
+    }
+
+    @Test
+    void testWorkloadIdentityProvider() throws Exception {
+        CredentialsProperties properties = new CredentialsProperties();
+        properties.setType(CredentialsProperties.ConfigType.WORKLOAD_IDENTITY);
+        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
+        try (MockedStatic mocked = mockStatic(OkeWorkloadIdentityAuthenticationDetailsProvider.class)) {
+            OkeWorkloadIdentityAuthenticationDetailsProvider.OkeWorkloadIdentityAuthenticationDetailsProviderBuilder builder =
+                    mock(OkeWorkloadIdentityAuthenticationDetailsProvider.OkeWorkloadIdentityAuthenticationDetailsProviderBuilder.class);
+            when(OkeWorkloadIdentityAuthenticationDetailsProvider.builder()).thenReturn(builder);
+            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+        }
     }
 
     @Test
