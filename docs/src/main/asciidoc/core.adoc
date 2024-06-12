@@ -90,7 +90,7 @@ Set the config.type to `WORKLOAD_IDENTITY` as shown here.
 spring.cloud.oci.config.type = WORKLOAD_IDENTITY
 ----
 
-For further details, refer to https://blogs.oracle.com/cloud-infrastructure/post/oke-workload-identity-greater-control-access[OKE Workload Identity Authentication]
+For further details, refer to https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm[OKE Workload Identity Authentication]
 
 For further details, refer to https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12
 
