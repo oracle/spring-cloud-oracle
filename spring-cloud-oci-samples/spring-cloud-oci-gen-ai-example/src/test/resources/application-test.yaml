@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    oci:
+      genai:
+        enabled: true
+        embedding:
+          compartment: ${OCI_COMPARTMENT_ID}
+          on-demand-model-id: ""
+          truncate: END
