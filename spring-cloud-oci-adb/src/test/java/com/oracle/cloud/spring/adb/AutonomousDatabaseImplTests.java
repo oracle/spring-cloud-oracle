@@ -28,10 +28,10 @@ public class AutonomousDatabaseImplTests {
 
     @Test
     void testDatbaseImpl() {
-        when(autonomousDatabase.createAutonomousDatabase(any())).thenReturn(mock(CreateAutonomousDatabaseResponse.class));
-        when(autonomousDatabase.getAutonomousDatabase(any())).thenReturn(mock(GetAutonomousDatabaseResponse.class));
-        when(autonomousDatabase.generateAutonomousDatabaseWallet(any())).thenReturn(mock(GenerateAutonomousDatabaseWalletResponse.class));
-        when(autonomousDatabase.deleteAutonomousDatabase(any())).thenReturn(mock(DeleteAutonomousDatabaseResponse.class));
+        when(client.createAutonomousDatabase(any())).thenReturn(mock(CreateAutonomousDatabaseResponse.class));
+        when(client.getAutonomousDatabase(any())).thenReturn(mock(GetAutonomousDatabaseResponse.class));
+        when(client.generateAutonomousDatabaseWallet(any())).thenReturn(mock(GenerateAutonomousDatabaseWalletResponse.class));
+        when(client.deleteAutonomousDatabase(any())).thenReturn(mock(DeleteAutonomousDatabaseResponse.class));
 
         CreateAutonomousDatabaseResponse cadr = autonomousDatabase.createAutonomousDatabase("name", "compartment");
         // NYI - assertNotNull(cadr);
