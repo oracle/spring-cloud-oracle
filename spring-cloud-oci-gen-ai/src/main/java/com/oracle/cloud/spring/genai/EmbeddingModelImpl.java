@@ -8,6 +8,7 @@ package com.oracle.cloud.spring.genai;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.bmc.generativeaiinference.model.EmbedTextDetails;
@@ -40,7 +41,7 @@ public class EmbeddingModelImpl implements EmbeddingModel {
         Assert.notNull(compartment, "compartment must not be null");
         this.client = client;
         this.servingMode = servingMode;
-        this.truncate = Objects.requireNonNullElse(truncate, EmbedTextDetails.Truncate.None);
+        this.truncate = Optional.of(truncate).orElse(EmbedTextDetails.Truncate.None);
         this.compartment = compartment;
     }
 

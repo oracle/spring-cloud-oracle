@@ -19,14 +19,14 @@ public interface ChatModel {
     ChatResponse chat(String prompt);
     default String extractText(ChatResponse chatResponse) {
         BaseChatResponse baseChatResponse = chatResponse.getChatResult().getChatResponse();
-        if (baseChatResponse instanceof CohereChatResponse cohereChatResponse) {
-            return cohereChatResponse.getText();
-        } else if (baseChatResponse instanceof GenericChatResponse genericChatResponse) {
-            List<ChatChoice> choices = genericChatResponse.getChoices();
+        if (baseChatResponse instanceof CohereChatResponse) {
+            return ((CohereChatResponse) baseChatResponse).getText();
+        } else if (baseChatResponse instanceof GenericChatResponse) {
+            List<ChatChoice> choices =  ((GenericChatResponse) baseChatResponse).getChoices();
             List<ChatContent> contents = choices.get(choices.size() - 1).getMessage().getContent();
             ChatContent content = contents.get(contents.size() - 1);
-            if (content instanceof TextContent textContent) {
-                return textContent.getText();
+            if (content instanceof TextContent) {
+                return ((TextContent) content).getText();
             }
         }
         throw new IllegalStateException("Unexpected chat response type: " + baseChatResponse.getClass().getName());

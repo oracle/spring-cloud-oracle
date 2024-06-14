@@ -8,6 +8,7 @@ package com.oracle.cloud.spring.genai;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
@@ -64,13 +65,14 @@ public class ChatModelImpl implements ChatModel {
         this.servingMode = servingMode;
         this.compartment = compartment;
         this.preambleOverride = preambleOverride;
-        this.temperature = Objects.requireNonNullElse(temperature, 1.0);
-        this.frequencyPenalty = Objects.requireNonNullElse(frequencyPenalty, 0.0);
-        this.maxTokens = Objects.requireNonNullElse(maxTokens, 600);
-        this.presencePenalty = Objects.requireNonNullElse(presencePenalty, 0.0);
-        this.topP = Objects.requireNonNullElse(topP, 0.75);
-        this.topK = Objects.requireNonNullElse(topK, 0);
-        this.inferenceRequestType = Objects.requireNonNullElse(inferenceRequestType, InferenceRequestType.COHERE);
+
+        this.temperature = Optional.of(temperature).orElse(1.0);
+        this.frequencyPenalty = Optional.of(frequencyPenalty).orElse(0.0);
+        this.maxTokens = Optional.of(maxTokens).orElse(600);
+        this.presencePenalty = Optional.of(presencePenalty).orElse(0.0);
+        this.topP = Optional.of(topP).orElse(0.75);
+        this.topK = Optional.of(topK).orElse(0);
+        this.inferenceRequestType = Optional.of(inferenceRequestType).orElse(InferenceRequestType.COHERE);
     }
 
     public ChatResponse chat(String prompt) {
@@ -89,7 +91,8 @@ public class ChatModelImpl implements ChatModel {
 
     private BaseChatRequest createChatRequest(String prompt) {
         switch (inferenceRequestType) {
-            case COHERE -> CohereChatRequest.builder()
+            case COHERE:
+                return CohereChatRequest.builder()
                     .frequencyPenalty(frequencyPenalty)
                     .maxTokens(maxTokens)
                     .presencePenalty(presencePenalty)
@@ -100,13 +103,15 @@ public class ChatModelImpl implements ChatModel {
                     .chatHistory(cohereChatMessages)
                     .preambleOverride(preambleOverride)
                     .build();
-            case LLAMA -> {
+            case LLAMA:
                 List<Message> messages = genericChatMessages == null ? new ArrayList<>() : genericChatMessages.stream()
                         .map(ChatChoice::getMessage)
                         .collect(Collectors.toList());
-                List<ChatContent> contents = List.of(TextContent.builder()
-                                .text(prompt)
-                                .build());
+                ChatContent content = TextContent.builder()
+                        .text(prompt)
+                        .build();
+                List<ChatContent> contents = new ArrayList<>();
+                contents.add(content);
                 UserMessage message = UserMessage.builder()
                         .name("USER")
                         .content(contents)
@@ -121,17 +126,17 @@ public class ChatModelImpl implements ChatModel {
                         .topP(topP)
                         .topK(topK)
                         .build();
-            }
         }
         throw new IllegalArgumentException("Unsupported inference request type: " + inferenceRequestType);
     }
 
+
     private void saveChatHistory(ChatResponse chatResponse) {
         BaseChatResponse baseChatResponse = chatResponse.getChatResult().getChatResponse();
-        if (baseChatResponse instanceof CohereChatResponse cohereChatResponse) {
-            cohereChatMessages = cohereChatResponse.getChatHistory();
-        } else if (baseChatResponse instanceof GenericChatResponse genericChatResponse) {
-            genericChatMessages = genericChatResponse.getChoices();
+        if (baseChatResponse instanceof CohereChatResponse) {
+            cohereChatMessages = ((CohereChatResponse) baseChatResponse).getChatHistory();
+        } else if (baseChatResponse instanceof GenericChatResponse) {
+            genericChatMessages = ((GenericChatResponse) baseChatResponse).getChoices();
         }
         throw new IllegalStateException("Unexpected chat response type: " + baseChatResponse.getClass().getName());
     }

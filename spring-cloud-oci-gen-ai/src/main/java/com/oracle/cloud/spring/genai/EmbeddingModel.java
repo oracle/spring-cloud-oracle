@@ -6,6 +6,7 @@
 package com.oracle.cloud.spring.genai;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
@@ -26,10 +27,10 @@ public interface EmbeddingModel {
      * @return The EmbedTextResponse for the input.
      */
     default EmbedTextResponse embed(String text) {
-        return embedAll(List.of(text)).get(0);
+        return embedAll(Collections.singletonList(text)).get(0);
     }
     default List<List<Float>> fromResponse(EmbedTextResponse response) {
-        return fromResponses(List.of(response));
+        return fromResponses(Collections.singletonList(response));
     }
     default List<List<Float>> fromResponses(List<EmbedTextResponse> responses) {
         List<List<Float>> embeddings = new ArrayList<>();

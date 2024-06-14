@@ -7,3 +7,4 @@ com.oracle.cloud.spring.logging.LoggingAutoConfiguration
 com.oracle.cloud.spring.function.FunctionAutoConfiguration
 com.oracle.cloud.spring.streaming.StreamingAutoConfiguration
 com.oracle.cloud.spring.queue.QueueAutoConfiguration
+com.oracle.cloud.spring.genai.GenAIAutoConfiguration
