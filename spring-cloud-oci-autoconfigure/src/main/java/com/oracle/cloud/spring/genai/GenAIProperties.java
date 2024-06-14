@@ -7,6 +7,10 @@ package com.oracle.cloud.spring.genai;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Autoconfiguration properties for OCI GenAI
+ * @see GenAIAutoConfiguration
+ */
 @ConfigurationProperties(prefix = GenAIProperties.PREFIX)
 public class GenAIProperties {
     public static final String PREFIX = "spring.cloud.oci.genai";

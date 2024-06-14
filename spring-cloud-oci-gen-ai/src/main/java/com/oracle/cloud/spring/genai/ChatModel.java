@@ -15,8 +15,22 @@ import com.oracle.bmc.generativeaiinference.model.GenericChatResponse;
 import com.oracle.bmc.generativeaiinference.model.TextContent;
 import com.oracle.bmc.generativeaiinference.responses.ChatResponse;
 
+/**
+ * OCI GenAI chat interface.
+ */
 public interface ChatModel {
+    /**
+     * Chat using OCI GenAI.
+     * @param prompt Prompt text sent to OCI GenAI chat model.
+     * @return OCI GenAI ChatResponse
+     */
     ChatResponse chat(String prompt);
+
+    /**
+     * Extract chat text from a ChatResponse.
+     * @param chatResponse To extract text from.
+     * @return Chat text from ChatResponse.
+     */
     default String extractText(ChatResponse chatResponse) {
         BaseChatResponse baseChatResponse = chatResponse.getChatResult().getChatResponse();
         if (baseChatResponse instanceof CohereChatResponse) {

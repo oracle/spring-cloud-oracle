@@ -29,9 +29,21 @@ public interface EmbeddingModel {
     default EmbedTextResponse embed(String text) {
         return embedAll(Collections.singletonList(text)).get(0);
     }
+
+    /**
+     * Convert an EmbedTextResponse to a list of embedding vectors.
+     * @param response OCI EmbedTextResponse.
+     * @return A list of embedding vectors.
+     */
     default List<List<Float>> fromResponse(EmbedTextResponse response) {
         return fromResponses(Collections.singletonList(response));
     }
+
+    /**
+     * Convert a list of EmbedTextResponses to a list of embedding vectors.
+     * @param responses A list of OCI EmbedTextResponses.
+     * @return A list of embedding vectors.
+     */
     default List<List<Float>> fromResponses(List<EmbedTextResponse> responses) {
         List<List<Float>> embeddings = new ArrayList<>();
         for (EmbedTextResponse response : responses) {

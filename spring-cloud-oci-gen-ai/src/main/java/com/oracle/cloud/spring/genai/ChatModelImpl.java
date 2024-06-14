@@ -30,6 +30,9 @@ import com.oracle.bmc.generativeaiinference.responses.ChatResponse;
 import lombok.Builder;
 import org.springframework.util.Assert;
 
+/**
+ * OCI GenAI Chat
+ */
 public class ChatModelImpl implements ChatModel {
     private final GenerativeAiInference client;
     private final ServingMode servingMode;
@@ -59,7 +62,7 @@ public class ChatModelImpl implements ChatModel {
                          InferenceRequestType inferenceRequestType) {
         Assert.notNull(client, "client must not be null");
         Assert.notNull(servingMode, "servingMode must not be null");
-        Assert.notNull(compartment, "compartment must not be null");
+        Assert.hasText(compartment, "compartment must be present");
         this.client = client;
         this.servingMode = servingMode;
         this.compartment = compartment;
@@ -79,6 +82,11 @@ public class ChatModelImpl implements ChatModel {
         });
     }
 
+    /**
+     * Chat using OCI GenAI.
+     * @param prompt Prompt text sent to OCI GenAI chat model.
+     * @return OCI GenAI ChatResponse
+     */
     public ChatResponse chat(String prompt) {
         ChatDetails chatDetails = ChatDetails.builder()
                 .compartmentId(compartment)
@@ -93,6 +101,11 @@ public class ChatModelImpl implements ChatModel {
         return chat;
     }
 
+    /**
+     * Create a ChatRequest from a text prompt. Supports COHERE or LLAMA inference types.
+     * @param prompt To create a ChatRequest from.
+     * @return A COHERE or LLAMA ChatRequest.
+     */
     private BaseChatRequest createChatRequest(String prompt) {
         switch (inferenceRequestType) {
             case COHERE:
@@ -135,6 +148,10 @@ public class ChatModelImpl implements ChatModel {
     }
 
 
+    /**
+     * Save the current chat history to memory.
+     * @param chatResponse The latest chat response.
+     */
     private void saveChatHistory(ChatResponse chatResponse) {
         BaseChatResponse baseChatResponse = chatResponse.getChatResult().getChatResponse();
         if (baseChatResponse instanceof CohereChatResponse) {
