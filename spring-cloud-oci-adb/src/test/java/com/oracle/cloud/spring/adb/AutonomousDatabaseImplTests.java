@@ -4,13 +4,16 @@
 package com.oracle.cloud.spring.adb;
 
 import com.oracle.bmc.database.DatabaseClient;
-import com.oracle.bmc.database.responses.*;
+import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
+import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-
 
 public class AutonomousDatabaseImplTests {
 

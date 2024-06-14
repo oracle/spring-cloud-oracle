@@ -4,9 +4,14 @@
 package com.oracle.cloud.spring.adb;
 
 import com.oracle.bmc.database.DatabaseClient;
-import com.oracle.bmc.database.model.*;
-import com.oracle.bmc.database.responses.*;
-import com.oracle.bmc.database.requests.*;
+import com.oracle.bmc.database.model.GenerateAutonomousDatabaseWalletDetails;
+import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
+import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
+import com.oracle.bmc.database.requests.GetAutonomousDatabaseRequest;
+import com.oracle.bmc.database.requests.GenerateAutonomousDatabaseWalletRequest;
+import com.oracle.bmc.database.requests.DeleteAutonomousDatabaseRequest;
 
 /**
  * Implementation for the OCI Autonomous Database module.
