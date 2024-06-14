@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @EnabledIfEnvironmentVariable(named = "OCI_COMPARTMENT_ID", matches = ".+")
+@EnabledIfEnvironmentVariable(named = "OCI_COHERE_MODEL_ID", matches = ".+")
 @ActiveProfiles("chat-cohere")
 public class CohereChatIT extends ChatIT {
     @Autowired
