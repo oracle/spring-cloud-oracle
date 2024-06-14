@@ -7,7 +7,6 @@ package com.oracle.cloud.spring.genai;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,13 +65,18 @@ public class ChatModelImpl implements ChatModel {
         this.compartment = compartment;
         this.preambleOverride = preambleOverride;
 
-        this.temperature = Optional.of(temperature).orElse(1.0);
-        this.frequencyPenalty = Optional.of(frequencyPenalty).orElse(0.0);
-        this.maxTokens = Optional.of(maxTokens).orElse(600);
-        this.presencePenalty = Optional.of(presencePenalty).orElse(0.0);
-        this.topP = Optional.of(topP).orElse(0.75);
-        this.topK = Optional.of(topK).orElse(0);
-        this.inferenceRequestType = Optional.of(inferenceRequestType).orElse(InferenceRequestType.COHERE);
+        this.temperature = Optional.ofNullable(temperature).orElse(1.0);
+        this.frequencyPenalty = Optional.ofNullable(frequencyPenalty).orElse(0.0);
+        this.maxTokens = Optional.ofNullable(maxTokens).orElse(600);
+        this.presencePenalty = Optional.ofNullable(presencePenalty).orElse(0.0);
+        this.topP = Optional.ofNullable(topP).orElse(0.75);
+        this.inferenceRequestType = Optional.ofNullable(inferenceRequestType).orElse(InferenceRequestType.COHERE);
+        this.topK = Optional.ofNullable(topK).orElseGet(() -> {
+            if (this.inferenceRequestType == InferenceRequestType.COHERE) {
+                return 0;
+            }
+            return -1;
+        });
     }
 
     public ChatResponse chat(String prompt) {
@@ -137,7 +141,8 @@ public class ChatModelImpl implements ChatModel {
             cohereChatMessages = ((CohereChatResponse) baseChatResponse).getChatHistory();
         } else if (baseChatResponse instanceof GenericChatResponse) {
             genericChatMessages = ((GenericChatResponse) baseChatResponse).getChoices();
+        } else {
+            throw new IllegalStateException("Unexpected chat response type: " + baseChatResponse.getClass().getName());
         }
-        throw new IllegalStateException("Unexpected chat response type: " + baseChatResponse.getClass().getName());
     }
 }

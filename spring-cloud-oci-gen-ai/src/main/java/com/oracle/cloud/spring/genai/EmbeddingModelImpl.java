@@ -41,7 +41,7 @@ public class EmbeddingModelImpl implements EmbeddingModel {
         Assert.notNull(compartment, "compartment must not be null");
         this.client = client;
         this.servingMode = servingMode;
-        this.truncate = Optional.of(truncate).orElse(EmbedTextDetails.Truncate.None);
+        this.truncate = Optional.ofNullable(truncate).orElse(EmbedTextDetails.Truncate.None);
         this.compartment = compartment;
     }
 

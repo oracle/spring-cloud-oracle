@@ -48,6 +48,7 @@ public class GenAIAutoConfiguration {
 
     @Bean
     @RefreshScope
+    @ConditionalOnProperty(name = "spring.cloud.oci.genai.embedding.enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(EmbeddingModel.class)
     public EmbeddingModel embeddingModel(GenerativeAiInference generativeAiInference) {
         GenAIProperties.Embedding embedding = properties.getEmbedding();
@@ -63,6 +64,7 @@ public class GenAIAutoConfiguration {
 
     @Bean
     @RefreshScope
+    @ConditionalOnProperty(name = "spring.cloud.oci.genai.chat.enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(ChatModel.class)
     public ChatModel chatModel(GenerativeAiInference generativeAiInference) {
         GenAIProperties.Chat chat = properties.getChat();
