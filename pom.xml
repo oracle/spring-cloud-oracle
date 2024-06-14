@@ -53,6 +53,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </scm>
 
     <modules>
+        <module>spring-cloud-oci-adb</module>
         <module>spring-cloud-oci-dependencies</module>
         <module>spring-cloud-oci-core</module>
         <module>spring-cloud-oci-autoconfigure</module>

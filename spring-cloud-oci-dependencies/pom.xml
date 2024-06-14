@@ -54,6 +54,11 @@
             </dependency>
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-adb</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-notification</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -95,6 +100,11 @@
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-starter-adb</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
