@@ -5,6 +5,7 @@
 **/*.rpm
 **/*.jar
 **/*.bin
+pom.xml.versionsBackup
 
 ### STS ###
 .apt_generated
