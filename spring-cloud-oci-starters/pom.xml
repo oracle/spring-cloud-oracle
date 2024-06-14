@@ -46,6 +46,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-starter</module>
         <module>spring-cloud-oci-starter-storage</module>
         <module>spring-cloud-oci-starter-notification</module>
+        <module>spring-cloud-oci-starter-gen-ai</module>
         <module>spring-cloud-oci-starter-logging</module>
         <module>spring-cloud-oci-starter-streaming</module>
         <module>spring-cloud-oci-starter-queue</module>
