@@ -82,6 +82,16 @@ Set the config.type to `SESSION_TOKEN` as shown here.
 spring.cloud.oci.config.type = SESSION_TOKEN
 ----
 
+==== Workload Identity Configuration
+
+Set the config.type to `WORKLOAD_IDENTITY` as shown here.
+
+----
+spring.cloud.oci.config.type = WORKLOAD_IDENTITY
+----
+
+For further details, refer to https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm[OKE Workload Identity Authentication]
+
 For further details, refer to https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12
 
 === Region Configuration
