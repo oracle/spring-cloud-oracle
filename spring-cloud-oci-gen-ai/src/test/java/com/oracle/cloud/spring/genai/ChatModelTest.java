@@ -64,7 +64,7 @@ public class ChatModelTest {
     private ChatModel testChatModel(GenerativeAiInference client) {
         return ChatModelImpl.builder()
                 .client(client)
-                .compartment("")
+                .compartment("test")
                 .servingMode(OnDemandServingMode.builder().modelId("").build())
                 .build();
     }
