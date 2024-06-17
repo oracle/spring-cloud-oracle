@@ -28,14 +28,11 @@ This project has dependency and transitive dependencies on Spring Projects. The 
 | 1.0.1            | 2023.0.x     | 3.2.x        | 3.41.1       |
 | 1.1.0            | 2023.0.x     | 3.2.x        | 3.41.1       |
 
-## Try out samples
+## Sample applications
 
 Samples for each service supported by Spring Cloud OCI below:
 
-* [OCI Storage Sample](spring-cloud-oci-samples/spring-cloud-oci-storage-sample/README.md)
-* [OCI Notification Service Sample](spring-cloud-oci-samples/spring-cloud-oci-notification-sample/README.md)
-* [OCI Logging Service Sample](spring-cloud-oci-samples/spring-cloud-oci-logging-sample/README.md)
-
+* [Application Samples](spring-cloud-oci-samples)
 ## Checking out and building
 
 If you like to clone this repo in your OCI tenancy, click on 'Open in Code Editor' button below to clone and launch OCI Code Editor for this sample.
