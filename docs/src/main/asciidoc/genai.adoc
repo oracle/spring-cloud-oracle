@@ -1,0 +1,88 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#cloud-genai]
+== Generative AI
+
+https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm[OCI Generative AI] is a fully managed service that provides a set of state-of-the-art, customizable large language models (LLMs) that cover a wide range of use cases, including chat and creating text embeddings.
+
+Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.cloud.spring</groupId>
+    <artifactId>spring-cloud-oci-starter-gen-ai</artifactId>
+</dependency>
+----
+
+Gradle coordinates:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-gen-ai")
+}
+----
+
+=== Using Generative AI Chat
+
+The starter configures and registers a `ChatModel` bean in the Spring application context.
+The `ChatModel` bean (link[Javadoc]) can be used to interact with OCI Generative AI Chat Models.
+
+[source,java]
+----
+@Autowired
+@Autowired
+private ChatModel chatModel;
+
+public void embed() {
+    ChatResponse response = chatModel.chat("my chat prompt");
+}
+----
+
+=== Using Generative AI Embedding
+
+The starter configures and registers an `EmbeddingModel` bean in the Spring application context.
+The `EmbeddingModel` bean (link[Javadoc]) can be used to create text embeddings using OCI Generative AI Embedding Models.
+
+[source,java]
+----
+@Autowired
+private EmbeddingModel embeddingModel;
+
+public void embed() {
+    EmbedTextResponse response = embeddingModel.embed("my embedding text");
+}
+----
+
+=== Configuration
+
+The Spring Boot Starter for Oracle Cloud Generative AI provides the following configuration options:
+
+|===
+^| Name ^| Description ^| Required ^| Default value
+| `spring.cloud.oci.genai.enabled` | Enables the OCI Generative AI Client. | No | `true`
+| `spring.cloud.oci.genai.embedding.enabled` | Enables the OCI Generative AI Embedding APIs. | No | `false`
+| `spring.cloud.oci.genai.embedding.on-demand-model-id` | On-demand model ID to be used for embedding text. One of `spring.cloud.oci.genai.embedding.dedicated-cluster-endpoint` or `spring.cloud.oci.genai.embedding.on-demand-model-id` must be specified | No |
+| `spring.cloud.oci.genai.embedding.dedicated-cluster-endpoint` | Dedicated cluster endpoint used for embedding text. One of `spring.cloud.oci.genai.embedding.dedicated-cluster-endpoint` or `spring.cloud.oci.genai.embedding.on-demand-model-id` must be specified. | No |
+| `spring.cloud.oci.genai.embedding.compartment` | Embedding model compartment. | Yes |
+| `spring.cloud.oci.genai.embedding.truncate` | How to truncate embedding text when it is greater than the model's maximum tokens. May be `START`, `END`, or `NONE`. | No | `NONE`
+| `spring.cloud.oci.genai.chat.enabled` | Enables the OCI Generative AI Chat APIs. | No | `false`
+| `spring.cloud.oci.genai.chat.on-demand-model-id` | On-demand model ID to be used for chat. One of `spring.cloud.oci.genai.chat.dedicated-cluster-endpoint` or `spring.cloud.oci.genai.chat.on-demand-model-id` must be specified | No |
+| `spring.cloud.oci.genai.chat.dedicated-cluster-endpoint` | Dedicated cluster endpoint used for chat. One of `spring.cloud.oci.genai.chat.dedicated-cluster-endpoint` or `spring.cloud.oci.genai.chat.on-demand-model-id` must be specified. | No |
+| `spring.cloud.oci.genai.chat.compartment` | Chat model compartment. | Yes |
+| `spring.cloud.oci.genai.chat.preample-override` | If specified, overrides the model's prompt preamble. | No |
+| `spring.cloud.oci.genai.chat.temperature` | Chat text generation temperature. Higher values are more random or creative. Learn more about https://docs.oracle.com/en-us/iaas/Content/generative-ai/concepts.htm#temperature[temperature]. | No | `1.0`
+| `spring.cloud.oci.genai.chat.top-p` | Ensures that only the most likely tokens with probabilities that sum to P are generated. Learn more about https://docs.oracle.com/en-us/iaas/Content/generative-ai/concepts.htm#top-p[Top P]. | No | `0.75`
+| `spring.cloud.oci.genai.chat.top-k` | Ensures that only the top K most probably tokens are considered in each step of text generation. Learn more about https://docs.oracle.com/en-us/iaas/Content/generative-ai/concepts.htm#top-k[Top K]. | No | `0.0`
+| `spring.cloud.oci.genai.chat.frequency-penalty` | Assigns a penalty for tokens that appear frequently. A higher value results in less repetitive text. | No | `0.0`
+| `spring.cloud.oci.genai.chat.presence-penalty` | Assigns an equal penalty if a token appears in the text. A higher value results in less reptitive text. | No | `0.0`
+| `spring.cloud.oci.genai.chat.max-tokens` | Maximum response output tokens. Estimate 2-3 tokens per word. | No | `600`
+
+|===
+
+
+=== Sample
+
+A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Generative AI module.

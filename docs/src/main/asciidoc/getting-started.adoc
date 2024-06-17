@@ -64,6 +64,9 @@ The following table highlights several samples of the most used integrations in 
 | Cloud Notification
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample[spring-cloud-oci-notification-sample]
 
+| Cloud Generative AI
+| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[spring-cloud-oci-gen-ai-sample]
+
 | Cloud Logging
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample[spring-cloud-oci-logging-sample]
 

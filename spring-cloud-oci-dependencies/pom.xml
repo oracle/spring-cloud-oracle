@@ -52,6 +52,11 @@
             </dependency>
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-gen-ai</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-logging</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -83,6 +88,11 @@
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-starter-notification</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-starter-gen-ai</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

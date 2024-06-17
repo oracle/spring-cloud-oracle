@@ -22,6 +22,8 @@ include::storage.adoc[]
 
 include::notifications.adoc[]
 
+include::genai.adoc[]
+
 include::logging.adoc[]
 
 include::function.adoc[]
