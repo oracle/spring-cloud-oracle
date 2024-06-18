@@ -1,0 +1,60 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+package com.oracle.cloud.spring.sample.adb.springcloudociadbsample;
+
+import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
+import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
+import com.oracle.cloud.spring.adb.AutonomousDatabase;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("demoapp/api/adb")
+@Tag(name = "Autonomous Database APIs")
+public class AdbController {
+    
+    @Autowired
+    AutonomousDatabase autonomousDatabase;
+
+    @PostMapping
+    ResponseEntity<?> createAutonomousDatabase(
+        @Parameter(required = true, example = "databaseName") @RequestParam String databaseName,
+        @Parameter(required = true, example = "compartmentId") @RequestParam String compartmentId
+    ) {
+        CreateAutonomousDatabaseResponse response = autonomousDatabase.createAutonomousDatabase(databaseName, compartmentId);
+        return ResponseEntity.accepted().body("database id : " + response.getAutonomousDatabase().getAutonomousContainerDatabaseId());
+    }
+
+    @GetMapping
+    ResponseEntity<?> getAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
+        GetAutonomousDatabaseResponse response = autonomousDatabase.getAutonomousDatabase(databaseId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping(value = "/wallet")
+    ResponseEntity<?> getAutonomousDatabaseWallet(
+        @Parameter(required = true, example = "databaseId") @RequestParam String databaseId,
+        @Parameter(required = true, example = "password") @RequestParam String password
+    ) {
+        GenerateAutonomousDatabaseWalletResponse response = autonomousDatabase.generateAutonomousDatabaseWallet(databaseId, password);
+        return ResponseEntity.ok().body("opcRequestId fo generating wallet : " + response.getOpcRequestId());
+    }
+
+    @DeleteMapping
+    ResponseEntity<?> deleteAutonomousDatabase(@Parameter(required = true, example ="databaseId") @RequestParam String databaseId) {
+        DeleteAutonomousDatabaseResponse response = autonomousDatabase.deleteAutonomousDatabase(databaseId);
+        return ResponseEntity.ok().body("opcRequestId for deleting the database : " +response.getOpcRequestId());
+    }
+
+}

@@ -59,6 +59,12 @@
       "type": "java.lang.Boolean",
       "description": "Auto-configure OCI Cloud queue components.",
       "defaultValue": true
+    },
+    {
+      "name": "spring.cloud.oci.adb.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Auto-configure OCI Autonomous Database components.",
+      "defaultValue": true
     }
   ]
 }
