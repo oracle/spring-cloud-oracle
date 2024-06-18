@@ -34,7 +34,7 @@ public class AutonomousDatabaseImplTests {
         when(client.deleteAutonomousDatabase(any())).thenReturn(mock(DeleteAutonomousDatabaseResponse.class));
 
         CreateAutonomousDatabaseResponse cadr = autonomousDatabase.createAutonomousDatabase("name", "compartment");
-        // NYI - assertNotNull(cadr);
+        assertNotNull(cadr);
 
         GetAutonomousDatabaseResponse gadr = autonomousDatabase.getAutonomousDatabase("ocid");
         assertNotNull(gadr);

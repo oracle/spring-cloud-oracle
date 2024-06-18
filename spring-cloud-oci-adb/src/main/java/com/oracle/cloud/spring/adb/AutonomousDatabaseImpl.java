@@ -4,6 +4,7 @@
 package com.oracle.cloud.spring.adb;
 
 import com.oracle.bmc.database.DatabaseClient;
+import com.oracle.bmc.database.model.CreateAutonomousDatabaseDetails;
 import com.oracle.bmc.database.model.GenerateAutonomousDatabaseWalletDetails;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
@@ -11,6 +12,7 @@ import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletRespons
 import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 import com.oracle.bmc.database.requests.GetAutonomousDatabaseRequest;
 import com.oracle.bmc.database.requests.GenerateAutonomousDatabaseWalletRequest;
+import com.oracle.bmc.database.requests.CreateAutonomousDatabaseRequest;
 import com.oracle.bmc.database.requests.DeleteAutonomousDatabaseRequest;
 
 /**
@@ -40,7 +42,16 @@ public class AutonomousDatabaseImpl implements AutonomousDatabase {
      * @return CreateAutonomousDatabaseResponse
      */
     public CreateAutonomousDatabaseResponse createAutonomousDatabase(String databaseName, String compartmentId) {
-        return null;
+        CreateAutonomousDatabaseRequest createAutonomousDatabaseRequest = CreateAutonomousDatabaseRequest.builder()
+            .createAutonomousDatabaseDetails(CreateAutonomousDatabaseDetails.builder()
+                .compartmentId(compartmentId)
+                .dbName(databaseName)
+                .build())
+            .build();
+
+        CreateAutonomousDatabaseResponse response = client.createAutonomousDatabase(createAutonomousDatabaseRequest);
+
+        return response;
     }
 
     /**
