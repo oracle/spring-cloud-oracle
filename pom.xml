@@ -57,6 +57,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-logging</module>
         <module>spring-cloud-oci-function</module>
         <module>spring-cloud-oci-streaming</module>
+        <module>spring-cloud-oci-vault</module>
         <module>spring-cloud-oci-queue</module>
         <module>docs</module>
     </modules>

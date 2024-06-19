@@ -72,6 +72,11 @@
             </dependency>
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-vault</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-function</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -103,6 +108,11 @@
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-starter-streaming</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-starter-vault</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
