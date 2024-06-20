@@ -54,6 +54,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			<artifactId>oci-java-sdk-vault</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.oracle.oci.sdk</groupId>
+			<artifactId>oci-java-sdk-secrets</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
