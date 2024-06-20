@@ -72,7 +72,7 @@ public class VaultImplTest {
     @Test
     void scheduleSecretDeletion() {
         when(vaults.scheduleSecretDeletion(any())).thenReturn(ScheduleSecretDeletionResponse.builder().build());
-        ScheduleSecretDeletionResponse response = vault.scheduleSecretDeletion(secretName, new Date());
+        ScheduleSecretDeletionResponse response = vault.scheduleSecretDeletion(secretName, 1);
         assertThat(response).isNotNull();
     }
 

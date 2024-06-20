@@ -2,8 +2,9 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import com.oracle.bmc.secrets.Secrets;
@@ -29,6 +30,8 @@ import org.springframework.util.Assert;
  * @see Vault
  */
 public class VaultImpl implements Vault {
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
     private final Vaults vaults;
     private final Secrets secrets;
     private final String vaultId;
@@ -45,6 +48,11 @@ public class VaultImpl implements Vault {
         this.compartmentId = compartmentId;
     }
 
+    /**
+     * Retrieves a secret by name.
+     * @param secretName The name of the secret.
+     * @return The secret bundle response.
+     */
     @Override
     public GetSecretBundleByNameResponse getSecret(String secretName) {
         Assert.hasText(secretName, "secretName must not be empty");
@@ -55,6 +63,12 @@ public class VaultImpl implements Vault {
         return secrets.getSecretBundleByName(request);
     }
 
+    /**
+     * Create a secret.
+     * @param secretName The name of the secret being created.
+     * @param body The secret body to create.
+     * @return A create secret response.
+     */
     @Override
     public CreateSecretResponse createSecret(String secretName, CreateSecretDetails body) {
         Assert.hasText(secretName, "secretName must not be empty");
@@ -69,15 +83,24 @@ public class VaultImpl implements Vault {
         return vaults.createSecret(request);
     }
 
+    /**
+     * Schedule the deletion of a secret.
+     * @param secretName The name of the secret to schedule deletion for.
+     * @param deleteAfterDays The number of days after which the secret will be deleted. May be between 1 and 30.
+     * @return A delete secret respones.
+     */
     @Override
-    public ScheduleSecretDeletionResponse scheduleSecretDeletion(String secretName, Date timeOfDeletion) {
+    public ScheduleSecretDeletionResponse scheduleSecretDeletion(String secretName, int deleteAfterDays) {
         Assert.hasText(secretName, "secretName must not be empty");
-        Assert.notNull(timeOfDeletion, "timeOfDeletion must not be null");
+        Assert.isTrue(deleteAfterDays >= 1 && deleteAfterDays <= 30, "deleteAfterDays must be between 1 and 30");
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, deleteAfterDays);
         String secretId = getSecret(secretName)
                 .getSecretBundle()
                 .getSecretId();
         ScheduleSecretDeletionDetails body = ScheduleSecretDeletionDetails.builder()
-                .timeOfDeletion(timeOfDeletion)
+                .timeOfDeletion(cal.getTime())
                 .build();
         ScheduleSecretDeletionRequest request = ScheduleSecretDeletionRequest.builder()
                 .secretId(secretId)
@@ -86,6 +109,12 @@ public class VaultImpl implements Vault {
         return vaults.scheduleSecretDeletion(request);
     }
 
+    /**
+     * Update a secret content.
+     * @param secretName The name of the secret to update.
+     * @param body The secret body to update.
+     * @return An update secret response.
+     */
     @Override
     public UpdateSecretResponse updateSecret(String secretName, UpdateSecretDetails body) {
         Assert.hasText(secretName, "secretName must not be empty");
@@ -100,6 +129,10 @@ public class VaultImpl implements Vault {
         return vaults.updateSecret(request);
     }
 
+    /**
+     * Lists all secrets in the Vault.
+     * @return A list of secret summaries.
+     */
     @Override
     public List<SecretSummary> listSecrets() {
         List<SecretSummary> summaries = new ArrayList<>();

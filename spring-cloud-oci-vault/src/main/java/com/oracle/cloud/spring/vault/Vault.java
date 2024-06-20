@@ -4,7 +4,6 @@ package com.oracle.cloud.spring.vault;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
@@ -22,12 +21,48 @@ import com.oracle.bmc.vault.responses.UpdateSecretResponse;
  * Users can retrieve, create, update, list, and delete secrets within an OCI Vault.
  */
 public interface Vault {
+    /**
+     * Retrieves a secret by name.
+     * @param secretName The name of the secret.
+     * @return The secret bundle response.
+     */
     GetSecretBundleByNameResponse getSecret(String secretName);
+
+    /**
+     * Lists all secrets in the Vault.
+     * @return A list of secret summaries.
+     */
     List<SecretSummary> listSecrets();
+
+    /**
+     * Create a secret.
+     * @param secretName The name of the secret being created.
+     * @param body The secret body to create.
+     * @return A create secret response.
+     */
     CreateSecretResponse createSecret(String secretName, CreateSecretDetails body);
-    ScheduleSecretDeletionResponse scheduleSecretDeletion(String secretName, Date timeOfDeletion);
+
+    /**
+     * Schedule the deletion of a secret.
+     * @param secretName The name of the secret to schedule deletion for.
+     * @param deleteAfterDays The number of days after which the secret will be deleted. May be between 1 and 30.
+     * @return A delete secret respones.
+     */
+    ScheduleSecretDeletionResponse scheduleSecretDeletion(String secretName, int deleteAfterDays);
+
+    /**
+     * Update a secret content.
+     * @param secretName The name of the secret to update.
+     * @param body The secret body to update.
+     * @return An update secret response.
+     */
     UpdateSecretResponse updateSecret(String secretName, UpdateSecretDetails body);
 
+    /**
+     * Decode a secret bundle response as a String.
+     * @param bundle The bundle to decode.
+     * @return The secret String content.
+     */
     default String decodeBundle(GetSecretBundleByNameResponse bundle) {
         SecretBundleContentDetails content = bundle.getSecretBundle().getSecretBundleContent();
         if (content instanceof Base64SecretBundleContentDetails) {
