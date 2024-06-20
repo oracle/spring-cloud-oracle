@@ -4,7 +4,9 @@
  */
 package com.oracle.cloud.spring.vault;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.oracle.bmc.secrets.Secrets;
 import com.oracle.bmc.secrets.requests.GetSecretBundleByNameRequest;
@@ -12,11 +14,14 @@ import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
 import com.oracle.bmc.vault.Vaults;
 import com.oracle.bmc.vault.model.CreateSecretDetails;
 import com.oracle.bmc.vault.model.ScheduleSecretDeletionDetails;
+import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.requests.CreateSecretRequest;
+import com.oracle.bmc.vault.requests.ListSecretsRequest;
 import com.oracle.bmc.vault.requests.ScheduleSecretDeletionRequest;
 import com.oracle.bmc.vault.requests.UpdateSecretRequest;
 import com.oracle.bmc.vault.responses.CreateSecretResponse;
+import com.oracle.bmc.vault.responses.ListSecretsResponse;
 import com.oracle.bmc.vault.responses.ScheduleSecretDeletionResponse;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 import org.springframework.util.Assert;
@@ -87,5 +92,21 @@ public class VaultImpl implements Vault {
                 .body$(body)
                 .build();
         return vaults.updateSecret(request);
+    }
+
+    public List<SecretSummary> listSecrets() {
+        List<SecretSummary> summaries = new ArrayList<>();
+        String page = null;
+        do {
+            ListSecretsRequest request = ListSecretsRequest.builder()
+                    .vaultId(vaultId)
+                    .compartmentId(compartmentId)
+                    .page(page)
+                    .build();
+            ListSecretsResponse listSecretsResponse = vaults.listSecrets(request);
+            summaries.addAll(listSecretsResponse.getItems());
+            page = listSecretsResponse.getOpcNextPage();
+        } while(page != null);
+        return summaries;
     }
 }

@@ -7,11 +7,13 @@ package com.oracle.cloud.spring.vault;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
 import com.oracle.bmc.secrets.model.SecretBundleContentDetails;
 import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
 import com.oracle.bmc.vault.model.CreateSecretDetails;
+import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.responses.CreateSecretResponse;
 import com.oracle.bmc.vault.responses.ScheduleSecretDeletionResponse;
@@ -19,6 +21,7 @@ import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 
 public interface Vault {
     GetSecretBundleByNameResponse getSecret(String secretName);
+    List<SecretSummary> listSecrets();
     CreateSecretResponse createSecret(String secretName, CreateSecretDetails body);
     ScheduleSecretDeletionResponse scheduleSecretDeletion(String secretName, Date timeOfDeletion);
     UpdateSecretResponse updateSecret(String secretName, UpdateSecretDetails body);

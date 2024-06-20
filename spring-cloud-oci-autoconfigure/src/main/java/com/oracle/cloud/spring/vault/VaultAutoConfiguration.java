@@ -44,9 +44,8 @@ public class VaultAutoConfiguration {
 
     @Bean
     @RefreshScope
-    @ConditionalOnProperty(name = "spring.cloud.oci.genai.embedding.enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnMissingBean(Vault.class)
-    public Vault embeddingModel(Vaults vaults, Secrets secrets) {
+    public Vault vault(Vaults vaults, Secrets secrets) {
         return new VaultImpl(vaults, secrets, properties.getVaultId(), properties.getCompartment());
     }
 

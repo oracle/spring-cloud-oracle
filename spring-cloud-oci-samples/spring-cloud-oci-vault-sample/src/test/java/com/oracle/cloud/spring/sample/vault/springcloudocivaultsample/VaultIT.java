@@ -5,10 +5,12 @@
 package com.oracle.cloud.spring.sample.vault.springcloudocivaultsample;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
 import com.oracle.bmc.vault.model.Base64SecretContentDetails;
+import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 import com.oracle.cloud.spring.vault.Vault;
@@ -33,7 +35,6 @@ public class VaultIT {
     private final String secretName = "mysecret";
 
     @Test
-    @Disabled
     void getSecret() {
         GetSecretBundleByNameResponse secret = vault.getSecret(secretName);
         String decoded = vault.decodeBundle(secret);
@@ -52,5 +53,11 @@ public class VaultIT {
                 .secretContent(contentDetails)
                 .build());
         assertThat(response.getSecret()).isNotNull();
+    }
+
+    @Test
+    void listSecret() {
+        List<SecretSummary> summaries = vault.listSecrets();
+        assertThat(summaries).hasSize(1);
     }
 }

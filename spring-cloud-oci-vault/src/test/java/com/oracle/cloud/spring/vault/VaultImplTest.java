@@ -7,6 +7,7 @@ package com.oracle.cloud.spring.vault;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 import com.oracle.bmc.secrets.Secrets;
 import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
@@ -14,8 +15,10 @@ import com.oracle.bmc.secrets.model.SecretBundle;
 import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
 import com.oracle.bmc.vault.Vaults;
 import com.oracle.bmc.vault.model.CreateSecretDetails;
+import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.responses.CreateSecretResponse;
+import com.oracle.bmc.vault.responses.ListSecretsResponse;
 import com.oracle.bmc.vault.responses.ScheduleSecretDeletionResponse;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,5 +83,20 @@ public class VaultImplTest {
         when(vaults.updateSecret(any())).thenReturn(UpdateSecretResponse.builder().build());
         UpdateSecretResponse response = vault.updateSecret(secretName, UpdateSecretDetails.builder().build());
         assertThat(response).isNotNull();
+    }
+
+    @Test
+    void listSecrets() {
+        List<SecretSummary> summaries = List.of(SecretSummary.builder().build());
+        ListSecretsResponse r1 = ListSecretsResponse.builder()
+                .items(summaries)
+                .opcNextPage("next")
+                .build();
+        ListSecretsResponse r2 = ListSecretsResponse.builder()
+                .items(summaries)
+                .build();
+        when(vaults.listSecrets(any())).thenReturn(r1).thenReturn(r2);
+        List<SecretSummary> actual = vault.listSecrets();
+        assertThat(actual).hasSize(2);
     }
 }
