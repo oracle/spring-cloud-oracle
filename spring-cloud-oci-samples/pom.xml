@@ -21,6 +21,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-gen-ai-sample</module>
         <module>spring-cloud-oci-logging-sample</module>
         <module>spring-cloud-oci-streaming-sample</module>
+        <module>spring-cloud-oci-vault-sample</module>
         <module>spring-cloud-oci-queue-sample</module>
         <module>spring-cloud-oci-function-sample</module>
     </modules>

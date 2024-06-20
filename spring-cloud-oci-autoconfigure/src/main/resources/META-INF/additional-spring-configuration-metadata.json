@@ -49,6 +49,12 @@
       "defaultValue": true
     },
     {
+      "name": "spring.cloud.oci.vault.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Auto-configure OCI Cloud vault components.",
+      "defaultValue": true
+    },
+    {
       "name": "spring.cloud.oci.queue.enabled",
       "type": "java.lang.Boolean",
       "description": "Auto-configure OCI Cloud queue components.",
