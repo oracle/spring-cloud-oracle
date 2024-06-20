@@ -1,7 +1,5 @@
-/*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
- ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
- */
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
 import java.nio.charset.StandardCharsets;
@@ -19,6 +17,10 @@ import com.oracle.bmc.vault.responses.CreateSecretResponse;
 import com.oracle.bmc.vault.responses.ScheduleSecretDeletionResponse;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 
+/**
+ * The Vault interface defines the API for accessing OCI Vault Service.
+ * Users can retrieve, create, update, list, and delete secrets within an OCI Vault.
+ */
 public interface Vault {
     GetSecretBundleByNameResponse getSecret(String secretName);
     List<SecretSummary> listSecrets();

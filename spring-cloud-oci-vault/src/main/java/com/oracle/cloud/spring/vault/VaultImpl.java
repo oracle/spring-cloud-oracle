@@ -1,7 +1,5 @@
-/*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
- ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
- */
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
 import java.util.ArrayList;
@@ -26,6 +24,10 @@ import com.oracle.bmc.vault.responses.ScheduleSecretDeletionResponse;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 import org.springframework.util.Assert;
 
+/**
+ * Default implementation for Vault interface.
+ * @see Vault
+ */
 public class VaultImpl implements Vault {
     private final Vaults vaults;
     private final Secrets secrets;
@@ -43,6 +45,7 @@ public class VaultImpl implements Vault {
         this.compartmentId = compartmentId;
     }
 
+    @Override
     public GetSecretBundleByNameResponse getSecret(String secretName) {
         Assert.hasText(secretName, "secretName must not be empty");
         GetSecretBundleByNameRequest request = GetSecretBundleByNameRequest.builder()
@@ -52,6 +55,7 @@ public class VaultImpl implements Vault {
         return secrets.getSecretBundleByName(request);
     }
 
+    @Override
     public CreateSecretResponse createSecret(String secretName, CreateSecretDetails body) {
         Assert.hasText(secretName, "secretName must not be empty");
         Assert.notNull(body, "body must not be null");
@@ -65,6 +69,7 @@ public class VaultImpl implements Vault {
         return vaults.createSecret(request);
     }
 
+    @Override
     public ScheduleSecretDeletionResponse scheduleSecretDeletion(String secretName, Date timeOfDeletion) {
         Assert.hasText(secretName, "secretName must not be empty");
         Assert.notNull(timeOfDeletion, "timeOfDeletion must not be null");
@@ -81,6 +86,7 @@ public class VaultImpl implements Vault {
         return vaults.scheduleSecretDeletion(request);
     }
 
+    @Override
     public UpdateSecretResponse updateSecret(String secretName, UpdateSecretDetails body) {
         Assert.hasText(secretName, "secretName must not be empty");
         Assert.notNull(body, "body must not be null");
@@ -94,6 +100,7 @@ public class VaultImpl implements Vault {
         return vaults.updateSecret(request);
     }
 
+    @Override
     public List<SecretSummary> listSecrets() {
         List<SecretSummary> summaries = new ArrayList<>();
         String page = null;

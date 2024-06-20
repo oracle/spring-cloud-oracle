@@ -1,7 +1,5 @@
-/*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
- ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
- */
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.sample.vault.springcloudocivaultsample;
 
 import java.util.Base64;
@@ -14,7 +12,6 @@ import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 import com.oracle.cloud.spring.vault.Vault;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
