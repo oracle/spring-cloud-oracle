@@ -19,21 +19,28 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <description>Spring Cloud OCI Autoconfigure Module</description>
     <url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
 
-    <licenses>
-        <license>
-            <name>The Universal Permissive License (UPL), Version 1.0</name>
-            <url>https://oss.oracle.com/licenses/upl/</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <organization>
+        <name>Oracle America, Inc.</name>
+        <url>https://www.oracle.com</url>
+    </organization>
 
     <developers>
         <developer>
-            <id>oracle</id>
             <name>Oracle</name>
+            <email>obaas_ww at oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
             <organizationUrl>https://www.oracle.com</organizationUrl>
         </developer>
     </developers>
+
+    <licenses>
+        <license>
+            <name>Oracle Free Use Terms and Conditions (FUTC)</name>
+            <comments>
+                https://www.oracle.com/downloads/licenses/oracle-free-license.html
+            </comments>
+        </license>
+    </licenses>
 
     <scm>
         <url>https://github.com/oracle/spring-cloud-oci</url>

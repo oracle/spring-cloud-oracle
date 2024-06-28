@@ -16,6 +16,21 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 	<artifactId>spring-cloud-oci-streaming-sample</artifactId>
 	<name>spring-cloud-oci-streaming-sample</name>
 	<description>spring-cloud-oci-streaming-sample</description>
+
+	<organization>
+		<name>Oracle America, Inc.</name>
+		<url>https://www.oracle.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Oracle</name>
+			<email>obaas_ww at oracle.com</email>
+			<organization>Oracle America, Inc.</organization>
+			<organizationUrl>https://www.oracle.com</organizationUrl>
+		</developer>
+	</developers>
+
 	<licenses>
 		<license>
 			<name>The Universal Permissive License (UPL), Version 1.0</name>
@@ -23,6 +38,13 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
+	<scm>
+		<url>https://github.com/oracle/spring-cloud-oci</url>
+		<connection>scm:git:https://github.com/oracle/spring-cloud-oci.git</connection>
+		<developerConnection>scm:git:git@github.com:oracle/spring-cloud-oci.git</developerConnection>
+	</scm>
+
 	<properties>
 		<java.version>17</java.version>
 	</properties>
