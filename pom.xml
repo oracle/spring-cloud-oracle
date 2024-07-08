@@ -371,8 +371,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <distributionManagement>
         <repository>
-            <id>${repository.id</id>
-            <name>${repository.name</name>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
             <url>${repository.url}</url>
         </repository>
     </distributionManagement>
