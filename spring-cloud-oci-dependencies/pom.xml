@@ -11,6 +11,13 @@
     <description>Spring Cloud OCI Dependencies</description>
     <url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
 
+    <properties>
+        <!-- Distribution management -->
+        <repository.id>releases</repository.id>
+        <repository.name>spring-cloud-oci-releases</repository.name>
+        <repository.url>changeme</repository.url>
+    </properties>
+
     <licenses>
         <license>
             <name>The Universal Permissive License (UPL), Version 1.0</name>
@@ -132,4 +139,12 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </repository>
+    </distributionManagement>
 </project>
