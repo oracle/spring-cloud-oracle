@@ -91,6 +91,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <cc.code-coverage-ratio>0.80</cc.code-coverage-ratio>
         <!--<dependency-check-maven.version>8.4.0</dependency-check-maven.version>
         <failBuildOnCVSS.score>8</failBuildOnCVSS.score> -->
+
+        <!-- Distribution management -->
+        <repository.id>releases</repository.id>
+        <repository.name>spring-cloud-oci-releases</repository.name>
+        <repository.url>changeme</repository.url>
+
     </properties>
 
     <dependencyManagement>
@@ -362,4 +368,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			</build>
 		</profile>
     </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>${repository.id</id>
+            <name>${repository.name</name>
+            <url>${repository.url}</url>
+        </repository>
+    </distributionManagement>
 </project>
