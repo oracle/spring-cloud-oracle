@@ -54,6 +54,11 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		<asciidoctor.maven.plugin.version>2.2.4</asciidoctor.maven.plugin.version>
 		<asciidoctorj.version>2.5.10</asciidoctorj.version>
 		<jruby.version>9.4.2.0</jruby.version>
+
+		<!-- Distribution management -->
+		<repository.id>artifactory</repository.id>
+		<repository.name>spring-cloud-oci-releases</repository.name>
+		<repository.url>changeme</repository.url>
 	</properties>
 
 	<repositories>
@@ -133,4 +138,17 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 			</build>
 		</profile>
 	</profiles>
+
+	<distributionManagement>
+		<repository>
+			<id>${repository.id}</id>
+			<name>${repository.name}</name>
+			<url>${repository.url}</url>
+		</repository>
+		<snapshotRepository>
+			<id>${repository.id}</id>
+			<name>${repository.name}</name>
+			<url>${repository.url}</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
