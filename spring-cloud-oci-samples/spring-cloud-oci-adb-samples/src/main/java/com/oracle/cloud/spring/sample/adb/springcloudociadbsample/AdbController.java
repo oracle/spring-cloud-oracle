@@ -37,7 +37,7 @@ public class AdbController {
     ) {
         CreateAutonomousDatabaseResponse response = autonomousDatabase.createAutonomousDatabase(
             databaseName, compartmentId, adminPassword, dataStorageSizeInGBs, computeCount);
-        return ResponseEntity.accepted().body("database id : " + response.getAutonomousDatabase().getAutonomousContainerDatabaseId());
+        return ResponseEntity.accepted().body("opcRequestId : " + response.getOpcRequestId());
     }
 
     @GetMapping
