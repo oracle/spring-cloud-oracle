@@ -4,6 +4,7 @@
 package com.oracle.cloud.spring.adb;
 
 import com.oracle.bmc.database.DatabaseClient;
+import com.oracle.bmc.database.model.AutonomousDatabase;
 import com.oracle.bmc.database.model.CreateAutonomousDatabaseBase;
 import com.oracle.bmc.database.model.CreateAutonomousDatabaseDetails;
 import com.oracle.bmc.database.model.GenerateAutonomousDatabaseWalletDetails;
@@ -19,11 +20,11 @@ import com.oracle.bmc.database.requests.DeleteAutonomousDatabaseRequest;
 /**
  * Implementation for the OCI Autonomous Database module.
  */
-public class AutonomousDatabaseImpl implements AutonomousDatabase {
+public class AutonomousDbImpl implements AutonomousDb {
 
     final DatabaseClient client;
 
-    public AutonomousDatabaseImpl(DatabaseClient client) {
+    public AutonomousDbImpl(DatabaseClient client) {
         this.client = client;
     }
 
@@ -71,14 +72,17 @@ public class AutonomousDatabaseImpl implements AutonomousDatabase {
      * @param databaseId OCID of the Autonomous Database to get details of
      * @return GetAutonomousDatabaseResponse
      */
-    public GetAutonomousDatabaseResponse getAutonomousDatabase(String databaseId) {
+    public AutonomousDatabase getAutonomousDatabase(String databaseId) {
         GetAutonomousDatabaseRequest getAutonomousDatabaseRequest = GetAutonomousDatabaseRequest.builder()
 		    .autonomousDatabaseId(databaseId)
 		    .build();
 
         GetAutonomousDatabaseResponse response = client.getAutonomousDatabase(getAutonomousDatabaseRequest);
+        AutonomousDatabase adb = response.getAutonomousDatabase();
+
+        System.out.println("***\n" + adb);
    
-        return response;
+        return adb;
     }
 
     /**

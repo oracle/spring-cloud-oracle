@@ -3,7 +3,6 @@
 
 package com.oracle.cloud.spring.adb;
 
-import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.database.DatabaseClient;
 import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
@@ -15,8 +14,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 
-import java.text.MessageFormat;
-
 import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProviderAutoConfiguration.credentialsProviderQualifier;
 import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration.regionProviderQualifier;
 
@@ -26,18 +23,18 @@ import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfi
  * {@link com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration}
  * for loading the Authentication configuration
  *
- * @see com.oracle.cloud.spring.adb.AutonomousDatabase
+ * @see com.oracle.cloud.spring.adb.AutonomousDb
  */
 @AutoConfiguration
-@ConditionalOnClass({AutonomousDatabase.class})
+@ConditionalOnClass({AutonomousDb.class})
 @ConditionalOnProperty(name = "spring.cloud.oci.adb.enabled", havingValue = "true", matchIfMissing = true)
-public class AutonomousDatabaseAutoConfiguration {
+public class AutonomousDbAutoConfiguration {
 
     @Bean
     @RefreshScope
-    @ConditionalOnMissingBean(AutonomousDatabase.class)
-    AutonomousDatabase getQueueImpl(DatabaseClient databaseClient) {
-        return new AutonomousDatabaseImpl(databaseClient);
+    @ConditionalOnMissingBean(AutonomousDb.class)
+    AutonomousDb getQueueImpl(DatabaseClient databaseClient) {
+        return new AutonomousDbImpl(databaseClient);
     }
 
     @Bean

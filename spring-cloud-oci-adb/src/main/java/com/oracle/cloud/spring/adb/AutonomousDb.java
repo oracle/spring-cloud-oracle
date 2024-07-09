@@ -4,15 +4,15 @@
 package com.oracle.cloud.spring.adb;
 
 import com.oracle.bmc.database.DatabaseClient;
+import com.oracle.bmc.database.model.AutonomousDatabase;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
-import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
 import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 
 /**
  * Interface for OCI Autonomous Database module.
  */
-public interface AutonomousDatabase {
+public interface AutonomousDb {
 
     /**
      * Direct instance of OCI Java SDK DatabaseClient.
@@ -41,7 +41,7 @@ public interface AutonomousDatabase {
      * @param databaseId OCID of the Autonomous Database to get details of
      * @return GetAutonomousDatabaseResponse
      */
-    GetAutonomousDatabaseResponse getAutonomousDatabase(String databaseId);
+    AutonomousDatabase getAutonomousDatabase(String databaseId);
 
     /**
      * Generate a wallet for an Autonomous Database.

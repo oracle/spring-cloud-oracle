@@ -3,11 +3,12 @@
 
 package com.oracle.cloud.spring.sample.adb.springcloudociadbsample;
 
+import com.oracle.bmc.database.model.AutonomousDatabase;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
 import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
-import com.oracle.cloud.spring.adb.AutonomousDatabase;
+import com.oracle.cloud.spring.adb.AutonomousDb;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdbController {
     
     @Autowired
-    AutonomousDatabase autonomousDatabase;
+    AutonomousDb autonomousDatabase;
 
     @PostMapping
     ResponseEntity<?> createAutonomousDatabase(
@@ -42,7 +43,7 @@ public class AdbController {
 
     @GetMapping
     ResponseEntity<?> getAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
-        GetAutonomousDatabaseResponse response = autonomousDatabase.getAutonomousDatabase(databaseId);
+        AutonomousDatabase response = autonomousDatabase.getAutonomousDatabase(databaseId);
         return ResponseEntity.ok().body(response);
     }
 
