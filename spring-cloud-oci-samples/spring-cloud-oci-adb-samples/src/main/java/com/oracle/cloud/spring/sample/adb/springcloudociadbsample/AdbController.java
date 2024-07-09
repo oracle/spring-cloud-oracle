@@ -9,6 +9,7 @@ import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
 import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
 import com.oracle.cloud.spring.adb.AutonomousDb;
+import com.oracle.cloud.spring.adb.AutonomousDbDetails;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,8 @@ public class AdbController {
 
     @GetMapping
     ResponseEntity<?> getAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
-        AutonomousDatabase response = autonomousDatabase.getAutonomousDatabase(databaseId);
+        AutonomousDbDetails response = autonomousDatabase.getAutonomousDatabase(databaseId);
+        //System.out.println("###MARK###\n" + response);
         return ResponseEntity.ok().body(response);
     }
 

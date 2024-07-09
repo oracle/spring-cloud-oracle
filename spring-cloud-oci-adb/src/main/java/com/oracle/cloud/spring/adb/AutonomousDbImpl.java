@@ -72,7 +72,7 @@ public class AutonomousDbImpl implements AutonomousDb {
      * @param databaseId OCID of the Autonomous Database to get details of
      * @return GetAutonomousDatabaseResponse
      */
-    public AutonomousDatabase getAutonomousDatabase(String databaseId) {
+    public AutonomousDbDetails getAutonomousDatabase(String databaseId) {
         GetAutonomousDatabaseRequest getAutonomousDatabaseRequest = GetAutonomousDatabaseRequest.builder()
 		    .autonomousDatabaseId(databaseId)
 		    .build();
@@ -80,9 +80,21 @@ public class AutonomousDbImpl implements AutonomousDb {
         GetAutonomousDatabaseResponse response = client.getAutonomousDatabase(getAutonomousDatabaseRequest);
         AutonomousDatabase adb = response.getAutonomousDatabase();
 
-        System.out.println("***\n" + adb);
+        // work around the jackson deserialization issue in oci-java-sdk 3.44.2 - cannot handle explicitlySet - no filter
+        AutonomousDbDetails add = new AutonomousDbDetails(
+            adb.getCompartmentId(),
+            adb.getDisplayName(),
+            adb.getId(),
+            adb.getDbName(),
+            adb.getLifecycleState().toString(),
+            adb.getTimeCreated().toString(),
+            adb.getComputeCount(),
+            adb.getDataStorageSizeInGBs(),
+            adb.getLicenseModel().toString(),
+            adb.getServiceConsoleUrl()
+        );
    
-        return adb;
+        return add;
     }
 
     /**

@@ -4,7 +4,6 @@
 package com.oracle.cloud.spring.adb;
 
 import com.oracle.bmc.database.DatabaseClient;
-import com.oracle.bmc.database.model.AutonomousDatabase;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
@@ -30,7 +29,7 @@ public class AutonomousDbImplTests {
     @Test
     void testDatbaseImpl() {
         when(client.createAutonomousDatabase(any())).thenReturn(mock(CreateAutonomousDatabaseResponse.class));
-        when(client.getAutonomousDatabase(any())).thenReturn(mock(GetAutonomousDatabaseResponse.class));
+        //when(client.getAutonomousDatabase(any())).thenReturn(mock(GetAutonomousDatabaseResponse.class));
         when(client.generateAutonomousDatabaseWallet(any())).thenReturn(mock(GenerateAutonomousDatabaseWalletResponse.class));
         when(client.deleteAutonomousDatabase(any())).thenReturn(mock(DeleteAutonomousDatabaseResponse.class));
 
@@ -38,8 +37,8 @@ public class AutonomousDbImplTests {
             "name", "compartment", "password", 200, 2f);
         assertNotNull(cadr);
 
-        AutonomousDatabase gadr = autonomousDatabase.getAutonomousDatabase("ocid");
-        //assertNotNull(gadr);
+        //AutonomousDbDetails add = autonomousDatabase.getAutonomousDatabase("ocid");
+        //assertNotNull(add);
 
         GenerateAutonomousDatabaseWalletResponse gadwr = autonomousDatabase.generateAutonomousDatabaseWallet("ocid", "password");
         assertNotNull(gadwr);

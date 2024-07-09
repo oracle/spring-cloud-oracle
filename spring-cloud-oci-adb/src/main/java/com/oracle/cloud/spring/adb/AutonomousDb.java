@@ -41,7 +41,7 @@ public interface AutonomousDb {
      * @param databaseId OCID of the Autonomous Database to get details of
      * @return GetAutonomousDatabaseResponse
      */
-    AutonomousDatabase getAutonomousDatabase(String databaseId);
+    AutonomousDbDetails getAutonomousDatabase(String databaseId);
 
     /**
      * Generate a wallet for an Autonomous Database.
