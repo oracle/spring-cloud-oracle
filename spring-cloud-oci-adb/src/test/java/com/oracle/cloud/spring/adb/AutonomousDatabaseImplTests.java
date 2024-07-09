@@ -33,7 +33,8 @@ public class AutonomousDatabaseImplTests {
         when(client.generateAutonomousDatabaseWallet(any())).thenReturn(mock(GenerateAutonomousDatabaseWalletResponse.class));
         when(client.deleteAutonomousDatabase(any())).thenReturn(mock(DeleteAutonomousDatabaseResponse.class));
 
-        CreateAutonomousDatabaseResponse cadr = autonomousDatabase.createAutonomousDatabase("name", "compartment");
+        CreateAutonomousDatabaseResponse cadr = autonomousDatabase.createAutonomousDatabase(
+            "name", "compartment", "password", 200, 2f);
         assertNotNull(cadr);
 
         GetAutonomousDatabaseResponse gadr = autonomousDatabase.getAutonomousDatabase("ocid");

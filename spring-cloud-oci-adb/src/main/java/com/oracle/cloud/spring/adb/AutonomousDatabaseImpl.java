@@ -4,6 +4,7 @@
 package com.oracle.cloud.spring.adb;
 
 import com.oracle.bmc.database.DatabaseClient;
+import com.oracle.bmc.database.model.CreateAutonomousDatabaseBase;
 import com.oracle.bmc.database.model.CreateAutonomousDatabaseDetails;
 import com.oracle.bmc.database.model.GenerateAutonomousDatabaseWalletDetails;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
@@ -41,11 +42,21 @@ public class AutonomousDatabaseImpl implements AutonomousDatabase {
      * @param compartmentId Compartment OCID where the Autonomous Database needs to be created
      * @return CreateAutonomousDatabaseResponse
      */
-    public CreateAutonomousDatabaseResponse createAutonomousDatabase(String databaseName, String compartmentId) {
+    public CreateAutonomousDatabaseResponse createAutonomousDatabase(
+        String databaseName, 
+        String compartmentId, 
+        String adminPassword,
+        Integer dataStorageSizeInGBs,
+        Float computeCount
+    ) {
         CreateAutonomousDatabaseRequest createAutonomousDatabaseRequest = CreateAutonomousDatabaseRequest.builder()
             .createAutonomousDatabaseDetails(CreateAutonomousDatabaseDetails.builder()
                 .compartmentId(compartmentId)
                 .dbName(databaseName)
+                .adminPassword(adminPassword)
+                .dataStorageSizeInGBs(dataStorageSizeInGBs)
+                .computeModel(CreateAutonomousDatabaseBase.ComputeModel.Ecpu)
+                .computeCount(computeCount)
                 .build())
             .build();
 

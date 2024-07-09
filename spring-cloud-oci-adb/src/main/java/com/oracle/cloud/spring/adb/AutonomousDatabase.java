@@ -27,7 +27,13 @@ public interface AutonomousDatabase {
      * @param compartmentId Compartment OCID where the Autonomous Database needs to be created
      * @return CreateAutonomousDatabaseResponse
      */
-    CreateAutonomousDatabaseResponse createAutonomousDatabase(String databaseName, String compartmentId);
+    CreateAutonomousDatabaseResponse createAutonomousDatabase(
+        String databaseName, 
+        String compartmentId, 
+        String adminPassword,
+        Integer dataStorageSizeInGBs,
+        Float computeCount
+        );
 
     /**
      * Get details of an Autonomous Database.
