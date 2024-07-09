@@ -199,6 +199,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 				</configuration>
                 <executions>
                     <execution>
+                        <phase>deploy</phase>
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
@@ -212,6 +213,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
+                        <phase>deploy</phase>
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
@@ -333,6 +335,18 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                      </execution>
                  </executions>
              </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Plugin for dependency check -->
             <!--<plugin>
                 <groupId>org.owasp</groupId>
