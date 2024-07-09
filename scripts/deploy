@@ -46,6 +46,6 @@ echo "Successfully set project version = $VERSION"
 
 echo "Deploying project to ${REPOSITORY_URL}/${REPOSITORY_NAME}"
 
-mvn -q -Drepository.url="$REPOSITORY_URL" -Drepository.name="$REPOSITORY_NAME" -DskipTests
+mvn -q deploy -Drepository.url="$REPOSITORY_URL" -Drepository.name="$REPOSITORY_NAME" -DskipTests
 
 echo "Successfully deployed project to ${REPOSITORY_URL}/${REPOSITORY_NAME}"

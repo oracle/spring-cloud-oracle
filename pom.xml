@@ -88,6 +88,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
         <cc.code-coverage-ratio>0.80</cc.code-coverage-ratio>
         <!--<dependency-check-maven.version>8.4.0</dependency-check-maven.version>
         <failBuildOnCVSS.score>8</failBuildOnCVSS.score> -->
@@ -335,6 +336,36 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                      </execution>
                  </executions>
              </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <!--suppress UnresolvedMavenProperty -->
+                                    <file>${session.executionRootDirectory}/LICENSE.txt</file>
+                                    <type>txt</type>
+                                    <classifier>LICENSE</classifier>
+                                </artifact>
+                                <artifact>
+                                    <!--suppress UnresolvedMavenProperty -->
+                                    <file>${session.executionRootDirectory}/THIRD_PARTY_LICENSES.txt</file>
+                                    <type>txt</type>
+                                    <classifier>THIRD_PARTY_LICENSES</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <executions>
