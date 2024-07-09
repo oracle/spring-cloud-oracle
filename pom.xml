@@ -93,7 +93,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <failBuildOnCVSS.score>8</failBuildOnCVSS.score> -->
 
         <!-- Distribution management -->
-        <repository.id>releases</repository.id>
+        <repository.id>artifactory</repository.id>
         <repository.name>spring-cloud-oci-releases</repository.name>
         <repository.url>changeme</repository.url>
 
@@ -375,5 +375,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <name>${repository.name}</name>
             <url>${repository.url}</url>
         </repository>
+        <snapshotRepository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </snapshotRepository>
     </distributionManagement>
 </project>

@@ -13,7 +13,7 @@
 
     <properties>
         <!-- Distribution management -->
-        <repository.id>releases</repository.id>
+        <repository.id>artifactory</repository.id>
         <repository.name>spring-cloud-oci-releases</repository.name>
         <repository.url>changeme</repository.url>
     </properties>
