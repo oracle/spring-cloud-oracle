@@ -1,0 +1,82 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#autonomous-database]
+== Autonomous Database
+
+https://docs.oracle.com/en/cloud/paas/atp-cloud/index.html[Autonomous Database] is a data management service built
+on self-driving Oracle Autonomous Database technology to deliver automated patching, upgrades, and tuning, including
+performing all routine database maintenance tasks while the system is running, without human intervention.
+
+Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.cloud.spring</groupId>
+    <artifactId>spring-cloud-oci-starter-adb</artifactId>
+</dependency>
+----
+
+Gradle coordinates:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-adb")
+}
+----
+
+=== Using Autonomous Database
+
+The starter automatically configures and registers an `AutnomousDb` bean in the Spring application context.
+The `AutnomousDb` bean (link[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
+delete an Autonomous Database and generate a wallet for an Autonomous Database.
+
+[source,java]
+----
+@Autowired
+private Queue queue;
+
+public void createQueue() {
+
+    String queueId = queue.createQueue("my-queue", <<compartmentId>>, <<deadLetterQueueDeliveryCount>>, <<retentionInSeconds>>);
+}
+@Autowired
+AutonomousDb autonomousDatabase;
+
+public void createAutonomousDatabase() {
+    autonomousDatabase.createAutonomousDatabase(
+        databaseName, compartmentId, adminPassword, dataStorageSizeInGBs, computeCount);
+}
+
+public void getAutonomousDatabase() {
+    AutonomousDbDetails response = autonomousDatabase.getAutonomousDatabase(databaseId);
+}
+
+public void getAutonomousDatabaseWallet() {
+    GenerateAutonomousDatabaseWalletResponse response = autonomousDatabase.generateAutonomousDatabaseWallet(databaseId, password);
+    InputStream is = response.getInputStream();
+    int ContentLength = response.getContentLength();
+    // read the InputStream to get the wallet
+}
+
+public void deleteAutonomousDatabase() {
+    DeleteAutonomousDatabaseResponse response = autonomousDatabase.deleteAutonomousDatabase(databaseId);
+}
+----
+
+
+=== Configuration
+
+The Spring Boot Starter for Oracle Autonomous Database provides the following configuration options:
+
+|===
+^| Name ^| Description ^| Required ^| Default value
+| `spring.cloud.oci.adb.enabled` | Enables the OCI Autonomous Database APIs. | No | `true`
+|===
+
+
+=== Sample
+
+A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Autonomous Database module.

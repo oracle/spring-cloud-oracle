@@ -53,6 +53,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </scm>
 
     <modules>
+        <module>spring-cloud-oci-adb</module>
         <module>spring-cloud-oci-dependencies</module>
         <module>spring-cloud-oci-core</module>
         <module>spring-cloud-oci-autoconfigure</module>
@@ -73,7 +74,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2023.0.2</spring-cloud-dependencies.version>
         <spring-boot-dependencies.version>3.2.7</spring-boot-dependencies.version>
-        <oci-sdk.version>3.44.0</oci-sdk.version>
+        <oci-sdk.version>3.44.2</oci-sdk.version>
         <spring-boot-maven-plugin.version>3.2.5</spring-boot-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
