@@ -104,6 +104,11 @@
             </dependency>
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-starter-adb</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -75,6 +75,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-cloud-dependencies.version>2023.0.2</spring-cloud-dependencies.version>
         <spring-boot-dependencies.version>3.2.7</spring-boot-dependencies.version>
         <oci-sdk.version>3.44.2</oci-sdk.version>
+        <oracle-database-security.version>23.4.0.24.05</oracle-database-security.version>
+        <osdt.version>21.14.0.0</osdt.version>
         <spring-boot-maven-plugin.version>3.2.5</spring-boot-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -103,6 +105,21 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.oracle.database.security</groupId>
+                <artifactId>oraclepki</artifactId>
+                <version>${oracle-database-security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.security</groupId>
+                <artifactId>osdt_core</artifactId>
+                <version>${osdt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.security</groupId>
+                <artifactId>osdt_cert</artifactId>
+                <version>${osdt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.oracle.oci.sdk</groupId>
                 <artifactId>oci-java-sdk-bom</artifactId>
