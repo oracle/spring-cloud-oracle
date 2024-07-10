@@ -13,6 +13,8 @@ import com.oracle.cloud.spring.adb.AutonomousDbDetails;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +47,6 @@ public class AdbController {
     @GetMapping
     ResponseEntity<?> getAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
         AutonomousDbDetails response = autonomousDatabase.getAutonomousDatabase(databaseId);
-        //System.out.println("###MARK###\n" + response);
         return ResponseEntity.ok().body(response);
     }
 
@@ -55,7 +56,10 @@ public class AdbController {
         @Parameter(required = true, example = "password") @RequestParam String password
     ) {
         GenerateAutonomousDatabaseWalletResponse response = autonomousDatabase.generateAutonomousDatabaseWallet(databaseId, password);
-        return ResponseEntity.ok().body("opcRequestId fo generating wallet : " + response.getOpcRequestId());
+        InputStreamResource isr = new InputStreamResource(response.getInputStream());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentLength(response.getContentLength());
+        return ResponseEntity.ok().headers(headers).body(isr);
     }
 
     @DeleteMapping
