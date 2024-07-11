@@ -126,7 +126,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 								</goals>
 								<configuration>
 									<backend>spring-html</backend>
-									<!-- <attributes>
+									<attributes>
 										<source-highlighter>rouge</source-highlighter>
 										<imagesdir>./images</imagesdir>
 										<toc>left</toc>
@@ -135,7 +135,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 										<idprefix/>
 										<idseparator>-</idseparator>
 										<docinfo1>true</docinfo1>
-									</attributes> -->
+									</attributes>
 								</configuration>
 							</execution>
 						</executions>
