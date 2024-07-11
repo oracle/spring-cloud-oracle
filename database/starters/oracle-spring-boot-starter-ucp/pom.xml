@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>23.4.0.24.05</version>
+        <version>24.1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-ucp</artifactId>
-    <version>23.4.0.24.05</version>
+    <version>24.1.0</version>
 
     <name>Oracle Spring Boot Starter - UCP</name>
     <description>Oracle's implementation of Spring Boot Starter for using with Oracle UCP</description>
