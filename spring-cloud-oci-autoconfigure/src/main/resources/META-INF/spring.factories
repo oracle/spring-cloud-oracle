@@ -1,0 +1,1 @@
+org.springframework.boot.env.EnvironmentPostProcessor=com.oracle.cloud.spring.vault.VaultEnvironmentPostProcessor

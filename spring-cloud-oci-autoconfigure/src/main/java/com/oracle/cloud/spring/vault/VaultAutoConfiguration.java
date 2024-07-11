@@ -53,12 +53,7 @@ public class VaultAutoConfiguration {
     public Vaults vaults(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                          @Qualifier(credentialsProviderQualifier)
                          CredentialsProvider cp) {
-        Vaults vaults = VaultsClient.builder()
-                .build(cp.getAuthenticationDetailsProvider());
-        if (regionProvider.getRegion() != null) {
-            vaults.setRegion(regionProvider.getRegion());
-        }
-        return vaults;
+        return createVaultClient(regionProvider, cp);
     }
 
     @Bean
@@ -67,12 +62,25 @@ public class VaultAutoConfiguration {
     public Secrets secrets(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                           @Qualifier(credentialsProviderQualifier)
                          CredentialsProvider cp) {
+        return createSecretsClient(regionProvider, cp);
+    }
+
+    public static Secrets createSecretsClient(RegionProvider regionProvider, CredentialsProvider cp) {
         Secrets secrets = SecretsClient.builder()
                 .build(cp.getAuthenticationDetailsProvider());
         if (regionProvider.getRegion() != null) {
             secrets.setRegion(regionProvider.getRegion());
         }
         return secrets;
+    }
+
+    public static Vaults createVaultClient(RegionProvider regionProvider, CredentialsProvider cp) {
+        Vaults vaults = VaultsClient.builder()
+                .build(cp.getAuthenticationDetailsProvider());
+        if (regionProvider.getRegion() != null) {
+            vaults.setRegion(regionProvider.getRegion());
+        }
+        return vaults;
     }
 }
 

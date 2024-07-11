@@ -1,0 +1,110 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#vault]
+== Vault
+
+https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm[Vault] can be used as a Spring property source for Vault secrets, and as an application bean for creating, updating, listing, and deleting secrets from a Vault.
+
+Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.cloud.spring</groupId>
+    <artifactId>spring-cloud-oci-starter-vault</artifactId>
+</dependency>
+----
+
+Gradle coordinates:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-vault")
+}
+----
+
+=== Using VaultPropertySource
+
+By configuring Vault as a property source, secrets can be dynamically loaded from OCI Vault into the Spring application context.
+For each vault specified as a property source, Spring will inject secrets as properties identified by their name.
+
+[source,yaml]
+----
+spring:
+  cloud:
+    oci:
+      config:
+        type: file
+      region:
+        static: us-ashburn-1
+      vault:
+        enabled: true
+        compartment: ${OCI_COMPARTMENT_ID}
+        # Spring will automatically refresh properties from Vault,
+        # if the property-refresh-interval is greater than 0ms.
+        # Defaults to 10 minutes.
+        property-refresh-interval: 10000ms
+        property-sources:
+        - vault-id: ${OCI_VAULT_ID}
+----
+
+[source,java]
+----
+// The secret "secretName" will be loaded from the Vault,
+// and it's String value bound to the secretValue variable.
+@Value("${secretname}")
+String secretValue;
+----
+
+=== Using Vault APIs in an application
+
+The starter automatically configures and registers an `Vault` bean in the Spring application context.
+The `Vault` bean can be used to create, update, list, and delete secrets in an OCI Vault
+
+[source,yaml]
+----
+spring:
+  cloud:
+    oci:
+      config:
+        type: file
+      region:
+        static: us-ashburn-1
+      vault:
+        compartment: ${OCI_COMPARTMENT_ID}
+        vault-id: ${OCI_VAULT_ID}
+        enabled: true
+----
+
+[source,java]
+----
+@Autowired
+private Vault vault;
+
+public String getSecretByName(String secretName) {
+    GetSecretBundleByNameResponse bundle = vault.getSecret(secretName);
+    return vault.decodeBundle(bundle);
+}
+
+----
+
+
+=== Configuration
+
+The Spring Boot Starter for Oracle Vault provides the following configuration options:
+
+|===
+^| Name ^| Description ^| Required ^| Default value
+| `spring.cloud.oci.vault.enabled` | Enables the OCI Vault APIs. | No | `true`
+| `spring.cloud.oci.vault.compartment` | Compartment for Vault APIs and property sources. | Yes |
+| `spring.cloud.oci.vault.vault-id` | Vault OCID for Vault APIs. | Yes |
+| `spring.cloud.oci.vault.property-refresh-interval` | Duration on which properties will be refreshed. | No | 10m
+| `spring.cloud.oci.vault.property-sources` | List of Vaults to use as Spring property sources. | No |
+| `spring.cloud.oci.vault.property-sources[i].vault-id` | Vault OCID to use as a property source. | Yes |
+|===
+
+=== Sample
+
+A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Vault module.
