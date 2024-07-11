@@ -2,6 +2,7 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,7 +14,9 @@ public class VaultProperties {
     private String compartment;
     private String vaultId;
 
-    private List<VaultPropertySources> propertySources;
+    private List<VaultPropertySourceProperties> propertySources;
+
+    private Duration propertyRefreshInterval;
 
     public String getCompartment() {
         return compartment;
@@ -31,11 +34,19 @@ public class VaultProperties {
         this.vaultId = vaultId;
     }
 
-    public List<VaultPropertySources> getPropertySources() {
+    public List<VaultPropertySourceProperties> getPropertySources() {
         return propertySources;
     }
 
-    public void setPropertySources(List<VaultPropertySources> propertySources) {
+    public void setPropertySources(List<VaultPropertySourceProperties> propertySources) {
         this.propertySources = propertySources;
+    }
+
+    public Duration getPropertyRefreshInterval() {
+        return propertyRefreshInterval;
+    }
+
+    public void setPropertyRefreshInterval(Duration propertyRefreshInterval) {
+        this.propertyRefreshInterval = propertyRefreshInterval;
     }
 }

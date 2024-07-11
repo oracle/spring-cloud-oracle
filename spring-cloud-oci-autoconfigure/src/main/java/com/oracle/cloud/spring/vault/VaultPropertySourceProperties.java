@@ -2,14 +2,14 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
-public class VaultPropertySources {
-    private String secretId;
+public class VaultPropertySourceProperties {
+    private String vaultId;
 
-    public String getSecretId() {
-        return secretId;
+    public String getVaultId() {
+        return vaultId;
     }
 
-    public void setSecretId(String secretId) {
-        this.secretId = secretId;
+    public void setVaultId(String vaultId) {
+        this.vaultId = vaultId;
     }
 }

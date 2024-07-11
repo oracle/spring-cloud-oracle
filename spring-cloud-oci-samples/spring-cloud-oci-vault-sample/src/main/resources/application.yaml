@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    oci:
+      config:
+        type: file
+      region:
+        static: us-chicago-1
+      vault:
+        compartment: ${OCI_COMPARTMENT_ID}
+        vault-id: ${OCI_VAULT_ID}
+        enabled: true
+        property-refresh-interval: 10000ms
+        property-sources:
+        - vault-id: ${OCI_VAULT_ID}

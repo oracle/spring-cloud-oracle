@@ -16,7 +16,7 @@ public class VaultPropertySource extends EnumerablePropertySource<VaultPropertyL
 
     @Override
     public Object getProperty(String name) {
-        return source.getProeprty(name);
+        return source.getProperty(name);
     }
 
     @Override

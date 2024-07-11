@@ -2,45 +2,41 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.oracle.bmc.secrets.Secrets;
-import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
-import com.oracle.bmc.secrets.model.SecretBundleContentDetails;
-import com.oracle.bmc.secrets.requests.GetSecretBundleRequest;
-import com.oracle.bmc.secrets.responses.GetSecretBundleResponse;
+import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
+import com.oracle.bmc.vault.model.SecretSummary;
 
 public class VaultPropertyLoader implements AutoCloseable {
     private static Timer timer;
 
-    private final Secrets secrets;
+    private final Vault vault;
     private final Map<String, Object> properties = new LinkedHashMap<>();
 
-    public VaultPropertyLoader(Secrets secrets, List<String> secretIds, Duration refresh) {
-        this.secrets = secrets;
-
-        for (String secretId : secretIds) {
-            properties.put(secretId, "");
-        }
-
-        synchronized (VaultPropertyLoader.class) {
-            if (timer == null) {
-                timer = new Timer(true);
-                long refreshMillis = refresh.toMillis();
-                timer.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-                        reload();
-                    }
-                }, refreshMillis, refreshMillis);
+    public VaultPropertyLoader(Vault vault, Duration refresh) {
+        this.vault = vault;
+        reload();
+        long refreshMillis = Optional.ofNullable(refresh)
+                .orElse(Duration.ofMinutes(10))
+                .toMillis();
+        if (refreshMillis > 0) {
+            synchronized (VaultPropertyLoader.class) {
+                if (timer == null) {
+                    timer = new Timer(true);
+                    ;
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            reload();
+                        }
+                    }, refreshMillis, refreshMillis);
+                }
             }
         }
     }
@@ -49,8 +45,8 @@ public class VaultPropertyLoader implements AutoCloseable {
         return properties.containsKey(key);
     }
 
-    String getProeprty(String key) {
-        return properties.get(key).toString();
+    Object getProperty(String key) {
+        return properties.get(key);
     }
 
     String[] getPropertyNames() {
@@ -58,24 +54,12 @@ public class VaultPropertyLoader implements AutoCloseable {
     }
 
     private void reload() {
-        Set<String> secretIds = properties.keySet();
-        for (String secretId : secretIds) {
-            Object value = getSecretValue(secretId);
-            properties.put(secretId, value);
+        List<SecretSummary> secrets = vault.listSecrets();
+        for (SecretSummary secretSummary : secrets) {
+            GetSecretBundleByNameResponse getSecretResponse = vault.getSecret(secretSummary.getSecretName());
+            String secretValue = vault.decodeBundle(getSecretResponse);
+            properties.put(secretSummary.getSecretName(), secretValue);
         }
-    }
-
-    private Object getSecretValue(String secretId) {
-        GetSecretBundleRequest request = GetSecretBundleRequest.builder()
-                .secretId(secretId)
-                .build();
-        GetSecretBundleResponse response = secrets.getSecretBundle(request);
-        SecretBundleContentDetails content = response.getSecretBundle().getSecretBundleContent();
-        if (content instanceof Base64SecretBundleContentDetails) {
-            Base64SecretBundleContentDetails encoded = (Base64SecretBundleContentDetails) content;
-            return new String(Base64.getDecoder().decode(encoded.getContent()), StandardCharsets.UTF_8);
-        }
-        return content.toString();
     }
 
     @Override

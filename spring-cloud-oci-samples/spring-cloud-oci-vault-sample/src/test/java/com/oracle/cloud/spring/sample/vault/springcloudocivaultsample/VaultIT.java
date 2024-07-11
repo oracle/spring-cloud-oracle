@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Requires an existing vault, identified by the OCI_VAULT_ID environment variable.
+ * The vault must have a secret named "mysecret" present.
  */
 @SpringBootTest
 @EnabledIfEnvironmentVariable(named = "OCI_COMPARTMENT_ID", matches = ".+")
@@ -28,6 +29,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VaultIT {
     @Autowired
     Vault vault;
+
+    @Autowired
+    VaultController vaultController;
 
     private final String secretName = "mysecret";
 
@@ -56,5 +60,10 @@ public class VaultIT {
     void listSecret() {
         List<SecretSummary> summaries = vault.listSecrets();
         assertThat(summaries).hasSize(1);
+    }
+
+    @Test
+    void propertySourceLoaded() {
+        assertThat(vaultController.getVaultSecretValue()).hasSizeGreaterThan(1);
     }
 }
