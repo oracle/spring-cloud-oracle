@@ -62,27 +62,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		<repository.url>changeme</repository.url>
 	</properties>
 
-	<!-- <repositories>
-		<repository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories> -->
-
 	<profiles>
 		<profile>
 			<id>asciidocs</id>
