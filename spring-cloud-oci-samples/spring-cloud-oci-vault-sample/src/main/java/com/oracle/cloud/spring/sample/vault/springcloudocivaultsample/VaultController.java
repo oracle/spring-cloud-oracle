@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/demoapp/api/vault/")
-@Tag(name = "streaming APIs")
+@Tag(name = "Vault APIs")
 public class VaultController {
     // This value will be loaded from OCI Vault
     @Value("${mysecret}")
