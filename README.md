@@ -16,6 +16,7 @@ For a deep dive into the project, refer to the Spring Cloud OCI documentation:
 |------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
 | Spring Cloud OCI 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) |
 | Spring Cloud OCI 1.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) |
+| Spring Cloud OCI 1.1.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oci/1.0.0/javadocs/index.html) |
 
 
 ## Compatibility with Spring Project Versions
@@ -26,7 +27,7 @@ This project has dependency and transitive dependencies on Spring Projects. The 
 |------------------|--------------|--------------|--------------|
 | 1.0.0            | 2022.0.x     | 3.1.x, 3.0.x | 3.24.0       |
 | 1.0.1            | 2023.0.x     | 3.2.x        | 3.41.1       |
-| 1.1.0            | 2023.0.x     | 3.2.x        | 3.41.1       |
+| 1.1.0            | 2023.0.x     | 3.2.x        | 3.44.2       |
 
 ## Sample applications
 
