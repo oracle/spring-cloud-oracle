@@ -3,7 +3,7 @@
 package com.oracle.cloud.spring.sample.vault.springcloudocivaultsample;
 
 import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
-import com.oracle.cloud.spring.vault.Vault;
+import com.oracle.cloud.spring.vault.VaultTemplate;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +20,16 @@ public class VaultController {
     @Value("${mysecret}")
     private String vaultSecretValue;
 
-    private final Vault vault;
+    private final VaultTemplate vaultTemplate;
 
-    public VaultController(Vault vault) {
-        this.vault = vault;
+    public VaultController(VaultTemplate vaultTemplate) {
+        this.vaultTemplate = vaultTemplate;
     }
 
     @GetMapping("secret")
     public ResponseEntity<?> getSecret(@RequestParam String secretName) {
-        GetSecretBundleByNameResponse secret = vault.getSecret(secretName);
-        return ResponseEntity.ok(vault.decodeBundle(secret));
+        GetSecretBundleByNameResponse secret = vaultTemplate.getSecret(secretName);
+        return ResponseEntity.ok(vaultTemplate.decodeBundle(secret));
     }
 
     public String getVaultSecretValue() {

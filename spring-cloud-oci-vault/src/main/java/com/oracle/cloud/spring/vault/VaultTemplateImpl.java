@@ -5,7 +5,9 @@ package com.oracle.cloud.spring.vault;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.oracle.bmc.secrets.Secrets;
 import com.oracle.bmc.secrets.requests.GetSecretBundleByNameRequest;
@@ -27,9 +29,9 @@ import org.springframework.util.Assert;
 
 /**
  * Default implementation for Vault interface.
- * @see Vault
+ * @see VaultTemplate
  */
-public class VaultImpl implements Vault {
+public class VaultTemplateImpl implements VaultTemplate {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private final Vaults vaults;
@@ -37,7 +39,7 @@ public class VaultImpl implements Vault {
     private final String vaultId;
     private final String compartmentId;
 
-    public VaultImpl(Vaults vaults, Secrets secrets, String vaultId, String compartmentId) {
+    public VaultTemplateImpl(Vaults vaults, Secrets secrets, String vaultId, String compartmentId) {
         Assert.notNull(vaults, "vaults must not be null");
         Assert.notNull(secrets, "secrets must not be null");
         Assert.hasText(vaultId, "vaultId must not be empty");
@@ -61,6 +63,16 @@ public class VaultImpl implements Vault {
                 .secretName(secretName)
                 .build();
         return secrets.getSecretBundleByName(request);
+    }
+
+    @Override
+    public Map<String, String> getAllSecrets() {
+        LinkedHashMap<String, String> secrets = new LinkedHashMap<>();
+        for (SecretSummary secretSummary : listSecrets()) {
+            GetSecretBundleByNameResponse bundle = getSecret(secretSummary.getSecretName());
+            secrets.put(secretSummary.getSecretName(), decodeBundle(bundle));
+        }
+        return secrets;
     }
 
     /**

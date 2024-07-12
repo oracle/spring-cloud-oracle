@@ -27,7 +27,7 @@ import static org.springframework.core.env.StandardEnvironment.SYSTEM_ENVIRONMEN
 
 /**
  * Injects a VaultPropertySource for each OCI Vault property source specified in the application properties.
- * OCI Vault property sources will only be loaded if the com.oracle.cloud.spring.vault.Vault class is on the classpath.
+ * OCI Vault property sources will only be loaded if the com.oracle.cloud.spring.vault.VaulTemplate class is on the classpath.
  */
 public class VaultEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
     @Override
@@ -51,8 +51,8 @@ public class VaultEnvironmentPostProcessor implements EnvironmentPostProcessor, 
             // Inject VaultPropertySources into the system property sources
             MutablePropertySources propertySources = environment.getPropertySources();
             for (VaultPropertySourceProperties properties : vaultProperties.getPropertySources()) {
-                Vault vault = new VaultImpl(vaultClient, secretsClient, properties.getVaultId(), vaultProperties.getCompartment());
-                VaultPropertyLoader vaultPropertyLoader = new VaultPropertyLoader(vault, vaultProperties.getPropertyRefreshInterval());
+                VaultTemplate vaultTemplate = new VaultTemplateImpl(vaultClient, secretsClient, properties.getVaultId(), vaultProperties.getCompartment());
+                VaultPropertyLoader vaultPropertyLoader = new VaultPropertyLoader(vaultTemplate, vaultProperties.getPropertyRefreshInterval());
                 VaultPropertySource vaultPropertySource = new VaultPropertySource(properties.getVaultId(), vaultPropertyLoader);
                 if (propertySources.contains(SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
                     propertySources.addAfter(SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, vaultPropertySource);
@@ -69,7 +69,7 @@ public class VaultEnvironmentPostProcessor implements EnvironmentPostProcessor, 
     }
 
     private boolean areClassesLoaded() {
-        return ClassUtils.isPresent("com.oracle.cloud.spring.vault.Vault", VaultEnvironmentPostProcessor.class.getClassLoader());
+        return ClassUtils.isPresent("com.oracle.cloud.spring.vault.VaultTemplate", VaultEnvironmentPostProcessor.class.getClassLoader());
     }
 
     private CredentialsProvider getCredentialsProvider(CredentialsProperties credentialsProperties) {

@@ -5,6 +5,7 @@ package com.oracle.cloud.spring.vault;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
 import com.oracle.bmc.secrets.model.SecretBundleContentDetails;
@@ -17,16 +18,23 @@ import com.oracle.bmc.vault.responses.ScheduleSecretDeletionResponse;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 
 /**
- * The Vault interface defines the API for accessing OCI Vault Service.
+ * The VaultTemplate interface defines the API for accessing OCI Vault Service.
  * Users can retrieve, create, update, list, and delete secrets within an OCI Vault.
  */
-public interface Vault {
+public interface VaultTemplate {
     /**
      * Retrieves a secret by name.
      * @param secretName The name of the secret.
      * @return The secret bundle response.
      */
     GetSecretBundleByNameResponse getSecret(String secretName);
+
+    /**
+     * Retrieve all secrets from the Vault.
+     *
+     * @return A mapping of secret names to secret values.
+     */
+    Map<String, String> getAllSecrets();
 
     /**
      * Lists all secrets in the Vault.
