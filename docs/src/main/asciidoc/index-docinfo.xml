@@ -1,10 +1,10 @@
-<!-- Copyright (c) 2023, Oracle and/or its affiliates.-->
+<!-- Copyright (c) 2023, 2024, Oracle and/or its affiliates.-->
 <!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/-->
 
 <productname>Spring Cloud OCI</productname>
 <releaseinfo>{project-version}</releaseinfo>
 <copyright>
-	<year>2022-2023</year>
+	<year>2022-2024</year>
 	<holder>Oracle</holder>
 </copyright>
 <legalnotice>

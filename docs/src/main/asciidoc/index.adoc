@@ -34,8 +34,6 @@ include::queues.adoc[]
 
 include::adb.adoc[]
 
-include::genai.adoc[]
-
 include::vault.adoc[]
 
 include::ucp.adoc[]
