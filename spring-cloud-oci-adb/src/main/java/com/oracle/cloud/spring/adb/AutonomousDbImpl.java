@@ -32,7 +32,7 @@ public class AutonomousDbImpl implements AutonomousDb {
      * Direct instance of OCI Java SDK DatabaseClient.
      * @return DatabaseClient
      */
-    public DatabaseClient getDatatbaseClient() {
+    public DatabaseClient getDatabaseClient() {
         return client;
     }
 

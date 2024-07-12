@@ -18,7 +18,7 @@ public interface AutonomousDb {
      * Direct instance of OCI Java SDK DatabaseClient.
      * @return DatabaseClient
      */
-    DatabaseClient getDatatbaseClient();
+    DatabaseClient getDatabaseClient();
 
     /**
      * Create an Autonomous Database.
