@@ -38,6 +38,10 @@ include::genai.adoc[]
 
 include::vault.adoc[]
 
+include::ucp.adoc[]
+
+include::aqjms.adoc[]
+
 == Configuration properties
 
 To see the list of all OCI-related configuration properties see the link:appendix.html[Appendix page].
