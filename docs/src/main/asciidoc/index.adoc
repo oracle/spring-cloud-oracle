@@ -12,8 +12,6 @@ include::_attributes.adoc[]
 
 Spring Cloud for OCI, part of the Spring Cloud umbrella project, eases the integration with hosted OCI Services. It offers a convenient way to interact with OCI provided services using well-known Spring idioms and APIs, such as storage resources. Developers can build their application around the hosted services without having to worry about infrastructure or maintenance.
 
-Spring Cloud OCI lets you leverage the power and simplicity of the Spring Framework to use OCI Cloud resources. 
-
 include::getting-started.adoc[]
 
 include::core.adoc[]
