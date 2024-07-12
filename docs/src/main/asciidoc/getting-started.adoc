@@ -82,7 +82,7 @@ The following table highlights several samples of the most used integrations in 
 | Oracle Autonomous Database
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-samples[spring-cloud-oci-adb-samples]
 
-| Generative AI 
+| Generative AI
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[spring-cloud-oci-gen-ai-sample]
 
 | Vault

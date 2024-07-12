@@ -28,7 +28,7 @@ dependencies {
 === Using VaultPropertySource
 
 By configuring Vault as a property source, secrets can be dynamically loaded from OCI Vault into the Spring application context.
-For each vault specified as a property source, Spring will inject secrets as properties identified by their name.
+For each Vault specified as a property source, Spring will inject secrets as properties identified by their name.
 
 [source,yaml]
 ----
@@ -58,10 +58,10 @@ spring:
 String secretValue;
 ----
 
-=== Using Vault APIs in an application
+=== Using VaultTemplate
 
-The starter automatically configures and registers an `Vault` bean in the Spring application context.
-The `Vault` bean can be used to create, update, list, and delete secrets in an OCI Vault
+The starter automatically configures and registers an `VaultTemplate` bean in the Spring application context.
+The `VaultTemplate` bean can be used to create, update, list, and delete secrets in an OCI Vault
 
 [source,yaml]
 ----
@@ -81,11 +81,11 @@ spring:
 [source,java]
 ----
 @Autowired
-private Vault vault;
+private VaultTemplate vaultTemplate;
 
 public String getSecretByName(String secretName) {
-    GetSecretBundleByNameResponse bundle = vault.getSecret(secretName);
-    return vault.decodeBundle(bundle);
+    GetSecretBundleByNameResponse bundle = vaultTemplate.getSecret(secretName);
+    return vaultTemplate.decodeBundle(bundle);
 }
 
 ----

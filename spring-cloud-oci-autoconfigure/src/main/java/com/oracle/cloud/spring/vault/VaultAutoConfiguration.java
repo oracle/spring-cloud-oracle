@@ -27,10 +27,10 @@ import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfi
  *  {@link com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration}
  *  for loading the Authentication configuration
  *
- * @see Vault
+ * @see VaultTemplate
  */
 @AutoConfiguration
-@ConditionalOnClass({Vault.class})
+@ConditionalOnClass({VaultTemplate.class})
 @EnableConfigurationProperties(VaultProperties.class)
 @ConditionalOnProperty(name = "spring.cloud.oci.vault.enabled", havingValue = "true", matchIfMissing = true)
 public class VaultAutoConfiguration {
@@ -42,9 +42,9 @@ public class VaultAutoConfiguration {
 
     @Bean
     @RefreshScope
-    @ConditionalOnMissingBean(Vault.class)
-    public Vault vault(Vaults vaults, Secrets secrets) {
-        return new VaultImpl(vaults, secrets, properties.getVaultId(), properties.getCompartment());
+    @ConditionalOnMissingBean(VaultTemplate.class)
+    public VaultTemplate vault(Vaults vaults, Secrets secrets) {
+        return new VaultTemplateImpl(vaults, secrets, properties.getVaultId(), properties.getCompartment());
     }
 
     @Bean
