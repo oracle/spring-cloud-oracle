@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (c) 2023, Oracle and/or its affiliates.
+Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 -->
 
@@ -50,37 +50,17 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		<upload-docs-zip.phase>none</upload-docs-zip.phase>
 
 		<!--maven-resources-plugin:3.2.0:copy-resources fails: https://issues.apache.org/jira/browse/MSHARED-966-->
-		<maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
-		<asciidoctor.maven.plugin.version>2.2.4</asciidoctor.maven.plugin.version>
-		<asciidoctorj.version>2.5.10</asciidoctorj.version>
-		<jruby.version>9.4.2.0</jruby.version>
+		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+		<asciidoctor.maven.plugin.version>3.0.0</asciidoctor.maven.plugin.version>
+		<asciidoctorj.version>2.5.13</asciidoctorj.version>
+		<spring-asciidoctor-backends.version>0.0.7</spring-asciidoctor-backends.version>
+		<jruby.version>9.4.8.0</jruby.version>
 
 		<!-- Distribution management -->
 		<repository.id>artifactory</repository.id>
 		<repository.name>spring-cloud-oci-releases</repository.name>
 		<repository.url>changeme</repository.url>
 	</properties>
-
-	<repositories>
-		<repository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<profiles>
 		<profile>
@@ -102,6 +82,11 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 								<artifactId>asciidoctorj</artifactId>
 								<version>${asciidoctorj.version}</version>
 							</dependency>
+							<dependency>
+								<groupId>io.spring.asciidoctor.backends</groupId>
+								<artifactId>spring-asciidoctor-backends</artifactId>
+								<version>${spring-asciidoctor-backends.version}</version>
+							</dependency>							
 						</dependencies>
 						<configuration>
 							<sourceDirectory>src/main/asciidoc</sourceDirectory>
@@ -119,7 +104,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<backend>html5</backend>
+									<backend>spring-html</backend>
 									<attributes>
 										<source-highlighter>rouge</source-highlighter>
 										<imagesdir>./images</imagesdir>
@@ -152,3 +137,4 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		</snapshotRepository>
 	</distributionManagement>
 </project>
+
