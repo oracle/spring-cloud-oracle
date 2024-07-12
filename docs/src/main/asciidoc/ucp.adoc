@@ -97,7 +97,7 @@ public class DataSourceConfiguration {
     public DataSource dataSource() throws SQLException {
         OracleDataSource dataSource = new OracleDataSource();
         dataSource.setUser("account");
-        dataSource.setPassword("account");
+        dataSource.setPassword("password");
         dataSource.setURL("jdbc:oracle:thin:@//myhost:1521/pdb1");
         dataSource.setDataSourceName("AccountConnectionPool");
         return dataSource;
