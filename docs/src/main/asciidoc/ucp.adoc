@@ -1,8 +1,8 @@
 // Copyright (c) 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-[#Universal Connection Pooling]
-== Universal Connection Pooling
+[#universal-connection-pool]
+== Universal Connection Pool
 
 This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way to use database connections.
 
@@ -26,7 +26,7 @@ dependencies {
 }
 ----
 
-=== Using Universal Connection Pooling
+=== Using Universal Connection Pool
 
 An Oracle data source is injected into your application and can be used normally. You must configure the data source as shown below, and you should also add either Spring Data JDBC or Spring Data JPA to your project.
 
