@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [[spring-cloud-oci-reference]]
@@ -31,6 +31,12 @@ include::function.adoc[]
 include::streaming.adoc[]
 
 include::queues.adoc[]
+
+include::adb.adoc[]
+
+include::genai.adoc[]
+
+include::vault.adoc[]
 
 == Configuration properties
 

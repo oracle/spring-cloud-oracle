@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 == Getting Started
@@ -78,6 +78,16 @@ The following table highlights several samples of the most used integrations in 
 
 | Cloud Queue
 | https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample[spring-cloud-oci-queue-sample]
+
+| Oracle Autonomous Database
+| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-samples[spring-cloud-oci-adb-samples]
+
+| Generative AI 
+| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[spring-cloud-oci-gen-ai-sample]
+
+| Vault
+| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample[spring-cloud-oci-vault-sample]
+
 |===
 
 Each sample application demonstrates how to use Spring Cloud OCI libraries in context and how to setup the dependencies for the project.
