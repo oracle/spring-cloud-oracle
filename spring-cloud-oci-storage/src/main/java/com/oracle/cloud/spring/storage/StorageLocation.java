@@ -11,7 +11,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Storage location parser for ocs:// protocol URI.
+ * Storage location parser for Object Storage URI.
  */
 public class StorageLocation {
     private static final Pattern URL_PATTERN = Pattern.compile("(https://)?(.+?\\.)?objectstorage\\.(.+?)\\.(oraclecloud\\.com|oci\\.customer-oci\\.com)(.+?)");
