@@ -1,0 +1,124 @@
+##############################################################################
+# General
+##############################################################################
+*.pem
+**/wallet/**
+**/__pycache__
+stack/**
+
+##############################################################################
+# Ansible
+##############################################################################
+.venv/
+stage/
+ansible/roles/kubernetes/files/kubeconfig
+ansible/**/vars/**
+!ansible/vars/README.md
+ansible/logs
+
+##############################################################################
+# Images
+##############################################################################
+images/**/target/**
+images/**/kaniko/node_modules/
+images/**/kaniko/.next/
+images/**/kaniko/oracle-obaas.jar
+images/**/kaniko/kaniko.tar.gz
+images/mbaas/parse-server/*parse-server*.*
+images/mbaas/parse-dashboard/*parse-dashboard*.*
+!images/**/.mvn/wrapper/maven-wrapper.jar
+!images/**/src/main/**/target/
+!images/**/src/test/**/target/
+**/.trivyignore
+
+##############################################################################
+# Kubernetes
+##############################################################################
+kubernetes/configmaps/**/files
+kubernetes/deployments/**/base/charts
+kubernetes/manifests
+kubernetes/secrets
+
+##############################################################################
+# Terraform
+##############################################################################
+terraform/**/terraform.tfvars*
+terraform/**/.terraform*
+terraform/**/terraform.tfstate*
+terraform/**/backend.conf
+terraform/**/backend.tf
+!terraform/**/*.auto.tfvars
+
+##############################################################################
+# smoke-tests
+##############################################################################
+smoke-test/wallet.zip
+smoke-test/kubeconfig
+
+##############################################################################
+# VS Code Extention
+##############################################################################
+vs-code-ext/.vscodeignore
+vs-code-ext/testTunnel.js
+
+##############################################################################
+# Dev Env
+##############################################################################
+.DS_Store
+.*.swp
+crash.log
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+### VS Code ###
+.vscode/
+
+##############################################################################
+# General Exceptions
+##############################################################################
+!**/.gitkeep
+**/target
+### oractl
+spring-shell.log
+oractl.log
+
+images/ebaas/graalvm-compiler/tests/demo.jar.exec
+images/ebaas/graalvm-compiler/tests/demo.jar
+images/ebaas/graalvm-compiler/mvnw.cmd
+.gitignore
+images/ebaas/graalvm-compiler/mvnw
+.venv
+images/ebaas/graalvm-compiler/tests/demo.exec
+images/ebaas/obaas-cli/logs/
+terraform.tfstate
+images/ebaas/graalvm-compiler/tests/demo-0.0.1-SNAPSHOT.jar
+images/ebaas/graalvm-compiler/tests/creditscore-0.0.1-SNAPSHOT.jar.exec
+images/ebaas/graalvm-compiler/tests/demo-0.0.1-SNAPSHOT.jar.exec
+.gitignore
+.gitignore
+images/ebaas/obaas-cli/creditscore-0.0.1-SNAPSHOT.jar.exec
+images/ebaas/obaas-cli/demo-0.0.1-SNAPSHOT.jar.exec
+images/ebaas/soc-ui/kaniko/.next/
+images/ebaas/soc-ui/kaniko/node_modules/
+images/ebaas/soc-ui/kaniko/.env.local
+!intellij-plugin/.gitignore
+kubernetes/deployments/ebaas/12-alertmanager/base/auth
