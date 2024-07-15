@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [[spring-cloud-oci-reference]]
@@ -6,13 +6,11 @@
 
 include::_attributes.adoc[]
 
-*{project-version}*
+Documentation for version *{project-version}*
 
 == Introduction
 
 Spring Cloud for OCI, part of the Spring Cloud umbrella project, eases the integration with hosted OCI Services. It offers a convenient way to interact with OCI provided services using well-known Spring idioms and APIs, such as storage resources. Developers can build their application around the hosted services without having to worry about infrastructure or maintenance.
-
-Spring Cloud OCI lets you leverage the power and simplicity of the Spring Framework to read and write from Spring Resources backed up by Oracle Cloud Storage
 
 include::getting-started.adoc[]
 
@@ -31,6 +29,14 @@ include::function.adoc[]
 include::streaming.adoc[]
 
 include::queues.adoc[]
+
+include::adb.adoc[]
+
+include::vault.adoc[]
+
+include::ucp.adoc[]
+
+include::aqjms.adoc[]
 
 == Configuration properties
 

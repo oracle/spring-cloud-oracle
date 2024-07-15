@@ -16,11 +16,11 @@ import com.oracle.bmc.vault.model.SecretSummary;
 public class VaultPropertyLoader implements AutoCloseable {
     private static Timer timer;
 
-    private final Vault vault;
-    private final Map<String, Object> properties = new LinkedHashMap<>();
+    private final VaultTemplate vaultTemplate;
+    private Map<String, String> properties = new LinkedHashMap<>();
 
-    public VaultPropertyLoader(Vault vault, Duration refresh) {
-        this.vault = vault;
+    public VaultPropertyLoader(VaultTemplate vaultTemplate, Duration refresh) {
+        this.vaultTemplate = vaultTemplate;
         reload();
         long refreshMillis = Optional.ofNullable(refresh)
                 .orElse(Duration.ofMinutes(10))
@@ -54,12 +54,7 @@ public class VaultPropertyLoader implements AutoCloseable {
     }
 
     private void reload() {
-        List<SecretSummary> secrets = vault.listSecrets();
-        for (SecretSummary secretSummary : secrets) {
-            GetSecretBundleByNameResponse getSecretResponse = vault.getSecret(secretSummary.getSecretName());
-            String secretValue = vault.decodeBundle(getSecretResponse);
-            properties.put(secretSummary.getSecretName(), secretValue);
-        }
+        properties = vaultTemplate.getAllSecrets();
     }
 
     @Override

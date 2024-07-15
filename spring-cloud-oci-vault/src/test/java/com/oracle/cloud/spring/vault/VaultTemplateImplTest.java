@@ -4,7 +4,6 @@ package com.oracle.cloud.spring.vault;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 import com.oracle.bmc.secrets.Secrets;
@@ -27,10 +26,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class VaultImplTest {
+public class VaultTemplateImplTest {
     private Vaults vaults;
     private Secrets secrets;
-    private Vault vault;
+    private VaultTemplate vaultTemplate;
 
     private final String compartmentId = "mycompartment";
     private final String vaultId = "myvault";
@@ -43,7 +42,7 @@ public class VaultImplTest {
     void setUp() {
         vaults = mock(Vaults.class);
         secrets = mock(Secrets.class);
-        vault = new VaultImpl(vaults, secrets, vaultId, compartmentId);
+        vaultTemplate = new VaultTemplateImpl(vaults, secrets, vaultId, compartmentId);
         GetSecretBundleByNameResponse response = GetSecretBundleByNameResponse.builder()
                 .secretBundle(SecretBundle.builder()
                         .secretId(secretName)
@@ -57,29 +56,29 @@ public class VaultImplTest {
 
     @Test
     void getSecretBundle() {
-        GetSecretBundleByNameResponse foo = vault.getSecret(secretName);
-        String decoded = vault.decodeBundle(foo);
+        GetSecretBundleByNameResponse foo = vaultTemplate.getSecret(secretName);
+        String decoded = vaultTemplate.decodeBundle(foo);
         assertThat(decoded).isEqualTo(secretValue);
     }
 
     @Test
     void createSecret() {
         when(vaults.createSecret(any())).thenReturn(CreateSecretResponse.builder().build());
-        CreateSecretResponse response = vault.createSecret(secretName, CreateSecretDetails.builder().build());
+        CreateSecretResponse response = vaultTemplate.createSecret(secretName, CreateSecretDetails.builder().build());
         assertThat(response).isNotNull();
     }
 
     @Test
     void scheduleSecretDeletion() {
         when(vaults.scheduleSecretDeletion(any())).thenReturn(ScheduleSecretDeletionResponse.builder().build());
-        ScheduleSecretDeletionResponse response = vault.scheduleSecretDeletion(secretName, 1);
+        ScheduleSecretDeletionResponse response = vaultTemplate.scheduleSecretDeletion(secretName, 1);
         assertThat(response).isNotNull();
     }
 
     @Test
     void updateSecret() {
         when(vaults.updateSecret(any())).thenReturn(UpdateSecretResponse.builder().build());
-        UpdateSecretResponse response = vault.updateSecret(secretName, UpdateSecretDetails.builder().build());
+        UpdateSecretResponse response = vaultTemplate.updateSecret(secretName, UpdateSecretDetails.builder().build());
         assertThat(response).isNotNull();
     }
 
@@ -94,7 +93,7 @@ public class VaultImplTest {
                 .items(summaries)
                 .build();
         when(vaults.listSecrets(any())).thenReturn(r1).thenReturn(r2);
-        List<SecretSummary> actual = vault.listSecrets();
+        List<SecretSummary> actual = vaultTemplate.listSecrets();
         assertThat(actual).hasSize(2);
     }
 }

@@ -11,7 +11,7 @@ import com.oracle.bmc.vault.model.Base64SecretContentDetails;
 import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
-import com.oracle.cloud.spring.vault.Vault;
+import com.oracle.cloud.spring.vault.VaultTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @EnabledIfEnvironmentVariable(named = "OCI_COMPARTMENT_ID", matches = ".+")
 @EnabledIfEnvironmentVariable(named = "OCI_VAULT_ID", matches = ".+")
-public class VaultIT {
+public class VaultTemplateIT {
     @Autowired
-    Vault vault;
+    VaultTemplate vaultTemplate;
 
     @Autowired
     VaultController vaultController;
@@ -37,8 +37,8 @@ public class VaultIT {
 
     @Test
     void getSecret() {
-        GetSecretBundleByNameResponse secret = vault.getSecret(secretName);
-        String decoded = vault.decodeBundle(secret);
+        GetSecretBundleByNameResponse secret = vaultTemplate.getSecret(secretName);
+        String decoded = vaultTemplate.decodeBundle(secret);
         assertThat(decoded).isNotNull();
         assertThat(decoded).hasSizeGreaterThan(1);
     }
@@ -50,7 +50,7 @@ public class VaultIT {
                 .content(Base64.getEncoder().encodeToString(content.getBytes()))
                 .name(content)
                 .build();
-        UpdateSecretResponse response = vault.updateSecret(secretName, UpdateSecretDetails.builder()
+        UpdateSecretResponse response = vaultTemplate.updateSecret(secretName, UpdateSecretDetails.builder()
                 .secretContent(contentDetails)
                 .build());
         assertThat(response.getSecret()).isNotNull();
@@ -58,7 +58,7 @@ public class VaultIT {
 
     @Test
     void listSecret() {
-        List<SecretSummary> summaries = vault.listSecrets();
+        List<SecretSummary> summaries = vaultTemplate.listSecrets();
         assertThat(summaries).hasSize(1);
     }
 

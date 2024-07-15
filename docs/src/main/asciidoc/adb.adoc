@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [#autonomous-database]
@@ -29,8 +29,8 @@ dependencies {
 
 === Using Autonomous Database
 
-The starter automatically configures and registers an `AutnomousDb` bean in the Spring application context.
-The `AutnomousDb` bean (link[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
+The starter automatically configures and registers an `AutonomousDb` bean in the Spring application context.
+The `AutonomousDb` bean (link[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
 delete an Autonomous Database and generate a wallet for an Autonomous Database.
 
 [source,java]
