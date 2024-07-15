@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Autonomous Database</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<span id="back-to-index"><a href="index.html">Back to index</a></span><ul class="sectlevel1">
+<li><a href="#autonomous-database">Autonomous Database</a>
+<ul class="sectlevel2">
+<li><a href="#using-autonomous-database">Using Autonomous Database</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#sample">Sample</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="autonomous-database"><a class="anchor" href="#autonomous-database"></a>Autonomous Database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en/cloud/paas/atp-cloud/index.html">Autonomous Database</a> is a data management service built
+on self-driving Oracle Autonomous Database technology to deliver automated patching, upgrades, and tuning, including
+performing all routine database maintenance tasks while the system is running, without human intervention.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="getting-started.html#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-adb<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-adb")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-autonomous-database"><a class="anchor" href="#using-autonomous-database"></a>Using Autonomous Database</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers an <code>AutonomousDb</code> bean in the Spring application context.
+The <code>AutonomousDb</code> bean (link[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
+delete an Autonomous Database and generate a wallet for an Autonomous Database.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Queue</span> <span class="n">queue</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createQueue</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">String</span> <span class="n">queueId</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">createQueue</span><span class="o">(</span><span class="s">"my-queue"</span><span class="o">,</span> <span class="o">&lt;&lt;</span><span class="n">compartmentId</span><span class="o">&gt;&gt;,</span> <span class="o">&lt;&lt;</span><span class="n">deadLetterQueueDeliveryCount</span><span class="o">&gt;&gt;,</span> <span class="o">&lt;&lt;</span><span class="n">retentionInSeconds</span><span class="o">&gt;&gt;);</span>
+<span class="o">}</span>
+<span class="nd">@Autowired</span>
+<span class="nc">AutonomousDb</span> <span class="n">autonomousDatabase</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createAutonomousDatabase</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">createAutonomousDatabase</span><span class="o">(</span>
+        <span class="n">databaseName</span><span class="o">,</span> <span class="n">compartmentId</span><span class="o">,</span> <span class="n">adminPassword</span><span class="o">,</span> <span class="n">dataStorageSizeInGBs</span><span class="o">,</span> <span class="n">computeCount</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getAutonomousDatabase</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">AutonomousDbDetails</span> <span class="n">response</span> <span class="o">=</span> <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">getAutonomousDatabase</span><span class="o">(</span><span class="n">databaseId</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getAutonomousDatabaseWallet</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">GenerateAutonomousDatabaseWalletResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">generateAutonomousDatabaseWallet</span><span class="o">(</span><span class="n">databaseId</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
+    <span class="nc">InputStream</span> <span class="n">is</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="nc">ContentLength</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentLength</span><span class="o">();</span>
+    <span class="c1">// read the InputStream to get the wallet</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteAutonomousDatabase</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">DeleteAutonomousDatabaseResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">deleteAutonomousDatabase</span><span class="o">(</span><span class="n">databaseId</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Autonomous Database provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.adb.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Autonomous Database APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample"><a class="anchor" href="#sample"></a>Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Autonomous Database module.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-07-15 10:41:20 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>

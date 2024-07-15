@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Vault</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<span id="back-to-index"><a href="index.html">Back to index</a></span><ul class="sectlevel1">
+<li><a href="#vault">Vault</a>
+<ul class="sectlevel2">
+<li><a href="#using-vaultpropertysource">Using VaultPropertySource</a></li>
+<li><a href="#using-vaulttemplate">Using VaultTemplate</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#sample">Sample</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="vault"><a class="anchor" href="#vault"></a>Vault</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm">Vault</a> can be used as a Spring property source for Vault secrets, and as an application bean for creating, updating, listing, and deleting secrets from a Vault.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="getting-started.html#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-vault<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-vault")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-vaultpropertysource"><a class="anchor" href="#using-vaultpropertysource"></a>Using VaultPropertySource</h3>
+<div class="paragraph">
+<p>By configuring Vault as a property source, secrets can be dynamically loaded from OCI Vault into the Spring application context.
+For each Vault specified as a property source, Spring will inject secrets as properties identified by their name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">cloud</span><span class="pi">:</span>
+    <span class="na">oci</span><span class="pi">:</span>
+      <span class="na">config</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">file</span>
+      <span class="na">region</span><span class="pi">:</span>
+        <span class="na">static</span><span class="pi">:</span> <span class="s">us-ashburn-1</span>
+      <span class="na">vault</span><span class="pi">:</span>
+        <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
+        <span class="na">compartment</span><span class="pi">:</span> <span class="s">${OCI_COMPARTMENT_ID}</span>
+        <span class="c1"># Spring will automatically refresh properties from Vault,</span>
+        <span class="c1"># if the property-refresh-interval is greater than 0ms.</span>
+        <span class="c1"># Defaults to 10 minutes.</span>
+        <span class="na">property-refresh-interval</span><span class="pi">:</span> <span class="s">10000ms</span>
+        <span class="na">property-sources</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">vault-id</span><span class="pi">:</span> <span class="s">${OCI_VAULT_ID}</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="c1">// The secret "secretName" will be loaded from the Vault,</span>
+<span class="c1">// and it's String value bound to the secretValue variable.</span>
+<span class="nd">@Value</span><span class="o">(</span><span class="s">"${secretname}"</span><span class="o">)</span>
+<span class="nc">String</span> <span class="n">secretValue</span><span class="o">;</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-vaulttemplate"><a class="anchor" href="#using-vaulttemplate"></a>Using VaultTemplate</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers an <code>VaultTemplate</code> bean in the Spring application context.
+The <code>VaultTemplate</code> bean can be used to create, update, list, and delete secrets in an OCI Vault</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">cloud</span><span class="pi">:</span>
+    <span class="na">oci</span><span class="pi">:</span>
+      <span class="na">config</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">file</span>
+      <span class="na">region</span><span class="pi">:</span>
+        <span class="na">static</span><span class="pi">:</span> <span class="s">us-ashburn-1</span>
+      <span class="na">vault</span><span class="pi">:</span>
+        <span class="na">compartment</span><span class="pi">:</span> <span class="s">${OCI_COMPARTMENT_ID}</span>
+        <span class="na">vault-id</span><span class="pi">:</span> <span class="s">${OCI_VAULT_ID}</span>
+        <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">VaultTemplate</span> <span class="n">vaultTemplate</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="nc">String</span> <span class="nf">getSecretByName</span><span class="o">(</span><span class="nc">String</span> <span class="n">secretName</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">GetSecretBundleByNameResponse</span> <span class="n">bundle</span> <span class="o">=</span> <span class="n">vaultTemplate</span><span class="o">.</span><span class="na">getSecret</span><span class="o">(</span><span class="n">secretName</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">vaultTemplate</span><span class="o">.</span><span class="na">decodeBundle</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Vault provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Vault APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.compartment</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compartment for Vault APIs and property sources.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.vault-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vault OCID for Vault APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.property-refresh-interval</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Duration on which properties will be refreshed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10m</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.property-sources</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Vaults to use as Spring property sources.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.property-sources[i].vault-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vault OCID to use as a property source.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample"><a class="anchor" href="#sample"></a>Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Vault module.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-07-15 10:41:20 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
