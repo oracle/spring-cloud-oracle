@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Spring Cloud OCI</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body id="spring-cloud-oci-reference" class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<h1>Spring Cloud OCI</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#getting-started">2. Getting Started</a>
+<ul class="sectlevel2">
+<li><a href="#spring-cloud-oci">2.1. Spring Cloud OCI</a></li>
+<li><a href="#learning-spring-cloud-oci">2.2. Learning Spring Cloud OCI</a></li>
+</ul>
+</li>
+<li><a href="#spring-cloud-oci-core">3. Spring Cloud OCI Core</a>
+<ul class="sectlevel2">
+<li><a href="#authentication-configuration">3.1. Authentication Configuration</a></li>
+<li><a href="#region-configuration">3.2. Region Configuration</a></li>
+<li><a href="#compartment-configuration">3.3. Compartment Configuration</a></li>
+</ul>
+</li>
+<li><a href="#cloud-storage">4. Cloud Storage</a>
+<ul class="sectlevel2">
+<li><a href="#using-cloud-storage">4.1. Using Cloud Storage</a></li>
+<li><a href="#cloud-storage-objects-spring-resources">4.2. Cloud Storage Objects Spring Resources</a></li>
+<li><a href="#configuration">4.3. Configuration</a></li>
+<li><a href="#sample">4.4. Sample</a></li>
+</ul>
+</li>
+<li><a href="#cloud-notifications">5. Cloud Notifications</a>
+<ul class="sectlevel2">
+<li><a href="#using-cloud-notifications">5.1. Using Cloud Notifications</a></li>
+<li><a href="#configuration-2">5.2. Configuration</a></li>
+<li><a href="#sample-2">5.3. Sample</a></li>
+</ul>
+</li>
+<li><a href="#cloud-genai">6. Generative AI</a>
+<ul class="sectlevel2">
+<li><a href="#using-generative-ai-chat">6.1. Using Generative AI Chat</a></li>
+<li><a href="#using-generative-ai-embedding">6.2. Using Generative AI Embedding</a></li>
+<li><a href="#configuration-3">6.3. Configuration</a></li>
+<li><a href="#sample-3">6.4. Sample</a></li>
+</ul>
+</li>
+<li><a href="#cloud-logging">7. Cloud Logging</a>
+<ul class="sectlevel2">
+<li><a href="#using-cloud-logging">7.1. Using Cloud Logging</a></li>
+<li><a href="#configuration-4">7.2. Configuration</a></li>
+<li><a href="#sample-4">7.3. Sample</a></li>
+</ul>
+</li>
+<li><a href="#cloud-function">8. Cloud Functions</a>
+<ul class="sectlevel2">
+<li><a href="#using-cloud-functions">8.1. Using Cloud Functions</a></li>
+<li><a href="#configuration-5">8.2. Configuration</a></li>
+<li><a href="#sample-5">8.3. Sample</a></li>
+</ul>
+</li>
+<li><a href="#cloud-stream">9. Cloud Stream</a>
+<ul class="sectlevel2">
+<li><a href="#using-cloud-streaming">9.1. Using Cloud Streaming</a></li>
+<li><a href="#configuration-6">9.2. Configuration</a></li>
+<li><a href="#sample-6">9.3. Sample</a></li>
+</ul>
+</li>
+<li><a href="#cloud-queues">10. Cloud Queues</a>
+<ul class="sectlevel2">
+<li><a href="#using-cloud-queues">10.1. Using Cloud Queues</a></li>
+<li><a href="#configuration-7">10.2. Configuration</a></li>
+<li><a href="#sample-7">10.3. Sample</a></li>
+</ul>
+</li>
+<li><a href="#autonomous-database">11. Autonomous Database</a>
+<ul class="sectlevel2">
+<li><a href="#using-autonomous-database">11.1. Using Autonomous Database</a></li>
+<li><a href="#configuration-8">11.2. Configuration</a></li>
+<li><a href="#sample-8">11.3. Sample</a></li>
+</ul>
+</li>
+<li><a href="#vault">12. Vault</a>
+<ul class="sectlevel2">
+<li><a href="#using-vaultpropertysource">12.1. Using VaultPropertySource</a></li>
+<li><a href="#using-vaulttemplate">12.2. Using VaultTemplate</a></li>
+<li><a href="#configuration-9">12.3. Configuration</a></li>
+<li><a href="#sample-9">12.4. Sample</a></li>
+</ul>
+</li>
+<li><a href="#universal-connection-pool">13. Universal Connection Pool</a>
+<ul class="sectlevel2">
+<li><a href="#using-universal-connection-pool">13.1. Using Universal Connection Pool</a></li>
+</ul>
+</li>
+<li><a href="#AQ/JMS">14. AQ/JMS</a>
+<ul class="sectlevel2">
+<li><a href="#using-aqjms">14.1. Using AQ/JMS</a></li>
+</ul>
+</li>
+<li><a href="#configuration-properties">15. Configuration properties</a>
+<ul class="sectlevel2">
+<li><a href="#configuration-refresh">15.1. Configuration Refresh</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Documentation for version <strong>1.1.0</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="introduction"><a class="anchor" href="#introduction"></a>1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Cloud for OCI, part of the Spring Cloud umbrella project, eases the integration with hosted OCI Services. It offers a convenient way to interact with OCI provided services using well-known Spring idioms and APIs, such as storage resources. Developers can build their application around the hosted services without having to worry about infrastructure or maintenance.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="getting-started"><a class="anchor" href="#getting-started"></a>2. Getting Started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section describes how to get started using Spring Cloud OCI libraries.</p>
+</div>
+<div class="sect2">
+<h3 id="spring-cloud-oci"><a class="anchor" href="#spring-cloud-oci"></a>2.1. Spring Cloud OCI</h3>
+<div class="paragraph">
+<p>Spring Cloud OCI module dependencies can be used directly in Maven with a direct configuration of the module. The Spring Cloud OCI module includes all transitive dependencies for the Spring modules, and the OCI SDK that are needed to operate the modules. The general dependency configuration will look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.oracle.cloud.spring&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-oci-starter&lt;/artifactId&gt;
+    &lt;version&gt;{spring-cloud-oci-version}&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Different modules can be included by replacing the module name with the respective one (for example, <code>spring-cloud-oci-starter-storage</code> instead of <code>spring-cloud-oci-starter</code>)</p>
+</div>
+<div class="sect3">
+<h4 id="starter-dependencies"><a class="anchor" href="#starter-dependencies"></a>2.1.1. Starter Dependencies</h4>
+<div class="paragraph">
+<p>Spring Cloud OCI offers <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-starters">starter dependencies</a> through Maven to easily depend on different modules of the library.
+Each starter contains all the dependencies and transitive dependencies needed to begin using their corresponding Spring Cloud OCI module.</p>
+</div>
+<div class="paragraph">
+<p>For example, to write a Spring application with Cloud Storage, you include the <code>spring-cloud-oci-starter-storage</code> dependency in your project.
+You do <strong>not</strong> need to include the underlying <code>spring-cloud-oci-storage</code> dependency, because the <code>starter</code> dependency includes it.</p>
+</div>
+<div class="paragraph">
+<p>A summary of these artifacts is provided here.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">Spring Cloud OCI Starter</th>
+<th class="tableblock halign-center valign-top">Description</th>
+<th class="tableblock halign-center valign-top">Maven Artifact Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Automatically configure authentication</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#spring-cloud-oci-core">com.oracle.cloud.spring:spring-cloud-oci-starter</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Object Storage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provides integrations with OCI Cloud Storage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#spring-cloud-storage">com.oracle.cloud.spring:spring-cloud-oci-starter-storage</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="learning-spring-cloud-oci"><a class="anchor" href="#learning-spring-cloud-oci"></a>2.2. Learning Spring Cloud OCI</h3>
+<div class="paragraph">
+<p>There are a variety of resources to help you learn how to use Spring Cloud OCI libraries.</p>
+</div>
+<div class="sect3">
+<h4 id="sample-applications"><a class="anchor" href="#sample-applications"></a>2.2.1. Sample Applications</h4>
+<div class="paragraph">
+<p>The easiest way to learn how to use Spring Cloud OCI is to consult the <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples">sample applications on Github</a>.
+Spring Cloud OCI provides sample applications which demonstrate how to use every integration in the library.
+The following table highlights several samples of the most used integrations in Spring Cloud OCI.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">OCI Integration</th>
+<th class="tableblock halign-center valign-top">Sample Application</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Storage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">spring-cloud-oci-storage-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Notification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">spring-cloud-oci-notification-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Generative AI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">spring-cloud-oci-gen-ai-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Logging</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">spring-cloud-oci-logging-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Streaming</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample">spring-cloud-oci-streaming-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Function</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-function-sample">spring-cloud-oci-function-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample">spring-cloud-oci-queue-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oracle Autonomous Database</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-samples">spring-cloud-oci-adb-samples</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generative AI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">spring-cloud-oci-gen-ai-sample</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vault</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample">spring-cloud-oci-vault-sample</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Each sample application demonstrates how to use Spring Cloud OCI libraries in context and how to setup the dependencies for the project.
+The applications are fully functional and can be deployed to OCI as well.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="spring-cloud-oci-core"><a class="anchor" href="#spring-cloud-oci-core"></a>3. Spring Cloud OCI Core</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Cloud OCI provides a Spring Boot starter to auto-configure the core components.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="authentication-configuration"><a class="anchor" href="#authentication-configuration"></a>3.1. Authentication Configuration</h3>
+<div class="paragraph">
+<p>Spring Cloud OCI allows you to authenticate with OCI using various available options.</p>
+</div>
+<div class="sect3">
+<h4 id="configuration-file-based-authentication"><a class="anchor" href="#configuration-file-based-authentication"></a>3.1.1. Configuration File Based Authentication</h4>
+<div class="paragraph">
+<p>By default, configuration file based authentication is enabled. To set it explicitly, set the property <code>spring.cloud.oci.config.type</code> to <code>FILE</code>. The following are optional configurations to set a custom configuration profile name and file name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.profile = DEFAULT
+spring.cloud.oci.config.file = &lt;FILE_PATH&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details about the Authentication configuration file, refer <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm">SDK and CLI Configuration File</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="simple-authentication"><a class="anchor" href="#simple-authentication"></a>3.1.2. Simple Authentication</h4>
+<div class="paragraph">
+<p>Set the property <code>spring.cloud.oci.config.type</code> to <code>SIMPLE</code> and add the following properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = SIMPLE
+spring.cloud.oci.config.userId = ocid1.user.oc1..&lt;unique_ID&gt;
+spring.cloud.oci.config.tenantId = ocid1.tenancy.oc1..&lt;unique_ID&gt;
+spring.cloud.oci.config.fingerprint = &lt;FINGERPRINT&gt;
+spring.cloud.oci.config.privateKey = &lt;PRIVATE_KEY_FILE_PATH&gt;
+spring.cloud.oci.config.passPhrase = &lt;PASS_PHRASE&gt;
+spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: All the preceding properties are mandatory except <code>spring.cloud.oci.config.passPhrase</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="instance-principal-configuration"><a class="anchor" href="#instance-principal-configuration"></a>3.1.3. Instance Principal Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>INSTANCE_PRINCIPAL</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = INSTANCE_PRINCIPAL</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm">OCI Instance Principal Authentication</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resource-principal-configuration"><a class="anchor" href="#resource-principal-configuration"></a>3.1.4. Resource Principal Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>RESOURCE_PRINCIPAL</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = RESOURCE_PRINCIPAL</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal">OCI Resource Principal Authentication</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="session-token-configuration"><a class="anchor" href="#session-token-configuration"></a>3.1.5. Session token Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>SESSION_TOKEN</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = SESSION_TOKEN</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="workload-identity-configuration"><a class="anchor" href="#workload-identity-configuration"></a>3.1.6. Workload Identity Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>WORKLOAD_IDENTITY</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = WORKLOAD_IDENTITY</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm">OKE Workload Identity Authentication</a></p>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12" class="bare">docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="region-configuration"><a class="anchor" href="#region-configuration"></a>3.2. Region Configuration</h3>
+<div class="paragraph">
+<p>OCI services are available in different regions. Based on the custom requirements, you can host the application on different OCI regions. The following configuration allows you to set a specific region for the entire application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.region.static = us-ashburn-1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Region value set in the preceding property takes precedence over the property <code>spring.cloud.oci.config.region</code> and <code>region</code> from the Authentication configuration file</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="compartment-configuration"><a class="anchor" href="#compartment-configuration"></a>3.3. Compartment Configuration</h3>
+<div class="paragraph">
+<p>A compartment is a logical container, used to organize and control access to the OCI Resources (Compute, Storage, Network, Load Balancer, etc.) created within that compartment. The following configuration allows you to set the default compartment for your application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.compartment.static = &lt;COMPARTMENT_OCID&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloud-storage"><a class="anchor" href="#cloud-storage"></a>4. Cloud Storage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://www.oracle.com/in/cloud/storage/">Oracle Cloud Storage</a> allows you to store any types of file.
+A Spring Boot starter is provided to auto-configure the various Storage components.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-storage<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-storage")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-cloud-storage"><a class="anchor" href="#using-cloud-storage"></a>4.1. Using Cloud Storage</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers a <code>Storage</code> bean in the Spring application context.
+The <code>Storage</code> bean (link[Javadoc]) can be used to list, create, update or delete buckets and objects.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Storage</span> <span class="n">storage</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createBucketAndUploadFile</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">Bucket</span> <span class="n">bucket</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="na">createBucket</span><span class="o">(</span><span class="s">"my-bucket"</span><span class="o">)</span>
+
+    <span class="n">storage</span><span class="o">.</span><span class="na">upload</span><span class="o">(</span><span class="s">"my-bucket"</span><span class="o">,</span> <span class="s">"my-file.txt"</span><span class="o">,</span> <span class="n">inputStream</span><span class="o">,</span> <span class="nc">StorageObjectMetadata</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">contentType</span><span class="o">(</span><span class="s">"text/plain"</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="cloud-storage-objects-spring-resources"><a class="anchor" href="#cloud-storage-objects-spring-resources"></a>4.2. Cloud Storage Objects Spring Resources</h3>
+<div class="paragraph">
+<p><a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html">Spring Resources</a> are an abstraction for several low-level resources, such as file system files, classpath files, servlet context-relative files, etc.
+Spring Cloud OCI adds a new resource type: an Oracle Cloud Storage (OCS) object.</p>
+</div>
+<div class="paragraph">
+<p>The Spring Resource Abstraction for Oracle Cloud Storage allows OCS objects to be accessed by their OCS URL using the <code>@Value</code> annotation or the Spring application context:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Value</span><span class="o">(</span><span class="s">"ocs://[YOUR_OCS_BUCKET]/[OCS_FILE_NAME]"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="nc">Resource</span> <span class="n">ocsResource</span><span class="o">;</span>
+</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(...).</span><span class="na">getResource</span><span class="o">(</span><span class="s">"ocs://[YOUR_OCS_BUCKET]/[OCS_FILE_NAME]"</span><span class="o">);</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This creates a <code>Resource</code> object that can be used to read the object, among <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html#resources-resource">other possible operations</a>.</p>
+</div>
+<div class="paragraph">
+<p>Currently this resource is only readable.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration"><a class="anchor" href="#configuration"></a>4.3. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Storage provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.storage.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI storage APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample"><a class="anchor" href="#sample"></a>4.4. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">here</a> contains the examples to demonstrate the usage of OCI Spring Cloud Storage module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloud-notifications"><a class="anchor" href="#cloud-notifications"></a>5. Cloud Notifications</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://www.oracle.com/in/devops/notifications/">OCI Notifications</a> is a highly available, low latency publish/subscribe (pub/sub) service that sends alerts and messages to Oracle Cloud Functions, email, SMS, and message delivery partners, including Slack, PagerDuty and custom HTTPS endpoint. Spring Cloud module for Oracle Cloud Notifications allows you to create a Topic, then create and publish messages to multiple subscription types such as Oracle Cloud Functions, email, SMS, Slack, PagerDuty and custom HTTPS endpoint.
+A Spring Boot starter is provided to auto-configure the various Notification components.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-notification<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-notification")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-cloud-notifications"><a class="anchor" href="#using-cloud-notifications"></a>5.1. Using Cloud Notifications</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers a <code>Notification</code> bean in the Spring application context.
+The <code>Notification</code> bean (link[Javadoc]) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Notification</span> <span class="n">notification</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createTopic</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">CreateTopicResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="na">createTopic</span><span class="o">(</span><span class="s">"my-topic"</span><span class="o">,</span> <span class="o">&lt;&lt;</span><span class="n">compartment</span><span class="o">-</span><span class="n">ocid</span><span class="o">&gt;&gt;);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-2"><a class="anchor" href="#configuration-2"></a>5.2. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Notifications provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.notification.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Notifications APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-2"><a class="anchor" href="#sample-2"></a>5.3. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Notification module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloud-genai"><a class="anchor" href="#cloud-genai"></a>6. Generative AI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm">OCI Generative AI</a> is a fully managed service that provides a set of state-of-the-art, customizable large language models (LLMs) that cover a wide range of use cases, including chat and creating text embeddings.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-gen-ai<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-gen-ai")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-generative-ai-chat"><a class="anchor" href="#using-generative-ai-chat"></a>6.1. Using Generative AI Chat</h3>
+<div class="paragraph">
+<p>The starter configures and registers a <code>ChatModel</code> bean in the Spring application context.
+The <code>ChatModel</code> bean (link[Javadoc]) can be used to interact with OCI Generative AI Chat Models.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">ChatModel</span> <span class="n">chatModel</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">embed</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">ChatResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">chatModel</span><span class="o">.</span><span class="na">chat</span><span class="o">(</span><span class="s">"my chat prompt"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-generative-ai-embedding"><a class="anchor" href="#using-generative-ai-embedding"></a>6.2. Using Generative AI Embedding</h3>
+<div class="paragraph">
+<p>The starter configures and registers an <code>EmbeddingModel</code> bean in the Spring application context.
+The <code>EmbeddingModel</code> bean (link[Javadoc]) can be used to create text embeddings using OCI Generative AI Embedding Models.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">EmbeddingModel</span> <span class="n">embeddingModel</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">embed</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">EmbedTextResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">embeddingModel</span><span class="o">.</span><span class="na">embed</span><span class="o">(</span><span class="s">"my embedding text"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-3"><a class="anchor" href="#configuration-3"></a>6.3. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Generative AI provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Generative AI Client.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.embedding.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Generative AI Embedding APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.embedding.on-demand-model-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">On-demand model ID to be used for embedding text. One of <code>spring.cloud.oci.genai.embedding.dedicated-cluster-endpoint</code> or <code>spring.cloud.oci.genai.embedding.on-demand-model-id</code> must be specified</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.embedding.dedicated-cluster-endpoint</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dedicated cluster endpoint used for embedding text. One of <code>spring.cloud.oci.genai.embedding.dedicated-cluster-endpoint</code> or <code>spring.cloud.oci.genai.embedding.on-demand-model-id</code> must be specified.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.embedding.compartment</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Embedding model compartment.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.embedding.truncate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">How to truncate embedding text when it is greater than the model&#8217;s maximum tokens. May be <code>START</code>, <code>END</code>, or <code>NONE</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NONE</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Generative AI Chat APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.on-demand-model-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">On-demand model ID to be used for chat. One of <code>spring.cloud.oci.genai.chat.dedicated-cluster-endpoint</code> or <code>spring.cloud.oci.genai.chat.on-demand-model-id</code> must be specified</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.dedicated-cluster-endpoint</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dedicated cluster endpoint used for chat. One of <code>spring.cloud.oci.genai.chat.dedicated-cluster-endpoint</code> or <code>spring.cloud.oci.genai.chat.on-demand-model-id</code> must be specified.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.compartment</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chat model compartment.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.preample-override</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If specified, overrides the model&#8217;s prompt preamble.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.temperature</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chat text generation temperature. Higher values are more random or creative. Learn more about <a href="https://docs.oracle.com/en-us/iaas/Content/generative-ai/concepts.htm#temperature">temperature</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.top-p</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ensures that only the most likely tokens with probabilities that sum to P are generated. Learn more about <a href="https://docs.oracle.com/en-us/iaas/Content/generative-ai/concepts.htm#top-p">Top P</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.75</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.top-k</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ensures that only the top K most probably tokens are considered in each step of text generation. Learn more about <a href="https://docs.oracle.com/en-us/iaas/Content/generative-ai/concepts.htm#top-k">Top K</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.frequency-penalty</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Assigns a penalty for tokens that appear frequently. A higher value results in less repetitive text.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.presence-penalty</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Assigns an equal penalty if a token appears in the text. A higher value results in less reptitive text.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.genai.chat.max-tokens</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum response output tokens. Estimate 2-3 tokens per word.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>600</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-3"><a class="anchor" href="#sample-3"></a>6.4. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Generative AI module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloud-logging"><a class="anchor" href="#cloud-logging"></a>7. Cloud Logging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm">OCI Logging</a> service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from OCI resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service, and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
+A Spring Boot starter is provided to auto-configure the Logging component.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-logging<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-logging")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-cloud-logging"><a class="anchor" href="#using-cloud-logging"></a>7.1. Using Cloud Logging</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers a <code>Logging</code> bean in the Spring application context.
+The <code>Logging</code> bean (link[Javadoc]) can be used to ingest logs associated with a logId specified in the property <code>spring.cloud.oci.logging.logId</code> within the application configuration file</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">LogService</span> <span class="n">logService</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">putLog</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">PutLogsResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">logService</span><span class="o">.</span><span class="na">putLog</span><span class="o">(</span><span class="s">"log-text"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-4"><a class="anchor" href="#configuration-4"></a>7.2. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Logging provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.logging.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Logging APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-4"><a class="anchor" href="#sample-4"></a>7.3. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Logging module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloud-function"><a class="anchor" href="#cloud-function"></a>8. Cloud Functions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm">OCI Functions</a> is a fully managed, multi-tenant, highly scalable, on-demand, Functions-as-a-Service platform. It is built on enterprise-grade Oracle Cloud Infrastructure and powered by the Fn Project open source engine. Use OCI Functions when you want to focus on writing code to meet business needs. The Spring Cloud module for OCI Functions allows to invoke an OCI Function.
+A Spring Boot starter is provided to auto-configure the Function component.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-function<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-function")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-cloud-functions"><a class="anchor" href="#using-cloud-functions"></a>8.1. Using Cloud Functions</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers a <code>Function</code> bean in the Spring application context.
+The <code>Function</code> bean (link[Javadoc]) can be used to invoke a function with parameter inputs 'functionOcid' and 'endpoint'</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Function</span> <span class="n">function</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">invoke</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">InvokeFunctionResponse</span> <span class="n">invokeFunctionResponse</span> <span class="o">=</span> <span class="n">function</span><span class="o">.</span><span class="na">invokeFunction</span><span class="o">(</span><span class="n">functionOcid</span><span class="o">,</span> <span class="n">endpoint</span><span class="o">,</span> <span class="n">mode</span><span class="o">,</span> <span class="n">requestBody</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-5"><a class="anchor" href="#configuration-5"></a>8.2. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Function provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.function.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Functions APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-5"><a class="anchor" href="#sample-5"></a>8.3. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-function-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Function module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloud-stream"><a class="anchor" href="#cloud-stream"></a>9. Cloud Stream</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/Streaming/home.htm">OCI Streaming</a> service provides a fully managed, scalable, and durable solution for ingesting and consuming high-volume data streams in real time.
+A Spring Boot starter is provided to auto-configure the Streaming component.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-streaming<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-streaming")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-cloud-streaming"><a class="anchor" href="#using-cloud-streaming"></a>9.1. Using Cloud Streaming</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers a <code>Streaming</code> bean in the Spring application context.
+The <code>Streaming</code> bean (link[Javadoc]) can be used to create streamPool, stream in OCI and ingest and consume high-volume data streams with a streamId</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Streaming</span> <span class="n">streaming</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">putMessages</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">PutMessagesResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">streaming</span><span class="o">.</span><span class="na">putMessages</span><span class="o">(</span><span class="n">streamId</span><span class="o">,</span> <span class="s">"key"</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(),</span> <span class="s">"value"</span><span class="o">..</span><span class="na">getBytes</span><span class="o">());</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getMessages</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">GetMessagesResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">streaming</span><span class="o">.</span><span class="na">getMessages</span><span class="o">(</span><span class="n">streamId</span><span class="o">,</span> <span class="s">"cursor"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-6"><a class="anchor" href="#configuration-6"></a>9.2. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Stream provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.stream.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Streaming APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-6"><a class="anchor" href="#sample-6"></a>9.3. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Streaming module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cloud-queues"><a class="anchor" href="#cloud-queues"></a>10. Cloud Queues</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/queue/home.htm">OCI Queues</a> is a highly available, low latency publish/subscribe (pub/sub) service, handles high volume transactional data that requires independently processed messages without loss or duplication. Spring Cloud module for Oracle Cloud Queues allows you to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
+A Spring Boot starter is provided to auto-configure the various Queue components.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-queue<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-queue")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-cloud-queues"><a class="anchor" href="#using-cloud-queues"></a>10.1. Using Cloud Queues</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers a <code>Queue</code> bean in the Spring application context.
+The <code>Queue</code> bean (link[Javadoc]) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Queue</span> <span class="n">queue</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createQueue</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">String</span> <span class="n">queueId</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">createQueue</span><span class="o">(</span><span class="s">"my-queue"</span><span class="o">,</span> <span class="o">&lt;&lt;</span><span class="n">compartmentId</span><span class="o">&gt;&gt;,</span> <span class="o">&lt;&lt;</span><span class="n">deadLetterQueueDeliveryCount</span><span class="o">&gt;&gt;,</span> <span class="o">&lt;&lt;</span><span class="n">retentionInSeconds</span><span class="o">&gt;&gt;);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-7"><a class="anchor" href="#configuration-7"></a>10.2. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Queues provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.queue.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Queue APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-7"><a class="anchor" href="#sample-7"></a>10.3. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Queue module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="autonomous-database"><a class="anchor" href="#autonomous-database"></a>11. Autonomous Database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en/cloud/paas/atp-cloud/index.html">Autonomous Database</a> is a data management service built
+on self-driving Oracle Autonomous Database technology to deliver automated patching, upgrades, and tuning, including
+performing all routine database maintenance tasks while the system is running, without human intervention.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-adb<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-adb")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-autonomous-database"><a class="anchor" href="#using-autonomous-database"></a>11.1. Using Autonomous Database</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers an <code>AutonomousDb</code> bean in the Spring application context.
+The <code>AutonomousDb</code> bean (link[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
+delete an Autonomous Database and generate a wallet for an Autonomous Database.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Queue</span> <span class="n">queue</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createQueue</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">String</span> <span class="n">queueId</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">createQueue</span><span class="o">(</span><span class="s">"my-queue"</span><span class="o">,</span> <span class="o">&lt;&lt;</span><span class="n">compartmentId</span><span class="o">&gt;&gt;,</span> <span class="o">&lt;&lt;</span><span class="n">deadLetterQueueDeliveryCount</span><span class="o">&gt;&gt;,</span> <span class="o">&lt;&lt;</span><span class="n">retentionInSeconds</span><span class="o">&gt;&gt;);</span>
+<span class="o">}</span>
+<span class="nd">@Autowired</span>
+<span class="nc">AutonomousDb</span> <span class="n">autonomousDatabase</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createAutonomousDatabase</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">createAutonomousDatabase</span><span class="o">(</span>
+        <span class="n">databaseName</span><span class="o">,</span> <span class="n">compartmentId</span><span class="o">,</span> <span class="n">adminPassword</span><span class="o">,</span> <span class="n">dataStorageSizeInGBs</span><span class="o">,</span> <span class="n">computeCount</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getAutonomousDatabase</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">AutonomousDbDetails</span> <span class="n">response</span> <span class="o">=</span> <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">getAutonomousDatabase</span><span class="o">(</span><span class="n">databaseId</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">getAutonomousDatabaseWallet</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">GenerateAutonomousDatabaseWalletResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">generateAutonomousDatabaseWallet</span><span class="o">(</span><span class="n">databaseId</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span>
+    <span class="nc">InputStream</span> <span class="n">is</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="nc">ContentLength</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getContentLength</span><span class="o">();</span>
+    <span class="c1">// read the InputStream to get the wallet</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">deleteAutonomousDatabase</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">DeleteAutonomousDatabaseResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">autonomousDatabase</span><span class="o">.</span><span class="na">deleteAutonomousDatabase</span><span class="o">(</span><span class="n">databaseId</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-8"><a class="anchor" href="#configuration-8"></a>11.2. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Autonomous Database provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.adb.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Autonomous Database APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-8"><a class="anchor" href="#sample-8"></a>11.3. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Autonomous Database module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="vault"><a class="anchor" href="#vault"></a>12. Vault</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm">Vault</a> can be used as a Spring property source for Vault secrets, and as an application bean for creating, updating, listing, and deleting secrets from a Vault.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-vault<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-vault")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-vaultpropertysource"><a class="anchor" href="#using-vaultpropertysource"></a>12.1. Using VaultPropertySource</h3>
+<div class="paragraph">
+<p>By configuring Vault as a property source, secrets can be dynamically loaded from OCI Vault into the Spring application context.
+For each Vault specified as a property source, Spring will inject secrets as properties identified by their name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">cloud</span><span class="pi">:</span>
+    <span class="na">oci</span><span class="pi">:</span>
+      <span class="na">config</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">file</span>
+      <span class="na">region</span><span class="pi">:</span>
+        <span class="na">static</span><span class="pi">:</span> <span class="s">us-ashburn-1</span>
+      <span class="na">vault</span><span class="pi">:</span>
+        <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>
+        <span class="na">compartment</span><span class="pi">:</span> <span class="s">${OCI_COMPARTMENT_ID}</span>
+        <span class="c1"># Spring will automatically refresh properties from Vault,</span>
+        <span class="c1"># if the property-refresh-interval is greater than 0ms.</span>
+        <span class="c1"># Defaults to 10 minutes.</span>
+        <span class="na">property-refresh-interval</span><span class="pi">:</span> <span class="s">10000ms</span>
+        <span class="na">property-sources</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">vault-id</span><span class="pi">:</span> <span class="s">${OCI_VAULT_ID}</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="c1">// The secret "secretName" will be loaded from the Vault,</span>
+<span class="c1">// and it's String value bound to the secretValue variable.</span>
+<span class="nd">@Value</span><span class="o">(</span><span class="s">"${secretname}"</span><span class="o">)</span>
+<span class="nc">String</span> <span class="n">secretValue</span><span class="o">;</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-vaulttemplate"><a class="anchor" href="#using-vaulttemplate"></a>12.2. Using VaultTemplate</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers an <code>VaultTemplate</code> bean in the Spring application context.
+The <code>VaultTemplate</code> bean can be used to create, update, list, and delete secrets in an OCI Vault</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">cloud</span><span class="pi">:</span>
+    <span class="na">oci</span><span class="pi">:</span>
+      <span class="na">config</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">file</span>
+      <span class="na">region</span><span class="pi">:</span>
+        <span class="na">static</span><span class="pi">:</span> <span class="s">us-ashburn-1</span>
+      <span class="na">vault</span><span class="pi">:</span>
+        <span class="na">compartment</span><span class="pi">:</span> <span class="s">${OCI_COMPARTMENT_ID}</span>
+        <span class="na">vault-id</span><span class="pi">:</span> <span class="s">${OCI_VAULT_ID}</span>
+        <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">VaultTemplate</span> <span class="n">vaultTemplate</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="nc">String</span> <span class="nf">getSecretByName</span><span class="o">(</span><span class="nc">String</span> <span class="n">secretName</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">GetSecretBundleByNameResponse</span> <span class="n">bundle</span> <span class="o">=</span> <span class="n">vaultTemplate</span><span class="o">.</span><span class="na">getSecret</span><span class="o">(</span><span class="n">secretName</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">vaultTemplate</span><span class="o">.</span><span class="na">decodeBundle</span><span class="o">(</span><span class="n">bundle</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-9"><a class="anchor" href="#configuration-9"></a>12.3. Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Vault provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Vault APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.compartment</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Compartment for Vault APIs and property sources.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.vault-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vault OCID for Vault APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.property-refresh-interval</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Duration on which properties will be refreshed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10m</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.property-sources</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Vaults to use as Spring property sources.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.vault.property-sources[i].vault-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vault OCID to use as a property source.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample-9"><a class="anchor" href="#sample-9"></a>12.4. Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Vault module.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="universal-connection-pool"><a class="anchor" href="#universal-connection-pool"></a>13. Universal Connection Pool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way to use database connections.</p>
+</div>
+<div class="paragraph">
+<p>To add this starter to your project, add this Maven dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.database.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>oracle-spring-boot-starter-ucp<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>23.4.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Gradle projects, add this dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0'
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-universal-connection-pool"><a class="anchor" href="#using-universal-connection-pool"></a>13.1. Using Universal Connection Pool</h3>
+<div class="paragraph">
+<p>An Oracle data source is injected into your application and can be used normally. You must configure the data source as shown below, and you should also add either Spring Data JDBC or Spring Data JPA to your project.</p>
+</div>
+<div class="paragraph">
+<p>To configure the data source, provide a <code>spring.datasource</code> object in your Spring <code>application.yaml</code>, or equivalent, as shown in the following example.  The <code>oracleucp</code> entry is optional, and can be used to fine tune the configuration of the connection pool, if desired.  For details of available settings, refer to the [JavaDoc](<a href="https://docs.oracle.com/en/database/oracle/oracle-database/21/jjuar/oracle/ucp/jdbc/UCPDataSource.html" class="bare">docs.oracle.com/en/database/oracle/oracle-database/21/jjuar/oracle/ucp/jdbc/UCPDataSource.html</a>).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">jpa</span><span class="pi">:</span>
+    <span class="na">hibernate</span><span class="pi">:</span>
+      <span class="na">ddl-auto</span><span class="pi">:</span> <span class="s">validate</span>
+    <span class="na">properties</span><span class="pi">:</span>
+      <span class="na">hibernate</span><span class="pi">:</span>
+        <span class="na">dialect</span><span class="pi">:</span> <span class="s">org.hibernate.dialect.OracleDialect</span>
+        <span class="na">format_sql</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">show-sql</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">datasource</span><span class="pi">:</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s">jdbc:oracle:thin:@//myhost:1521/pdb1</span>
+    <span class="na">username</span><span class="pi">:</span> <span class="s">username</span>
+    <span class="na">password</span><span class="pi">:</span> <span class="s">password</span>
+    <span class="na">driver-class-name</span><span class="pi">:</span> <span class="s">oracle.jdbc.OracleDriver</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">oracle.ucp.jdbc.PoolDataSource</span>
+    <span class="na">oracleucp</span><span class="pi">:</span>
+      <span class="na">connection-factory-class-name</span><span class="pi">:</span> <span class="s">oracle.jdbc.pool.OracleDataSource</span>
+      <span class="na">connection-pool-name</span><span class="pi">:</span> <span class="s">AccountConnectionPool</span>
+      <span class="na">initial-pool-size</span><span class="pi">:</span> <span class="m">15</span>
+      <span class="na">min-pool-size</span><span class="pi">:</span> <span class="m">10</span>
+      <span class="na">max-pool-size</span><span class="pi">:</span> <span class="s">30</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>spring.datasource.url</code> can be in the basic format (as previously shown), or in TNS format if your application uses Transparent Network Substrate (TNS).</p>
+</div>
+<div class="paragraph">
+<p>Note that the connections to the database use the <code>DEDICATED</code> server by default. If you wish to use <code>SHARED</code> or <code>POOLED</code>, you can append that to the basic URL, or add it to the TNS names entry. For example, to use database resident pooled connections, you would change the URL shown in the previous example to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">  <span class="na">datasource</span><span class="pi">:</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s">jdbc:oracle:thin:@//myhost:1521/pdb1:pooled</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are using TNS, add <code>server=pooled</code> to the <code>connect_data</code>. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">mydb_tp = (description=
+ (retry_count=20)
+ (retry_delay=3)
+ (address=(protocol=tcps)(port=1521)(host=myhost))
+ (connect_data=(service_name=pdb1)(server=pooled))
+ (security=(ssl_server_dn_match=yes)))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you prefer to use Java configuration, the data source can be configured as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">oracle.jdbc.pool.OracleDataSource</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.sql.DataSource</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.SQLException</span><span class="o">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataSourceConfiguration</span> <span class="o">{</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">DataSource</span> <span class="nf">dataSource</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">SQLException</span> <span class="o">{</span>
+        <span class="nc">OracleDataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OracleDataSource</span><span class="o">();</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setUser</span><span class="o">(</span><span class="s">"account"</span><span class="o">);</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="s">"password"</span><span class="o">);</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setURL</span><span class="o">(</span><span class="s">"jdbc:oracle:thin:@//myhost:1521/pdb1"</span><span class="o">);</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setDataSourceName</span><span class="o">(</span><span class="s">"AccountConnectionPool"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">dataSource</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="AQ/JMS"><a class="anchor" href="#AQ/JMS"></a>14. AQ/JMS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This starter provides support for Oracle Transactional Event Queues (TxEventQ) and Oracle Advanced Queuing (AQ) as Java Message Service (JMS) providers. It depends on the Universal Connection Pool (UCP) starter.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note</strong>: By default, the data Source and JMS Connection Factory that the starter injects into your application share the same database transaction.  This means that you can start a transaction, read from a queue, perform an update operation, and then commit or rollback that whole unit of work, including the message consumption.</p>
+</div>
+<div class="paragraph">
+<p>To add this starter to your project, add this Maven dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.database.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>oracle-spring-boot-starter-aqjms<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>23.4.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Gradle projects, add this dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:23.4.0'
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-aqjms"><a class="anchor" href="#using-aqjms"></a>14.1. Using AQ/JMS</h3>
+<div class="paragraph">
+<p>To configure your application to use Oracle Transactional Event Queues or Oracle Advanced Queuing, you must annotate you application with the <code>@EnableJms</code> annotation, and create the
+two following beans:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A <code>JmsListenerContainerFactory&lt;?&gt;</code> bean, which can be created as shown in the following example. Note that you can override settings if you need to.  Also, note that the name of the method defines the name of the factory, which you will use when creating JMS listeners.</p>
+</li>
+<li>
+<p>A <code>MessageConverter</code> bean to map objects of your class representing the payload into a text based format (like JSON) that can be used in the actual messages.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Note</strong>: Any queues or topics that you want to use must be pre-created in the database. See [Sample Code](<a href="https://www.oracle.com/database/advanced-queuing/#rc30sample-code" class="bare">www.oracle.com/database/advanced-queuing/#rc30sample-code</a>) for
+examples.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.example.aqjms</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">jakarta.jms.ConnectionFactory</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.ConfigurableApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.jms.annotation.EnableJms</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.jms.config.DefaultJmsListenerContainerFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.jms.config.JmsListenerContainerFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.jms.core.JmsTemplate</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.jms.support.converter.MappingJackson2MessageConverter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.jms.support.converter.MessageConverter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.jms.support.converter.MessageType</span><span class="o">;</span>
+
+<span class="nd">@SpringBootApplication</span>
+<span class="nd">@EnableJms</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JmsSampleApplication</span> <span class="o">{</span>
+
+ <span class="nd">@Bean</span>
+ <span class="kd">public</span> <span class="nc">JmsListenerContainerFactory</span><span class="o">&lt;?&gt;</span> <span class="n">myFactory</span><span class="o">(</span><span class="nc">ConnectionFactory</span> <span class="n">connectionFactory</span><span class="o">,</span>
+       <span class="nc">DefaultJmsListenerContainerFactoryConfigurer</span> <span class="n">configurer</span><span class="o">)</span> <span class="o">{</span>
+   <span class="nc">DefaultJmsListenerContainerFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultJmsListenerContainerFactory</span><span class="o">();</span>
+   <span class="c1">// This provides all Boot's defaults to this factory, including the message converter</span>
+   <span class="n">configurer</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">factory</span><span class="o">,</span> <span class="n">connectionFactory</span><span class="o">);</span>
+   <span class="c1">// You could override some of Boot's defaults here if necessary</span>
+   <span class="k">return</span> <span class="n">factory</span><span class="o">;</span>
+ <span class="o">}</span>
+
+ <span class="nd">@Bean</span>
+ <span class="kd">public</span> <span class="nc">MessageConverter</span> <span class="nf">jacksonJmsMessageConverter</span><span class="o">()</span> <span class="o">{</span>
+   <span class="nc">MappingJackson2MessageConverter</span> <span class="n">converter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MappingJackson2MessageConverter</span><span class="o">();</span>
+   <span class="n">converter</span><span class="o">.</span><span class="na">setTargetType</span><span class="o">(</span><span class="nc">MessageType</span><span class="o">.</span><span class="na">TEXT</span><span class="o">);</span>
+   <span class="n">converter</span><span class="o">.</span><span class="na">setTypeIdPropertyName</span><span class="o">(</span><span class="s">"_type"</span><span class="o">);</span>
+   <span class="k">return</span> <span class="n">converter</span><span class="o">;</span>
+ <span class="o">}</span>
+
+ <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+   <span class="nc">ConfigurableApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">JmsSampleApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+ <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To send a message to a JMS queue or topic, get an instance of the <code>JmsTemplate</code> from the Spring Application context, and call the <code>convertAndSend()</code> method specifying the name of the queue or
+topic, and providing the object to be converted and sent in the payload of the message, as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nc">JmsTemplate</span> <span class="n">jmsTemplate</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">JmsTemplate</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">jmsTemplate</span><span class="o">.</span><span class="na">convertAndSend</span><span class="o">(</span><span class="s">"mailbox"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Email</span><span class="o">(-</span><span class="mi">1</span><span class="o">,</span> <span class="s">"info@example.com"</span><span class="o">,</span> <span class="s">"Hello"</span><span class="o">));</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To receive messages from a JMS queue or topic, create a method that takes your message class, for example <code>Email</code>, as input. Annotate the method with the <code>@JmsListener</code> annotation, specifying the destination, that is the name of the queue or topic, and the container factory name that you created earlier, as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.example.aqjms</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.jms.annotation.JmsListener</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Receiver</span> <span class="o">{</span>
+
+    <span class="nd">@JmsListener</span><span class="o">(</span><span class="n">destination</span> <span class="o">=</span> <span class="s">"mailbox"</span><span class="o">,</span> <span class="n">containerFactory</span> <span class="o">=</span> <span class="s">"myFactory"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">receiveMessage</span><span class="o">(</span><span class="nc">Email</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Received &lt;"</span> <span class="o">+</span> <span class="n">email</span> <span class="o">+</span> <span class="s">"&gt;"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Note</strong>: The starter uses the configuration for <code>spring.datasource</code> as the connection details for the Oracle Database hosting the queues and topics. If you wish to use a different configuration, you must use a named configuration, for example <code>spring.datasource.txeventq</code> and use Java configuration and annotate the configuration with the standard Spring <code>@Qualifier</code> annotation, specifying the correct name, for example <code>txevevntq</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration-properties"><a class="anchor" href="#configuration-properties"></a>15. Configuration properties</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To see the list of all OCI-related configuration properties see the <a href="appendix.html">Appendix page</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="configuration-refresh"><a class="anchor" href="#configuration-refresh"></a>15.1. Configuration Refresh</h3>
+<div class="paragraph">
+<p>The following properties are supported for Configuration auto-refresh at runtime without the need to restart applications</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">Name</th>
+<th class="tableblock halign-center valign-top">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.profile</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DEFAULT</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.file</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.userId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.tenantId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.fingerprint</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.privateKey</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.passPhrase</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.config.region</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.region.static</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.compartment.static</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spring.cloud.oci.logging.logId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NA</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Spring Boot Actuator can be used to explicitly refresh the externalized configuration during runtime. Add the corresponding build dependency to enable the Actuator:</p>
+</div>
+<div class="paragraph">
+<p>Maven:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Set <code>management.endpoints.web.exposure.include=refresh</code> in the externalized configuration file of the Spring Boot Application to enable /actuator/refresh endpoint.</p>
+</div>
+<div class="paragraph">
+<p>To refresh the updated Configuration properties at runtime make a POST API call to /actuator/refresh endpoint</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-07-12 14:39:55 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>

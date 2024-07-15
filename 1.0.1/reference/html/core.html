@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Spring Cloud OCI Core</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<span id="back-to-index"><a href="index.html">Back to index</a></span><ul class="sectlevel1">
+<li><a href="#spring-cloud-oci-core">Spring Cloud OCI Core</a>
+<ul class="sectlevel2">
+<li><a href="#authentication-configuration">Authentication Configuration</a></li>
+<li><a href="#region-configuration">Region Configuration</a></li>
+<li><a href="#compartment-configuration">Compartment Configuration</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="spring-cloud-oci-core"><a class="anchor" href="#spring-cloud-oci-core"></a>Spring Cloud OCI Core</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Cloud OCI provides a Spring Boot starter to auto-configure the core components.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates, using <a href="getting-started.html#bill-of-materials">Spring Cloud OCI BOM</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="authentication-configuration"><a class="anchor" href="#authentication-configuration"></a>Authentication Configuration</h3>
+<div class="paragraph">
+<p>Spring Cloud OCI allows you to authenticate with OCI using various available options.</p>
+</div>
+<div class="sect3">
+<h4 id="configuration-file-based-authentication"><a class="anchor" href="#configuration-file-based-authentication"></a>Configuration File Based Authentication</h4>
+<div class="paragraph">
+<p>By default, configuration file based authentication is enabled. To set it explicitly, set the property <code>spring.cloud.oci.config.type</code> to <code>FILE</code>. The following are optional configurations to set a custom configuration profile name and file name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.profile = DEFAULT
+spring.cloud.oci.config.file = &lt;FILE_PATH&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details about the Authentication configuration file, refer <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm">SDK and CLI Configuration File</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="simple-authentication"><a class="anchor" href="#simple-authentication"></a>Simple Authentication</h4>
+<div class="paragraph">
+<p>Set the property <code>spring.cloud.oci.config.type</code> to <code>SIMPLE</code> and add the following properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = SIMPLE
+spring.cloud.oci.config.userId = ocid1.user.oc1..&lt;unique_ID&gt;
+spring.cloud.oci.config.tenantId = ocid1.tenancy.oc1..&lt;unique_ID&gt;
+spring.cloud.oci.config.fingerprint = &lt;FINGERPRINT&gt;
+spring.cloud.oci.config.privateKey = &lt;PRIVATE_KEY_FILE_PATH&gt;
+spring.cloud.oci.config.passPhrase = &lt;PASS_PHRASE&gt;
+spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: All the preceding properties are mandatory except <code>spring.cloud.oci.config.passPhrase</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="instance-principal-configuration"><a class="anchor" href="#instance-principal-configuration"></a>Instance Principal Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>INSTANCE_PRINCIPAL</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = INSTANCE_PRINCIPAL</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm">OCI Instance Principal Authentication</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resource-principal-configuration"><a class="anchor" href="#resource-principal-configuration"></a>Resource Principal Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>RESOURCE_PRINCIPAL</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = RESOURCE_PRINCIPAL</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal">OCI Resource Principal Authentication</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="session-token-configuration"><a class="anchor" href="#session-token-configuration"></a>Session token Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>SESSION_TOKEN</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = SESSION_TOKEN</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="workload-identity-configuration"><a class="anchor" href="#workload-identity-configuration"></a>Workload Identity Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>WORKLOAD_IDENTITY</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = WORKLOAD_IDENTITY</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm">OKE Workload Identity Authentication</a></p>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12" class="bare">https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="region-configuration"><a class="anchor" href="#region-configuration"></a>Region Configuration</h3>
+<div class="paragraph">
+<p>OCI services are available in different regions. Based on the custom requirements, you can host the application on different OCI regions. The following configuration allows you to set a specific region for the entire application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.region.static = us-ashburn-1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Region value set in the preceding property takes precedence over the property <code>spring.cloud.oci.config.region</code> and <code>region</code> from the Authentication configuration file</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="compartment-configuration"><a class="anchor" href="#compartment-configuration"></a>Compartment Configuration</h3>
+<div class="paragraph">
+<p>A compartment is a logical container, used to organize and control access to the OCI Resources (Compute, Storage, Network, Load Balancer, etc.) created within that compartment. The following configuration allows you to set the default compartment for your application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.compartment.static = &lt;COMPARTMENT_OCID&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-07-12 12:23:50 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>

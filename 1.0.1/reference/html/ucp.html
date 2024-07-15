@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Universal Connection Pool</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<span id="back-to-index"><a href="index.html">Back to index</a></span><ul class="sectlevel1">
+<li><a href="#universal-connection-pool">Universal Connection Pool</a>
+<ul class="sectlevel2">
+<li><a href="#using-universal-connection-pool">Using Universal Connection Pool</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="universal-connection-pool"><a class="anchor" href="#universal-connection-pool"></a>Universal Connection Pool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way to use database connections.</p>
+</div>
+<div class="paragraph">
+<p>To add this starter to your project, add this Maven dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.database.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>oracle-spring-boot-starter-ucp<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>23.4.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Gradle projects, add this dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0'
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-universal-connection-pool"><a class="anchor" href="#using-universal-connection-pool"></a>Using Universal Connection Pool</h3>
+<div class="paragraph">
+<p>An Oracle data source is injected into your application and can be used normally. You must configure the data source as shown below, and you should also add either Spring Data JDBC or Spring Data JPA to your project.</p>
+</div>
+<div class="paragraph">
+<p>To configure the data source, provide a <code>spring.datasource</code> object in your Spring <code>application.yaml</code>, or equivalent, as shown in the following example.  The <code>oracleucp</code> entry is optional, and can be used to fine tune the configuration of the connection pool, if desired.  For details of available settings, refer to the [JavaDoc](<a href="https://docs.oracle.com/en/database/oracle/oracle-database/21/jjuar/oracle/ucp/jdbc/UCPDataSource.html" class="bare">https://docs.oracle.com/en/database/oracle/oracle-database/21/jjuar/oracle/ucp/jdbc/UCPDataSource.html</a>).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">jpa</span><span class="pi">:</span>
+    <span class="na">hibernate</span><span class="pi">:</span>
+      <span class="na">ddl-auto</span><span class="pi">:</span> <span class="s">validate</span>
+    <span class="na">properties</span><span class="pi">:</span>
+      <span class="na">hibernate</span><span class="pi">:</span>
+        <span class="na">dialect</span><span class="pi">:</span> <span class="s">org.hibernate.dialect.OracleDialect</span>
+        <span class="na">format_sql</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="na">show-sql</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">datasource</span><span class="pi">:</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s">jdbc:oracle:thin:@//myhost:1521/pdb1</span>
+    <span class="na">username</span><span class="pi">:</span> <span class="s">username</span>
+    <span class="na">password</span><span class="pi">:</span> <span class="s">password</span>
+    <span class="na">driver-class-name</span><span class="pi">:</span> <span class="s">oracle.jdbc.OracleDriver</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">oracle.ucp.jdbc.PoolDataSource</span>
+    <span class="na">oracleucp</span><span class="pi">:</span>
+      <span class="na">connection-factory-class-name</span><span class="pi">:</span> <span class="s">oracle.jdbc.pool.OracleDataSource</span>
+      <span class="na">connection-pool-name</span><span class="pi">:</span> <span class="s">AccountConnectionPool</span>
+      <span class="na">initial-pool-size</span><span class="pi">:</span> <span class="m">15</span>
+      <span class="na">min-pool-size</span><span class="pi">:</span> <span class="m">10</span>
+      <span class="na">max-pool-size</span><span class="pi">:</span> <span class="s">30</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>spring.datasource.url</code> can be in the basic format (as previously shown), or in TNS format if your application uses Transparent Network Substrate (TNS).</p>
+</div>
+<div class="paragraph">
+<p>Note that the connections to the database use the <code>DEDICATED</code> server by default. If you wish to use <code>SHARED</code> or <code>POOLED</code>, you can append that to the basic URL, or add it to the TNS names entry. For example, to use database resident pooled connections, you would change the URL shown in the previous example to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">  <span class="na">datasource</span><span class="pi">:</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s">jdbc:oracle:thin:@//myhost:1521/pdb1:pooled</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are using TNS, add <code>server=pooled</code> to the <code>connect_data</code>. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-text" data-lang="text">mydb_tp = (description=
+ (retry_count=20)
+ (retry_delay=3)
+ (address=(protocol=tcps)(port=1521)(host=myhost))
+ (connect_data=(service_name=pdb1)(server=pooled))
+ (security=(ssl_server_dn_match=yes)))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you prefer to use Java configuration, the data source can be configured as shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">oracle.jdbc.pool.OracleDataSource</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.sql.DataSource</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.sql.SQLException</span><span class="o">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataSourceConfiguration</span> <span class="o">{</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">DataSource</span> <span class="nf">dataSource</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">SQLException</span> <span class="o">{</span>
+        <span class="nc">OracleDataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OracleDataSource</span><span class="o">();</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setUser</span><span class="o">(</span><span class="s">"account"</span><span class="o">);</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="s">"password"</span><span class="o">);</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setURL</span><span class="o">(</span><span class="s">"jdbc:oracle:thin:@//myhost:1521/pdb1"</span><span class="o">);</span>
+        <span class="n">dataSource</span><span class="o">.</span><span class="na">setDataSourceName</span><span class="o">(</span><span class="s">"AccountConnectionPool"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">dataSource</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-07-12 12:23:50 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
