@@ -5,6 +5,8 @@
 
 package com.oracle.cloud.spring.storage;
 
+import java.util.regex.Pattern;
+
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
@@ -12,12 +14,11 @@ import org.springframework.util.Assert;
  * Storage location parser for ocs:// protocol URI.
  */
 public class StorageLocation {
+    private static final Pattern URL_PATTERN = Pattern.compile("(https://)?(.+?\\.)?objectstorage\\.(.+?)\\.(oraclecloud\\.com|oci\\.customer-oci\\.com)(.+?)");
 
-    private static final String OCS_PROTOCOL_PREFIX = "ocs://";
+    private static final String BUCKET_DELIMITER = "/b/";
 
-    private static final String PATH_DELIMITER = "/";
-
-    private static final String VERSION_DELIMITER = "^";
+    private static final String OBJECT_DELIMITER = "/o/";
 
     static final String ERROR_BUCKET_REQUIRED = "bucket is required";
 
@@ -29,20 +30,12 @@ public class StorageLocation {
 
     private final String object;
 
-    @Nullable
-    private final String version;
-
     StorageLocation(String bucket, String object) {
-        this(bucket, object, null);
-    }
-
-    StorageLocation(String bucket, String object, @Nullable String version) {
         Assert.notNull(bucket, ERROR_BUCKET_REQUIRED);
         Assert.notNull(object, ERROR_OBJECT_REQUIRED);
 
         this.bucket = bucket;
         this.object = object;
-        this.version = version;
     }
 
     String getBucket() {
@@ -53,15 +46,9 @@ public class StorageLocation {
         return object;
     }
 
-    @Nullable
-    String getVersion() {
-        return version;
-    }
-
     @Override
     public String toString() {
-        return "Location{" + "bucket='" + bucket + '\'' + ", object='" + object + '\'' + ", version='" + version + '\''
-                + '}';
+        return String.format("Location{bucket='%s', object='%s'}", bucket, object);
     }
 
     /**
@@ -72,63 +59,37 @@ public class StorageLocation {
     @Nullable
     public static StorageLocation resolve(String location) {
         if (isSimpleStorageResource(location)) {
-            return new StorageLocation(resolveBucketName(location), resolveObjectName(location), resolveVersionId(location));
+            return new StorageLocation(resolveBucketName(location), resolveObjectName(location));
         }
 
         return null;
     }
 
     /**
-     * Checks whether the location URI starts with protocol prefix (oci://).
-     * @param location String contains storage URI.
+     * Checks whether the location URI is an OCI Object Storage URI.
+     * @param location Resource location.
      * @return Boolean
      */
     static boolean isSimpleStorageResource(String location) {
         Assert.notNull(location, "Location must not be null");
-        return location.toLowerCase().startsWith(OCS_PROTOCOL_PREFIX);
+        return URL_PATTERN.matcher(location).matches();
     }
 
     public static String resolveBucketName(String location) {
-        int bucketEndIndex = location.indexOf(PATH_DELIMITER, OCS_PROTOCOL_PREFIX.length());
-        if (bucketEndIndex == -1 || bucketEndIndex == OCS_PROTOCOL_PREFIX.length()) {
+        int bucketStartIndex = location.indexOf(BUCKET_DELIMITER);
+        int bucketEndIndex = location.indexOf(OBJECT_DELIMITER);
+        if (bucketStartIndex == -1 || location.length() < BUCKET_DELIMITER.length()) {
             throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
         }
-        return location.substring(OCS_PROTOCOL_PREFIX.length(), bucketEndIndex);
+        return location.substring(bucketStartIndex + BUCKET_DELIMITER.length(), bucketEndIndex == -1 ? location.length() - 1 : bucketEndIndex);
     }
 
     public static String resolveObjectName(String location) {
-        int bucketEndIndex = location.indexOf(PATH_DELIMITER, OCS_PROTOCOL_PREFIX.length());
-        if (bucketEndIndex == -1 || bucketEndIndex == OCS_PROTOCOL_PREFIX.length()) {
-            throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
+        int objectStartIndex = location.indexOf(OBJECT_DELIMITER);
+
+        if (objectStartIndex == -1 || location.length() < OBJECT_DELIMITER.length()) {
+            throw new IllegalArgumentException(ERROR_OBJECT_REQUIRED);
         }
-
-        if (location.contains(VERSION_DELIMITER)) {
-            return resolveObjectName(location.substring(0, location.indexOf(VERSION_DELIMITER)));
-        }
-
-        int endIndex = location.length();
-        if (location.endsWith(PATH_DELIMITER)) {
-            endIndex--;
-        }
-
-        if (bucketEndIndex >= endIndex) {
-            return "";
-        }
-
-        return location.substring(++bucketEndIndex, endIndex);
-    }
-
-    @Nullable
-    public static String resolveVersionId(String location) {
-        int objectNameEndIndex = location.indexOf(VERSION_DELIMITER, OCS_PROTOCOL_PREFIX.length());
-        if (objectNameEndIndex == -1 || location.endsWith(VERSION_DELIMITER)) {
-            return null;
-        }
-
-        if (objectNameEndIndex == OCS_PROTOCOL_PREFIX.length()) {
-            throw new IllegalArgumentException("The location :'" + location + "' " + ERROR_INVALID_BUCKET);
-        }
-
-        return location.substring(++objectNameEndIndex, location.length());
+        return location.substring(objectStartIndex + OBJECT_DELIMITER.length());
     }
 }

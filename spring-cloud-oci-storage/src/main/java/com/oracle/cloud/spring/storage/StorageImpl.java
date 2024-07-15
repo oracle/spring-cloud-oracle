@@ -65,7 +65,7 @@ public class StorageImpl implements Storage {
         Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
         Assert.notNull(key, ERROR_KEY_REQUIRED);
 
-        return new OracleStorageResource(bucketName, key, version, osClient);
+        return new OracleStorageResource(bucketName, key, osClient);
     }
 
     /**

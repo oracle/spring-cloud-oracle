@@ -19,12 +19,12 @@ import static org.mockito.Mockito.*;
 
 public class OracleStorageResourceTests {
     final ObjectStorageClient osClient = mock(ObjectStorageClient.class);
-    final OracleStorageResource oracleStorageResource = new OracleStorageResource("testBucket", "testObject", "1.0", osClient);
+    final OracleStorageResource oracleStorageResource = new OracleStorageResource("testBucket", "testObject", osClient);
 
     @Test
     public void testCreate() {
         try (MockedStatic mock = mockStatic(StorageLocation.class)) {
-            OracleStorageResource.create("ocs://test/bucket", osClient);
+            OracleStorageResource.create("https://objectstorage.us-chicago-1.oraclecloud.com/n/namespace/b/mybucket/o/myobject", osClient);
         }
     }
 

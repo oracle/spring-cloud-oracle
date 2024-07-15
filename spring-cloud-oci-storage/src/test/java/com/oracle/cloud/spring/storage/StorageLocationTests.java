@@ -5,6 +5,7 @@
 
 package com.oracle.cloud.spring.storage;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -33,51 +34,42 @@ class StorageLocationTests {
 
     @Test
     void testStorageLocationWithValidInput() {
-        assertNotNull(StorageLocation.resolve("ocs://test/bucket"));
+        assertNotNull(StorageLocation.resolve("https://objectstorage.us-chicago-1.oraclecloud.com/n/namespace/b/mybucket/o/myobject"));
     }
 
     @Test
     void testStorageLocationWithInvalidInput() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            StorageLocation.resolve("ocs://test");
-        });
-        assertTrue(exception.getMessage().contains(StorageLocation.ERROR_INVALID_BUCKET));
+        assertNull(StorageLocation.resolve("https://foo.com"));
     }
 
     @Test
     void testSimpleStorageResource() {
-        assertTrue(StorageLocation.isSimpleStorageResource("ocs://test/bucket"));
+        assertTrue(StorageLocation.isSimpleStorageResource("https://objectstorage.us-chicago-1.oraclecloud.com/n/namespace/b/mybucket/o/myobject"));
     }
 
     @Test
     void testResolveBucketName() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            StorageLocation.resolveBucketName("ocs://test");
+            StorageLocation.resolveBucketName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace");
         });
         assertTrue(exception.getMessage().contains(StorageLocation.ERROR_INVALID_BUCKET));
-        assertNotNull(StorageLocation.resolveBucketName("ocs://test/bucket"));
+        String bucketName = StorageLocation.resolveBucketName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket/o/myobject");
+        assertThat(bucketName).isEqualTo("mybucket");
     }
 
     @Test
     void testResolveObjectName() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            StorageLocation.resolveObjectName("ocs://test");
-        });
-        assertTrue(exception.getMessage().contains(StorageLocation.ERROR_INVALID_BUCKET));
-        assertNotNull(StorageLocation.resolveObjectName("ocs://test/bucket/^"));
-    }
-
-    @Test
-    void testResolveVersionId() {
-        assertNull(StorageLocation.resolveVersionId("ocs://test/bucket/v1"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> StorageLocation.resolveObjectName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket"));
+        assertTrue(exception.getMessage().contains(StorageLocation.ERROR_OBJECT_REQUIRED));
+        String objectName = StorageLocation.resolveObjectName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket/o/myobject");
+        assertThat(objectName).isEqualTo("myobject");
     }
 
     @Test
     void testStorageLocation() {
-        StorageLocation storageLocation = new StorageLocation("testBucket", "testObject", "v1");
+        StorageLocation storageLocation = new StorageLocation("testBucket", "testObject");
         assertEquals("testBucket", storageLocation.getBucket());
         assertEquals("testObject", storageLocation.getObject());
-        assertEquals("v1", storageLocation.getVersion());
         assertNotNull(storageLocation.toString());
     }
 }
