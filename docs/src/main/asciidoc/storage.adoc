@@ -37,7 +37,7 @@ The `Storage` bean (link[Javadoc]) can be used to list, create, update or delete
 private Storage storage;
 
 public void createBucketAndUploadFile() {
-    Bucket bucket = storage.createBucket("my-bucket")
+    Bucket bucket = storage.createBucket("my-bucket");
 
     storage.upload("my-bucket", "my-file.txt", inputStream, StorageObjectMetadata.builder().contentType("text/plain").build());
 }
@@ -46,19 +46,19 @@ public void createBucketAndUploadFile() {
 === Cloud Storage Objects Spring Resources
 
 https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html[Spring Resources] are an abstraction for several low-level resources, such as file system files, classpath files, servlet context-relative files, etc.
-Spring Cloud OCI adds a new resource type: an Oracle Cloud Storage (OCS) object.
+Spring Cloud OCI adds a new resource type for Oracle Cloud Object Storage.
 
-The Spring Resource Abstraction for Oracle Cloud Storage allows OCS objects to be accessed by their OCS URL using the `@Value` annotation or the Spring application context:
-
-[source,java]
-----
-@Value("ocs://[YOUR_OCS_BUCKET]/[OCS_FILE_NAME]")
-private Resource ocsResource;
-----
+The Spring Resource Abstraction for Oracle Cloud Storage allows Object Storage objects to be accessed by their URL using the `@Value` annotation or the Spring application context:
 
 [source,java]
 ----
-SpringApplication.run(...).getResource("ocs://[YOUR_OCS_BUCKET]/[OCS_FILE_NAME]");
+@Value("https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
+private Resource myObjectResource;
+----
+
+[source,java]
+----
+SpringApplication.run(...).getResource("Object Storage URL");
 ----
 
 This creates a `Resource` object that can be used to read the object, among https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html#resources-resource[other possible operations].

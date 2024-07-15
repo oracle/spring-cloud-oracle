@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,18 +34,11 @@ public class ObjectController {
     @Autowired
     ResourceLoader loader;
 
-    @Value("ocs://your-bucket/555.json")
-    Object myObject;
+    @Value("https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
+    Resource myObject;
 
     @GetMapping("/")
-    String hello() throws IOException {
-        // Note: This is the sample piece of code to access 
-        // OCI Storage Object with resource URI as ocs://<bucket>/<object-name>
-
-        // Object obj = loader.getResource("ocs://your-bucket/object-name");
-        // Scanner s = new Scanner(((OracleStorageResource)obj).getInputStream()).useDelimiter("\\A");
-        // String result = s.hasNext() ? s.next() : "";
-        // System.out.println(result);
+    String hello() {
         return "Hello World ";
     }
 

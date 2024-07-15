@@ -11,10 +11,12 @@ import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetNamespaceResponse;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import org.springframework.core.io.AbstractResource;
+import org.springframework.core.io.WritableResource;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Default OCI Storage resource implementation of Spring Resource.
@@ -40,9 +42,9 @@ public class OracleStorageResource extends AbstractResource {
         return null;
     }
 
-    public OracleStorageResource(String bucketName, String objectName, String version,
+    public OracleStorageResource(String bucketName, String objectName,
                                  ObjectStorageClient osClient) {
-        this(new StorageLocation(bucketName, objectName, version), osClient);
+        this(new StorageLocation(bucketName, objectName), osClient);
     }
 
     public OracleStorageResource(StorageLocation location, ObjectStorageClient osClient) {
@@ -76,7 +78,6 @@ public class OracleStorageResource extends AbstractResource {
                                 .namespaceName(namespaceName)
                                 .bucketName(location.getBucket())
                                 .objectName(location.getObject())
-                                .versionId(location.getVersion())
                                 .build());
         return getResponse.getInputStream();
     }

@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    oci:
+      compartment:
+        static: ${OCI_COMPARTMENT}
+      config:
+        type: file
+      region:
+        static: us-chicago-1

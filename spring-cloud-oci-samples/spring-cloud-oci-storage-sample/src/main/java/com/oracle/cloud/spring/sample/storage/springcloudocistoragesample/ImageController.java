@@ -54,10 +54,6 @@ public class ImageController {
     @PostMapping(value = "/{bucketName}", consumes = MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<?> upload(@Parameter(required = true) @RequestPart(required = true, name = "file") MultipartFile multipartFile,
                              @Parameter(required = true, example = "new-bucket") @PathVariable String bucketName) throws IOException {
-        //if (!IMAGE_JPEG.toString().equals(multipartFile.getContentType())) {
-          //  return ResponseEntity.badRequest().body("Invalid image file");
-       // }
-
         try (InputStream is = multipartFile.getInputStream()) {
             storage.upload(bucketName, multipartFile.getOriginalFilename(), is,
                     StorageObjectMetadata.builder().contentType(multipartFile.getContentType()).build());

@@ -36,7 +36,7 @@ public class OracleStorageProtocolResolverTests {
     @Test
     public void testResolve() {
         try (MockedStatic mock = mockStatic(OracleStorageResource.class)) {
-            oracleStorageProtocolResolver.resolve("ocs://test", new DefaultResourceLoader());
+            oracleStorageProtocolResolver.resolve("https://objectstorage.us-chicago-1.oraclecloud.com/n/namespace/b/mybucket/o/myobject", new DefaultResourceLoader());
         }
     }
 }

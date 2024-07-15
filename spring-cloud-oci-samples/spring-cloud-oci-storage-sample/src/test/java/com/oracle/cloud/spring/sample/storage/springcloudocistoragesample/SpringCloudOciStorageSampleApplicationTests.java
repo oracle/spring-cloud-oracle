@@ -5,30 +5,43 @@
 
 package com.oracle.cloud.spring.sample.storage.springcloudocistoragesample;
 
-import com.oracle.cloud.spring.sample.common.base.SpringCloudSampleApplicationTestBase;
 import com.oracle.cloud.spring.storage.Storage;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 
-@SpringBootTest
-@EnabledIfSystemProperty(named = "it.storage", matches = "true")
-@TestPropertySource(locations="classpath:application-test.properties")
-class SpringCloudOciStorageSampleApplicationTests extends SpringCloudSampleApplicationTestBase {
-    static final String TEST_BUCKET = "bucketName";
+import static org.assertj.core.api.Assertions.assertThat;
 
-    static final String testBucket = System.getProperty(TEST_BUCKET) != null ? System.getProperty(TEST_BUCKET) :
-            System.getenv().get(TEST_BUCKET);
+@SpringBootTest
+@EnabledIfEnvironmentVariable(named = "OCI_NAMESPACE", matches = ".+")
+@EnabledIfEnvironmentVariable(named = "OCI_BUCKET", matches = ".+")
+@EnabledIfEnvironmentVariable(named = "OCI_OBJECT", matches = ".+")
+@EnabledIfEnvironmentVariable(named = "OCI_COMPARTMNET", matches = ".+")
+class SpringCloudOciStorageSampleApplicationTests {
+
+    static final String testBucket = System.getenv("OCI_BUCKET");
 
     @Autowired
     Storage storage;
 
+    @Autowired
+    ObjectController objectController;
+
     @Test
-    void testFileUpload() throws IOException {
+    void resourceIsLoaded() throws IOException {
+        Resource myObject = objectController.myObject;
+        assertThat(myObject).isNotNull();
+        assertThat(myObject.getContentAsByteArray()).hasSizeGreaterThan(1);
+    }
+
+    @Test
+    @Disabled
+    void storePOJO() throws IOException {
         ActivityInfo ainfo = new ActivityInfo("Hello from Storage integration test");
         storage.store(testBucket, ainfo.getFileName(), ainfo);
     }

@@ -69,7 +69,7 @@ public class OracleStorageProtocolResolver implements ProtocolResolver, Resource
             ((DefaultResourceLoader) resourceLoader).addProtocolResolver(this);
         } else {
             LOGGER.warn("The provided delegate resource loader is not an implementation "
-                    + "of DefaultResourceLoader. Custom Protocol using ocs:// prefix will not be enabled.");
+                    + "of DefaultResourceLoader. Custom OCI Object Storage prefix will not be enabled.");
         }
     }
 
