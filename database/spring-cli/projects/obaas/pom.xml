@@ -45,11 +45,18 @@
     		<version>${oracle-springboot-starter.version}</version>
     		<type>pom</type>
 		</dependency>
-        <dependency>
+		
+		<!-- If you want to use Liquibase to manage your schema and reference data, -->
+		<!-- uncomment the following dependency and edit the files located in       -->
+ 		<!-- src/main/resources/db/changelog to add your definitions and data.      -->
+		<!-- Also uncomment the liquibase plugin in the build section below.        -->
+        <!-- 
+		<dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
-        </dependency>
+        </dependency> 
+		-->
 
         <dependency>
             <groupId>net.ttddyy.observation</groupId>
@@ -78,11 +85,13 @@
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
             </plugin>
+			<!--
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
             </plugin>
+		    -->
 		</plugins>
 	</build>
 
