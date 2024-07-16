@@ -1,13 +1,13 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024 Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [#cloud-storage]
 == Cloud Storage
 
 https://www.oracle.com/in/cloud/storage/[Oracle Cloud Storage] allows you to store any types of file.
-A Spring Boot starter is provided to auto-configure the various Storage components.
+A Spring Boot starter is provided to autoconfigure the various Storage components.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates:
 
 [source,xml]
 ----
@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Storage
 
 The starter automatically configures and registers a `Storage` bean in the Spring application context.
-The `Storage` bean (link[Javadoc]) can be used to list, create, update or delete buckets and objects.
+The `Storage` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/storage/package-summary.html[Javadoc]) can be used to list, create, update or delete buckets and objects.
 
 [source,java]
 ----
@@ -63,7 +63,7 @@ SpringApplication.run(...).getResource("Object Storage URL");
 
 This creates a `Resource` object that can be used to read the object, among https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html#resources-resource[other possible operations].
 
-Currently this resource is only readable.
+Currently, this resource is only readable.
 
 === Configuration
 

@@ -1,13 +1,13 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [#cloud-notifications]
 == Cloud Notifications
 
 https://www.oracle.com/in/devops/notifications/[OCI Notifications] is a highly available, low latency publish/subscribe (pub/sub) service that sends alerts and messages to Oracle Cloud Functions, email, SMS, and message delivery partners, including Slack, PagerDuty and custom HTTPS endpoint. Spring Cloud module for Oracle Cloud Notifications allows you to create a Topic, then create and publish messages to multiple subscription types such as Oracle Cloud Functions, email, SMS, Slack, PagerDuty and custom HTTPS endpoint.
-A Spring Boot starter is provided to auto-configure the various Notification components.
+A Spring Boot starter is provided to autoconfigure the various Notification components.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates:
 
 [source,xml]
 ----
@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Notifications
 
 The starter automatically configures and registers a `Notification` bean in the Spring application context.
-The `Notification` bean (link[Javadoc]) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.
+The `Notification` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/notification/package-summary.html[Javadoc]) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.
 
 [source,java]
 ----

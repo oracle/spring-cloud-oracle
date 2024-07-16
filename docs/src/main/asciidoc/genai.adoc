@@ -6,7 +6,7 @@
 
 https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm[OCI Generative AI] is a fully managed service that provides a set of state-of-the-art, customizable large language models (LLMs) that cover a wide range of use cases, including chat and creating text embeddings.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates:
 
 [source,xml]
 ----
@@ -28,11 +28,10 @@ dependencies {
 === Using Generative AI Chat
 
 The starter configures and registers a `ChatModel` bean in the Spring application context.
-The `ChatModel` bean (link[Javadoc]) can be used to interact with OCI Generative AI Chat Models.
+The `ChatModel` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/genai/package-summary.html[Javadoc]) can be used to interact with OCI Generative AI Chat Models.
 
 [source,java]
 ----
-@Autowired
 @Autowired
 private ChatModel chatModel;
 
@@ -44,7 +43,7 @@ public void embed() {
 === Using Generative AI Embedding
 
 The starter configures and registers an `EmbeddingModel` bean in the Spring application context.
-The `EmbeddingModel` bean (link[Javadoc]) can be used to create text embeddings using OCI Generative AI Embedding Models.
+The `EmbeddingModel` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/genai/package-summary.html[Javadoc]) can be used to create text embeddings using OCI Generative AI Embedding Models.
 
 [source,java]
 ----
@@ -81,7 +80,6 @@ The Spring Boot Starter for Oracle Cloud Generative AI provides the following co
 | `spring.cloud.oci.genai.chat.max-tokens` | Maximum response output tokens. Estimate 2-3 tokens per word. | No | `600`
 
 |===
-
 
 === Sample
 

@@ -8,7 +8,7 @@ https://docs.oracle.com/en/cloud/paas/atp-cloud/index.html[Autonomous Database] 
 on self-driving Oracle Autonomous Database technology to deliver automated patching, upgrades, and tuning, including
 performing all routine database maintenance tasks while the system is running, without human intervention.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates:
 
 [source,xml]
 ----
@@ -30,18 +30,11 @@ dependencies {
 === Using Autonomous Database
 
 The starter automatically configures and registers an `AutonomousDb` bean in the Spring application context.
-The `AutonomousDb` bean (link[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
+The `AutonomousDb` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/adb/package-summary.html[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
 delete an Autonomous Database and generate a wallet for an Autonomous Database.
 
 [source,java]
 ----
-@Autowired
-private Queue queue;
-
-public void createQueue() {
-
-    String queueId = queue.createQueue("my-queue", <<compartmentId>>, <<deadLetterQueueDeliveryCount>>, <<retentionInSeconds>>);
-}
 @Autowired
 AutonomousDb autonomousDatabase;
 

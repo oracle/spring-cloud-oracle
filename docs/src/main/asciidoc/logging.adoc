@@ -1,13 +1,13 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [#cloud-logging]
 == Cloud Logging
 
 https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm[OCI Logging] service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from OCI resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service, and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
-A Spring Boot starter is provided to auto-configure the Logging component.
+A Spring Boot starter is provided to autoconfigure the Logging component.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates::
 
 [source,xml]
 ----
@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Logging
 
 The starter automatically configures and registers a `Logging` bean in the Spring application context.
-The `Logging` bean (link[Javadoc]) can be used to ingest logs associated with a logId specified in the property `spring.cloud.oci.logging.logId` within the application configuration file
+The `Logging` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/logging/package-summary.html[Javadoc]) can be used to ingest logs associated with a logId specified in the property `spring.cloud.oci.logging.logId` within the application configuration file
 
 [source,java]
 ----
