@@ -2,7 +2,7 @@
 project-repositories:
 - name: "obaas"
   description: "RESTful Hello World service for Oracle Backend for Spring Boot and Microservices"
-  uri: "https://github.com/oracle/spring-cloud-oci/database/spring-cli/projects/obaas"
+  uri: "https://github.com/oracle/spring-cloud-oci/tree/obaas-starter/database/spring-cli/projects/obaas"
   tags:
   - "obaas"
   - "java-17"
