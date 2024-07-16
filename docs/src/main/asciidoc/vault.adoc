@@ -6,7 +6,7 @@
 
 https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm[Vault] can be used as a Spring property source for Vault secrets, and as an application bean for creating, updating, listing, and deleting secrets from a Vault.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates:
 
 [source,xml]
 ----

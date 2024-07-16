@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Logging
 
 The starter automatically configures and registers a `Logging` bean in the Spring application context.
-The `Logging` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/logging/package-summary.html[Javadoc]) can be used to ingest logs associated with a logId specified in the property `spring.cloud.oci.logging.logId` within the application configuration file
+The `Logging` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/logging/package-summary.html[Javadoc]) can be used to ingest logs associated with a logId specified in the property `spring.cloud.oci.logging.logId` within the application configuration file
 
 [source,java]
 ----

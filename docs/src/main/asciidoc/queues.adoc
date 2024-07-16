@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Queues
 
 The starter automatically configures and registers a `Queue` bean in the Spring application context.
-The `Queue` bean (https://oracle.github.io/spring-cloud-oci/1.1.0/javadocs/com/oracle/cloud/spring/queue/package-summary.html[Javadoc]) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
+The `Queue` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/queue/package-summary.html[Javadoc]) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
 
 [source,java]
 ----
