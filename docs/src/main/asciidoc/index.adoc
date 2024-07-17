@@ -34,9 +34,7 @@ include::streaming.adoc[]
 
 include::vault.adoc[]
 
-include::ucp.adoc[]
-
-include::aqjms.adoc[]
+include::db_starters.adoc[]
 
 == Configuration properties
 

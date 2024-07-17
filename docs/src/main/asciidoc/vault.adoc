@@ -1,8 +1,8 @@
 // Copyright (c) 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-[#vault]
-== Vault
+[#oci-vault]
+== OCI Vault
 
 https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm[Vault] can be used as a Spring property source for Vault secrets, and as an application bean for creating, updating, listing, and deleting secrets from a Vault.
 
