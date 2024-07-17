@@ -6,7 +6,7 @@
 
 include::_attributes.adoc[]
 
-Documentation for version *{project-version}*
+Documentation for version *+{project-version}+*
 
 == Introduction
 
@@ -14,29 +14,27 @@ Spring Cloud for OCI, part of the Spring Cloud umbrella project, eases the integ
 
 include::getting-started.adoc[]
 
+include::adb.adoc[]
+
 include::core.adoc[]
+
+include::function.adoc[]
+
+include::logging.adoc[]
+
+include::genai.adoc[]
 
 include::storage.adoc[]
 
 include::notifications.adoc[]
 
-include::genai.adoc[]
-
-include::logging.adoc[]
-
-include::function.adoc[]
+include::queues.adoc[]
 
 include::streaming.adoc[]
 
-include::queues.adoc[]
-
-include::adb.adoc[]
-
 include::vault.adoc[]
 
-include::ucp.adoc[]
-
-include::aqjms.adoc[]
+include::db_starters.adoc[]
 
 == Configuration properties
 
