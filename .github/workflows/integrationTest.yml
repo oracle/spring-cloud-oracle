@@ -22,6 +22,7 @@ jobs:
           java-package: 'jdk'
           cache: 'maven'
       - name: Run Maven Build and Test
+        working-directory: ./spring-cloud-oci
         run: |
           mvn clean \
             -Pspring-cloud-oci-ci-it \
