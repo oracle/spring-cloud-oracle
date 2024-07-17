@@ -28,8 +28,6 @@ public class UCPAutoConfiguration {
                 ds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
                 setIfNull(ds.getConnectionPoolName(), () -> ds.setConnectionPoolName("SpringConnectionPool"));
                 setIfNull(ds.getInitialPoolSize(), () -> ds.setInitialPoolSize(15));
-                setIfNull(ds.getMinPoolSize(), () -> ds.setMinPoolSize(5));
-                setIfNull(ds.getMaxPoolSize(), () -> ds.setMaxPoolSize(30));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -37,8 +35,12 @@ public class UCPAutoConfiguration {
     }
 
     private <T> void setIfNull(T value, Setter setter) throws SQLException {
-        if (value != null) {
+        if (value == null) {
             setter.set();
+        } else if (value instanceof Integer intValue) {
+            if (intValue < 1) {
+                setter.set();
+            }
         }
     }
 
