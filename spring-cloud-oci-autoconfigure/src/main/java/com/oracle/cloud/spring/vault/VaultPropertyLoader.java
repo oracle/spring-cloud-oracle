@@ -4,14 +4,10 @@ package com.oracle.cloud.spring.vault;
 
 import java.time.Duration;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
-import com.oracle.bmc.vault.model.SecretSummary;
 
 public class VaultPropertyLoader implements AutoCloseable {
     private static Timer timer;
@@ -29,7 +25,6 @@ public class VaultPropertyLoader implements AutoCloseable {
             synchronized (VaultPropertyLoader.class) {
                 if (timer == null) {
                     timer = new Timer(true);
-                    ;
                     timer.scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {

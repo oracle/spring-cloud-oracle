@@ -7,7 +7,6 @@ package com.oracle.cloud.spring.genai;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;

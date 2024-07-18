@@ -11,12 +11,10 @@ import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetNamespaceResponse;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import org.springframework.core.io.AbstractResource;
-import org.springframework.core.io.WritableResource;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Default OCI Storage resource implementation of Spring Resource.
