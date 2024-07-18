@@ -48,6 +48,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-vault-sample</module>
         <module>spring-cloud-oci-queue-sample</module>
         <module>spring-cloud-oci-function-sample</module>
+        <module>spring-cloud-oci-adb-sample</module>
+        <module>spring-cloud-oci-email-sample</module>
     </modules>
 
     <artifactId>spring-cloud-oci-samples</artifactId>

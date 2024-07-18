@@ -18,6 +18,8 @@ include::adb.adoc[]
 
 include::core.adoc[]
 
+include::email.adoc[]
+
 include::function.adoc[]
 
 include::logging.adoc[]
