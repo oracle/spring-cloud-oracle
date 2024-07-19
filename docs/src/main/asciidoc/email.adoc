@@ -4,7 +4,7 @@
 [#email-delivery]
 == Email Delivery
 
-https://docs.oracle.com/en-us/iaas/Content/Email/home.htm[Email Delivery] provides an implementation of the Spring Mail interface, providing MailSender and JavaMailSender beans to send email using OCI Email Delivery.
+https://docs.oracle.com/en-us/iaas/Content/Email/home.htm[Email Delivery] module provides an implementation of the Spring Mail interface, implementing MailSender and JavaMailSender interfaces to send email using OCI Email Delivery.
 
 Maven coordinates:
 
@@ -74,7 +74,7 @@ public class EmailService {
 
 === Using JavaMailSender
 
-For more complex emails, such as those with attachments, use the JavaMailSender interface. The followign example shows how to send an email with the JavaMailSender API.
+For more complex emails, such as those with attachments, use the JavaMailSender interface. The following example shows how to send an email with the JavaMailSender API.
 
 [source,java]
 ----
