@@ -49,7 +49,7 @@ curl http://localhost:8080/greeting?name=User
 
 == About the sample code
 
-The [Maven POM file](./pom.xml) contains dependencies for commonly used features.
+The link:./pom.xml[Maven POM file] contains dependencies for commonly used features.
 You should review the POM file and remove any dependencies that you do not need.
 Note that there may be dependency configuration in the link:./src/main/resources/application.yaml[Spring application configuration file]
 as well, which you should remove if you remove the matching dependency.
