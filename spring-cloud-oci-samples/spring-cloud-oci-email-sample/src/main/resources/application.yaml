@@ -1,0 +1,7 @@
+spring:
+  mail:
+    host: ${OCI_SMTP_HOST}
+    username: ${OCI_SMTP_USERNAME}
+    password: ${OCI_SMTP_PASSWORD}
+    # Port 25 or 587 may be used.
+    port: 587

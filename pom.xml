@@ -67,6 +67,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-streaming</module>
         <module>spring-cloud-oci-vault</module>
         <module>spring-cloud-oci-queue</module>
+        <module>spring-cloud-oci-email</module>
         <module>docs</module>
     </modules>
 
@@ -74,6 +75,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2023.0.2</spring-cloud-dependencies.version>
         <spring-boot-dependencies.version>3.2.7</spring-boot-dependencies.version>
+        <spring-framework.version>6.1.10</spring-framework.version>
+        <jakarta-mail.version>2.0.3</jakarta-mail.version>
         <oci-sdk.version>3.44.2</oci-sdk.version>
         <spring-boot-maven-plugin.version>3.2.5</spring-boot-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
@@ -109,6 +112,11 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <version>${oci-sdk.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.oci.sdk</groupId>
+                <artifactId>oci-java-sdk-email</artifactId>
+                <version>${oci-sdk.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oracle.oci.sdk</groupId>
@@ -159,6 +167,18 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <version>${spring-cloud-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring-framework.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.angus</groupId>
+                <artifactId>jakarta.mail</artifactId>
+                <version>${jakarta-mail.version}</version>
+                <scope>compile</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

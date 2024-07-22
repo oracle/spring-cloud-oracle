@@ -10,3 +10,4 @@ com.oracle.cloud.spring.queue.QueueAutoConfiguration
 com.oracle.cloud.spring.genai.GenAIAutoConfiguration
 com.oracle.cloud.spring.vault.VaultAutoConfiguration
 com.oracle.cloud.spring.adb.AutonomousDbAutoConfiguration
+com.oracle.cloud.spring.email.EmailDeliveryAutoConfiguration

@@ -1,0 +1,119 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#email-delivery]
+== Email Delivery
+
+https://docs.oracle.com/en-us/iaas/Content/Email/home.htm[Email Delivery] module provides an implementation of the Spring Mail interface, implementing MailSender and JavaMailSender interfaces to send email using OCI Email Delivery.
+
+Maven coordinates:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.cloud.spring</groupId>
+    <artifactId>spring-cloud-oci-starter-email</artifactId>
+</dependency>
+----
+
+Gradle coordinates:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-email")
+}
+----
+
+=== Configuring Email Delivery
+
+Email Delivery uses the Spring Mail SMTP configuration properties to configure MailSender and JavaMailSender beans. https://docs.oracle.com/en-us/iaas/Content/Email/Reference/gettingstarted_topic-create-smtp-credentials.htm#top[Create SMTP credentials for OCI] and use these to configure your username and password in Spring.
+
+Your OCI SMTP endpoint can be found on the OCI Email Delivery Console.
+
+[source,yaml]
+----
+spring:
+  mail:
+    host: ${OCI_SMTP_HOST}
+    username: ${OCI_SMTP_USERNAME}
+    password: ${OCI_SMTP_PASSWORD}
+    # Port 25 or 587 may be used. 587 is default.
+    port: 587
+----
+
+=== Using MailSender
+
+For simple emails, use the MailSender interface. The following sample shows how to send an email with the MailSender interface.
+
+[source,java]
+----
+@Service
+public class EmailService {
+    private final MailSender mailSender;
+
+    public EmailService(@Qualifier("ociMailSender") MailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    public void sendSimpleMail(
+            String from,
+            String to,
+            String subject,
+            String text
+    ) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        mailSender.send(message);
+    }
+}
+----
+
+=== Using JavaMailSender
+
+For more complex emails, such as those with attachments, use the JavaMailSender interface. The following example shows how to send an email with the JavaMailSender API.
+
+[source,java]
+----
+@Service
+public class EmailService {
+    private final JavaMailSender javaMailSender;
+
+    public EmailService(@Qualifier("ociJavaMailSender") JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
+    public void sendJavaMail(
+            String from,
+            String to,
+            String subject,
+            String text,
+            File fileAttachment
+    ) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        Multipart multipartContent = new MimeMultipart();
+        MimeBodyPart textContent = new MimeBodyPart();
+        textContent.setContent(text, "text/html");
+        multipartContent.addBodyPart(textContent);
+
+        MimeBodyPart attachmentContent = new MimeBodyPart();
+        DataSource source = new FileDataSource(fileAttachment);
+        attachmentContent.setDataHandler(new DataHandler(source));
+        attachmentContent.setFileName(fileAttachment.getName());
+        multipartContent.addBodyPart(attachmentContent);
+
+        message.setFrom(from);
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+        message.setSubject(subject);
+        message.setContent(multipartContent);
+        javaMailSender.send(message);
+    }
+}
+----
+
+=== Sample
+
+A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-email-sample[here] contains examples that demonstrate the usage of Spring Cloud OCI Email module.

@@ -1,13 +1,13 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [#cloud-function]
 == Cloud Functions
 
 https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm[OCI Functions] is a fully managed, multi-tenant, highly scalable, on-demand, Functions-as-a-Service platform. It is built on enterprise-grade Oracle Cloud Infrastructure and powered by the Fn Project open source engine. Use OCI Functions when you want to focus on writing code to meet business needs. The Spring Cloud module for OCI Functions allows to invoke an OCI Function.
-A Spring Boot starter is provided to auto-configure the Function component.
+A Spring Boot starter is provided to autoconfigure the Function component.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates:
 
 [source,xml]
 ----
@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Functions
 
 The starter automatically configures and registers a `Function` bean in the Spring application context.
-The `Function` bean (link[Javadoc]) can be used to invoke a function with parameter inputs 'functionOcid' and 'endpoint'
+The `Function` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/function/package-summary.html[Javadoc]) can be used to invoke a function with parameter inputs 'functionOcid' and 'endpoint'
 
 [source,java]
 ----

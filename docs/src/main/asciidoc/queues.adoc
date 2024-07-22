@@ -1,13 +1,13 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [#cloud-queues]
 == Cloud Queues
 
 https://docs.oracle.com/en-us/iaas/Content/queue/home.htm[OCI Queues] is a highly available, low latency publish/subscribe (pub/sub) service, handles high volume transactional data that requires independently processed messages without loss or duplication. Spring Cloud module for Oracle Cloud Queues allows you to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
-A Spring Boot starter is provided to auto-configure the various Queue components.
+A Spring Boot starter is provided to autoconfigure the various Queue components.
 
-Maven coordinates, using <<getting-started.adoc#bill-of-materials, Spring Cloud OCI BOM>>:
+Maven coordinates:
 
 [source,xml]
 ----
@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Queues
 
 The starter automatically configures and registers a `Queue` bean in the Spring application context.
-The `Queue` bean (link[Javadoc]) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
+The `Queue` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/queue/package-summary.html[Javadoc]) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.
 
 [source,java]
 ----
