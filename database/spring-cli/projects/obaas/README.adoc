@@ -1,6 +1,6 @@
 == Basic Spring Web Application for Oracle Backend for Spring Boot and Microservices
 
-This project contains a web service that can be deployed on [Oracle Backend for Spring Boot and Microservices](https://bit.ly/oraclespringboot)
+This project contains a web service that can be deployed on link:https://bit.ly/oraclespringboot[Oracle Backend for Spring Boot and Microservices]
 and includes configuration for the well-known endpoints provided by the platform.
 The web service will accept HTTP GET requests at `http://localhost:8080/greeting`.
 
