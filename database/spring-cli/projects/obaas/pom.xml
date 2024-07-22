@@ -24,21 +24,27 @@
 	</properties>
 	
 	<dependencies>
+		<!-- Spring WebMVC for REST support.                                        -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- This is for Spring Data JPA.  You could use Spring Data JDBC instead.  -->
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+		<!-- This adds Oracle Universal Connection Pool (UCP) which gives you       -->
+		<!-- access to high availability features of Oracle.  This is optional, you -->
+		<!-- can remove this to use HikariCP instead.                               -->
         <dependency>
 			<groupId>com.oracle.database.spring</groupId>
 			<artifactId>oracle-spring-boot-starter-ucp</artifactId>
 			<version>${oracle-springboot-starter.version}</version>
             <type>pom</type>
 		</dependency>
+		<!-- This adds support for Oracle Wallet based authentication and mTLS.     -->
 		<dependency>
     		<groupId>com.oracle.database.spring</groupId>
     		<artifactId>oracle-spring-boot-starter-wallet</artifactId>
@@ -46,28 +52,30 @@
     		<type>pom</type>
 		</dependency>
 		
-		<!-- If you want to use Liquibase to manage your schema and reference data, -->
-		<!-- uncomment the following dependency and edit the files located in       -->
- 		<!-- src/main/resources/db/changelog to add your definitions and data.      -->
-		<!-- Also uncomment the liquibase plugin in the build section below.        -->
-        <!-- 
+		<!-- This dependency allows you to use Liquibase to manage your schema and  -->
+		<!-- reference data.  Enable it in the application.yaml and edit the files  -->
+ 		<!-- in src/main/resources/db/changelog to add your definitions and data.   -->
+		<!-- If you comment this out, or remove it, also comment/remove the         -->
+		<!-- liquibase plugin in the build section below.                           -->
 		<dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
         </dependency> 
-		-->
 
+  		<!-- This enables Spring Actuator which provides monitoring, metrics, etc.  -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<!-- This adds metrics for data sources.                                    -->
         <dependency>
             <groupId>net.ttddyy.observation</groupId>
             <artifactId>datasource-micrometer-spring-boot</artifactId>
             <version>${datasource-micrometer-spring-boot.version}</version>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-
+		
+		<!-- Spring test support.                                                   -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -81,17 +89,17 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- This allows native image compilation (optional)                    -->
 			<plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
             </plugin>
-			<!--
+			<!-- This enables Liquibase (optional)                                  -->
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
             </plugin>
-		    -->
 		</plugins>
 	</build>
 

@@ -1,3 +1,9 @@
+# 
+#  This is an example Spring application.yaml configuration file for a
+#  Spring Boot application that can be deployed to Oracle Backend for
+#  Spring Boot and Microservices.
+#
+
 spring:
   application:
     name: restservice
@@ -12,7 +18,13 @@ spring:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     show-sql: true
-    
+
+
+  # This section configures Liquibase to automate the schema and reference
+  # data based on the definitions under src/main/resources/db/changelog.
+  # Comment out this section if you do not need Liquibase.
+  # Note that the variables used here will be injected into the deployment
+  # automatically when you deploy with oractl or the IDE plugins.
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
@@ -20,6 +32,10 @@ spring:
     password: ${liquibase.datasource.password}
     enabled: ${LIQUIBASE_ENABLED:true}
     
+  # This section configures an Oracle datasource using UCP.  You can adjust
+  # the pool sizing parameters below in the oracleucp section.
+  # Note that the variables used here will be injected into the deployment
+  # automatically when you deploy with oractl or the IDE plugins.
   datasource:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}
@@ -34,6 +50,11 @@ spring:
       max-pool-size: 30
       shared: true
 
+# This section configures service discovery using the Spring Cloud Eureka Service
+# Registry that is automatically installed and configured in Oracle Backend for
+# Spring Boot and Microservices.  Note that it must be configured to use IP address
+# not hostname since the deployment is in Kubernetes and the hostname allocated to
+# pod will not match.
 eureka:
   instance:
     hostname: ${spring.application.name}
@@ -45,6 +66,7 @@ eureka:
     register-with-eureka: true
     enabled: true
 
+# This section confiugres 
 management:
   endpoint:
     health:

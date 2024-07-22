@@ -1,7 +1,8 @@
-== Basic Spring Web Application
+== Basic Spring Web Application for Oracle Backend for Spring Boot and Microservices
 
-This project contains a web service that will accept HTTP GET requests at
-`http://localhost:8080/greeting`.
+This project contains a web service that can be deployed on [Oracle Backend for Spring Boot and Microservices](https://bit.ly/oraclespringboot)
+and includes configuration for the well-known endpoints provided by the platform.
+The web service will accept HTTP GET requests at `http://localhost:8080/greeting`.
 
 It will respond with a JSON representation of a greeting, as the following listing shows:
 
@@ -32,11 +33,11 @@ response, as the following listing shows:
 ----
 ====
 
-=== Building and running
+=== Building and running locally
 
 [source,bash]
 ----
-./mvnw spring-boot:run
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ----
 
 Then access the endpoint
@@ -45,3 +46,27 @@ Then access the endpoint
 ----
 curl http://localhost:8080/greeting?name=User
 ----
+
+== About the sample code
+
+The [Maven POM file](./pom.xml) contains dependencies for commonly used features.
+You should review the POM file and remove any dependencies that you do not need.
+Note that there may be dependency configuration in the [Spring application configuration file](./src/main/resources/application.yaml)
+as well, which you should remove if you remove the matching dependency.
+
+The [Spring application configuration file](./src/main/resources/application.yaml) contains
+comments that explain what the various configuration included is for.
+You can use this as an example starting point and modify it to suit your needs. 
+
+There are example [Liquibase](./src/main/resources/db/changelog) configuration files
+provided.  If you want to use Liquibase, you will need to modify these to meet
+your needs.  Note that the use of Liquibase is optional.  If you do not wish to 
+use Liquibase you can safely remove the `src/main/resources/db` directory, the
+Liquibase dependency in the POM, the Liquibase build plugin in the POM, and the
+Liquibase configuration in the Spring application configuration file.
+
+This example uses Oracle Universal Connection Pool (UCP) and also includes the
+dependencies for Oracle Wallet authentication and mTLS.  These are optional. 
+If you prefer to use HikariCP, you can remove the dependencies from the POM 
+and the `oracleucp` section in the datasource configuration in the Spring
+application configuration file.
