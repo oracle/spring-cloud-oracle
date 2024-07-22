@@ -51,14 +51,14 @@ curl http://localhost:8080/greeting?name=User
 
 The [Maven POM file](./pom.xml) contains dependencies for commonly used features.
 You should review the POM file and remove any dependencies that you do not need.
-Note that there may be dependency configuration in the [Spring application configuration file](./src/main/resources/application.yaml)
+Note that there may be dependency configuration in the link:./src/main/resources/application.yaml[Spring application configuration file]
 as well, which you should remove if you remove the matching dependency.
 
-The [Spring application configuration file](./src/main/resources/application.yaml) contains
+The link:./src/main/resources/application.yaml[Spring application configuration file] contains
 comments that explain what the various configuration included is for.
 You can use this as an example starting point and modify it to suit your needs. 
 
-There are example [Liquibase](./src/main/resources/db/changelog) configuration files
+There are example link:./src/main/resources/db/changelog[Liquibase] configuration files
 provided.  If you want to use Liquibase, you will need to modify these to meet
 your needs.  Note that the use of Liquibase is optional.  If you do not wish to 
 use Liquibase you can safely remove the `src/main/resources/db` directory, the
