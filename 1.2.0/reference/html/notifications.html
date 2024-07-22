@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Cloud Notifications</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<span id="back-to-index"><a href="index.html">Back to index</a></span><ul class="sectlevel1">
+<li><a href="#cloud-notifications">Cloud Notifications</a>
+<ul class="sectlevel2">
+<li><a href="#using-cloud-notifications">Using Cloud Notifications</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#sample">Sample</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="cloud-notifications"><a class="anchor" href="#cloud-notifications"></a>Cloud Notifications</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://www.oracle.com/in/devops/notifications/">OCI Notifications</a> is a highly available, low latency publish/subscribe (pub/sub) service that sends alerts and messages to Oracle Cloud Functions, email, SMS, and message delivery partners, including Slack, PagerDuty and custom HTTPS endpoint. Spring Cloud module for Oracle Cloud Notifications allows you to create a Topic, then create and publish messages to multiple subscription types such as Oracle Cloud Functions, email, SMS, Slack, PagerDuty and custom HTTPS endpoint.
+A Spring Boot starter is provided to autoconfigure the various Notification components.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-notification<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-notification")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-cloud-notifications"><a class="anchor" href="#using-cloud-notifications"></a>Using Cloud Notifications</h3>
+<div class="paragraph">
+<p>The starter automatically configures and registers a <code>Notification</code> bean in the Spring application context.
+The <code>Notification</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.2.0/javadocs/com/oracle/cloud/spring/notification/package-summary.html">Javadoc</a>) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="kd">private</span> <span class="nc">Notification</span> <span class="n">notification</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">createTopic</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="nc">CreateTopicResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="na">createTopic</span><span class="o">(</span><span class="s">"my-topic"</span><span class="o">,</span> <span class="o">&lt;&lt;</span><span class="n">compartment</span><span class="o">-</span><span class="n">ocid</span><span class="o">&gt;&gt;);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration"><a class="anchor" href="#configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>The Spring Boot Starter for Oracle Cloud Notifications provides the following configuration options:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Default value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spring.cloud.oci.notification.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables the OCI Notifications APIs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="sample"><a class="anchor" href="#sample"></a>Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Notification module.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-07-22 16:11:13 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
