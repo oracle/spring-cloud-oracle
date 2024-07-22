@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.oracle.cloud.spring</groupId>
     <artifactId>spring-cloud-oci-dependencies</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
 
     <name>Spring Cloud OCI Dependencies</name>
@@ -32,6 +32,13 @@
         <connection>scm:git:https://github.com/oracle/spring-cloud-oci.git</connection>
         <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oci.git</developerConnection>
     </scm>
+
+    <properties>
+        <!-- Distribution management -->
+        <repository.id>artifactory</repository.id>
+        <repository.name>spring-cloud-oci-releases</repository.name>
+        <repository.url>changeme</repository.url>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -112,4 +119,17 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

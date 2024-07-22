@@ -10,7 +10,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <groupId>com.oracle.cloud.spring</groupId>
         <artifactId>spring-cloud-oci-samples</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <groupId>com.oracle.cloud.spring.sample.storage</groupId>
     <artifactId>spring-cloud-oci-storage-sample</artifactId>
