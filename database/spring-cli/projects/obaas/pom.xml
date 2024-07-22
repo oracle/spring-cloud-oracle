@@ -1,106 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
-	<groupId>com.example</groupId>
-	<artifactId>obaas-rest-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	
-	<name>obaas-rest-service</name>
-	<description>RESTful web application for Oracle Backend for Spring Boot and Microservices</description>
-	
-	<properties>
-		<java.version>17</java.version>
-		<oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
+    <groupId>com.example</groupId>
+    <artifactId>obaas-rest-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    
+    <name>obaas-rest-service</name>
+    <description>RESTful web application for Oracle Backend for Spring Boot and Microservices</description>
+    
+    <properties>
+        <java.version>17</java.version>
+        <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
         <liquibase.version>4.25.1</liquibase.version>
         <datasource-micrometer-spring-boot.version>1.0.3</datasource-micrometer-spring-boot.version>
-	</properties>
-	
-	<dependencies>
-		<!-- Spring WebMVC for REST support.                                        -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+    </properties>
+    
+    <dependencies>
+        <!-- Spring WebMVC for REST support.                                        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-		<!-- This is for Spring Data JPA.  You could use Spring Data JDBC instead.  -->
-		<dependency>
+        <!-- This is for Spring Data JPA.  You could use Spring Data JDBC instead.  -->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-		<!-- This adds Oracle Universal Connection Pool (UCP) which gives you       -->
-		<!-- access to high availability features of Oracle.  This is optional, you -->
-		<!-- can remove this to use HikariCP instead.                               -->
+        <!-- This adds Oracle Universal Connection Pool (UCP) which gives you       -->
+        <!-- access to high availability features of Oracle.  This is optional, you -->
+        <!-- can remove this to use HikariCP instead.                               -->
         <dependency>
-			<groupId>com.oracle.database.spring</groupId>
-			<artifactId>oracle-spring-boot-starter-ucp</artifactId>
-			<version>${oracle-springboot-starter.version}</version>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+            <version>${oracle-springboot-starter.version}</version>
             <type>pom</type>
-		</dependency>
-		<!-- This adds support for Oracle Wallet based authentication and mTLS.     -->
-		<dependency>
-    		<groupId>com.oracle.database.spring</groupId>
-    		<artifactId>oracle-spring-boot-starter-wallet</artifactId>
-    		<version>${oracle-springboot-starter.version}</version>
-    		<type>pom</type>
-		</dependency>
-		
-		<!-- This dependency allows you to use Liquibase to manage your schema and  -->
-		<!-- reference data.  Enable it in the application.yaml and edit the files  -->
- 		<!-- in src/main/resources/db/changelog to add your definitions and data.   -->
-		<!-- If you comment this out, or remove it, also comment/remove the         -->
-		<!-- liquibase plugin in the build section below.                           -->
-		<dependency>
+        </dependency>
+        <!-- This adds support for Oracle Wallet based authentication and mTLS.     -->
+        <dependency>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+            <version>${oracle-springboot-starter.version}</version>
+            <type>pom</type>
+        </dependency>
+        
+        <!-- This dependency allows you to use Liquibase to manage your schema and  -->
+        <!-- reference data.  Enable it in the application.yaml and edit the files  -->
+         <!-- in src/main/resources/db/changelog to add your definitions and data.   -->
+        <!-- If you comment this out, or remove it, also comment/remove the         -->
+        <!-- liquibase plugin in the build section below.                           -->
+        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
         </dependency> 
 
-  		<!-- This enables Spring Actuator which provides monitoring, metrics, etc.  -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<!-- This adds metrics for data sources.                                    -->
+          <!-- This enables Spring Actuator which provides monitoring, metrics, etc.  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- This adds metrics for data sources.                                    -->
         <dependency>
             <groupId>net.ttddyy.observation</groupId>
             <artifactId>datasource-micrometer-spring-boot</artifactId>
             <version>${datasource-micrometer-spring-boot.version}</version>
         </dependency>
-		
-		<!-- Spring test support.                                                   -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        
+        <!-- Spring test support.                                                   -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<!-- This allows native image compilation (optional)                    -->
-			<plugin>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- This allows native image compilation (optional)                    -->
+            <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
             </plugin>
-			<!-- This enables Liquibase (optional)                                  -->
+            <!-- This enables Liquibase (optional)                                  -->
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
             </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
 </project>
