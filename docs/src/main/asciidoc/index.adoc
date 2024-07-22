@@ -6,7 +6,7 @@
 
 include::_attributes.adoc[]
 
-Documentation for version *{project-version}*
+Documentation for version: *{project-version}*
 
 == Introduction
 
