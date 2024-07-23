@@ -61,8 +61,8 @@ Using the base URL, the following APIs can be invoked:
 
 ## References
 * [OCI Logging Service](https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm)
-* [Spring Cloud OCI - Documentation](#)
-* [Spring Cloud OCI - Open Source](https://github.com/oracle/spring-cloud-oci)
+* [Spring Cloud Oracle - Documentation](#)
+* [Spring Cloud Oracle - Open Source](https://github.com/oracle/spring-cloud-oci)
 * [OCI SDK - Documentation](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdks.htm)
 
 ## Contributing

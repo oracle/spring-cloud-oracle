@@ -19,8 +19,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <version>1.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Spring Cloud OCI</name>
-    <description>Spring Cloud OCI</description>
+    <name>Spring Cloud Oracle</name>
+    <description>Spring Cloud Oracle</description>
     <url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
 
     <organization>

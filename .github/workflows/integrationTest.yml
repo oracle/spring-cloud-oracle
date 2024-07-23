@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven
 # Integration tests for github are disabled temporarily
 
-name: Run the Integration Tests for Spring Cloud OCI
+name: Run the Integration Tests for Spring Cloud Oracle
 
 on:
   push:
