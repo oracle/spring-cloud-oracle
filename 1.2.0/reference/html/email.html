@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Email Delivery</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<span id="back-to-index"><a href="index.html">Back to index</a></span><ul class="sectlevel1">
+<li><a href="#email-delivery">Email Delivery</a>
+<ul class="sectlevel2">
+<li><a href="#configuring-email-delivery">Configuring Email Delivery</a></li>
+<li><a href="#using-mailsender">Using MailSender</a></li>
+<li><a href="#using-javamailsender">Using JavaMailSender</a></li>
+<li><a href="#sample">Sample</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="email-delivery"><a class="anchor" href="#email-delivery"></a>Email Delivery</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/Email/home.htm">Email Delivery</a> module provides an implementation of the Spring Mail interface, implementing MailSender and JavaMailSender interfaces to send email using OCI Email Delivery.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter-email<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-email")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuring-email-delivery"><a class="anchor" href="#configuring-email-delivery"></a>Configuring Email Delivery</h3>
+<div class="paragraph">
+<p>Email Delivery uses the Spring Mail SMTP configuration properties to configure MailSender and JavaMailSender beans. <a href="https://docs.oracle.com/en-us/iaas/Content/Email/Reference/gettingstarted_topic-create-smtp-credentials.htm#top">Create SMTP credentials for OCI</a> and use these to configure your username and password in Spring.</p>
+</div>
+<div class="paragraph">
+<p>Your OCI SMTP endpoint can be found on the OCI Email Delivery Console.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">mail</span><span class="pi">:</span>
+    <span class="na">host</span><span class="pi">:</span> <span class="s">${OCI_SMTP_HOST}</span>
+    <span class="na">username</span><span class="pi">:</span> <span class="s">${OCI_SMTP_USERNAME}</span>
+    <span class="na">password</span><span class="pi">:</span> <span class="s">${OCI_SMTP_PASSWORD}</span>
+    <span class="c1"># Port 25 or 587 may be used. 587 is default.</span>
+    <span class="na">port</span><span class="pi">:</span> <span class="s">587</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-mailsender"><a class="anchor" href="#using-mailsender"></a>Using MailSender</h3>
+<div class="paragraph">
+<p>For simple emails, use the MailSender interface. The following sample shows how to send an email with the MailSender interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmailService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">MailSender</span> <span class="n">mailSender</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">EmailService</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ociMailSender"</span><span class="o">)</span> <span class="nc">MailSender</span> <span class="n">mailSender</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">mailSender</span> <span class="o">=</span> <span class="n">mailSender</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendSimpleMail</span><span class="o">(</span>
+            <span class="nc">String</span> <span class="n">from</span><span class="o">,</span>
+            <span class="nc">String</span> <span class="n">to</span><span class="o">,</span>
+            <span class="nc">String</span> <span class="n">subject</span><span class="o">,</span>
+            <span class="nc">String</span> <span class="n">text</span>
+    <span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SimpleMailMessage</span> <span class="n">message</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleMailMessage</span><span class="o">();</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">setFrom</span><span class="o">(</span><span class="n">from</span><span class="o">);</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">setTo</span><span class="o">(</span><span class="n">to</span><span class="o">);</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">setSubject</span><span class="o">(</span><span class="n">subject</span><span class="o">);</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+        <span class="n">mailSender</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-javamailsender"><a class="anchor" href="#using-javamailsender"></a>Using JavaMailSender</h3>
+<div class="paragraph">
+<p>For more complex emails, such as those with attachments, use the JavaMailSender interface. The following example shows how to send an email with the JavaMailSender API.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmailService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">JavaMailSender</span> <span class="n">javaMailSender</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">EmailService</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ociJavaMailSender"</span><span class="o">)</span> <span class="nc">JavaMailSender</span> <span class="n">javaMailSender</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">javaMailSender</span> <span class="o">=</span> <span class="n">javaMailSender</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sendJavaMail</span><span class="o">(</span>
+            <span class="nc">String</span> <span class="n">from</span><span class="o">,</span>
+            <span class="nc">String</span> <span class="n">to</span><span class="o">,</span>
+            <span class="nc">String</span> <span class="n">subject</span><span class="o">,</span>
+            <span class="nc">String</span> <span class="n">text</span><span class="o">,</span>
+            <span class="nc">File</span> <span class="n">fileAttachment</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">MessagingException</span> <span class="o">{</span>
+        <span class="nc">MimeMessage</span> <span class="n">message</span> <span class="o">=</span> <span class="n">javaMailSender</span><span class="o">.</span><span class="na">createMimeMessage</span><span class="o">();</span>
+        <span class="nc">Multipart</span> <span class="n">multipartContent</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MimeMultipart</span><span class="o">();</span>
+        <span class="nc">MimeBodyPart</span> <span class="n">textContent</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MimeBodyPart</span><span class="o">();</span>
+        <span class="n">textContent</span><span class="o">.</span><span class="na">setContent</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="s">"text/html"</span><span class="o">);</span>
+        <span class="n">multipartContent</span><span class="o">.</span><span class="na">addBodyPart</span><span class="o">(</span><span class="n">textContent</span><span class="o">);</span>
+
+        <span class="nc">MimeBodyPart</span> <span class="n">attachmentContent</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MimeBodyPart</span><span class="o">();</span>
+        <span class="nc">DataSource</span> <span class="n">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileDataSource</span><span class="o">(</span><span class="n">fileAttachment</span><span class="o">);</span>
+        <span class="n">attachmentContent</span><span class="o">.</span><span class="na">setDataHandler</span><span class="o">(</span><span class="k">new</span> <span class="nc">DataHandler</span><span class="o">(</span><span class="n">source</span><span class="o">));</span>
+        <span class="n">attachmentContent</span><span class="o">.</span><span class="na">setFileName</span><span class="o">(</span><span class="n">fileAttachment</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">multipartContent</span><span class="o">.</span><span class="na">addBodyPart</span><span class="o">(</span><span class="n">attachmentContent</span><span class="o">);</span>
+
+        <span class="n">message</span><span class="o">.</span><span class="na">setFrom</span><span class="o">(</span><span class="n">from</span><span class="o">);</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">setRecipients</span><span class="o">(</span><span class="nc">Message</span><span class="o">.</span><span class="na">RecipientType</span><span class="o">.</span><span class="na">TO</span><span class="o">,</span> <span class="nc">InternetAddress</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">to</span><span class="o">));</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">setSubject</span><span class="o">(</span><span class="n">subject</span><span class="o">);</span>
+        <span class="n">message</span><span class="o">.</span><span class="na">setContent</span><span class="o">(</span><span class="n">multipartContent</span><span class="o">);</span>
+        <span class="n">javaMailSender</span><span class="o">.</span><span class="na">send</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sample"><a class="anchor" href="#sample"></a>Sample</h3>
+<div class="paragraph">
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-email-sample">here</a> contains examples that demonstrate the usage of Spring Cloud OCI Email module.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-07-22 16:11:13 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
