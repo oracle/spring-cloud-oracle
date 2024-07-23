@@ -1,8 +1,8 @@
-# OCI Storage - Spring Cloud OCI Sample
+# OCI Storage - Spring Cloud Oracle Sample
 
-This sample demonstrates getting started quickly with Spring Cloud OCI to work with Oracle Cloud Infrastructure (OCI) Storage Service. This sample implements simple REST service which internally uses Spring Cloud OCI Storage APIs.
+This sample demonstrates getting started quickly with Spring Cloud Oracle to work with Oracle Cloud Infrastructure (OCI) Storage Service. This sample implements simple REST service which internally uses Spring Cloud Oracle OCI Storage APIs.
 
-## What is Spring Cloud OCI?
+## What is Spring Cloud Oracle?
 
 Spring Cloud for OCI, eases the integration of OCI services with the help of internal OCI Java SDK. It offers a convenient way to interact with OCI-provided services using well-known Spring idioms and APIs, such as the messaging or storage API. Developers can build applications around the hosted services without concern for infrastructure or maintenance. Spring Cloud for OCI contains autoconfiguration support for OCI-managed services.
 
@@ -45,7 +45,7 @@ git clone https://github.com/oracle/spring-cloud-oci.git spring-cloud-oci
 
 1. Run `mvn clean install` from the root directory of the repository code.
 
-1. Set appropriate values at `application.properties` for the following properties. (Refer to the Spring Cloud OCI docs for more details.)
+1. Set appropriate values at `application.properties` for the following properties. (Refer to the Spring Cloud Oracle docs for more details.)
 ```
 spring.cloud.oci.region.static = US_ASHBURN_1
 spring.cloud.oci.compartment.static = <COMPARTMENT_OCID>
@@ -64,8 +64,8 @@ Launch the Swagger UI (http://localhost:8080/swagger-ui/index.html) to view all 
 ![Swagger UI](./images/swagger-ui.png)
 
 ## References
-* [Spring Cloud OCI - Documentation](#)
-* [Spring Cloud OCI - Open Source](https://github.com/oracle/spring-cloud-oci)
+* [Spring Cloud Oracle - Documentation](#)
+* [Spring Cloud Oracle - Open Source](https://github.com/oracle/spring-cloud-oci)
 * [OCI SDK - Documentation](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdks.htm)
 
 ## Contributing

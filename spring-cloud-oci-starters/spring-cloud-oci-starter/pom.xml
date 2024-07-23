@@ -15,8 +15,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </parent>
 
     <artifactId>spring-cloud-oci-starter</artifactId>
-    <name>Spring Cloud OCI Starter Module</name>
-    <description>Spring Cloud OCI Starter Module</description>
+    <name>Spring Cloud Oracle Starter Module</name>
+    <description>Spring Cloud Oracle Starter Module</description>
     <url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
 
     <organization>

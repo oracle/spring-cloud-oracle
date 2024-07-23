@@ -14,8 +14,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </parent>
 
     <artifactId>spring-cloud-oci-core</artifactId>
-    <name>Spring Cloud OCI Core Module</name>
-    <description>Spring Cloud OCI Core Module</description>
+    <name>Spring Cloud Oracle OCI Core Module</name>
+    <description>Spring Cloud Oracle OCI Core Module</description>
     <url>https://github.com/oracle/spring-cloud-oci/#spring-cloud-oci-documentation</url>
 
     <organization>
