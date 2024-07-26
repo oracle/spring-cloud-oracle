@@ -46,7 +46,7 @@ or
 To check out the project manually and build it from source, do the following:
 
 ```shell
-git clone https://github.com/oracle/spring-cloud-oci.git
+git clone https://github.com/oracle/spring-cloud-oracle.git
 cd spring-cloud-oci
 mvn package
 ```
