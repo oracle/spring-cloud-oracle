@@ -39,7 +39,7 @@ Samples for each service supported by Spring Cloud Oracle below:
 
 If you would like to clone this repo in your OCI tenancy, click on 'Open in Code Editor' button below to clone and launch OCI Code Editor for this sample.
 
-[<img src="https://raw.githubusercontent.com/oracle-devrel/oci-code-editor-samples/main/images/open-in-code-editor.png" />](https://cloud.oracle.com/?region=home&cs_repo_url=https://github.com/oracle/spring-cloud-oci.git&cs_open_ce=true&cs_readme_path=spring-cloud-oci-samples/spring-cloud-oci-storage/README.md)
+[<img src="https://raw.githubusercontent.com/oracle-devrel/oci-code-editor-samples/main/images/open-in-code-editor.png" />](https://cloud.oracle.com/?region=home&cs_repo_url=https://github.com/oracle/spring-cloud-oracle.git&cs_open_ce=true)
 
 or
 
@@ -47,7 +47,7 @@ To check out the project manually and build it from source, do the following:
 
 ```shell
 git clone https://github.com/oracle/spring-cloud-oracle.git
-cd spring-cloud-oci
+cd spring-cloud-oracle
 mvn package
 ```
 
