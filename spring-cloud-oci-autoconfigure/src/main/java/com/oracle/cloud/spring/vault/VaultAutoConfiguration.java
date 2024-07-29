@@ -43,6 +43,7 @@ public class VaultAutoConfiguration {
     @Bean
     @RefreshScope
     @ConditionalOnMissingBean(VaultTemplate.class)
+    @ConditionalOnProperty(name = "spring.cloud.oci.vault.vault-id")
     public VaultTemplate vault(Vaults vaults, Secrets secrets) {
         return new VaultTemplateImpl(vaults, secrets, properties.getVaultId(), properties.getCompartment());
     }
