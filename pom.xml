@@ -74,11 +74,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <properties>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2023.0.2</spring-cloud-dependencies.version>
-        <spring-boot-dependencies.version>3.2.7</spring-boot-dependencies.version>
         <spring-framework.version>6.1.10</spring-framework.version>
         <jakarta-mail.version>2.0.3</jakarta-mail.version>
         <oci-sdk.version>3.44.3</oci-sdk.version>
-        <spring-boot-maven-plugin.version>3.2.7</spring-boot-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
@@ -156,7 +154,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
