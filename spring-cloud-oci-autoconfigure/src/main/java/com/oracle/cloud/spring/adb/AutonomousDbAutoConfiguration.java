@@ -33,7 +33,7 @@ public class AutonomousDbAutoConfiguration {
     @Bean
     @RefreshScope
     @ConditionalOnMissingBean(AutonomousDb.class)
-    AutonomousDb getQueueImpl(DatabaseClient databaseClient) {
+    AutonomousDb getAutomousDbImpl(DatabaseClient databaseClient) {
         return new AutonomousDbImpl(databaseClient);
     }
 

@@ -66,6 +66,8 @@ Build:
 make build
 ```
 
+*Note*: If you get a coverage error, please ensure you have up to date jacoco files by running a `clean` first, then run `package`,  `install`, or `build` again.
+
 Clean:
 
 ```shell
