@@ -94,7 +94,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot-maven-plugin.version}</version>
+                    <version>${spring-boot.version}</version>
                     <executions>
                         <execution>
                             <goals>
