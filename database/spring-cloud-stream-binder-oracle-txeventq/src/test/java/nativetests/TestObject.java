@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 
 /*
@@ -26,25 +26,25 @@
 package nativetests;
 
 public class TestObject {
-	private int x;
-	
-	public TestObject(int x) {
-		this.x = x;
-	}
-	
-	public TestObject() {
-		
-	}
-	
-	public int getX() {
-		return this.x;
-	}
-	
-	public void setX(int x) {
-		this.x = x;
-	}
-	
-	public String toString() {
-		return "MyTestObject[x='" + this.x + "']";
-	}
+    private int x;
+
+    public TestObject(int x) {
+        this.x = x;
+    }
+
+    public TestObject() {
+
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public String toString() {
+        return "MyTestObject[x='" + this.x + "']";
+    }
 }

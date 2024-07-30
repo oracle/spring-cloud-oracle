@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -32,10 +32,10 @@ import org.springframework.cloud.stream.binder.ExtendedConsumerProperties;
 import org.springframework.cloud.stream.binder.ExtendedProducerProperties;
 
 public class TxEventQTestBinder
-  extends AbstractTestBinder<JMSMessageChannelBinder, ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> {
+        extends AbstractTestBinder<JMSMessageChannelBinder, ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> {
 
-  @Override
-  public void cleanup() {
-    System.out.println("Got into clean");
-  }
+    @Override
+    public void cleanup() {
+        System.out.println("Got into clean");
+    }
 }

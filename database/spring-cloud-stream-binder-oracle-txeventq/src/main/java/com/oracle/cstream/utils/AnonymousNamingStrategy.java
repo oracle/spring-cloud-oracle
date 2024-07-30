@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -26,7 +26,7 @@ package com.oracle.cstream.utils;
 
 public interface AnonymousNamingStrategy {
 
-	String generateName();
+    String generateName();
 
-	String generateName(String prefix);
+    String generateName(String prefix);
 }

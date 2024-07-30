@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 
 /*
@@ -29,12 +29,12 @@ import com.oracle.cstream.serialize.Serializer;
 
 public class TestObjectSerializer implements Serializer {
 
-	@Override
-	public byte[] serialize(Object data) {
-		if(data instanceof TestObject) {
-			return ((TestObject)data).toString().getBytes();
-		}
-		throw new RuntimeException("Only payloads of type TestObject are supported");
-	}
-	
+    @Override
+    public byte[] serialize(Object data) {
+        if (data instanceof TestObject) {
+            return data.toString().getBytes();
+        }
+        throw new RuntimeException("Only payloads of type TestObject are supported");
+    }
+
 }

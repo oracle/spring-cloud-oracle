@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -25,5 +25,5 @@
 package com.oracle.cstream.serialize;
 
 public interface Deserializer<T> {
-	public T deserialize(byte[] bytes);
+    T deserialize(byte[] bytes);
 }

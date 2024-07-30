@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 
 /*
@@ -29,11 +29,11 @@ import com.oracle.cstream.serialize.Deserializer;
 
 public class TestObjectDeserializer implements Deserializer<TestObject> {
 
-	@Override
-	public TestObject deserialize(byte[] bytes) {
-		String s = new String(bytes);
-		int x = Integer.valueOf(s.substring(16, s.length()-2));
-		return new TestObject(x);
-	}
-	
+    @Override
+    public TestObject deserialize(byte[] bytes) {
+        String s = new String(bytes);
+        int x = Integer.valueOf(s.substring(16, s.length() - 2));
+        return new TestObject(x);
+    }
+
 }

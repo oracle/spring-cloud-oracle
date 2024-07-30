@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -25,13 +25,13 @@
 package com.oracle.cstream.config;
 
 public class JmsProducerProperties {
-	private String serializer = null;
-	
-	public String getSerializer() {
-		return this.serializer;
-	}
-	
-	public void setSerializer(String serializer) {
-		this.serializer = serializer;
-	}
+    private String serializer = null;
+
+    public String getSerializer() {
+        return this.serializer;
+    }
+
+    public void setSerializer(String serializer) {
+        this.serializer = serializer;
+    }
 }
