@@ -6,6 +6,7 @@
 **/*.jar
 **/*.bin
 pom.xml.versionsBackup
+.mvn/
 
 ### STS ###
 .apt_generated
