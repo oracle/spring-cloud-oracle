@@ -11,7 +11,7 @@ The following projects are supported through Spring Cloud Oracle:
 | [Spring Cloud OCI](./spring-cloud-oci/README.md)                      | Use OCI services with well-known Spring idioms and APIs |
 | [Oracle Database Spring Boot Starters](./database/starters/README.md) | Integrate Oracle Database with Spring Boot              |
 
-## Spring Cloud Oracle documentation
+## Documentation
 
 For a deep dive into the project, refer to the Spring Cloud Oracle documentation:
 
