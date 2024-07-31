@@ -41,9 +41,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </licenses>
 
     <scm>
-        <url>https://github.com/oracle/spring-cloud-oci</url>
-        <connection>scm:git:https://github.com/oracle/spring-cloud-oci.git</connection>
-        <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oci.git</developerConnection>
+        <url>https://github.com/oracle/spring-cloud-oracle</url>
+        <connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
+        <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
     </scm>
 
     <properties>
