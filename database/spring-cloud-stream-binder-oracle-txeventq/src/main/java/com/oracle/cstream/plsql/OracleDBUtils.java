@@ -42,7 +42,7 @@ public class OracleDBUtils {
 
     private static final String CREATE_KB2_TEQ =
             "BEGIN "
-                    + "dbms_aqadm.create_sharded_queue(?, multiple_consumers => true);"
+                    + "dbms_aqadm.create_transactional_event_queue(?, multiple_consumers => true);"
                     + "dbms_aqadm.set_queue_parameter(?, 'KEY_BASED_ENQUEUE', 2); "
                     + "dbms_aqadm.set_queue_parameter(?, 'SHARD_NUM', ?); "
                     + "dbms_aqadm.start_queue(?); "
