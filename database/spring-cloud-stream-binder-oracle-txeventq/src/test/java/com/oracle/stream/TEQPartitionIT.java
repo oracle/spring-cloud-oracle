@@ -104,9 +104,7 @@ public class TEQPartitionIT extends
     private static int DB_VERSION = 23;
 
     @Container
-    private static final OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.4-slim-faststart")
-            .withUsername("testuser")
-            .withPassword(("testpwd"));
+    private static final OracleContainer oracleContainer = Util.oracleContainer();
 
     @Override
     protected boolean usesExplicitRouting() {
@@ -120,20 +118,14 @@ public class TEQPartitionIT extends
 
     @BeforeAll
     public static void setBinder() throws Exception {
-        oracleContainer.start();
-        oracleContainer.copyFileToContainer(MountableFile.forClasspathResource("init.sql"), "/tmp/init.sql");
-        oracleContainer.execInContainer("sqlplus", "sys / as sysdba", "@/tmp/init.sql");
+        Util.startOracleContainer(oracleContainer);
         teqBinder = createBinder();
     }
 
     protected static TxEventQTestBinder createBinder() throws Exception {
         PoolDataSource ds = PoolDataSourceFactory.getPoolDataSource();
         try {
-            ds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-            ds.setConnectionPoolName("TEQ_PARTITION_IT");
-            ds.setURL(oracleContainer.getJdbcUrl());
-            ds.setUser(oracleContainer.getUsername());
-            ds.setPassword(oracleContainer.getPassword());
+            Util.configurePoolDataSource(ds, oracleContainer);
         } catch (Exception e) {
             System.out.println("Encountered error: " + e);
         }
