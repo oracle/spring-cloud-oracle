@@ -77,4 +77,4 @@ The Spring Boot Starter for Oracle Cloud Storage provides the following configur
 
 === Sample
 
-A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample[here] contains the examples to demonstrate the usage of OCI Spring Cloud Storage module.
+A sample application provided https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-storage-sample[here] contains the examples to demonstrate the usage of OCI Spring Cloud Storage module.

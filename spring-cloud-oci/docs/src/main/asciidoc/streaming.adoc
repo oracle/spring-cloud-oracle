@@ -60,4 +60,4 @@ The Spring Boot Starter for Oracle Cloud Stream provides the following configura
 
 === Sample
 
-A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Streaming module.
+A sample application provided https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Streaming module.
