@@ -107,4 +107,4 @@ The Spring Boot Starter for Oracle Vault provides the following configuration op
 
 === Sample
 
-A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Vault module.
+A sample application provided https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-vault-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Vault module.

@@ -51,7 +51,7 @@ There are a variety of resources to help you learn how to use Spring Cloud Oracl
 
 ==== Sample Applications
 
-The easiest way to learn how to use Spring Cloud Oracle is to consult the https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples[sample applications on Github].
+The easiest way to learn how to use Spring Cloud Oracle is to consult the https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples[sample applications on Github].
 Spring Cloud Oracle provides sample applications which demonstrate how to use every integration in the library.
 The following table highlights several samples of the most used integrations in Spring Cloud Oracle.
 
@@ -59,34 +59,34 @@ The following table highlights several samples of the most used integrations in 
 ^| OCI Integration ^| Sample Application
 
 | Cloud Storage
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample[spring-cloud-oci-storage-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-storage-sample[spring-cloud-oci-storage-sample]
 
 | Cloud Notification
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample[spring-cloud-oci-notification-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-notification-sample[spring-cloud-oci-notification-sample]
 
 | Cloud Generative AI
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[spring-cloud-oci-gen-ai-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[spring-cloud-oci-gen-ai-sample]
 
 | Cloud Logging
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample[spring-cloud-oci-logging-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-logging-sample[spring-cloud-oci-logging-sample]
 
 | Cloud Streaming
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample[spring-cloud-oci-streaming-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample[spring-cloud-oci-streaming-sample]
 
 | Cloud Function
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-function-sample[spring-cloud-oci-function-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-function-sample[spring-cloud-oci-function-sample]
 
 | Cloud Queue
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample[spring-cloud-oci-queue-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-queue-sample[spring-cloud-oci-queue-sample]
 
 | Oracle Autonomous Database
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-samples[spring-cloud-oci-adb-samples]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-adb-samples[spring-cloud-oci-adb-samples]
 
 | Generative AI
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[spring-cloud-oci-gen-ai-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample[spring-cloud-oci-gen-ai-sample]
 
 | Vault
-| https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample[spring-cloud-oci-vault-sample]
+| https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-vault-sample[spring-cloud-oci-vault-sample]
 
 |===
 
