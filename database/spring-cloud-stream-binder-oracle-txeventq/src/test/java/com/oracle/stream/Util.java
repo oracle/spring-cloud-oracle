@@ -2,17 +2,17 @@ package com.oracle.stream;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.UUID;
 
 import oracle.ucp.jdbc.PoolDataSource;
 import org.testcontainers.oracle.OracleContainer;
 import org.testcontainers.utility.MountableFile;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class Util {
     public static OracleContainer oracleContainer() {
-        return new OracleContainer("gvenzl/oracle-free:23.4-slim-faststart")
+        return new OracleContainer("gvenzl/oracle-free:23.5-slim-faststart")
+                .withStartupTimeout(Duration.ofMinutes(2)) // Needed for M1 Mac
                 .withUsername("testuser")
                 .withPassword(("testpwd"));
     }
