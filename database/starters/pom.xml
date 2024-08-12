@@ -192,12 +192,6 @@
         <version>${spring-boot-dependencies.version}</version>
         <scope>test</scope>
       </dependency>
-
-      <dependency>
-        <groupId>com.oracle.database.jdbc</groupId>
-        <artifactId>ucp</artifactId>
-        <version>${ojdbc.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 

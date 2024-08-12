@@ -47,6 +47,14 @@
         <org.springframework.cloud.version>4.1.1</org.springframework.cloud.version>
         <org.springframework.boot.version>3.2.8</org.springframework.boot.version>
         <testcontainers.version>1.20.1</testcontainers.version>
+        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+        <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+
+        <!-- Distribution management -->
+        <repository.id>artifactory</repository.id>
+        <repository.name>spring-cloud-oci-releases</repository.name>
+        <repository.url>changeme</repository.url>
     </properties>
 
     <dependencyManagement>
@@ -210,6 +218,96 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <skip>false</skip>
+                    <author>true</author>
+                    <header>${project.name}</header>
+                    <reportOutputDirectory>${project.build.directory}/site/${project.version}/apidocs</reportOutputDirectory>
+                    <excludePackageNames>com.oracle.cloud.spring.sample.*</excludePackageNames>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <!--suppress UnresolvedMavenProperty -->
+                                    <file>${session.executionRootDirectory}/LICENSE.txt</file>
+                                    <type>txt</type>
+                                    <classifier>LICENSE</classifier>
+                                </artifact>
+                                <artifact>
+                                    <!--suppress UnresolvedMavenProperty -->
+                                    <file>${session.executionRootDirectory}/THIRD_PARTY_LICENSES.txt</file>
+                                    <type>txt</type>
+                                    <classifier>THIRD_PARTY_LICENSES</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
