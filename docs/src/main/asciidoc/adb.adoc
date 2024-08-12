@@ -30,7 +30,7 @@ dependencies {
 === Using Autonomous Database
 
 The starter automatically configures and registers an `AutonomousDb` bean in the Spring application context.
-The `AutonomousDb` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/adb/package-summary.html[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
+The `AutonomousDb` bean (https://oracle.github.io/spring-cloud-oracle/{project-version}/javadocs/com/oracle/cloud/spring/adb/package-summary.html[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
 delete an Autonomous Database and generate a wallet for an Autonomous Database.
 
 [source,java]

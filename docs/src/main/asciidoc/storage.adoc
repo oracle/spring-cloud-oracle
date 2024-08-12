@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Storage
 
 The starter automatically configures and registers a `Storage` bean in the Spring application context.
-The `Storage` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/storage/package-summary.html[Javadoc]) can be used to list, create, update or delete buckets and objects.
+The `Storage` bean (https://oracle.github.io/spring-cloud-oracle/{project-version}/javadocs/com/oracle/cloud/spring/storage/package-summary.html[Javadoc]) can be used to list, create, update or delete buckets and objects.
 
 [source,java]
 ----
@@ -46,7 +46,7 @@ public void createBucketAndUploadFile() {
 === Cloud Storage Objects Spring Resources
 
 https://docs.spring.io/spring/docs/current/spring-framework-reference/html/resources.html[Spring Resources] are an abstraction for several low-level resources, such as file system files, classpath files, servlet context-relative files, etc.
-Spring Cloud OCI adds a new resource type for Oracle Cloud Object Storage.
+Spring Cloud Oracle adds a new resource type for Oracle Cloud Object Storage.
 
 The Spring Resource Abstraction for Oracle Cloud Storage allows Object Storage objects to be accessed by their URL using the `@Value` annotation or the Spring application context:
 

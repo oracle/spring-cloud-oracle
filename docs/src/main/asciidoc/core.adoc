@@ -2,9 +2,9 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 [#spring-cloud-oci-core]
-== Spring Cloud OCI Core
+== Spring Cloud Oracle Core
 
-Spring Cloud OCI provides a Spring Boot starter to auto-configure the core components.
+Spring Cloud Oracle provides a Spring Boot starter to auto-configure the core components.
 
 Maven coordinates:
 
@@ -27,7 +27,7 @@ dependencies {
 
 === Authentication Configuration
 
-Spring Cloud OCI allows you to authenticate with OCI using various available options.
+Spring Cloud Oracle allows you to authenticate with OCI using various available options.
 
 ==== Configuration File Based Authentication
 
