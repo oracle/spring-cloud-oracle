@@ -116,4 +116,4 @@ public class EmailService {
 
 === Sample
 
-A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-email-sample[here] contains examples that demonstrate the usage of Spring Cloud OCI Email module.
+A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-email-sample[here] contains examples that demonstrate the usage of Spring Cloud Oracle Email module.

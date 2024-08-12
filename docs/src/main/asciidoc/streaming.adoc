@@ -29,7 +29,7 @@ dependencies {
 === Using Cloud Streaming
 
 The starter automatically configures and registers a `Streaming` bean in the Spring application context.
-The `Streaming` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/streaming/package-summary.html[Javadoc]) can be used to create streamPool, stream in OCI and ingest and consume high-volume data streams with a streamId
+The `Streaming` bean (https://oracle.github.io/spring-cloud-oracle/{project-version}/javadocs/com/oracle/cloud/spring/streaming/package-summary.html[Javadoc]) can be used to create streamPool, stream in OCI and ingest and consume high-volume data streams with a streamId
 
 [source,java]
 ----

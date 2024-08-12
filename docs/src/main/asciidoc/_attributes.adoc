@@ -15,5 +15,5 @@
 :docinfo: shared,private
 
 :sc-ext: java
-:project-full-name: Spring Cloud OCI
+:project-full-name: Spring Cloud Oracle
 :all: {asterisk}{asterisk}
