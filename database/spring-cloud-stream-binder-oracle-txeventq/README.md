@@ -5,13 +5,23 @@ This version of the binder supports Spring Boot 3+/Spring framework 6+.
 ## Getting started
 
 Install the project after cloning this repo.
-```
-> mvn clean install
+```shell
+mvn clean install
 ```
 
 If you want to skip running the tests build using the following command: 
+```shell
+mvn clean install -DskipTests
 ```
-> mvn clean install -DskipTests
+
+### Running Integration Tests
+
+The integration test suite requires a local docker environment supporting `@TestContainers`, used to create a Oracle Database container for the duration of the tests. 
+
+To run the integration tests use the following command:
+
+```shell
+mvn integration-test
 ```
 
 To use in an application project, add the following dependencies apart from regular spring-cloud-stream project dependencies:
