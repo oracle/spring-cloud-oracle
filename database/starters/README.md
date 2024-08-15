@@ -4,8 +4,9 @@ Oracle Database Spring Starters implements Spring Boot Starters to facilitate th
 
 The following starters are provided:
 
-| Starter                                                              | Description                                                                     |
-|----------------------------------------------------------------------|---------------------------------------------------------------------------------|
-| [Oracle Spring Boot Starter UCP](oracle-spring-boot-starter-ucp)     | Autoconfigure UCP for Oracle Database, over the default Hikari Connection Pool. |
-| [Oracle Spring Boot Starter AQJMS](oracle-spring-boot-starter-aqjms) | Autoconfigure Oracle Database AQJMS Connections.                                |
+| Starter                                                                                    | Description                                                                     |
+|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [Oracle Spring Boot Starter UCP](oracle-spring-boot-starter-ucp)                           | Autoconfigure UCP for Oracle Database, over the default Hikari Connection Pool. |
+| [Oracle Spring Boot Starter AQJMS](oracle-spring-boot-starter-aqjms)                       | Autoconfigure Oracle Database AQJMS Connections.                                |
+| [Oracle Spring Boot Starter JSON Collections](oracle-spring-boot-starter-json-collections) | Autoconfiguration and utilities for JSON with Oracle Database                   |
 
