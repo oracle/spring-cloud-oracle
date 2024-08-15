@@ -12,11 +12,7 @@ import oracle.soda.OracleDocument;
 import oracle.soda.OracleException;
 import oracle.sql.json.OracleJsonFactory;
 import org.eclipse.yasson.YassonJsonb;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.stereotype.Component;
 
-@Component
-@ConditionalOnClass({OracleDocument.class, YassonJsonb.class})
 public class SODA {
     private final OracleJsonFactory oracleJsonFactory;
     private final YassonJsonb jsonb;
