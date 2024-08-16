@@ -56,6 +56,7 @@
     <module>oracle-spring-boot-starter-ucp</module>
     <module>oracle-spring-boot-starter-aqjms</module>
     <module>oracle-spring-boot-starter-json-collections</module>
+    <module>oracle-spring-boot-starter-samples</module>
   </modules>
 
   <properties>
