@@ -1,8 +1,10 @@
 # Spring Cloud Oracle
 
-Many Oracle customers make extensive use of Spring in their environments. They use Oracle Database and Oracle Cloud Infrastructure (OCI) services. Oracle Database is available in OCI, Azure and GCP, making it truly a multi-cloud database, and on-premises including in containers and Kubernetes. Oracle is trusted by many of the world’s top businesses, governments and other organizations to protect their most sensitive data.
+Many Oracle customers make extensive use of Spring in their environments. They use Oracle Database and Oracle Cloud Infrastructure (OCI) services. Oracle Database is available in OCI, Azure, GCP and AWS, making it truly a multi-cloud database, and on-premises including in containers and Kubernetes. Oracle is trusted by many of the world’s top businesses, governments and other organizations to protect their most sensitive data.
 
-Spring Cloud Oracle 1.2.0 is the most recent release of the Spring Cloud Oracle project which brings together in one place Spring Boot Starters, autoconfiguration and sample code for Oracle Database and OCI services and facilitates the integration of Oracle with Spring Boot in an idiomatic and flexible manner.
+*Spring Cloud Oracle* provides tools and services to integrate Oracle Cloud Infrastructure and Software with the Spring ecosystem in an idiomatic and flexible manner. It is designed to simplify microservices development that uses Oracle Database, middleware, and messaging on Oracle and non-Oracle clouds as well as on-premises.     
+
+Spring Cloud Oracle 1.2.0 is the most recent release which brings together in one place Spring Boot Starters, autoconfiguration and sample code for Oracle Database and OCI services.
 
 Spring Cloud Oracle goes beyond simply wrapping the OCI APIs in starters and adds idiomatic ways to integrate with Spring including for example the ability to use OCI Vault as a Spring Property Source and OCI Object Storage as a Spring Resource provider. We also provide Spring CLI integration with a project catalog to help you create Spring Boot projects using Oracle.
 
