@@ -14,6 +14,7 @@
 
     <artifactId>oracle-spring-boot-starter-samples</artifactId>
     <version>24.1.0</version>
+    <packaging>pom</packaging>
 
     <name>Oracle Spring Boot Starter - Samples</name>
     <description>Oracle Spring Boot Starter Sample Parent Module</description>
@@ -46,4 +47,23 @@
         <connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
         <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
     </scm>
+
+    <modules>
+        <module>oracle-spring-boot-sample-ucp-jpa</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Skip deploy of sample code-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
