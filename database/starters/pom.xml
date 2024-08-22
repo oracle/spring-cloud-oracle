@@ -70,7 +70,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
-    <ojdbc.version>23.4.0.24.05</ojdbc.version>
+    <ojdbc.version>23.5.0.24.07</ojdbc.version>
     <oracledb-messaging.version>23.3.1.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
     <micrometer.version>1.11.5</micrometer.version>
