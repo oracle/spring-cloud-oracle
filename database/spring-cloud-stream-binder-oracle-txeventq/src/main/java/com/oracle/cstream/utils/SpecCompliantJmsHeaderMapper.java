@@ -85,10 +85,10 @@ public class SpecCompliantJmsHeaderMapper extends DefaultJmsHeaderMapper {
                 compliantHeaders.put(entry.getKey(), value.toString());
             } else if (!SUPPORTED_PROPERTY_TYPES.contains(value.getClass())) {
                 if (value instanceof Serializable) {
-                    logger.info("Serializing {} header object", value);
+                    logger.debug("Serializing {} header object", value);
                     compliantHeaders.put(entry.getKey(), SerializationUtils.serialize(value));
                 } else {
-                    logger.info("Storing String representation for header: {}", entry.getKey());
+                    logger.debug("Storing String representation for header: {}", entry.getKey());
                     compliantHeaders.put(entry.getKey(), value.toString());
                 }
             }

@@ -1,0 +1,33 @@
+phrase: "Spring Cloud Stream simplifies event-driven microservices with powerful messaging capabilities."
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        wordSupplier-out-0:
+          destination: toUpperCase-in-0
+          group: t1
+          producer:
+            required-groups:
+              - t1
+        stdoutConsumer-in-0:
+          destination: toUpperCase-out-0
+          group: t1
+    function:
+      definition: wordSupplier;toUpperCase;stdoutConsumer
+
+  datasource:
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    url: ${JDBC_URL}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSourceImpl
+    oracleucp:
+      initial-pool-size: 1
+      min-pool-size: 1
+      max-pool-size: 30
+      connection-pool-name: TxEventQSample
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+server:
+  port: 9001
+

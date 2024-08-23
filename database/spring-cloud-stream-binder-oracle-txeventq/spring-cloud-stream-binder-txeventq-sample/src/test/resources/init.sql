@@ -1,0 +1,11 @@
+alter session set container=freepdb1;
+grant unlimited tablespace to testuser;
+grant select_catalog_role to testuser;
+grant execute on dbms_aq to testuser;
+grant execute on dbms_aqadm to testuser;
+grant execute on dbms_aqin to testuser;
+grant execute on dbms_aqjms_internal to testuser;
+grant execute on dbms_teqk to testuser;
+grant execute on DBMS_RESOURCE_MANAGER to testuser;
+grant select on sys.aq$_queue_shards to testuser;
+grant select on user_queue_partition_assignment_table to testuser;
