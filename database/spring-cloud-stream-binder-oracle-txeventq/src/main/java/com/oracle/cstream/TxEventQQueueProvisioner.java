@@ -37,6 +37,7 @@ import jakarta.jms.Topic;
 
 import java.sql.SQLException;
 
+import oracle.jakarta.jms.AQjmsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.stream.binder.ExtendedConsumerProperties;
@@ -49,6 +50,7 @@ import org.springframework.jms.support.JmsUtils;
 public class TxEventQQueueProvisioner
         implements
         ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> {
+    private static final int CODE_TOPIC_NOT_FOUND = 243;
 
     private final ConnectionFactory connectionFactory;
 
@@ -247,7 +249,7 @@ public class TxEventQQueueProvisioner
 
 
     private String formatName(String name) {
-        // surround with double quotes 
+        // surround with double quotes
         // to use exact name for topic
         return "\"" + name + "\"";
     }
@@ -262,7 +264,11 @@ public class TxEventQQueueProvisioner
         try {
             topic = session.createTopic(topicName);
         } catch (JMSException e) {
-            logger.info("Exception: {}", e.getMessage());
+            if (e instanceof AQjmsException aqe && aqe.getErrorNumber() == CODE_TOPIC_NOT_FOUND) {
+                logger.debug(e.getMessage());
+            } else {
+                logger.info("Exception: {}", e.getMessage());
+            }
             return null;
         }
         return topic;
