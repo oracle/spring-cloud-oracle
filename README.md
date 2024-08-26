@@ -10,10 +10,11 @@ Spring Cloud Oracle goes beyond simply wrapping the OCI APIs in starters and add
 
 The following sub-projects are included in Spring Cloud Oracle:
 
-| Project                                                               | Description                                             |
-|-----------------------------------------------------------------------|---------------------------------------------------------|
-| [Spring Cloud OCI](./spring-cloud-oci/README.md)                      | Use OCI services with well-known Spring idioms and APIs |
-| [Oracle Database Spring Boot Starters](./database/starters/README.md) | Integrate Oracle Database with Spring Boot              |
+| Project                                                                                                           | Description                                                            |
+|-------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| [Spring Cloud OCI](./spring-cloud-oci/README.md)                                                                  | Use OCI services with well-known Spring idioms and APIs                |
+| [Oracle Database Spring Boot Starters](./database/starters/README.md)                                             | Integrate Oracle Database with Spring Boot                             |
+| [Spring Cloud Stream Binder for Oracle TxEventQ](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | Build highly scalable event-driven microservices with Oracle TxEventQ. |
 
 ## Some key features
 
@@ -42,6 +43,7 @@ Spring Cloud Oracle has a strong and constantly evolving roadmap as we work to p
 
 - Spring Cloud Stream Binder for Oracle Transactional Event Queues
 - A Spring Boot Starter for JSON Collections in the Oracle Database
+- A Spring Boot Starter for OKafka and TxEventQ
 - OpenRewrite recipes to ease migration from HikariCP to Oracle Universal Connection Pool
 - Further simplification of running Spring Boot applications as OCI Functions, including as native images using GraalVM Native Image compilation
 - Further improvement of the idiomaticity of OCI Service modules and the expansion of adoption of the Spring Template pattern
