@@ -39,7 +39,7 @@ For some specific features of the binder, it is required that ojdbc11 and ucp ve
 
 ```
 <properties>
-	<oracle-database.version>23.3.0.23.09</oracele-database.version>
+	<oracle-database.version>23.3.0.23.09</oracle-database.version>
 </properties>
 ```
 
