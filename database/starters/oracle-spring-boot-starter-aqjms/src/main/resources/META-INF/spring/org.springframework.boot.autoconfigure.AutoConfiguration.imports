@@ -1,1 +1,1 @@
-com.oracle.spring.aqjms.AqJmsAutoConfiguration
+com.oracle.database.spring.aqjms.AqJmsAutoConfiguration

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.oracle.spring.json.JsonCollectionsAutoConfiguration
+com.oracle.database.spring.json.JsonCollectionsAutoConfiguration

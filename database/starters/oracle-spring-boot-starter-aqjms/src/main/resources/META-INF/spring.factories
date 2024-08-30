@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.oracle.spring.aqjms.AqJmsAutoConfiguration
+com.oracle.database.spring.aqjms.AqJmsAutoConfiguration
