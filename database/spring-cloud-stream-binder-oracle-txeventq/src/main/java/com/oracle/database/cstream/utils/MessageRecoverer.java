@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,17 +22,16 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.cstream.utils;
 
-import com.oracle.database.cstream.serialize.Deserializer;
+import jakarta.jms.Message;
 
-public class TestObjectDeserializer implements Deserializer<TestObject> {
-
-    @Override
-    public TestObject deserialize(byte[] bytes) {
-        String s = new String(bytes);
-        int x = Integer.valueOf(s.substring(16, s.length() - 2));
-        return new TestObject(x);
-    }
-
+public interface MessageRecoverer {
+    /**
+     * Recover from the failure to deliver a message.
+     *
+     * @param undeliveredMessage the message that has not been delivered.
+     * @param cause              the reason for the failure to deliver.
+     */
+    void recover(Message undeliveredMessage, String dlq, Throwable cause);
 }

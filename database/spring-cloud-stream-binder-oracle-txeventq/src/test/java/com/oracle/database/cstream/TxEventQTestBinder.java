@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,17 +22,20 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.cstream;
 
-import com.oracle.database.cstream.serialize.Deserializer;
+import com.oracle.database.cstream.JMSMessageChannelBinder;
+import com.oracle.database.cstream.config.JmsConsumerProperties;
+import com.oracle.database.cstream.config.JmsProducerProperties;
+import org.springframework.cloud.stream.binder.AbstractTestBinder;
+import org.springframework.cloud.stream.binder.ExtendedConsumerProperties;
+import org.springframework.cloud.stream.binder.ExtendedProducerProperties;
 
-public class TestObjectDeserializer implements Deserializer<TestObject> {
+public class TxEventQTestBinder
+        extends AbstractTestBinder<JMSMessageChannelBinder, ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> {
 
     @Override
-    public TestObject deserialize(byte[] bytes) {
-        String s = new String(bytes);
-        int x = Integer.valueOf(s.substring(16, s.length() - 2));
-        return new TestObject(x);
+    public void cleanup() {
+        System.out.println("Got into clean");
     }
-
 }

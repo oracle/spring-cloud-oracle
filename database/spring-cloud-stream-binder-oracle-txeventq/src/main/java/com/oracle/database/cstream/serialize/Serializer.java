@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,17 +22,8 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.cstream.serialize;
 
-import com.oracle.database.cstream.serialize.Deserializer;
-
-public class TestObjectDeserializer implements Deserializer<TestObject> {
-
-    @Override
-    public TestObject deserialize(byte[] bytes) {
-        String s = new String(bytes);
-        int x = Integer.valueOf(s.substring(16, s.length() - 2));
-        return new TestObject(x);
-    }
-
+public interface Serializer {
+    byte[] serialize(Object data);
 }

@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,17 +22,32 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.cstream.provisioning;
 
-import com.oracle.database.cstream.serialize.Deserializer;
+import org.springframework.cloud.stream.provisioning.ConsumerDestination;
 
-public class TestObjectDeserializer implements Deserializer<TestObject> {
+public class JmsConsumerDestination implements ConsumerDestination {
 
-    @Override
-    public TestObject deserialize(byte[] bytes) {
-        String s = new String(bytes);
-        int x = Integer.valueOf(s.substring(16, s.length() - 2));
-        return new TestObject(x);
+    private final String topicName;
+
+    private final int dbversion;
+
+    public JmsConsumerDestination(final String topicName, final int dbversion) {
+        this.topicName = topicName;
+        this.dbversion = dbversion;
     }
 
+    @Override
+    public String getName() {
+        return this.topicName;
+    }
+
+    @Override
+    public String toString() {
+        return "JmsConsumerDestination{" + "topic=" + topicName + '}';
+    }
+
+    public int getDBVersion() {
+        return this.dbversion;
+    }
 }

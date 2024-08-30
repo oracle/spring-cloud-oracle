@@ -25,7 +25,7 @@
 
 package nativetests;
 
-import com.oracle.cstream.serialize.Serializer;
+import com.oracle.database.cstream.serialize.Serializer;
 
 public class TestObjectSerializer implements Serializer {
 

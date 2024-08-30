@@ -3,8 +3,8 @@
  ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
+ **
  */
-
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -23,17 +23,16 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.cstream.config;
 
-import com.oracle.database.cstream.serialize.Deserializer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cloud.stream.binder.Binder;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public class TestObjectDeserializer implements Deserializer<TestObject> {
-
-    @Override
-    public TestObject deserialize(byte[] bytes) {
-        String s = new String(bytes);
-        int x = Integer.valueOf(s.substring(16, s.length() - 2));
-        return new TestObject(x);
-    }
+@Configuration
+@ConditionalOnMissingBean(Binder.class)
+@Import({JmsBinderGlobalConfiguration.class})
+public class JmsBinderAutoConfiguration {
 
 }

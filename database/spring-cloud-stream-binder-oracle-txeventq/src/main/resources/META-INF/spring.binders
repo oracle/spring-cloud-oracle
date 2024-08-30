@@ -1,2 +1,2 @@
 txeventqjms=\
-com.oracle.cstream.config.TxEventQJmsConfiguration
+com.oracle.database.cstream.config.TxEventQJmsConfiguration

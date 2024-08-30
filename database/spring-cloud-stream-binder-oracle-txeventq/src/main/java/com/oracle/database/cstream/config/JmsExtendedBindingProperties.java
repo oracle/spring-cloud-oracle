@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,17 +22,33 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.cstream.config;
 
-import com.oracle.database.cstream.serialize.Deserializer;
+import java.util.Map;
 
-public class TestObjectDeserializer implements Deserializer<TestObject> {
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
+import org.springframework.cloud.stream.binder.AbstractExtendedBindingProperties;
+
+@ConfigurationProperties("spring.cloud.stream.txeventq")
+public class JmsExtendedBindingProperties
+        extends
+        AbstractExtendedBindingProperties<JmsConsumerProperties, JmsProducerProperties, JmsBindingProperties> {
+
+    private static final String DEFAULT_PREFIX = "spring.cloud.stream.txeventq.default";
 
     @Override
-    public TestObject deserialize(byte[] bytes) {
-        String s = new String(bytes);
-        int x = Integer.valueOf(s.substring(16, s.length() - 2));
-        return new TestObject(x);
+    public Map<String, JmsBindingProperties> getBindings() {
+        return this.doGetBindings();
     }
 
+    @Override
+    public String getDefaultsPrefix() {
+        return DEFAULT_PREFIX;
+    }
+
+    @Override
+    public Class<? extends BinderSpecificPropertiesProvider> getExtendedPropertiesEntryClass() {
+        return JmsBindingProperties.class;
+    }
 }
