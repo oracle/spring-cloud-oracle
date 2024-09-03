@@ -25,7 +25,7 @@
 
 package nativetests;
 
-import com.oracle.cstream.serialize.Deserializer;
+import com.oracle.database.spring.cloud.stream.binder.serialize.Deserializer;
 
 public class TestObjectDeserializer implements Deserializer<TestObject> {
 

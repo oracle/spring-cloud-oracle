@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,18 +22,11 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.spring.cloud.stream.binder.utils;
 
-import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
+public interface AnonymousNamingStrategy {
 
-public class TestObjectSerializer implements Serializer {
+    String generateName();
 
-    @Override
-    public byte[] serialize(Object data) {
-        if (data instanceof TestObject) {
-            return data.toString().getBytes();
-        }
-        throw new RuntimeException("Only payloads of type TestObject are supported");
-    }
-
+    String generateName(String prefix);
 }

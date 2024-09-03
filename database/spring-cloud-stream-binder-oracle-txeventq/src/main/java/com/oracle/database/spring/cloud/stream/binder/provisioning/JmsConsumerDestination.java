@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,18 +22,32 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.spring.cloud.stream.binder.provisioning;
 
-import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
+import org.springframework.cloud.stream.provisioning.ConsumerDestination;
 
-public class TestObjectSerializer implements Serializer {
+public class JmsConsumerDestination implements ConsumerDestination {
 
-    @Override
-    public byte[] serialize(Object data) {
-        if (data instanceof TestObject) {
-            return data.toString().getBytes();
-        }
-        throw new RuntimeException("Only payloads of type TestObject are supported");
+    private final String topicName;
+
+    private final int dbversion;
+
+    public JmsConsumerDestination(final String topicName, final int dbversion) {
+        this.topicName = topicName;
+        this.dbversion = dbversion;
     }
 
+    @Override
+    public String getName() {
+        return this.topicName;
+    }
+
+    @Override
+    public String toString() {
+        return "JmsConsumerDestination{" + "topic=" + topicName + '}';
+    }
+
+    public int getDBVersion() {
+        return this.dbversion;
+    }
 }

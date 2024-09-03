@@ -3,8 +3,8 @@
  ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
+ **
  */
-
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -23,18 +23,16 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.spring.cloud.stream.binder.config;
 
-import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cloud.stream.binder.Binder;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-public class TestObjectSerializer implements Serializer {
-
-    @Override
-    public byte[] serialize(Object data) {
-        if (data instanceof TestObject) {
-            return data.toString().getBytes();
-        }
-        throw new RuntimeException("Only payloads of type TestObject are supported");
-    }
+@Configuration
+@ConditionalOnMissingBean(Binder.class)
+@Import({JmsBinderGlobalConfiguration.class})
+public class JmsBinderAutoConfiguration {
 
 }

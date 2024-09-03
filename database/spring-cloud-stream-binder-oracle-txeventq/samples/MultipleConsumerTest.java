@@ -1,4 +1,4 @@
-package com.oracle.cstream;
+package com.oracle.database.spring.cloud.stream.binder;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 public class MultipleConsumerTest {
 	int y = 0;
 	public static void main(String[] args) {
-		SpringApplication.run(MultipleConsumerTest.class, 
+		SpringApplication.run(MultipleConsumerTest.class,
 				"--spring.datasource.url=jdbc:oracle:thin:@cdb1_pdb1_wallet",
 				"--spring.datasource.oracleucp.connection-properties.oracle.net.wallet_location=C:/tmp/wallet",
 				"--spring.datasource.oracleucp.connection-properties.oracle.net.tns_admin=C:/tmp/wallet",
@@ -27,19 +27,19 @@ public class MultipleConsumerTest {
 //				"--spring.cloud.stream.bindings.pd-out-0.producer.requiredGroups=t1",
 //				"--spring.cloud.stream.bindings.pd-out-0.producer.poller.fixedDelay=100"); /**/
 	}
-	
-	
+
+
 	@Bean
 	public Consumer<String> cs1() {
 		return to -> System.out.println("Received for cs1: " + to);
 	}
-	
+
 	@Bean
 	public Consumer<String> cs2() {
 		return to -> System.out.println("Received for cs2: " + to);
 	}
-	
-	
+
+
 //	@Bean
 //	public Supplier<String> pd() {
 //		return () -> {

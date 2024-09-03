@@ -6,11 +6,11 @@ Spring Cloud Stream exposes a [functional messaging API](https://docs.spring.io/
 
 ### WordSupplier: Message Producer
 
-The [WordSupplier](src/main/java/com/oracle/cstream/sample/WordSupplier.java) class produces a series of words to a topic. Consumers may subscribe to this topic to review messages from the supplier.
+The [WordSupplier](src/main/java/com/oracle/database/spring/cloud/stream/binder/sample/WordSupplier.java) class produces a series of words to a topic. Consumers may subscribe to this topic to review messages from the supplier.
 
 ### toUpperCase and stdoutConsumer
 
-Messages from the WordSupplier are piped through the [toUpperCase](src/main/java/com/oracle/cstream/sample/StreamConfiguration.java) functional interface to demonstrate stream processing. Finally, each message is consumed and printed to stdout by the `stdoutConsumer`.
+Messages from the WordSupplier are piped through the [toUpperCase](src/main/java/com/oracle/database/spring/cloud/stream/binder/sample/StreamConfiguration.java) functional interface to demonstrate stream processing. Finally, each message is consumed and printed to stdout by the `stdoutConsumer`.
 
 ### Running the tests
 
