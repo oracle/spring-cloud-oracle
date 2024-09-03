@@ -3,7 +3,7 @@
     <!-- Copyright (c) 2024, Oracle and/or its affiliates. -->
     <!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.oracle.database.cstream</groupId>
+    <groupId>com.oracle.database.spring.cloud.stream.binder</groupId>
     <artifactId>spring-cloud-stream-binder-txeventq-sample</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
@@ -52,7 +52,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.oracle.database.cstream</groupId>
+            <groupId>com.oracle.database.spring.cloud.stream.binder</groupId>
             <artifactId>spring-cloud-stream-binder-oracle-txeventq</artifactId>
             <version>${txeventq.streambinder.version}</version>
         </dependency>

@@ -1,2 +1,2 @@
 txeventqjms=\
-com.oracle.cstream.config.TxEventQJmsConfiguration
+com.oracle.database.spring.cloud.stream.binder.config.TxEventQJmsConfiguration

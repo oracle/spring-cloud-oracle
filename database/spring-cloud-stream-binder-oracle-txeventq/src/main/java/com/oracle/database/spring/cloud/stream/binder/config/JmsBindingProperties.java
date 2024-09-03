@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,18 +22,29 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.spring.cloud.stream.binder.config;
 
-import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
+import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 
-public class TestObjectSerializer implements Serializer {
+public class JmsBindingProperties implements BinderSpecificPropertiesProvider {
 
-    @Override
-    public byte[] serialize(Object data) {
-        if (data instanceof TestObject) {
-            return data.toString().getBytes();
-        }
-        throw new RuntimeException("Only payloads of type TestObject are supported");
+    private JmsConsumerProperties consumer = new JmsConsumerProperties();
+
+    private JmsProducerProperties producer = new JmsProducerProperties();
+
+    public JmsConsumerProperties getConsumer() {
+        return consumer;
     }
 
+    public void setConsumer(JmsConsumerProperties consumer) {
+        this.consumer = consumer;
+    }
+
+    public JmsProducerProperties getProducer() {
+        return producer;
+    }
+
+    public void setProducer(JmsProducerProperties producer) {
+        this.producer = producer;
+    }
 }

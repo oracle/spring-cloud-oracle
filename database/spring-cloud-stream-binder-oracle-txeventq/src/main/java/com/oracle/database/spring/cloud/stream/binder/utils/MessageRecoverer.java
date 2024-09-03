@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,18 +22,16 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.spring.cloud.stream.binder.utils;
 
-import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
+import jakarta.jms.Message;
 
-public class TestObjectSerializer implements Serializer {
-
-    @Override
-    public byte[] serialize(Object data) {
-        if (data instanceof TestObject) {
-            return data.toString().getBytes();
-        }
-        throw new RuntimeException("Only payloads of type TestObject are supported");
-    }
-
+public interface MessageRecoverer {
+    /**
+     * Recover from the failure to deliver a message.
+     *
+     * @param undeliveredMessage the message that has not been delivered.
+     * @param cause              the reason for the failure to deliver.
+     */
+    void recover(Message undeliveredMessage, String dlq, Throwable cause);
 }

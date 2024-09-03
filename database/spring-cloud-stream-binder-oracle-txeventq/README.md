@@ -29,7 +29,7 @@ mvn integration-test
 To use in an application project, add the following dependencies apart from regular spring-cloud-stream project dependencies:
 ```
 <dependency>
-	<groupId>com.oracle.database.cstream</groupId>
+	<groupId>com.oracle.database.spring.cloud.stream.binder</groupId>
 	<artifactId>spring-cloud-stream-binder-oracle-txeventq</artifactId>
 	<version>0.9.0</version>
 </dependency>

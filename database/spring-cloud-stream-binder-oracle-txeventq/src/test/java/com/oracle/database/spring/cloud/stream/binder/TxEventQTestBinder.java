@@ -5,7 +5,6 @@
  ** This file has been modified by Oracle Corporation.
  */
 
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
@@ -23,18 +22,20 @@
  * limitations under the License.
  */
 
-package nativetests;
+package com.oracle.database.spring.cloud.stream.binder;
 
-import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
+import com.oracle.database.spring.cloud.stream.binder.JMSMessageChannelBinder;
+import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
+import com.oracle.database.spring.cloud.stream.binder.config.JmsProducerProperties;
+import org.springframework.cloud.stream.binder.AbstractTestBinder;
+import org.springframework.cloud.stream.binder.ExtendedConsumerProperties;
+import org.springframework.cloud.stream.binder.ExtendedProducerProperties;
 
-public class TestObjectSerializer implements Serializer {
+public class TxEventQTestBinder
+        extends AbstractTestBinder<JMSMessageChannelBinder, ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> {
 
     @Override
-    public byte[] serialize(Object data) {
-        if (data instanceof TestObject) {
-            return data.toString().getBytes();
-        }
-        throw new RuntimeException("Only payloads of type TestObject are supported");
+    public void cleanup() {
+        System.out.println("Got into clean");
     }
-
 }
