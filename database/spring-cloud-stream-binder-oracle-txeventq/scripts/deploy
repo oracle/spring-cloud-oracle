@@ -48,5 +48,5 @@ echo "Successfully deployed project to ${REPOSITORY_URL}/${REPOSITORY_NAME}"
 PACKAGES="$(mvn -Dexec.executable='echo' -Dexec.args='${project.artifactId}' exec:exec -q)"
 printf "The following artifacts have been created for upload:\n\n"
 for PACKAGE in $PACKAGES; do
-  echo "com.oracle.database.spring.cloud.stream.binder:${PACKAGE}:${VERSION}"
+  echo "com.oracle.database.spring.cloud-stream-binder:${PACKAGE}:${VERSION}"
 done
