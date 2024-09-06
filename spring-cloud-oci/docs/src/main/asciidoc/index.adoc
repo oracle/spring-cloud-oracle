@@ -14,9 +14,9 @@ Spring Cloud Oracle, part of the Spring Cloud umbrella project, eases the integr
 
 include::getting-started.adoc[]
 
-include::adb.adoc[]
-
 include::core.adoc[]
+
+include::adb.adoc[]
 
 include::email.adoc[]
 
