@@ -15,8 +15,8 @@
     <artifactId>oracle-spring-boot-sample-json-duality</artifactId>
     <version>24.2.0</version>
 
-    <name>Oracle Spring Boot Starter - JSON Duality Views Sample</name>
-    <description>Oracle Spring Boot Starter Sample for JSON Duality Views</description>
+    <name>Oracle Spring Boot Starter - JSON Relational Duality Views Sample</name>
+    <description>Oracle Spring Boot Starter Sample for JSON Relational Duality Views</description>
 
     <organization>
         <name>Oracle America, Inc.</name>
