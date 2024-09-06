@@ -51,6 +51,12 @@ Spring Cloud Oracle has a strong and constantly evolving roadmap as we work to p
 
 We’d love to hear from you! Please let us know about your experiences using Spring Cloud Oracle, and what else you would like to see supported by opening an issue in our GitHub repository.
 
+## More great stuff to check out
+
+If you are building Spring Boot applications with Oracle Database, you should also check out [Oracle Backend for Spring Boot and Microservices](https://bit.ly/oraclespringboot) which simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications on any cloud or on your own infrastructure.
+
+If you'd like to try it out yourself, [CloudBank AI](https://bit.ly/cloudbankAI) is a great way to learn more.  It's a free self-paced hands-on lab that shows you how to build Spring Boot microservices and covers topics like REST, asynchronous services with JMS, storing data in Oracle, service dsicovery, using Spring Actuator for monitoring, Prometheus, Grafana, Loki, OpenTelemetry and Jaeger, implementing the saga pattern with Long Running Actions, exposing services using APISIX API Gateway and building an AI ChatBot using Ollama.
+
 ## Contributing
 
 This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
