@@ -50,6 +50,7 @@
 
     <modules>
         <module>oracle-spring-boot-sample-ucp-jpa</module>
+        <module>oracle-spring-boot-sample-json-duality</module>
     </modules>
 
     <build>
