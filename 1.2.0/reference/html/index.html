@@ -38,18 +38,18 @@
 <li><a href="#learning-spring-cloud-oracle">2.2. Learning Spring Cloud Oracle</a></li>
 </ul>
 </li>
-<li><a href="#autonomous-database">3. Autonomous Database</a>
+<li><a href="#spring-cloud-oci-core">3. Spring Cloud Oracle - OCI Core</a>
 <ul class="sectlevel2">
-<li><a href="#using-autonomous-database">3.1. Using Autonomous Database</a></li>
-<li><a href="#configuration">3.2. Configuration</a></li>
-<li><a href="#sample">3.3. Sample</a></li>
+<li><a href="#authentication-configuration">3.1. Authentication Configuration</a></li>
+<li><a href="#region-configuration">3.2. Region Configuration</a></li>
+<li><a href="#compartment-configuration">3.3. Compartment Configuration</a></li>
 </ul>
 </li>
-<li><a href="#spring-cloud-oci-core">4. Spring Cloud Oracle Core</a>
+<li><a href="#autonomous-database">4. Autonomous Database</a>
 <ul class="sectlevel2">
-<li><a href="#authentication-configuration">4.1. Authentication Configuration</a></li>
-<li><a href="#region-configuration">4.2. Region Configuration</a></li>
-<li><a href="#compartment-configuration">4.3. Compartment Configuration</a></li>
+<li><a href="#using-autonomous-database">4.1. Using Autonomous Database</a></li>
+<li><a href="#configuration">4.2. Configuration</a></li>
+<li><a href="#sample">4.3. Sample</a></li>
 </ul>
 </li>
 <li><a href="#email-delivery">5. Email Delivery</a>
@@ -137,7 +137,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Documentation for version: <strong>1.2.0</strong></p>
+<p>Documentation for version <strong>{project-version}</strong></p>
 </div>
 </div>
 </div>
@@ -145,7 +145,7 @@
 <h2 id="introduction"><a class="anchor" href="#introduction"></a>1. Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Spring Cloud for OCI, part of the Spring Cloud umbrella project, eases the integration with hosted OCI Services. It offers a convenient way to interact with OCI provided services using well-known Spring idioms and APIs, such as storage resources. Developers can build their application around the hosted services without having to worry about infrastructure or maintenance.</p>
+<p>Spring Cloud Oracle, part of the Spring Cloud umbrella project, eases the integration with Oracle Database and hosted OCI Services. It offers a convenient way to interact with Oracle Database and OCI provided services using well-known Spring idioms and APIs, such as storage resources. Developers can build their application around the hosted services without having to worry about infrastructure or maintenance.</p>
 </div>
 </div>
 </div>
@@ -223,7 +223,7 @@ You do <strong>not</strong> need to include the underlying <code>spring-cloud-oc
 <div class="sect3">
 <h4 id="sample-applications"><a class="anchor" href="#sample-applications"></a>2.2.1. Sample Applications</h4>
 <div class="paragraph">
-<p>The easiest way to learn how to use Spring Cloud Oracle is to consult the <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples">sample applications on Github</a>.
+<p>The easiest way to learn how to use Spring Cloud Oracle is to consult the <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples">sample applications on Github</a>.
 Spring Cloud Oracle provides sample applications which demonstrate how to use every integration in the library.
 The following table highlights several samples of the most used integrations in Spring Cloud Oracle.</p>
 </div>
@@ -241,43 +241,43 @@ The following table highlights several samples of the most used integrations in 
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Storage</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">spring-cloud-oci-storage-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">spring-cloud-oci-storage-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Notification</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">spring-cloud-oci-notification-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">spring-cloud-oci-notification-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Generative AI</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">spring-cloud-oci-gen-ai-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">spring-cloud-oci-gen-ai-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Logging</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">spring-cloud-oci-logging-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">spring-cloud-oci-logging-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Streaming</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample">spring-cloud-oci-streaming-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample">spring-cloud-oci-streaming-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Function</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-function-sample">spring-cloud-oci-function-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-function-sample">spring-cloud-oci-function-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cloud Queue</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample">spring-cloud-oci-queue-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-queue-sample">spring-cloud-oci-queue-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Oracle Autonomous Database</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-samples">spring-cloud-oci-adb-samples</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-adb-samples">spring-cloud-oci-adb-samples</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Generative AI</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">spring-cloud-oci-gen-ai-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">spring-cloud-oci-gen-ai-sample</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Vault</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample">spring-cloud-oci-vault-sample</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-vault-sample">spring-cloud-oci-vault-sample</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -290,7 +290,158 @@ The applications are fully functional and can be deployed to OCI as well.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="autonomous-database"><a class="anchor" href="#autonomous-database"></a>3. Autonomous Database</h2>
+<h2 id="spring-cloud-oci-core"><a class="anchor" href="#spring-cloud-oci-core"></a>3. Spring Cloud Oracle - OCI Core</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Cloud Oracle provides a Spring Boot starter to auto-configure the core components.</p>
+</div>
+<div class="paragraph">
+<p>Maven coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Gradle coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter")
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="authentication-configuration"><a class="anchor" href="#authentication-configuration"></a>3.1. Authentication Configuration</h3>
+<div class="paragraph">
+<p>Spring Cloud Oracle allows you to authenticate with OCI using various available options.</p>
+</div>
+<div class="sect3">
+<h4 id="configuration-file-based-authentication"><a class="anchor" href="#configuration-file-based-authentication"></a>3.1.1. Configuration File Based Authentication</h4>
+<div class="paragraph">
+<p>By default, configuration file based authentication is enabled. To set it explicitly, set the property <code>spring.cloud.oci.config.type</code> to <code>FILE</code>. The following are optional configurations to set a custom configuration profile name and file name.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.profile = DEFAULT
+spring.cloud.oci.config.file = &lt;FILE_PATH&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details about the Authentication configuration file, refer <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm">SDK and CLI Configuration File</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="simple-authentication"><a class="anchor" href="#simple-authentication"></a>3.1.2. Simple Authentication</h4>
+<div class="paragraph">
+<p>Set the property <code>spring.cloud.oci.config.type</code> to <code>SIMPLE</code> and add the following properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = SIMPLE
+spring.cloud.oci.config.userId = ocid1.user.oc1..&lt;unique_ID&gt;
+spring.cloud.oci.config.tenantId = ocid1.tenancy.oc1..&lt;unique_ID&gt;
+spring.cloud.oci.config.fingerprint = &lt;FINGERPRINT&gt;
+spring.cloud.oci.config.privateKey = &lt;PRIVATE_KEY_FILE_PATH&gt;
+spring.cloud.oci.config.passPhrase = &lt;PASS_PHRASE&gt;
+spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: All the preceding properties are mandatory except <code>spring.cloud.oci.config.passPhrase</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="instance-principal-configuration"><a class="anchor" href="#instance-principal-configuration"></a>3.1.3. Instance Principal Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>INSTANCE_PRINCIPAL</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = INSTANCE_PRINCIPAL</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm">OCI Instance Principal Authentication</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="resource-principal-configuration"><a class="anchor" href="#resource-principal-configuration"></a>3.1.4. Resource Principal Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>RESOURCE_PRINCIPAL</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = RESOURCE_PRINCIPAL</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal">OCI Resource Principal Authentication</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="session-token-configuration"><a class="anchor" href="#session-token-configuration"></a>3.1.5. Session token Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>SESSION_TOKEN</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = SESSION_TOKEN</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="workload-identity-configuration"><a class="anchor" href="#workload-identity-configuration"></a>3.1.6. Workload Identity Configuration</h4>
+<div class="paragraph">
+<p>Set the config.type to <code>WORKLOAD_IDENTITY</code> as shown here.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.config.type = WORKLOAD_IDENTITY</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm">OKE Workload Identity Authentication</a></p>
+</div>
+<div class="paragraph">
+<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12" class="bare">docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="region-configuration"><a class="anchor" href="#region-configuration"></a>3.2. Region Configuration</h3>
+<div class="paragraph">
+<p>OCI services are available in different regions. Based on the custom requirements, you can host the application on different OCI regions. The following configuration allows you to set a specific region for the entire application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.region.static = us-ashburn-1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Region value set in the preceding property takes precedence over the property <code>spring.cloud.oci.config.region</code> and <code>region</code> from the Authentication configuration file</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="compartment-configuration"><a class="anchor" href="#compartment-configuration"></a>3.3. Compartment Configuration</h3>
+<div class="paragraph">
+<p>A compartment is a logical container, used to organize and control access to the OCI Resources (Compute, Storage, Network, Load Balancer, etc.) created within that compartment. The following configuration allows you to set the default compartment for your application.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>spring.cloud.oci.compartment.static = &lt;COMPARTMENT_OCID&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="autonomous-database"><a class="anchor" href="#autonomous-database"></a>4. Autonomous Database</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="https://docs.oracle.com/en/cloud/paas/atp-cloud/index.html">Autonomous Database</a> is a data management service built
@@ -319,10 +470,10 @@ performing all routine database maintenance tasks while the system is running, w
 </div>
 </div>
 <div class="sect2">
-<h3 id="using-autonomous-database"><a class="anchor" href="#using-autonomous-database"></a>3.1. Using Autonomous Database</h3>
+<h3 id="using-autonomous-database"><a class="anchor" href="#using-autonomous-database"></a>4.1. Using Autonomous Database</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers an <code>AutonomousDb</code> bean in the Spring application context.
-The <code>AutonomousDb</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/adb/package-summary.html">Javadoc</a>) can be used to create an Autonomous Database, get details of an Autonomous Database,
+The <code>AutonomousDb</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/adb/package-summary.html">Javadoc</a>) can be used to create an Autonomous Database, get details of an Autonomous Database,
 delete an Autonomous Database and generate a wallet for an Autonomous Database.</p>
 </div>
 <div class="listingblock">
@@ -354,7 +505,7 @@ delete an Autonomous Database and generate a wallet for an Autonomous Database.<
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuration"><a class="anchor" href="#configuration"></a>3.2. Configuration</h3>
+<h3 id="configuration"><a class="anchor" href="#configuration"></a>4.2. Configuration</h3>
 <div class="paragraph">
 <p>The Spring Boot Starter for Oracle Autonomous Database provides the following configuration options:</p>
 </div>
@@ -382,160 +533,9 @@ delete an Autonomous Database and generate a wallet for an Autonomous Database.<
 </table>
 </div>
 <div class="sect2">
-<h3 id="sample"><a class="anchor" href="#sample"></a>3.3. Sample</h3>
+<h3 id="sample"><a class="anchor" href="#sample"></a>4.3. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Autonomous Database module.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="spring-cloud-oci-core"><a class="anchor" href="#spring-cloud-oci-core"></a>4. Spring Cloud Oracle Core</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Spring Cloud Oracle provides a Spring Boot starter to auto-configure the core components.</p>
-</div>
-<div class="paragraph">
-<p>Maven coordinates:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>com.oracle.cloud.spring<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-oci-starter<span class="nt">&lt;/artifactId&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Gradle coordinates:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code>dependencies {
-    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter")
-}</code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="authentication-configuration"><a class="anchor" href="#authentication-configuration"></a>4.1. Authentication Configuration</h3>
-<div class="paragraph">
-<p>Spring Cloud Oracle allows you to authenticate with OCI using various available options.</p>
-</div>
-<div class="sect3">
-<h4 id="configuration-file-based-authentication"><a class="anchor" href="#configuration-file-based-authentication"></a>4.1.1. Configuration File Based Authentication</h4>
-<div class="paragraph">
-<p>By default, configuration file based authentication is enabled. To set it explicitly, set the property <code>spring.cloud.oci.config.type</code> to <code>FILE</code>. The following are optional configurations to set a custom configuration profile name and file name.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.config.profile = DEFAULT
-spring.cloud.oci.config.file = &lt;FILE_PATH&gt;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For further details about the Authentication configuration file, refer <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm">SDK and CLI Configuration File</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="simple-authentication"><a class="anchor" href="#simple-authentication"></a>4.1.2. Simple Authentication</h4>
-<div class="paragraph">
-<p>Set the property <code>spring.cloud.oci.config.type</code> to <code>SIMPLE</code> and add the following properties:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.config.type = SIMPLE
-spring.cloud.oci.config.userId = ocid1.user.oc1..&lt;unique_ID&gt;
-spring.cloud.oci.config.tenantId = ocid1.tenancy.oc1..&lt;unique_ID&gt;
-spring.cloud.oci.config.fingerprint = &lt;FINGERPRINT&gt;
-spring.cloud.oci.config.privateKey = &lt;PRIVATE_KEY_FILE_PATH&gt;
-spring.cloud.oci.config.passPhrase = &lt;PASS_PHRASE&gt;
-spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note: All the preceding properties are mandatory except <code>spring.cloud.oci.config.passPhrase</code></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="instance-principal-configuration"><a class="anchor" href="#instance-principal-configuration"></a>4.1.3. Instance Principal Configuration</h4>
-<div class="paragraph">
-<p>Set the config.type to <code>INSTANCE_PRINCIPAL</code> as shown here.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.config.type = INSTANCE_PRINCIPAL</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm">OCI Instance Principal Authentication</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="resource-principal-configuration"><a class="anchor" href="#resource-principal-configuration"></a>4.1.4. Resource Principal Configuration</h4>
-<div class="paragraph">
-<p>Set the config.type to <code>RESOURCE_PRINCIPAL</code> as shown here.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.config.type = RESOURCE_PRINCIPAL</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For further details, refer to <a href="https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal">OCI Resource Principal Authentication</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="session-token-configuration"><a class="anchor" href="#session-token-configuration"></a>4.1.5. Session token Configuration</h4>
-<div class="paragraph">
-<p>Set the config.type to <code>SESSION_TOKEN</code> as shown here.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.config.type = SESSION_TOKEN</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="workload-identity-configuration"><a class="anchor" href="#workload-identity-configuration"></a>4.1.6. Workload Identity Configuration</h4>
-<div class="paragraph">
-<p>Set the config.type to <code>WORKLOAD_IDENTITY</code> as shown here.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.config.type = WORKLOAD_IDENTITY</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm">OKE Workload Identity Authentication</a></p>
-</div>
-<div class="paragraph">
-<p>For further details, refer to <a href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12" class="bare">docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12</a></p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="region-configuration"><a class="anchor" href="#region-configuration"></a>4.2. Region Configuration</h3>
-<div class="paragraph">
-<p>OCI services are available in different regions. Based on the custom requirements, you can host the application on different OCI regions. The following configuration allows you to set a specific region for the entire application.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.region.static = us-ashburn-1</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Region value set in the preceding property takes precedence over the property <code>spring.cloud.oci.config.region</code> and <code>region</code> from the Authentication configuration file</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="compartment-configuration"><a class="anchor" href="#compartment-configuration"></a>4.3. Compartment Configuration</h3>
-<div class="paragraph">
-<p>A compartment is a logical container, used to organize and control access to the OCI Resources (Compute, Storage, Network, Load Balancer, etc.) created within that compartment. The following configuration allows you to set the default compartment for your application.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>spring.cloud.oci.compartment.static = &lt;COMPARTMENT_OCID&gt;</pre>
-</div>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-adb-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Autonomous Database module.</p>
 </div>
 </div>
 </div>
@@ -668,7 +668,7 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 <div class="sect2">
 <h3 id="sample-2"><a class="anchor" href="#sample-2"></a>5.4. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-email-sample">here</a> contains examples that demonstrate the usage of Spring Cloud Oracle Email module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-email-sample">here</a> contains examples that demonstrate the usage of Spring Cloud Oracle Email module.</p>
 </div>
 </div>
 </div>
@@ -677,7 +677,7 @@ spring.cloud.oci.config.region = &lt;REGION&gt;</pre>
 <h2 id="cloud-function"><a class="anchor" href="#cloud-function"></a>6. Cloud Functions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm">OCI Functions</a> is a fully managed, multi-tenant, highly scalable, on-demand, Functions-as-a-Service platform. It is built on enterprise-grade Oracle Cloud Infrastructure and powered by the Fn Project open source engine. Use OCI Functions when you want to focus on writing code to meet business needs. The Spring Cloud module for OCI Functions allows to invoke an OCI Function.
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm">OCI Functions</a> is a fully managed, multi-tenant, highly scalable, on-demand, Functions-as-a-Service platform. It is built on enterprise-grade Oracle Cloud Infrastructure and powered by the Fn Project open source engine. Use OCI Functions when you want to focus on writing code to meet business needs. The Spring Cloud Oracle module for OCI Functions allows to invoke an OCI Function.
 A Spring Boot starter is provided to autoconfigure the Function component.</p>
 </div>
 <div class="paragraph">
@@ -705,7 +705,7 @@ A Spring Boot starter is provided to autoconfigure the Function component.</p>
 <h3 id="using-cloud-functions"><a class="anchor" href="#using-cloud-functions"></a>6.1. Using Cloud Functions</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Function</code> bean in the Spring application context.
-The <code>Function</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/function/package-summary.html">Javadoc</a>) can be used to invoke a function with parameter inputs 'functionOcid' and 'endpoint'</p>
+The <code>Function</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/function/package-summary.html">Javadoc</a>) can be used to invoke a function with parameter inputs 'functionOcid' and 'endpoint'</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -751,7 +751,7 @@ The <code>Function</code> bean (<a href="https://oracle.github.io/spring-cloud-o
 <div class="sect2">
 <h3 id="sample-3"><a class="anchor" href="#sample-3"></a>6.3. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-function-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Function module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-function-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Function module.</p>
 </div>
 </div>
 </div>
@@ -760,7 +760,7 @@ The <code>Function</code> bean (<a href="https://oracle.github.io/spring-cloud-o
 <h2 id="cloud-logging"><a class="anchor" href="#cloud-logging"></a>7. Cloud Logging</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm">OCI Logging</a> service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from OCI resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service, and Custom logs. The Spring Cloud module for OCI Logging allows ingesting logs associated with a logId.
+<p><a href="https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm">OCI Logging</a> service is a highly scalable and fully managed single pane of glass for all the logs in your tenancy. Logging provides access to logs from OCI resources. These logs include critical diagnostic information that describes how resources are performing and being accessed. Use Logging to enable, manage, and search Audit, Service, and Custom logs. The Spring Cloud Oracle module for OCI Logging allows ingesting logs associated with a logId.
 A Spring Boot starter is provided to autoconfigure the Logging component.</p>
 </div>
 <div class="dlist">
@@ -790,7 +790,7 @@ A Spring Boot starter is provided to autoconfigure the Logging component.</p>
 <h3 id="using-cloud-logging"><a class="anchor" href="#using-cloud-logging"></a>7.1. Using Cloud Logging</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Logging</code> bean in the Spring application context.
-The <code>Logging</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/logging/package-summary.html">Javadoc</a>) can be used to ingest logs associated with a logId specified in the property <code>spring.cloud.oci.logging.logId</code> within the application configuration file</p>
+The <code>Logging</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/logging/package-summary.html">Javadoc</a>) can be used to ingest logs associated with a logId specified in the property <code>spring.cloud.oci.logging.logId</code> within the application configuration file</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -836,7 +836,7 @@ The <code>Logging</code> bean (<a href="https://oracle.github.io/spring-cloud-or
 <div class="sect2">
 <h3 id="sample-4"><a class="anchor" href="#sample-4"></a>7.3. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Logging module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-logging-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Logging module.</p>
 </div>
 </div>
 </div>
@@ -872,7 +872,7 @@ The <code>Logging</code> bean (<a href="https://oracle.github.io/spring-cloud-or
 <h3 id="using-generative-ai-chat"><a class="anchor" href="#using-generative-ai-chat"></a>8.1. Using Generative AI Chat</h3>
 <div class="paragraph">
 <p>The starter configures and registers a <code>ChatModel</code> bean in the Spring application context.
-The <code>ChatModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to interact with OCI Generative AI Chat Models.</p>
+The <code>ChatModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to interact with OCI Generative AI Chat Models.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -890,7 +890,7 @@ The <code>ChatModel</code> bean (<a href="https://oracle.github.io/spring-cloud-
 <h3 id="using-generative-ai-embedding"><a class="anchor" href="#using-generative-ai-embedding"></a>8.2. Using Generative AI Embedding</h3>
 <div class="paragraph">
 <p>The starter configures and registers an <code>EmbeddingModel</code> bean in the Spring application context.
-The <code>EmbeddingModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to create text embeddings using OCI Generative AI Embedding Models.</p>
+The <code>EmbeddingModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to create text embeddings using OCI Generative AI Embedding Models.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1031,7 +1031,7 @@ The <code>EmbeddingModel</code> bean (<a href="https://oracle.github.io/spring-c
 <div class="sect2">
 <h3 id="sample-5"><a class="anchor" href="#sample-5"></a>8.4. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Generative AI module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-gen-ai-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Generative AI module.</p>
 </div>
 </div>
 </div>
@@ -1068,7 +1068,7 @@ A Spring Boot starter is provided to autoconfigure the various Storage component
 <h3 id="using-cloud-storage"><a class="anchor" href="#using-cloud-storage"></a>9.1. Using Cloud Storage</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Storage</code> bean in the Spring application context.
-The <code>Storage</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/storage/package-summary.html">Javadoc</a>) can be used to list, create, update or delete buckets and objects.</p>
+The <code>Storage</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/storage/package-summary.html">Javadoc</a>) can be used to list, create, update or delete buckets and objects.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1144,7 +1144,7 @@ Spring Cloud Oracle adds a new resource type for Oracle Cloud Object Storage.</p
 <div class="sect2">
 <h3 id="sample-6"><a class="anchor" href="#sample-6"></a>9.4. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">here</a> contains the examples to demonstrate the usage of OCI Spring Cloud Storage module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-storage-sample">here</a> contains the examples to demonstrate the usage of OCI Spring Cloud Storage module.</p>
 </div>
 </div>
 </div>
@@ -1181,7 +1181,7 @@ A Spring Boot starter is provided to autoconfigure the various Notification comp
 <h3 id="using-cloud-notifications"><a class="anchor" href="#using-cloud-notifications"></a>10.1. Using Cloud Notifications</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Notification</code> bean in the Spring application context.
-The <code>Notification</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/notification/package-summary.html">Javadoc</a>) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.</p>
+The <code>Notification</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/notification/package-summary.html">Javadoc</a>) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1227,7 +1227,7 @@ The <code>Notification</code> bean (<a href="https://oracle.github.io/spring-clo
 <div class="sect2">
 <h3 id="sample-7"><a class="anchor" href="#sample-7"></a>10.3. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Notification module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-notification-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Notification module.</p>
 </div>
 </div>
 </div>
@@ -1264,7 +1264,7 @@ A Spring Boot starter is provided to autoconfigure the various Queue components.
 <h3 id="using-cloud-queues"><a class="anchor" href="#using-cloud-queues"></a>11.1. Using Cloud Queues</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Queue</code> bean in the Spring application context.
-The <code>Queue</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/queue/package-summary.html">Javadoc</a>) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.</p>
+The <code>Queue</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/queue/package-summary.html">Javadoc</a>) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1310,7 +1310,7 @@ The <code>Queue</code> bean (<a href="https://oracle.github.io/spring-cloud-orac
 <div class="sect2">
 <h3 id="sample-8"><a class="anchor" href="#sample-8"></a>11.3. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-queue-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Queue module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-queue-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Queue module.</p>
 </div>
 </div>
 </div>
@@ -1349,7 +1349,7 @@ A Spring Boot starter is provided to autoconfigure the Streaming component.</p>
 <h3 id="using-cloud-streaming"><a class="anchor" href="#using-cloud-streaming"></a>12.1. Using Cloud Streaming</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Streaming</code> bean in the Spring application context.
-The <code>Streaming</code> bean (<a href="https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/com/oracle/cloud/spring/streaming/package-summary.html">Javadoc</a>) can be used to create streamPool, stream in OCI and ingest and consume high-volume data streams with a streamId</p>
+The <code>Streaming</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.3.0-SNAPSHOT/javadocs/com/oracle/cloud/spring/streaming/package-summary.html">Javadoc</a>) can be used to create streamPool, stream in OCI and ingest and consume high-volume data streams with a streamId</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1400,7 +1400,7 @@ The <code>Streaming</code> bean (<a href="https://oracle.github.io/spring-cloud-
 <div class="sect2">
 <h3 id="sample-9"><a class="anchor" href="#sample-9"></a>12.3. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Streaming module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-streaming-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Streaming module.</p>
 </div>
 </div>
 </div>
@@ -1563,7 +1563,7 @@ The <code>VaultTemplate</code> bean can be used to create, update, list, and del
 <div class="sect2">
 <h3 id="sample-10"><a class="anchor" href="#sample-10"></a>13.4. Sample</h3>
 <div class="paragraph">
-<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-vault-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Vault module.</p>
+<p>A sample application provided <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-vault-sample">here</a> contains the examples to demonstrates the usage of OCI Spring Cloud Vault module.</p>
 </div>
 </div>
 </div>
@@ -1934,7 +1934,7 @@ topic, and providing the object to be converted and sent in the payload of the m
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-08-12 13:07:02 -0400
+Last updated 2024-09-10 10:43:49 -0500
 </div>
 </div>
 </div>
