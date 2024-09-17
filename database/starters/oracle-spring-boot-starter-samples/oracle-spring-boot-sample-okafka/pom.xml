@@ -6,19 +6,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>oracle-spring-boot-starters</artifactId>
+        <artifactId>oracle-spring-boot-starter-samples</artifactId>
         <groupId>com.oracle.database.spring</groupId>
         <version>24.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>oracle-spring-boot-starter-samples</artifactId>
+    <artifactId>oracle-spring-boot-sample-okafka</artifactId>
     <version>24.2.0</version>
-    <packaging>pom</packaging>
 
-    <name>Oracle Spring Boot Starter - Samples</name>
-    <description>Oracle Spring Boot Starter Sample Parent Module</description>
-    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/samples</url>
+    <name>Oracle Spring Boot Starter - OKafka Sample</name>
+    <description>Oracle Spring Boot Starter Sample for OKafka</description>
 
     <organization>
         <name>Oracle America, Inc.</name>
@@ -48,24 +46,41 @@
         <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
     </scm>
 
-    <modules>
-        <module>oracle-spring-boot-sample-ucp-jpa</module>
-        <module>oracle-spring-boot-sample-json-duality</module>
-        <module>oracle-spring-boot-sample-okafka</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-starter-okafka</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <!-- Skip deploy of sample code-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+        <!-- Test Dependencies-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot-dependencies.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>oracle-free</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
