@@ -6,7 +6,7 @@ The Oracle Spring Boot Sample UCP JPA package includes a JPA entity, repository,
 
 ## Run the sample application
 
-The sample application creates a temporary Oracle Free container database, and requires a docker runtime environment. The sample application demonstrates the use of Spring Data JPA with the Oracle Spring Boot Starter UCP.
+The sample application test uses Testcontainers, and creates a temporary Oracle Free container database, and requires a docker runtime environment. The sample application demonstrates the use of Spring Data JPA with the Oracle Spring Boot Starter UCP.
 
 To run the test application, run the following command:
 

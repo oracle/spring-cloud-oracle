@@ -72,6 +72,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
     <okafka.version>23.5.0.0</okafka.version>
+    <kafka-clients.version>3.7.1</kafka-clients.version>
     <ojdbc.version>23.5.0.24.07</ojdbc.version>
     <oracledb-messaging.version>23.3.1.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
@@ -199,6 +200,11 @@
         <groupId>com.oracle.database.messaging</groupId>
         <artifactId>okafka</artifactId>
         <version>${okafka.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>${kafka-clients.version}</version>
       </dependency>
 
       <dependency>

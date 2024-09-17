@@ -16,7 +16,7 @@ The Spring Boot OKafka sample application includes the following components to d
 
 ## Run the sample application
 
-The sample application creates a temporary Oracle Free container database, and requires a docker runtime environment.
+The sample application test uses Testcontainers, and creates a temporary Oracle Free container database, and requires a docker runtime environment.
 
 To run the test application, run the following command:
 
