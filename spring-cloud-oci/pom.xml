@@ -75,6 +75,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2023.0.2</spring-cloud-dependencies.version>
         <spring-framework.version>6.1.10</spring-framework.version>
+        <spring-data-oracle-nosql.version>2.0.0</spring-data-oracle-nosql.version>
+        <oracle.nosql.driver.version>5.4.15</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.3</jakarta-mail.version>
         <oci-sdk.version>3.44.3</oci-sdk.version>
         <maven.compiler.source>17</maven.compiler.source>
@@ -171,6 +173,46 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring-framework.version}</version>
                 <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.nosql.sdk</groupId>
+                <artifactId>spring-data-oracle-nosql</artifactId>
+                <version>${spring-data-oracle-nosql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.nosql.sdk</groupId>
+                <artifactId>nosqldriver</artifactId>
+                <version>${oracle.nosql.driver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring-framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.angus</groupId>
