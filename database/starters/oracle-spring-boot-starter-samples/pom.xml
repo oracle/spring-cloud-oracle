@@ -51,6 +51,7 @@
     <modules>
         <module>oracle-spring-boot-sample-ucp-jpa</module>
         <module>oracle-spring-boot-sample-json-duality</module>
+        <module>oracle-spring-boot-sample-okafka</module>
     </modules>
 
     <build>
