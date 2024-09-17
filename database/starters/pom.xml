@@ -57,6 +57,7 @@
     <module>oracle-spring-boot-starter-aqjms</module>
     <module>oracle-spring-boot-starter-json-collections</module>
     <module>oracle-spring-boot-starter-samples</module>
+    <module>oracle-spring-boot-starter-okafka</module>
   </modules>
 
   <properties>
@@ -70,6 +71,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
+    <okafka.version>23.5.0.0</okafka.version>
     <ojdbc.version>23.5.0.24.07</ojdbc.version>
     <oracledb-messaging.version>23.3.1.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
@@ -191,6 +193,12 @@
         <artifactId>spring-boot-starter-web</artifactId>
         <scope>compile</scope>
         <version>${spring-boot-dependencies.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.oracle.database.messaging</groupId>
+        <artifactId>okafka</artifactId>
+        <version>${okafka.version}</version>
       </dependency>
 
       <dependency>
