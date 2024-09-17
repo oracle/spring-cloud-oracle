@@ -2,7 +2,7 @@
 
 With Oracle Database 23ai, powerful Kafka APIs are easily used to read and write data backed by [Transactional Event Queues (TxEventQ)](https://docs.oracle.com/en/database/oracle/oracle-database/21/adque/aq-introduction.html).
 
-If you’re unfamiliar with TxEventQ, it’s a a robust, real-time message broker that runs within Oracle Database, designed for high throughput — TxEventQ can handle approximately [100 billion messages per day](https://www.oracle.com/database/advanced-queuing/) on an 8-node Oracle RAC cluster.
+If you’re unfamiliar with TxEventQ, it’s a robust, real-time message broker that runs within Oracle Database, designed for high throughput — TxEventQ can handle approximately [100 billion messages per day](https://www.oracle.com/database/advanced-queuing/) on an 8-node Oracle RAC cluster.
 
 This sample application demonstrates how to use the Oracle Spring Boot Starter OKafka with the [Kafka Java Client for Oracle Transactional Event Queues](https://github.com/oracle/okafka)
 
