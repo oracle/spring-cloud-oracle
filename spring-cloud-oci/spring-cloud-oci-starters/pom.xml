@@ -59,6 +59,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <module>spring-cloud-oci-starter-queue</module>
         <module>spring-cloud-oci-starter-function</module>
         <module>spring-cloud-oci-starter-email</module>
+        <module>spring-cloud-oci-starter-nosql</module>
     </modules>
 
 </project>

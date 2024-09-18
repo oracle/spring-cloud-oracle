@@ -157,6 +157,11 @@
                 <artifactId>spring-cloud-oci-starter-email</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.oracle.cloud.spring</groupId>
+                <artifactId>spring-cloud-oci-starter-nosql</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

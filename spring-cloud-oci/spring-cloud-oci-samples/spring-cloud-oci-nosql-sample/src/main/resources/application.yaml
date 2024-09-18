@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    oci:
+      config:
+        type: file
+      region:
+        static: us-ashburn-1

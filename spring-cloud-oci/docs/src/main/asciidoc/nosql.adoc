@@ -1,0 +1,97 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#oci-nosql]
+== Oracle NoSQL Database
+
+https://docs.oracle.com/en-us/iaas/nosql-database/index.html[Oracle NoSQL Database] service offering on-demand throughput and storage based provisioning that supports JSON, Table and Key-Value datatypes, all with flexible transaction guarantees.
+
+Maven coordinates:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.cloud.spring</groupId>
+    <artifactId>spring-cloud-oci-starter-nosql</artifactId>
+</dependency>
+----
+
+Gradle coordinates:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation("com.oracle.cloud.spring:spring-cloud-oci-starter-nosql")
+}
+----
+
+=== Using Oracle NoSQL Database
+
+The starter automatically configures and registers a `NosqlDBConfig` bean in the Spring application, allowing the use of Oracle NoSQL Database repositories.
+
+[source,yaml]
+----
+spring:
+  cloud:
+    oci:
+      config:
+        type: file
+      region:
+        static: us-ashburn-1
+----
+
+Enable NoSQL repositories in your application by using the `@EnableNosqlRepositories` annotation and extending the `AbstractNosqlConfiguration` class.
+
+[source,java]
+----
+import com.oracle.nosql.spring.data.config.AbstractNosqlConfiguration;
+import com.oracle.nosql.spring.data.repository.config.EnableNosqlRepositories;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@EnableNosqlRepositories
+public class MyApp extends AbstractNosqlConfiguration {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApp.class, args);
+    }
+}
+----
+
+NoSQL repositories and tables are simply defined by extending the `NosqlRepository` interface and applying the `@NosqlTable` annotation:
+
+[source,java]
+----
+public interface BookRepository extends NosqlRepository<Book, Long> {
+    // Add repository methods as needed.
+    Iterable<Book> findByAuthor(String author);
+    Iterable<Book> findByTitle(String title);
+}
+----
+
+[source,java]
+----
+@NosqlTable(tableName = "books")
+public class Book {
+    @NosqlId(generated = true)
+    long id;
+    String title;
+    String author;
+    double price;
+}
+----
+
+
+=== Configuration
+
+The Spring Boot Starter for Oracle Cloud NoSQL Database provides the following configuration options:
+
+|===
+^| Name ^| Description ^| Required ^| Default value
+| `spring.cloud.oci.nosql.enabled` | Enables the NoSQL DB Config. | No | `true`
+|===
+
+
+=== Sample
+
+A sample application provided https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-nosql-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud NoSQL module.

@@ -30,6 +30,8 @@ include::storage.adoc[]
 
 include::notifications.adoc[]
 
+include::nosql.adoc[]
+
 include::queues.adoc[]
 
 include::streaming.adoc[]
