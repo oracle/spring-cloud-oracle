@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.7</version>
+    <version>3.2.8</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -61,8 +61,8 @@
   </modules>
 
   <properties>
-    <spring-boot-dependencies.version>3.2.7</spring-boot-dependencies.version>
-    <spring-framework-bom.version>6.1.10</spring-framework-bom.version>
+    <spring-boot-dependencies.version>3.2.8</spring-boot-dependencies.version>
+    <spring-framework-bom.version>6.1.13</spring-framework-bom.version>
 
     <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
