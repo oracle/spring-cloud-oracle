@@ -4,6 +4,7 @@ package com.oracle.spring.json.jsonb;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import jakarta.json.stream.JsonGenerator;
@@ -39,5 +40,15 @@ public class JSONB {
 
     public <T> T fromOSON(JsonParser parser, Class<T> clazz) {
         return jsonb.fromJson(parser, clazz);
+    }
+
+    public <T> T fromOSON(InputStream inputStream, Class<T> clazz) {
+        JsonParser jsonParser = oracleJsonFactory.createJsonBinaryParser(inputStream).wrap(JsonParser.class);
+        return jsonb.fromJson(jsonParser, clazz);
+    }
+
+    public <T> T fromOSON(ByteBuffer byteBuffer, Class<T> clazz) {
+        JsonParser jsonParser = oracleJsonFactory.createJsonBinaryParser(byteBuffer).wrap(JsonParser.class);
+        return jsonb.fromJson(jsonParser, clazz);
     }
 }

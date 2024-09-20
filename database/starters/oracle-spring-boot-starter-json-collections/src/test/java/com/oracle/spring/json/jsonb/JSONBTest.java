@@ -2,6 +2,10 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.json.jsonb;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+
 import com.oracle.spring.json.test.Student;
 import com.oracle.spring.json.test.StudentDetails;
 import jakarta.json.bind.JsonbBuilder;
@@ -32,6 +36,26 @@ public class JSONBTest {
     void parserToObject() {
         JsonParser parser = jsonb.toJsonParser(s);
         Student student = jsonb.fromOSON(parser, Student.class);
+        assertThat(student).isNotNull();
+        assertThat(student).isEqualTo(s);
+    }
+
+    @Test
+    void inputStreamToObject() {
+        byte[] oson = jsonb.toOSON(s);
+        InputStream is = new ByteArrayInputStream(oson);
+
+        Student student = jsonb.fromOSON(is, Student.class);
+        assertThat(student).isNotNull();
+        assertThat(student).isEqualTo(s);
+    }
+
+    @Test
+    void byteBufferToOjbect() {
+        byte[] oson = jsonb.toOSON(s);
+        ByteBuffer buf = ByteBuffer.wrap(oson);
+
+        Student student = jsonb.fromOSON(buf, Student.class);
         assertThat(student).isNotNull();
         assertThat(student).isEqualTo(s);
     }
