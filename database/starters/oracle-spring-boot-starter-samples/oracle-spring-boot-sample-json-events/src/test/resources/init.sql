@@ -15,7 +15,7 @@ create table weather_sensor (
     relative_humidity number(5,2),
     temperature       number(5,2),
     uv_index          number(4,1),
-    timestamp         timestamp default CURRENT_TIMESTAMP not null,
+    timestamp         timestamp default CURRENT_TIMESTAMP,
     constraint sensor_station_fk foreign key (station_id)
     references station(id)
 );
@@ -27,7 +27,6 @@ weather_sensor @insert @update @delete {
     relativeHumidity : relative_humidity,
     temperature,
     uvIndex : uv_index,
-    timestamp,
     station: station {
         _id : id,
         stationName : station_name,

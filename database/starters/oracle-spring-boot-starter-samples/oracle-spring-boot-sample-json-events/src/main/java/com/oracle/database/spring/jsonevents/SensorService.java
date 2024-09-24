@@ -21,7 +21,7 @@ public class SensorService {
 
     private static final String byStationId = """
             select * from weather_sensor_dv v
-            where v.sensor_id = ?
+            where v.data.station."_id" = ?
             """;
 
     private final JdbcTemplate jdbcTemplate;

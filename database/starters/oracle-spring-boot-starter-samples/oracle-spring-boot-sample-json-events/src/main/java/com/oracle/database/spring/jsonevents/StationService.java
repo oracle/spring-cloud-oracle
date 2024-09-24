@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class StationService {
     private static final String stationById = """
             select * from station_dv v
-            where where v.data."_id" = ?
+            where v.data."_id" = ?
             """;
 
     private final JdbcTemplate jdbcTemplate;
@@ -24,7 +24,7 @@ public class StationService {
 
     public StationService(JdbcTemplate jdbcTemplate, JSONB jsonb) {
         this.jdbcTemplate = jdbcTemplate;
-        this.rowMapper = new JSONBRowMapper(jsonb, Station.class);
+        this.rowMapper = new JSONBRowMapper<>(jsonb, Station.class);
     }
 
 

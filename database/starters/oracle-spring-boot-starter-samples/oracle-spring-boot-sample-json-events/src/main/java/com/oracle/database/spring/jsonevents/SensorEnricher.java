@@ -2,6 +2,7 @@ package com.oracle.database.spring.jsonevents;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import com.oracle.database.spring.jsonevents.model.Sensor;
 import com.oracle.database.spring.jsonevents.model.Station;
@@ -17,12 +18,9 @@ public class SensorEnricher {
 
     public Sensor enrich(Sensor sensor) {
         Objects.requireNonNull(sensor, "sensor cannot be null");
-        if (sensor.getStation() != null) {
-            return sensor;
-        }
-        List<Station> query = stationService.byId(sensor.getStationId());
+        List<Station> query = stationService.byId(sensor.getStation().get_id());
         if (query.isEmpty()) {
-            throw new IllegalStateException("No weather station found for id " + sensor.getStationId());
+            throw new IllegalStateException("No weather station found for id " + sensor.getStation().get_id());
         }
         sensor.setStation(query.get(0));
         return sensor;

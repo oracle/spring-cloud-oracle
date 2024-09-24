@@ -5,7 +5,6 @@ package com.oracle.database.spring.jsonevents.model;
 public class Sensor {
     String _id;
     String timestamp;
-    String stationId;
     double relativeHumidity;
     double temperature;
     double uvIndex;
@@ -25,14 +24,6 @@ public class Sensor {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public String getStationId() {
-        return stationId;
-    }
-
-    public void setStationId(String stationId) {
-        this.stationId = stationId;
     }
 
     public double getRelativeHumidity() {

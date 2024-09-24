@@ -4,8 +4,6 @@ app:
   bootstrapServers: localhost:1521
   ojdbcPath: /path/to/ojbdc/properties
 
-
-
 spring:
   jpa:
     hibernate:
@@ -26,3 +24,8 @@ spring:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
 server:
   port: 9001
+
+logging:
+  level:
+    org.apache.kafka: WARN
+    org.oracle.okafka: WARN

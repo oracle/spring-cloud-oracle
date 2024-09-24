@@ -6,11 +6,13 @@ import java.io.File;
 import java.time.Duration;
 import java.util.List;
 
+import com.oracle.database.spring.jsonevents.model.Sensor;
 import com.oracle.database.spring.jsonevents.model.SensorEvent;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -20,6 +22,7 @@ import org.testcontainers.oracle.OracleContainer;
 import org.testcontainers.utility.MountableFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 @Testcontainers
@@ -64,14 +67,17 @@ public class JSONEventsSampleTest {
 
 
     @Test
-    void jsonEventsSampleAppTest() {
+    void jsonEventsSampleAppTest() throws InterruptedException {
+        // Produce events for two different stations
         sensorController.produce(event1());
         sensorController.produce(event2());
-        assertTimeout(Duration.ofSeconds(5), () -> {
-            assertThat(sensorController.getEvents("ST001")
-                    .getBody())
-                    .hasSize(5);
-        });
+        // Wait for queues to process all events
+        Thread.sleep(3000);
+        // Assert all events have been processed and are available in the database
+        ResponseEntity<List<Sensor>> st001Events = sensorController.getEvents("ST001");
+        ResponseEntity<List<Sensor>> st002Events = sensorController.getEvents("ST002");
+        assertEquals(st001Events.getBody().size(), 5);
+        assertEquals(st002Events.getBody().size(), 10);
     }
 
     private SensorEvent event1() {
