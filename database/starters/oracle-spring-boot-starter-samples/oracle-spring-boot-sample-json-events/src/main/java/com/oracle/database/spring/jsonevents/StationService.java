@@ -1,9 +1,11 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonevents;
 
 import java.sql.PreparedStatement;
 import java.util.List;
 
-import com.oracle.database.spring.jsonevents.model.WeatherStation;
+import com.oracle.database.spring.jsonevents.model.Station;
 import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,22 +13,22 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WeatherStationService {
+public class StationService {
     private static final String stationById = """
-            select * from weather_station_dv v
+            select * from station_dv v
             where where v.data."_id" = ?
             """;
 
     private final JdbcTemplate jdbcTemplate;
-    private final RowMapper<WeatherStation> rowMapper;
+    private final RowMapper<Station> rowMapper;
 
-    public WeatherStationService(JdbcTemplate jdbcTemplate, JSONB jsonb) {
+    public StationService(JdbcTemplate jdbcTemplate, JSONB jsonb) {
         this.jdbcTemplate = jdbcTemplate;
-        this.rowMapper = new JSONBRowMapper(jsonb, WeatherStation.class);
+        this.rowMapper = new JSONBRowMapper(jsonb, Station.class);
     }
 
 
-    public List<WeatherStation> byId(String stationId) {
+    public List<Station> byId(String stationId) {
         return jdbcTemplate.query(con -> {
             PreparedStatement ps = con.prepareStatement(stationById);
             ps.setString(1, stationId);

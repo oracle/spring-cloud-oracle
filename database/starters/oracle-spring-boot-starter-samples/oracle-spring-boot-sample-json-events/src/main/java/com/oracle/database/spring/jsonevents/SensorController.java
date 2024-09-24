@@ -4,7 +4,7 @@ package com.oracle.database.spring.jsonevents;
 
 import java.util.List;
 
-import com.oracle.database.spring.jsonevents.model.SensorData;
+import com.oracle.database.spring.jsonevents.model.Sensor;
 import com.oracle.database.spring.jsonevents.model.SensorEvent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/events")
 public class SensorController {
     private final SensorEventProducer sensorEventProducer;
-    private final SensorDataService sensorDataService;
+    private final SensorService sensorService;
 
-    public SensorController(SensorEventProducer sensorEventProducer, SensorDataService sensorDataService) {
+    public SensorController(SensorEventProducer sensorEventProducer, SensorService sensorService) {
         this.sensorEventProducer = sensorEventProducer;
-        this.sensorDataService = sensorDataService;
+        this.sensorService = sensorService;
     }
 
     @PostMapping
@@ -32,8 +32,8 @@ public class SensorController {
     }
 
     @GetMapping("/station/{stationId}")
-    ResponseEntity<?> getEvents(@PathVariable String stationId) {
-        List<SensorData> sensorData = sensorDataService.byStationId(stationId);
-        return ResponseEntity.ok(sensorData);
+    ResponseEntity<List<Sensor>> getEvents(@PathVariable String stationId) {
+        List<Sensor> sensors = sensorService.byStationId(stationId);
+        return ResponseEntity.ok(sensors);
     }
 }

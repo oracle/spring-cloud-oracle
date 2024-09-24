@@ -2,10 +2,11 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonevents;
 
-import com.oracle.database.spring.jsonevents.model.SensorData;
+import com.oracle.database.spring.jsonevents.model.Sensor;
 import com.oracle.database.spring.jsonevents.model.SensorEvent;
+import jakarta.annotation.PreDestroy;
+import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Service;
  * The SensorEventProducer
  */
 @Service
-public class SensorEventProducer {
-    private final KafkaProducer<String, SensorData> producer;
+public class SensorEventProducer implements AutoCloseable {
+    private final Producer<String, Sensor> producer;
     private final String topic;
     private final SensorEventParser sensorEventParser;
 
-    public SensorEventProducer(@Qualifier("sensorDataProducer") KafkaProducer<String, SensorData> producer,
+    public SensorEventProducer(@Qualifier("okafkaProducer") Producer<String, Sensor> producer,
                                @Value("${app.topic}") String topic,
                                SensorEventParser sensorEventParser) {
         this.producer = producer;
@@ -28,11 +29,17 @@ public class SensorEventProducer {
     }
 
     public void send(SensorEvent event) {
-        for (SensorData sensorData : sensorEventParser.parse(event)) {
-            ProducerRecord<String, SensorData> record = new ProducerRecord<>(topic, sensorData);
+        for (Sensor sensor : sensorEventParser.parse(event)) {
+            ProducerRecord<String, Sensor> record = new ProducerRecord<>(topic, sensor);
             producer.send(record);
         }
     }
 
-
+    @PreDestroy
+    @Override
+    public void close() throws Exception {
+        if (producer != null) {
+            producer.close();
+        }
+    }
 }

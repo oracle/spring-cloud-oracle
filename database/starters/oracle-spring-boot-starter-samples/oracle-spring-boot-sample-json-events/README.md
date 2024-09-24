@@ -1,6 +1,6 @@
-# Oracle Spring Boot Sample for JSON Relational Duality Views
+# Oracle Spring Boot Sample for JSON Events and OKafka
 
-This sample application demonstrates how to use the Oracle Spring Boot Starter JSON Collections with [JSON Relational Duality Views](https://docs.oracle.com/en/database/oracle/oracle-database/23/jsnvu/overview-json-relational-duality-views.html)
+This sample application demonstrates how to use the Oracle Spring Boot Starter for OKafka, and the Oracle Spring Starter for JSON Collections with [JSON Relational Duality Views](https://docs.oracle.com/en/database/oracle/oracle-database/23/jsnvu/overview-json-relational-duality-views.html) and [Transactional Event Queues](https://www.oracle.com/database/advanced-queuing/). 
 
 The Oracle Spring Boot Sample for JSON Relational Duality Views package includes the following components to demonstrate development with JSON Relational Duality Views from a Spring Boot Java context:
 

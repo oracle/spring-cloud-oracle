@@ -4,8 +4,16 @@ package com.oracle.database.spring.jsonevents;
 
 import java.util.Properties;
 
-import com.oracle.database.spring.jsonevents.model.SensorData;
-import jakarta.annotation.PostConstruct;
+import com.oracle.database.spring.jsonevents.model.Sensor;
+import com.oracle.database.spring.jsonevents.serde.JSONBDeserializer;
+import com.oracle.database.spring.jsonevents.serde.JSONBSerializer;
+import com.oracle.spring.json.jsonb.JSONB;
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.common.serialization.Deserializer;
+import org.apache.kafka.common.serialization.Serializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.oracle.okafka.clients.consumer.KafkaConsumer;
 import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,8 +21,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * OKafkaConfiguration configures the OKafka properties, producer, and consumer beans.
+ */
 @Configuration
 public class OKafkaConfiguration {
+    private final JSONB jsonb;
+
     @Value("${app.ojdbcPath}")
     private String ojdbcPath;
 
@@ -30,6 +43,13 @@ public class OKafkaConfiguration {
     @Value("${app.securityProtocol:PLAINTEXT}")
     private String securityProtocol;
 
+    @Value("${app.consumerGroup:SensorEvents}")
+    private String consumerGroup;
+
+    public OKafkaConfiguration(JSONB jsonb) {
+        this.jsonb = jsonb;
+    }
+
     @Bean
     @Qualifier("okafkaProperties")
     public Properties okafkaProperties() {
@@ -43,23 +63,26 @@ public class OKafkaConfiguration {
     }
 
     @Bean
-    @Qualifier("sensorDataConsumer")
-    public KafkaConsumer<String, SensorData> sensorDataConsumer() {
+    @Qualifier("okafkaConsumer")
+    public Consumer<String, Sensor> okafkaConsumer() {
         Properties props = okafkaProperties();
+        props.put("group.id", consumerGroup);
+        props.put("enable.auto.commit","false");
+        props.put("max.poll.records", 2000);
 
-        return new KafkaConsumer<>(props);
+        Deserializer<String> keyDeserializer = new StringDeserializer();
+        Deserializer<Sensor> valueDeserializer = new JSONBDeserializer<>(jsonb, Sensor.class);
+        return new KafkaConsumer<>(props, keyDeserializer, valueDeserializer);
     }
 
     @Bean
-    @Qualifier("sensorDataProducer")
-    public KafkaProducer<String, SensorData> sensorDataProducer() {
+    @Qualifier("okafkaProducer")
+    public Producer<String, Sensor> okafkaProducer() {
         Properties props = okafkaProperties();
+        props.put("enable.idempotence", "true");
 
-        return new KafkaProducer<>(props);
-    }
-
-    @PostConstruct
-    void initOKafka() {
-
+        Serializer<String> keySerializer = new StringSerializer();
+        Serializer<Sensor> valueSerializer = new JSONBSerializer<>(jsonb);
+        return new KafkaProducer<>(props, keySerializer, valueSerializer);
     }
 }

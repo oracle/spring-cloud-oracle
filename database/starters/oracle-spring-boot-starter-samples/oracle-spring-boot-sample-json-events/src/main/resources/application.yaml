@@ -1,5 +1,10 @@
 app:
-  topic: sensor_data
+  topic: weathersensor
+  consumerGroup: weathersensor
+  bootstrapServers: localhost:1521
+  ojdbcPath: /path/to/ojbdc/properties
+
+
 
 spring:
   jpa:

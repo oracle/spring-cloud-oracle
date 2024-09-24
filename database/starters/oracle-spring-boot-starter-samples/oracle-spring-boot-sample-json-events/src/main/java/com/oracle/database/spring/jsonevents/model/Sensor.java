@@ -2,17 +2,21 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonevents.model;
 
-public class SensorData {
-    String id;
+public class Sensor {
+    String _id;
     String timestamp;
     String stationId;
+    double relativeHumidity;
+    double temperature;
+    double uvIndex;
+    Station station;
 
-    public String getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getTimestamp() {
@@ -47,24 +51,19 @@ public class SensorData {
         this.temperature = temperature;
     }
 
-    public double getUv() {
-        return uv;
+    public double getUvIndex() {
+        return uvIndex;
     }
 
-    public void setUv(double uv) {
-        this.uv = uv;
+    public void setUvIndex(double uvIndex) {
+        this.uvIndex = uvIndex;
     }
 
-    public WeatherStation getStation() {
+    public Station getStation() {
         return station;
     }
 
-    public void setStation(WeatherStation station) {
+    public void setStation(Station station) {
         this.station = station;
     }
-
-    double relativeHumidity;
-    double temperature;
-    double uv;
-    WeatherStation station;
 }

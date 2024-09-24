@@ -1,6 +1,8 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonevents.model;
 
-public class WeatherStation {
+public class Station {
     String _id;
     String stationName;
     double latitude;
