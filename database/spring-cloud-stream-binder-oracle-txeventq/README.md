@@ -1,4 +1,4 @@
-# [TxEventQ](https://www.oracle.com/database/advanced-queuing/) support for Spring Cloud Stream
+# [Oracle Database Transactional Event Queues](https://www.oracle.com/database/advanced-queuing/) support for Spring Cloud Stream
 
 This version of the binder supports Spring Boot 3+/Spring framework 6+.
 

@@ -14,7 +14,7 @@
     </parent>
 
     <name>spring-cloud-stream-binder-oracle-txeventq</name>
-    <description>Spring Cloud Stream Binder for Oracle TxEventQ based on JMS</description>
+    <description>Spring Cloud Stream Binder for Oracle Database Transactional Event Queues based on JMS</description>
 
     <organization>
         <name>Oracle America, Inc.</name>

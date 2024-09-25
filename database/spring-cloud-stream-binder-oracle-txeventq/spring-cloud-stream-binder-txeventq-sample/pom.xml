@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>spring-cloud-stream-binder-txeventq-sample</name>
-    <description>Spring Cloud Stream Binder for Oracle TxEventQ Sample Application</description>
+    <description>Spring Cloud Stream Binder for Oracle Database Transactional Event Queues Sample Application</description>
 
     <organization>
         <name>Oracle America, Inc.</name>

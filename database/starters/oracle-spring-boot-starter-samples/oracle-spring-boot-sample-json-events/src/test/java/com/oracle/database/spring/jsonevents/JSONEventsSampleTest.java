@@ -43,7 +43,7 @@ public class JSONEventsSampleTest {
      */
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
-        // Configure for OKafka
+        // Configure the Kafka Java Client for Oracle TxEventQ
         String bootstrapServers = "localhost:" + oracleContainer.getOraclePort();
         String propsPath = new File("src/main/resources").getAbsolutePath();
         registry.add("app.bootstrapServers", () -> bootstrapServers);
@@ -58,8 +58,8 @@ public class JSONEventsSampleTest {
     public static void setUp() throws Exception {
         // Run the okafka.sql grants as sysdba on the database test container
         oracleContainer.start();
-        oracleContainer.copyFileToContainer(MountableFile.forClasspathResource("okafka.sql"), "/tmp/okafka.sql");
-        oracleContainer.execInContainer("sqlplus", "sys / as sysdba", "@/tmp/okafka.sql");
+        oracleContainer.copyFileToContainer(MountableFile.forClasspathResource("txeventq.sql"), "/tmp/txeventq.sql");
+        oracleContainer.execInContainer("sqlplus", "sys / as sysdba", "@/tmp/txeventq.sql");
     }
 
     @Autowired
