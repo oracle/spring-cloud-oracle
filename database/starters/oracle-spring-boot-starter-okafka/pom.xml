@@ -15,8 +15,8 @@
     <artifactId>oracle-spring-boot-starter-okafka</artifactId>
     <version>24.2.0</version>
 
-    <name>Oracle Spring Boot Starter - Kafka Java Client for Oracle TxEventQ</name>
-    <description>Spring Boot Starter for the Kafka Java Client for Oracle TxEventQ</description>
+    <name>Oracle Spring Boot Starter - Kafka Java Client for Oracle Database Transactional Event Queues</name>
+    <description>Spring Boot Starter for the Kafka Java Client for Oracle Database Transactional Event Queues</description>
     <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-okafka</url>
 
     <organization>

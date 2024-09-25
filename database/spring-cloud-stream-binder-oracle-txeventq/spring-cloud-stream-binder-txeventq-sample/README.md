@@ -1,6 +1,6 @@
-# Spring Cloud Stream Binder TxEventQ Sample
+# Spring Cloud Stream Binder for Oracle Database Transactional Event Queues Sample
 
-This sample application demonstrates how to use the Spring Cloud Stream Binder for Oracle TxEventQ in a simple Spring Boot Application.
+This sample application demonstrates how to use the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues in a simple Spring Boot Application.
 
 Spring Cloud Stream exposes a [functional messaging API](https://docs.spring.io/spring-cloud-stream/reference/spring-cloud-stream/producing-and-consuming-messages.html) for producing and consuming messages. In this sample we implement three functional interfaces to produce a series of words, capitalize them, and output them.
 
@@ -22,7 +22,7 @@ To run the tests, use the following command:
 mvn test
 ```
 
-As the test runs, you should see the following output, indicating messages are being processed by the TxEventQ stream binder:
+As the test runs, you should see the following output, indicating messages are being processed by the Oracle Database Transactional Event Queues stream binder:
 
 ```
 Consumed: SPRING
