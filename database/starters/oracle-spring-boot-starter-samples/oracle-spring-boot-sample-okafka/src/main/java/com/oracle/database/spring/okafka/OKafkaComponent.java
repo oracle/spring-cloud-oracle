@@ -38,7 +38,7 @@ public class OKafkaComponent {
 
     @PostConstruct
     public void init() {
-        // Create a new OKafka topic
+        // Create a new TxEventQ topic
         NewTopic topic = new NewTopic(TOPIC_NAME, 1, (short) 1);
         OKafkaUtil.createTopicIfNotExists(kafkaProperties, topic);
 

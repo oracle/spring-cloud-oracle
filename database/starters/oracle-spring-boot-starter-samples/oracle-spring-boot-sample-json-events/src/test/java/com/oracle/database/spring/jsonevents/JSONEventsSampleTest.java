@@ -43,7 +43,7 @@ public class JSONEventsSampleTest {
      */
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
-        // Configure for OKafka
+        // Configure the Kafka Java Client for Oracle TxEventQ
         String bootstrapServers = "localhost:" + oracleContainer.getOraclePort();
         String propsPath = new File("src/main/resources").getAbsolutePath();
         registry.add("app.bootstrapServers", () -> bootstrapServers);
