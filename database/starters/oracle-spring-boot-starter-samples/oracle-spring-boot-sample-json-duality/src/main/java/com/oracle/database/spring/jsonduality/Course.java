@@ -2,20 +2,12 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonduality;
 
-import java.util.UUID;
-
 public class Course {
     private String _id;
     private String name;
     private String description;
     private Integer credits;
     private LectureHall lecture_hall;
-
-    public static Course createCourse() {
-        Course course = new Course();
-        course.set_id(UUID.randomUUID().toString());
-        return course;
-    }
 
     public Course() {
     }
@@ -66,5 +58,16 @@ public class Course {
 
     public void setLecture_hall(LectureHall lecture_hall) {
         this.lecture_hall = lecture_hall;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "_id='" + _id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", credits=" + credits +
+                ", lecture_hall=" + lecture_hall +
+                '}';
     }
 }

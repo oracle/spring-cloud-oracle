@@ -5,6 +5,7 @@ package com.oracle.database.spring.jsonevents;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.admin.Admin;
@@ -13,24 +14,26 @@ import org.apache.kafka.common.errors.TopicExistsException;
 import org.oracle.okafka.clients.admin.AdminClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.stereotype.Component;
 
 /**
  * OKafkaSetup creates the app's OKafka topic, and starts the consumer thread.
  */
-@Configuration
-public class OKafkaSetup {
+@Component
+public class OKafkaComponent {
     private final AsyncTaskExecutor asyncTaskExecutor;
     private final SensorConsumer sensorConsumer;
     private final Properties okafkaProperties;
 
-    @Value("${app.topic}")
+    @Value("${app.topic:weathersensor}")
     private String topic;
 
-    public OKafkaSetup(@Qualifier("applicationTaskExecutor") AsyncTaskExecutor asyncTaskExecutor,
-                       SensorConsumer sensorConsumer,
-                       @Qualifier("okafkaProperties") Properties okafkaProperties) {
+    private Future<?> consumer;
+
+    public OKafkaComponent(@Qualifier("applicationTaskExecutor") AsyncTaskExecutor asyncTaskExecutor,
+                           SensorConsumer sensorConsumer,
+                           @Qualifier("okafkaProperties") Properties okafkaProperties) {
         this.asyncTaskExecutor = asyncTaskExecutor;
         this.sensorConsumer = sensorConsumer;
         this.okafkaProperties = okafkaProperties;
@@ -50,6 +53,14 @@ public class OKafkaSetup {
                 throw new RuntimeException(e);
             }
         }
-        asyncTaskExecutor.submit(sensorConsumer);
+        consumer = asyncTaskExecutor.submit(sensorConsumer);
+    }
+
+    public void await() {
+        try {
+            consumer.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

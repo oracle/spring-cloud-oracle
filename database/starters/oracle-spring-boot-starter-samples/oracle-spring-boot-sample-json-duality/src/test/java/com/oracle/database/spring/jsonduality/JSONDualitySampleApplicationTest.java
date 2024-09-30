@@ -50,15 +50,18 @@ public class JSONDualitySampleApplicationTest {
 
     @Test
     void jsonDualityViewsSampleApplication() {
+        System.out.println("#### Querying Courses By Name:");
         // fetch courses
         List<Course> courseByName = courseService.getCourseByName("Introduction to Computer Science");
         assertThat(courseByName).hasSize(1);
         Course introToCS = courseByName.get(0);
+        System.out.println("#### Intro to Computer Science:\n" + introToCS);
         courseByName = courseService.getCourseByName("Data Structures and Algorithms");
         assertThat(courseByName).hasSize(1);
         Course dsAndAlgo = courseByName.get(0);
+        System.out.println("\n#### Data Structures and Algorithms:\n" + dsAndAlgo);
 
-
+        System.out.println("\n\n\n#### Enrolling Student in CS101");
         // Enroll existing student in a new course
         Student aliceSmith = getStudent("Alice", "Smith");
         Enrollment introToCSEnrollment = new Enrollment();
@@ -76,7 +79,10 @@ public class JSONDualitySampleApplicationTest {
                 .isEqualTo(introToCS.getName());
         assertThat(asEnrollments.get(0).getCourse().getLecture_hall().getName())
                 .isEqualTo("Hoffman Hall");
+        System.out.println("#### Enrollment created:\n" + aliceSmith);
 
+
+        System.out.println("\n\n\n#### Creating new student with two enrollments");
         // Create a new student with two enrollments
         Student bobSwanson = new Student();
         bobSwanson.setFirst_name("Robert");
@@ -94,6 +100,7 @@ public class JSONDualitySampleApplicationTest {
         // Verify student created with enrollments
         bobSwanson = getStudent("Robert", "Swanson");
         assertThat(bobSwanson.getEnrollments()).hasSize(2);
+        System.out.println("#### Student created:\n" + bobSwanson);
     }
 
     private Student getStudent(String firstName, String lastName) {

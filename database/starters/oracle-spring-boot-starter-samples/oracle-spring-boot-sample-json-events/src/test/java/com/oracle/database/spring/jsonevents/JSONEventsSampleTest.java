@@ -65,19 +65,31 @@ public class JSONEventsSampleTest {
     @Autowired
     SensorController sensorController;
 
+    @Autowired
+    OKafkaComponent okafkaComponent;
+
 
     @Test
     void jsonEventsSampleAppTest() throws InterruptedException {
         // Produce events for two different stations
+        System.out.println("Produced events for ST001");
         sensorController.produce(event1());
+        System.out.println("Produced events for ST002");
         sensorController.produce(event2());
+
+        System.out.println("Waiting for consumer to process all events");
         // Wait for queues to process all events
-        Thread.sleep(3000);
+        okafkaComponent.await();
+
         // Assert all events have been processed and are available in the database
         ResponseEntity<List<Sensor>> st001Events = sensorController.getEvents("ST001");
         ResponseEntity<List<Sensor>> st002Events = sensorController.getEvents("ST002");
+
+        System.out.printf("Received %d events for ST001\n", st001Events.getBody().size());
         assertEquals(st001Events.getBody().size(), 5);
+        System.out.printf("Received %d events for ST002\n", st002Events.getBody().size());
         assertEquals(st002Events.getBody().size(), 10);
+
     }
 
     private SensorEvent event1() {

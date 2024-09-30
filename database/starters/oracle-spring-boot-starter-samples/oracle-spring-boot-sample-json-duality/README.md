@@ -16,7 +16,7 @@ The sample application test uses Testcontainers, and creates a temporary Oracle 
 To run the test application, run the following command:
 
 ```shell
-mvn test
+mvn test -Dtest=JSONDualitySampleApplicationTest
 ```
 
 ## Configure your project to use Oracle JSON Relational Duality Views

@@ -16,7 +16,7 @@ The sample application test uses Testcontainers, and creates a temporary Oracle 
 To run application test, run the following command:
 
 ```shell
-mvn test
+mvn test -Dtest=JSONEventsSampleTest
 ```
 
 The test starts a sensor data consumer, and sends a series of raw weather station events to the producer. The test verifies that the events have been processed and saved to the database, available in JSON Relational Duality View form.

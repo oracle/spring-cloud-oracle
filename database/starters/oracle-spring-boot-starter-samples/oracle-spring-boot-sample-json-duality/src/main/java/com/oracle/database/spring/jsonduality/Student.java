@@ -3,10 +3,9 @@
 package com.oracle.database.spring.jsonduality;
 
 import java.util.List;
-import java.util.UUID;
 
 
-public class Student {
+public final class Student {
     private String _id;
     private String first_name;
     private String last_name;
@@ -15,12 +14,6 @@ public class Student {
     private double gpa;
     private double credits;
     private List<Enrollment> enrollments;
-
-    public static Student createStudent() {
-        Student student = new Student();
-        student.set_id(UUID.randomUUID().toString());
-        return student;
-    }
 
     public Student() {}
 
@@ -97,5 +90,19 @@ public class Student {
 
     public void setEnrollments(List<Enrollment> enrollments) {
         this.enrollments = enrollments;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "_id='" + _id + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", email='" + email + '\'' +
+                ", major='" + major + '\'' +
+                ", gpa=" + gpa +
+                ", credits=" + credits +
+                ", enrollments=" + enrollments +
+                '}';
     }
 }

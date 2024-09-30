@@ -69,6 +69,7 @@ public class OKafkaConfiguration {
         props.put("group.id", consumerGroup);
         props.put("enable.auto.commit","false");
         props.put("max.poll.records", 2000);
+        props.put("auto.offset.reset", "earliest");
 
         Deserializer<String> keyDeserializer = new StringDeserializer();
         Deserializer<Sensor> valueDeserializer = new JSONBDeserializer<>(jsonb, Sensor.class);

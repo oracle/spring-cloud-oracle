@@ -1,9 +1,3 @@
-app:
-  topic: weathersensor
-  consumerGroup: weathersensor
-  bootstrapServers: localhost:1521
-  ojdbcPath: /path/to/ojbdc/properties
-
 spring:
   jpa:
     hibernate:
@@ -27,5 +21,5 @@ server:
 
 logging:
   level:
-    org.apache.kafka: WARN
-    org.oracle.okafka: WARN
+    org.apache.kafka: FATAL
+    org.oracle.okafka: FATAL
