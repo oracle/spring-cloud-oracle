@@ -21,7 +21,7 @@ public class SensorEventProducer implements AutoCloseable {
     private final SensorEventParser sensorEventParser;
 
     public SensorEventProducer(@Qualifier("okafkaProducer") Producer<String, Sensor> producer,
-                               @Value("${app.topic}") String topic,
+                               @Value("${app.topic:weathersensor}") String topic,
                                SensorEventParser sensorEventParser) {
         this.producer = producer;
         this.topic = topic;

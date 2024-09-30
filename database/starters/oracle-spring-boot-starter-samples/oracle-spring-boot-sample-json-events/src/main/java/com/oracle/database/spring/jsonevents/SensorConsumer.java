@@ -20,25 +20,36 @@ public class SensorConsumer implements Runnable, AutoCloseable {
     private final String topic;
     private final SensorEnricher sensorEnricher;
     private final SensorService sensorService;
+    // Used to end the consumer for example/testing purposes
+    private final int limit;
 
     public SensorConsumer(@Qualifier("okafkaConsumer") Consumer<String, Sensor> consumer,
-                          @Value("${app.topic}") String topic,
+                          @Value("${app.topic:weathersensor}") String topic,
+                          @Value("${app.consumer.limit:15}") int limit,
                           SensorEnricher sensorEnricher,
                           SensorService sensorService) {
         this.consumer = consumer;
         this.topic = topic;
+        this.limit = limit;
         this.sensorEnricher = sensorEnricher;
         this.sensorService = sensorService;
+
     }
 
     @Override
     public void run() {
         consumer.subscribe(List.of(topic));
+        int consumedRecords = 0;
         while (true) {
             ConsumerRecords<String, Sensor> records = consumer.poll(Duration.ofMillis(100));
             processRecords(records);
             // Commit records when done processing.
-            consumer.commitAsync();
+            consumer.commitSync();
+            // End the consumed once we have consumed all records.
+            consumedRecords += records.count();
+            if (consumedRecords >= limit) {
+                return;
+            }
         }
     }
 

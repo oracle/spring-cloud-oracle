@@ -76,6 +76,7 @@ public class OKafkaConfiguration {
         props.put("max.poll.records", 2000);
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("auto.offset.reset", "earliest");
         // Note the use of the org.oracle.okafka.clients.producer.KafkaConsumer class, for Oracle TxEventQ.
         Consumer<String, String> okafkaConsumer = new KafkaConsumer<>(props);
         return new SampleConsumer<>(okafkaConsumer, TOPIC_NAME, expectedMessages);

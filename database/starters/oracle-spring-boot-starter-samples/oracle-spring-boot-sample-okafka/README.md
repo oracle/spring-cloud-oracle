@@ -21,7 +21,7 @@ The sample application test uses Testcontainers, and creates a temporary Oracle 
 To run the test application, run the following command:
 
 ```shell
-mvn test
+mvn test -Dtest=OKafkaSampleTest
 ```
 
 ## Configure your project to use the Kafka Java Client for Oracle Database Transactional Event Queues

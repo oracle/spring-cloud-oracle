@@ -30,7 +30,7 @@ public class SampleConsumer<T> implements Runnable, AutoCloseable {
         consumer.subscribe(List.of(topic));
         int consumedRecords = 0;
         while (true) {
-            ConsumerRecords<String, T> records = consumer.poll(Duration.ofMillis(100));
+            ConsumerRecords<String, T> records = consumer.poll(Duration.ofMillis(500));
             System.out.println("Consumed records: " + records.count());
             consumedRecords += records.count();
             if (consumedRecords >= expectedMessages) {
