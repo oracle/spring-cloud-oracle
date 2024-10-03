@@ -53,6 +53,7 @@
         <module>oracle-spring-boot-sample-json-duality</module>
         <module>oracle-spring-boot-sample-json-events</module>
         <module>oracle-spring-boot-sample-okafka</module>
+        <module>oracle-spring-boot-sample-wallet</module>
     </modules>
 
     <build>

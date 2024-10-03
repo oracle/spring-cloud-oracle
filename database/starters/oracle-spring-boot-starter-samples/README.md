@@ -15,3 +15,7 @@ The JSON Relational Duality Views sample application demonstrates how to use the
 This sample application demonstrates how to use the Oracle Spring Boot Starter for the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka)
 
 Using an in-database message broker like Oracle Database Transactional Event Queues eliminates the need for external message brokers, reduces overall network traffic, simplifying your overall application architecture — and the Kafka Java Client for Oracle Database Transactional Event Queues library enables developers to create applications for Oracle Database Transactional Event Queues using familiar Kafka APIs for messaging.
+
+### [Oracle UCP using Wallet](./oracle-spring-boot-sample-wallet)
+
+This sample application demonstrates how to connect to an Autonomous database using the Oracle Spring Boot Starter UCP and Oracle Spring Boot Starter Wallet all while using the best connection pooling library for Oracle Database with Spring Boot.
