@@ -54,6 +54,7 @@
 
   <modules>
     <module>oracle-spring-boot-starter-ucp</module>
+    <module>oracle-spring-boot-starter-wallet</module>
     <module>oracle-spring-boot-starter-aqjms</module>
     <module>oracle-spring-boot-starter-json-collections</module>
     <module>oracle-spring-boot-starter-samples</module>
@@ -73,7 +74,8 @@
 
     <okafka.version>23.5.0.0</okafka.version>
     <kafka-clients.version>3.7.1</kafka-clients.version>
-    <ojdbc.version>23.5.0.24.07</ojdbc.version>
+    <oracle.version>23.5.0.24.07</oracle.version>
+    <osdt.version>21.15.0.0</osdt.version>
     <oracledb-messaging.version>23.3.1.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
     <micrometer.version>1.11.5</micrometer.version>
@@ -132,14 +134,29 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>com.oracle.database.security</groupId>
+        <artifactId>oraclepki</artifactId>
+        <version>${osdt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle.database.security</groupId>
+        <artifactId>osdt_core</artifactId>
+        <version>${osdt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle.database.security</groupId>
+        <artifactId>osdt_cert</artifactId>
+        <version>${osdt.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.oracle.database.jdbc</groupId>
         <artifactId>ojdbc11</artifactId>
-        <version>${ojdbc.version}</version>
+        <version>${oracle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.oracle.database.jdbc</groupId>
         <artifactId>ucp</artifactId>
-        <version>${ojdbc.version}</version>
+        <version>${oracle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.oracle.database.messaging</groupId>

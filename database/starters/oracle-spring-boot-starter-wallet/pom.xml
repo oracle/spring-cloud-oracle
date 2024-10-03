@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2023, 2024, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>oracle-spring-boot-starters</artifactId>
+        <groupId>com.oracle.database.spring</groupId>
+        <version>24.3.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+    <version>24.3.0</version>
+
+    <name>Oracle Spring Boot Starter - Wallet</name>
+    <description>Oracle's implementation of Spring Boot Starter for Oracle Wallet</description>
+    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-wallet</url>
+
+    <organization>
+        <name>Oracle America, Inc.</name>
+        <url>https://www.oracle.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Oracle</name>
+            <email>obaas_ww at oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <organizationUrl>https://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Universal Permissive License (UPL), Version 1.0</name>
+            <url>https://oss.oracle.com/licenses/upl/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/oracle/spring-cloud-oracle</url>
+        <connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
+        <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.security</groupId>
+            <artifactId>oraclepki</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.security</groupId>
+            <artifactId>osdt_core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.security</groupId>
+            <artifactId>osdt_cert</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
