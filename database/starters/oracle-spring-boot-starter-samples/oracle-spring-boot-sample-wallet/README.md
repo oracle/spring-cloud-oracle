@@ -6,7 +6,7 @@ This sample application demonstrates how to connect to an Autonomous database us
 
 1. Download the Wallet using the following [instructions](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/connect-download-wallet.html#GUID-DED75E69-C303-409D-9128-5E10ADD47A35).
 1. Unzip the Wallet ZIP file
-1. OPen the `sqlnet.ora` file and modify the line `WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="<DIRECTORY_OF_UNZIPPED_WALLET>")))` to make the `DIRECTORY` parameter point to the directory where you unzipped the wallet.
+1. Open the `sqlnet.ora` file and modify the line `WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="<DIRECTORY_OF_UNZIPPED_WALLET>")))` to make the `DIRECTORY` parameter point to the directory where you unzipped the wallet.
 
 ## Configure the application
 
