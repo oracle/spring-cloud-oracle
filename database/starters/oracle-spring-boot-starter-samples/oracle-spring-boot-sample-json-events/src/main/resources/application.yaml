@@ -14,7 +14,7 @@ spring:
       initial-pool-size: 1
       min-pool-size: 1
       max-pool-size: 30
-      connection-pool-name: UCPSampleApplication
+      connection-pool-name: JSONEventsApplication
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
 server:
   port: 9001
