@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starter-samples</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>24.2.0</version>
+        <version>24.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-sample-okafka</artifactId>
-    <version>24.2.0</version>
+    <version>24.3.0</version>
 
     <name>Oracle Spring Boot Starter - OKafka Sample</name>
     <description>Oracle Spring Boot Starter Sample for OKafka</description>
