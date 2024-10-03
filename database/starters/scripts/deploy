@@ -49,6 +49,6 @@ PACKAGES="$(mvn -Dexec.executable='echo' -Dexec.args='${project.artifactId}' exe
 printf "The following artifacts have been created for upload:\n\n"
 for PACKAGE in $PACKAGES; do
   if [[ "$PACKAGE" != *"-sample"* ]]; then
-    echo "com.oracle.cloud.spring:${PACKAGE}:${VERSION}"
+    echo "com.oracle.database.spring:${PACKAGE}:${VERSION}"
   fi
 done
