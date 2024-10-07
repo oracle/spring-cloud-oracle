@@ -79,6 +79,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <dependency>
             <groupId>com.oracle.cloud.spring</groupId>
             <artifactId>spring-cloud-oci-adb</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.oracle.cloud.spring</groupId>
