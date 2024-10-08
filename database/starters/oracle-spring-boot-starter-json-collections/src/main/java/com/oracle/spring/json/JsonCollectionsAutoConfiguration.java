@@ -3,10 +3,7 @@
 package com.oracle.spring.json;
 
 import com.oracle.spring.json.jsonb.JSONB;
-import com.oracle.spring.json.jsonb.SODA;
 import jakarta.json.bind.JsonbBuilder;
-import oracle.soda.OracleDocument;
-import oracle.soda.rdbms.OracleRDBMSClient;
 import oracle.sql.json.OracleJsonFactory;
 import org.eclipse.yasson.YassonJsonb;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -28,20 +25,8 @@ public class JsonCollectionsAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnClass(OracleRDBMSClient.class)
-    OracleRDBMSClient oracleRDBMSClient() {
-        return new OracleRDBMSClient();
-    }
-
-    @Bean
     @ConditionalOnClass({OracleJsonFactory.class, YassonJsonb.class})
     public JSONB jsonb(OracleJsonFactory oracleJsonFactory, YassonJsonb yassonJsonb) {
         return new JSONB(oracleJsonFactory, yassonJsonb);
-    }
-
-    @Bean
-    @ConditionalOnClass({OracleJsonFactory.class, YassonJsonb.class, OracleDocument.class})
-    public SODA soda(OracleJsonFactory oracleJsonFactory, YassonJsonb yassonJsonb) {
-        return new SODA(oracleJsonFactory, yassonJsonb);
     }
 }
