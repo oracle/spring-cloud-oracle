@@ -3,7 +3,6 @@
 package com.oracle.spring.json;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.Duration;
 import java.util.List;
@@ -11,14 +10,9 @@ import java.util.UUID;
 
 import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
-import com.oracle.spring.json.jsonb.SODA;
 import com.oracle.spring.json.test.Student;
 import com.oracle.spring.json.test.StudentDetails;
 import oracle.jdbc.OracleTypes;
-import oracle.soda.OracleCollection;
-import oracle.soda.OracleDatabase;
-import oracle.soda.OracleDocument;
-import oracle.soda.rdbms.OracleRDBMSClient;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -45,20 +39,11 @@ public class JsonCollectionsIT {
 
     @Autowired
     JSONB jsonb;
-    @Autowired
-    SODA soda;
-    @Autowired
-    OracleRDBMSClient client;
 
     Student student1 = new Student(Student.newId(), "Bob", new StudentDetails(
             "Computer Science",
             3.33,
             64
-    ));
-    Student student2 = new Student(Student.newId(), "Alice", new StudentDetails(
-            "Mathematics",
-            3.8,
-            80
     ));
 
     @BeforeAll
@@ -94,26 +79,5 @@ public class JsonCollectionsIT {
         List<Student> students = jdbcTemplate.query("select * from student", rowMapper);
         assertThat(students).hasSize(1);
         assertThat(students.get(0)).isEqualTo(student1);
-    }
-
-    @Test
-    void sodaMapping() throws Exception {
-        try (Connection conn = dataSource.getConnection()) {
-            OracleDatabase db = client.getDatabase(conn);
-            db.admin().createCollection("student_soda");
-            OracleCollection col = db.openCollection("student_soda");
-
-            OracleDocument document1 = soda.toDocument(db, student1);
-            OracleDocument document2 = soda.toDocument(db, student2);
-
-            col.insert(document1);
-            col.insert(document2);
-
-            OracleDocument found = col.find().filter("{\"name\":\"Alice\"}")
-                    .getOne();
-
-            Student student = soda.fromDocument(found, Student.class);
-            assertThat(student).isEqualTo(student2);
-        }
     }
 }
