@@ -1,0 +1,23 @@
+#!/bin/bash
+
+VERSION="$1"
+
+if [ -z "$VERSION" ]; then
+  echo "Usage: ./scripts/version <VERSION>"
+  exit 1
+fi
+if [ -z "$(command -v mvn)" ]; then
+  echo "Error: 'mvn' binary not found on PATH. Install 'mvn' before running this script."
+  exit 1
+fi
+
+echo "Setting project version = $VERSION"
+
+mvn -q versions:set -DnewVersion="$VERSION"
+cd spring-cloud-oci-dependencies
+mvn -q versions:set -DnewVersion="$VERSION"
+cd -
+cd docs
+mvn -q versions:set -DnewVersion="$VERSION"
+cd -
+
