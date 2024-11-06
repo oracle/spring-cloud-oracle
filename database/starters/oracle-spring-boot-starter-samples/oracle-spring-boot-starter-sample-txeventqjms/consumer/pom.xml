@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2024, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>oracle-spring-boot-starter-samples</artifactId>
+		<groupId>com.oracle.database.spring</groupId>
+		<version>24.3.0</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>oracle-spring-boot-sample-txeventqjms-consumer</artifactId>
+	<version>24.3.0</version>
+
+	<name>Oracle Spring Boot Starter - Transactional Event Queue JMS Sample</name>
+	<description>Oracle Spring Boot Starter - Transactional Event Queue JMS Sample</description>
+
+	<organization>
+		<name>Oracle America, Inc.</name>
+		<url>https://www.oracle.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Oracle</name>
+			<email>obaas_ww at oracle.com</email>
+			<organization>Oracle America, Inc.</organization>
+			<organizationUrl>https://www.oracle.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Universal Permissive License (UPL), Version 1.0</name>
+			<url>https://oss.oracle.com/licenses/upl/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/oracle/spring-cloud-oracle</url>
+		<connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
+		<developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.spring</groupId>
+			<artifactId>oracle-spring-boot-starter-aqjms</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
