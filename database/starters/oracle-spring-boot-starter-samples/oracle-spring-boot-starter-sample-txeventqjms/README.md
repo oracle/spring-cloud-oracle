@@ -15,7 +15,7 @@ container-registry.oracle.com/database/free:latest-lite
 
 ## Create user and the Transactional Event Queue (TxEventQ)
 
-Log into the database as the `SYS` user and run the SQL script `setup.sql` located in the `sql` directory. The script creates a user called `TESTUSER` and a TxEventQ called `my-txeventq`.
+Log into the database as the `SYS` user and run the SQL script `setup.sql` located in the `sql` directory. The script creates a user called `TESTUSER` and a TxEventQ called `my_txeventq`.
 
 ## Start the Consumer application
 
