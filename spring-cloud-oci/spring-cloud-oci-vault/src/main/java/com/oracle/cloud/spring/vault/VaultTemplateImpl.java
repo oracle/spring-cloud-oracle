@@ -152,6 +152,7 @@ public class VaultTemplateImpl implements VaultTemplate {
         do {
             ListSecretsRequest request = ListSecretsRequest.builder()
                     .vaultId(vaultId)
+                    .lifecycleState(SecretSummary.LifecycleState.Active)
                     .compartmentId(compartmentId)
                     .page(page)
                     .build();
