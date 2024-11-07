@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2024, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>oracle-spring-boot-starter-samples</artifactId>
+        <groupId>com.oracle.database.spring</groupId>
+        <version>24.3.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oracle-spring-boot-sample-txeventqjms</artifactId>
+    <version>24.3.0</version>
+    <packaging>pom</packaging>
+
+	<name>Oracle Spring Boot Starter - Transactional Event Queue JMS Sample</name>
+	<description>Oracle Spring Boot Starter - Transactional Event Queue JMS Sample</description>
+
+    <modules>
+        <module>consumer</module>
+        <module>producer</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Skip deploy of sample code-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

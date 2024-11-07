@@ -54,6 +54,7 @@
         <module>oracle-spring-boot-sample-json-events</module>
         <module>oracle-spring-boot-sample-okafka</module>
         <module>oracle-spring-boot-sample-wallet</module>
+        <module>oracle-spring-boot-sample-txeventqjms</module>
     </modules>
 
     <build>
