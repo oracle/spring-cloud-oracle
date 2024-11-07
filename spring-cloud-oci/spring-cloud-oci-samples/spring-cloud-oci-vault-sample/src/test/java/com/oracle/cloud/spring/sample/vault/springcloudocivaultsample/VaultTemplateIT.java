@@ -15,13 +15,15 @@ import com.oracle.cloud.spring.vault.VaultTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Requires an existing vault, identified by the OCI_VAULT_ID environment variable.
- * The vault must have a secret named "mysecret" present.
+ * The vault must have at least one secret named "mysecret" present.
+ * This secret must be in the "ACTIVE" lifecycle state.
  */
 @SpringBootTest
 @EnabledIfEnvironmentVariable(named = "OCI_COMPARTMENT_ID", matches = ".+")
@@ -33,7 +35,11 @@ public class VaultTemplateIT {
     @Autowired
     VaultController vaultController;
 
-    private final String secretName = "mysecret";
+    @Value("${secretName:mysecret}")
+    private String secretName;
+
+    @Value("${numSecrets:1}")
+    private int numSecrets;
 
     @Test
     void getSecret() {
@@ -59,7 +65,7 @@ public class VaultTemplateIT {
     @Test
     void listSecret() {
         List<SecretSummary> summaries = vaultTemplate.listSecrets();
-        assertThat(summaries).hasSize(1);
+        assertThat(summaries).hasSizeGreaterThanOrEqualTo(numSecrets);
     }
 
     @Test
