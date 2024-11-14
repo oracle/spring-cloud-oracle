@@ -5,7 +5,7 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>oracle-spring-boot-starter-samples</artifactId>
+		<artifactId>oracle-spring-boot-sample-txeventqjms</artifactId>
 		<groupId>com.oracle.database.spring</groupId>
 		<version>24.3.0</version>
 		<relativePath>../pom.xml</relativePath>
