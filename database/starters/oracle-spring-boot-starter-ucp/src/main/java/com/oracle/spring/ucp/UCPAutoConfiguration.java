@@ -10,10 +10,12 @@ import jakarta.annotation.PostConstruct;
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.ucp.jdbc.PoolDataSourceImpl;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 
 @AutoConfiguration
 @ConditionalOnClass({OracleDataSource.class})
+@ConditionalOnBean(DataSource.class)
 public class UCPAutoConfiguration {
     private final DataSource dataSource;
 
