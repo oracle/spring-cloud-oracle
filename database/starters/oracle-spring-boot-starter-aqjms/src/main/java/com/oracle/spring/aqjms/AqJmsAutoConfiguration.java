@@ -36,7 +36,7 @@ import org.springframework.util.ClassUtils;
 public class AqJmsAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
-	@ConditionalOnBean(DataSource.class)
+	@ConditionalOnBean(name = "dataSource")
 	public ConnectionFactory aqJmsConnectionFactory(DataSource ds) {
 		ConnectionFactory connectionFactory = null;
 		try {

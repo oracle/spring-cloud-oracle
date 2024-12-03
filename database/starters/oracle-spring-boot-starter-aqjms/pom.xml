@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>24.3.0</version>
+        <version>24.4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
-    <version>24.3.0</version>
+    <version>24.4.0</version>
     <packaging>jar</packaging>
 
     <!-- Project Information -->
