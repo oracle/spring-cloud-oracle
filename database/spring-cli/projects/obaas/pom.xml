@@ -12,17 +12,17 @@
     <groupId>com.example</groupId>
     <artifactId>obaas-rest-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    
+
     <name>obaas-rest-service</name>
     <description>RESTful web application for Oracle Backend for Spring Boot and Microservices</description>
-    
+
     <properties>
         <java.version>17</java.version>
-        <oracle-springboot-starter.version>24.3.0</oracle-springboot-starter.version>
+        <oracle-springboot-starter.version>24.4.0</oracle-springboot-starter.version>
         <liquibase.version>4.30.0</liquibase.version>
         <datasource-micrometer-spring-boot.version>1.0.5</datasource-micrometer-spring-boot.version>
     </properties>
-    
+
     <dependencies>
         <!-- Spring WebMVC for REST support.                                        -->
         <dependency>
@@ -51,7 +51,7 @@
             <version>${oracle-springboot-starter.version}</version>
             <type>pom</type>
         </dependency>
-        
+
         <!-- This dependency allows you to use Liquibase to manage your schema and  -->
         <!-- reference data.  Enable it in the application.yaml and edit the files  -->
          <!-- in src/main/resources/db/changelog to add your definitions and data.   -->
@@ -61,7 +61,7 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
-        </dependency> 
+        </dependency>
 
           <!-- This enables Spring Actuator which provides monitoring, metrics, etc.  -->
         <dependency>
@@ -74,7 +74,7 @@
             <artifactId>datasource-micrometer-spring-boot</artifactId>
             <version>${datasource-micrometer-spring-boot.version}</version>
         </dependency>
-        
+
         <!-- Spring test support.                                                   -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
