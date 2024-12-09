@@ -10,6 +10,10 @@ The Oracle UCP with JPA sample application demonstrates how to use the Oracle Sp
 
 The JSON Relational Duality Views sample application demonstrates how to use the Oracle Spring Boot Starter JSON Collections with [JSON Relational Duality Views](https://docs.oracle.com/en/database/oracle/oracle-database/23/jsnvu/overview-json-relational-duality-views.html). JSON Relational Duality Views layer the advantages of JSON document-style database over existing relational data structures — Powerful JSON views with full CRUD capabilities can be created on relational database schemas, nesting related data into a single document with unified access.
 
+## [JSON Events Sample](./oracle-spring-boot-sample-json-duality/README.md)
+
+This sample application demonstrates how to develop a JSON event-streaming application using Kafka APIs by combining the Oracle Spring Boot Starter for Kafka Java Clients with Oracle Database Transactional Event Queues and the Oracle Spring Starter for JSON Collections. JSON data is stored and processed using [JSON Relational Duality Views](https://docs.oracle.com/en/database/oracle/oracle-database/23/jsnvu/overview-json-relational-duality-views.html), and events are produced/consumed with [Transactional Event Queues](https://www.oracle.com/database/advanced-queuing/).
+
 ## [Kafka Java Client for Oracle Database Transactional Event Queues Sample](./oracle-spring-boot-starter-okafka/README.md)
 
 This sample application demonstrates how to use the Oracle Spring Boot Starter for the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka)

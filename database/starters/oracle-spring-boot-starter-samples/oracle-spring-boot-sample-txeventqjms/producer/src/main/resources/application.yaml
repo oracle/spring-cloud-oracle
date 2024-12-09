@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@//localhost:1521/freepdb1
     username: testuser
-    password: Welcome12345
+    password: testpwd
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:

@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>24.4.0</version>
+        <version>25.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-json-collections</artifactId>
-    <version>24.4.0</version>
+    <version>25.0.0</version>
 
     <name>Oracle Spring Boot Starter - JSON Collections</name>
     <description>Spring Boot Starter for Oracle Database JSON colections</description>
