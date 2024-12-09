@@ -7,12 +7,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.oracle.database.spring</groupId>
   <artifactId>oracle-spring-boot-starters</artifactId>
-  <version>24.4.0</version>
+  <version>25.0.0</version>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.11</version>
+    <version>3.4.0</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -62,8 +62,8 @@
   </modules>
 
   <properties>
-    <spring-boot-dependencies.version>3.2.11</spring-boot-dependencies.version>
-    <spring-framework-bom.version>6.1.14</spring-framework-bom.version>
+    <spring-boot-dependencies.version>3.4.0</spring-boot-dependencies.version>
+    <spring-framework-bom.version>6.2.0</spring-framework-bom.version>
 
     <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
