@@ -79,8 +79,8 @@
     <osdt.version>21.15.0.0</osdt.version>
     <oracledb-messaging.version>23.3.1.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
-    <micrometer.version>1.11.5</micrometer.version>
-    <micrometer-tracing.version>1.1.6</micrometer-tracing.version>
+    <micrometer.version>1.14.2</micrometer.version>
+    <micrometer-tracing.version>1.4.1</micrometer-tracing.version>
     <junit5.version>5.9.3</junit5.version>
     <testcontainers.version>1.20.4</testcontainers.version>
 
