@@ -7,12 +7,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starter-samples</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>24.4.0</version>
+        <version>25.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-sample-txeventqjms</artifactId>
-    <version>24.4.0</version>
+    <version>25.0.0</version>
     <packaging>pom</packaging>
 
 	<name>Oracle Spring Boot Starter - Transactional Event Queue JMS Sample</name>
