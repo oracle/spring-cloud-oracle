@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.0</version>
+    <version>3.4.1</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -62,8 +62,8 @@
   </modules>
 
   <properties>
-    <spring-boot-dependencies.version>3.4.0</spring-boot-dependencies.version>
-    <spring-framework-bom.version>6.2.0</spring-framework-bom.version>
+    <spring-boot-dependencies.version>3.4.1</spring-boot-dependencies.version>
+    <spring-framework-bom.version>6.2.1</spring-framework-bom.version>
 
     <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -82,7 +82,7 @@
     <micrometer.version>1.11.5</micrometer.version>
     <micrometer-tracing.version>1.1.6</micrometer-tracing.version>
     <junit5.version>5.9.3</junit5.version>
-    <testcontainers.version>1.20.1</testcontainers.version>
+    <testcontainers.version>1.20.4</testcontainers.version>
 
     <jakarta.json-api.version>2.1.3</jakarta.json-api.version>
     <jakarta.json.bind-api.version>3.0.1</jakarta.json.bind-api.version>
@@ -273,6 +273,16 @@
         <artifactId>spring-boot-starter-test</artifactId>
         <version>${spring-boot-dependencies.version}</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
