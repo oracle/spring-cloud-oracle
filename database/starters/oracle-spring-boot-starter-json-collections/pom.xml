@@ -16,7 +16,7 @@
     <version>25.0.0</version>
 
     <name>Oracle Spring Boot Starter - JSON Collections</name>
-    <description>Spring Boot Starter for Oracle Database JSON colections</description>
+    <description>Spring Boot Starter for Oracle Database JSON collections</description>
     <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-json-collections</url>
 
     <organization>
