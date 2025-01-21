@@ -8,6 +8,7 @@
 
     <name>spring-cloud-stream-binder-oracle-txeventq</name>
     <description>Spring Cloud Stream Binder for Oracle Database Transactional Event Queues based on JMS</description>
+    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/spring-cloud-stream-binder-oracle-txeventq</url>
 
     <organization>
         <name>Oracle America, Inc.</name>
