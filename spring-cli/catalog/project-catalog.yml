@@ -8,4 +8,4 @@ project-repositories:
   - "java-17"
   - "rest"
   - "web"
-  - "boot-3.3.x"
+  - "boot-3.4.x"
