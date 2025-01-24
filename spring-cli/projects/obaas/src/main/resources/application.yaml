@@ -62,9 +62,9 @@ eureka:
       defaultZone: ${eureka.service-url}
     fetch-registry: true
     register-with-eureka: true
-    enabled: true
+    enabled: false
 
-# This section confiugres 
+# This section configures tracing and metrics 
 management:
   endpoint:
     health:
@@ -89,6 +89,10 @@ management:
   otlp:
     tracing:
       endpoint: ${otel.exporter.otlp.endpoint}
+      export:
+        enabled: false
+
+
 
 logging:
   level:

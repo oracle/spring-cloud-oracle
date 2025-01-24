@@ -22,15 +22,49 @@ To run the application locally you need access to an Oracle Database (remotly or
 
 ```shell
 #!/bin/bash
-export
-export
-export
+export spring_datasource_url=<URL to database>
+export liquibase_datasource_username=<Liquibase database user>
+export liquibase_datasource_password=<Liquibase database user password>
+export spring_datasource_username=<Application database user>
+export spring_datasource_password=<Application database user password>
+export otel_exporter_otlp_endpoint=http://localhost:8080 # Fake URL
+mvn spring-boot:run -DskipTests
+```
 
-mvn spring-boot:run
+You need to turn off registering to Eureka (unless you have an instance you can connect to). Set `eureka.client.enabled` to `false` and turn off exporting of tracing. Set `management.otlp.tracing.export.enabled` to `false`. The values are set in the `application.yaml` file. For example:
+
+```yaml
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: false
+```
+
+```yaml
+management:
+  otlp:
+    tracing:
+      endpoint: ${otel.exporter.otlp.endpoint
+      export:
+        enabled: false
 ```
 
 Execute the shell script running the following command:
 
 ```shell
 source run-app.sh
+```
+
+You can see a few `WARNINGS` with this message which can be ignored:
+
+```log
+WARNING:
+
+Liquibase detected the following invalid LIQUIBASE_* environment variables:
 ```
