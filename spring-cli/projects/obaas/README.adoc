@@ -1,6 +1,6 @@
 == Basic Spring Web Application for Oracle Backend for Spring Boot and Microservices
 
-This project contains a web service that can be deployed on link:https://bit.ly/oraclespringboot[Oracle Backend for Spring Boot and Microservices]
+This project contains a web service that can be deployed on link:https://bit.ly/OracleAI-microservices[Oracle Backend for Microservices and AI]
 and includes configuration for the well-known endpoints provided by the platform.
 The web service will accept HTTP GET requests at `http://localhost:8080/greeting`.
 
@@ -37,7 +37,7 @@ response, as the following listing shows:
 
 [source,bash]
 ----
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local ????
 ----
 
 Then access the endpoint
