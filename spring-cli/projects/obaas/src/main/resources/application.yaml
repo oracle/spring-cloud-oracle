@@ -3,7 +3,6 @@
 #  Spring Boot application that can be deployed to Oracle Backend for
 #  Spring Boot and Microservices.
 #
-
 spring:
   application:
     name: restservice
@@ -18,7 +17,6 @@ spring:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     show-sql: true
-
 
   # This section configures Liquibase to automate the schema and reference
   # data based on the definitions under src/main/resources/db/changelog.
@@ -44,7 +42,7 @@ spring:
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
-      connection-pool-name: CustomerConnectionPool
+      connection-pool-name: SpringCLIConnectionPool
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
