@@ -36,6 +36,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <!-- This adds Oracle Universal Connection Pool (UCP) which gives you       -->
         <!-- access to high availability features of Oracle.  This is optional, you -->
         <!-- can remove this to use HikariCP instead.                               -->
@@ -45,6 +46,7 @@
             <version>${oracle-springboot-starter.version}</version>
             <type>pom</type>
         </dependency>
+
         <!-- This adds support for Oracle Wallet based authentication and mTLS.     -->
         <dependency>
             <groupId>com.oracle.database.spring</groupId>
@@ -86,7 +88,6 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
-<!--            <version>${micrometer-core.version}</version>-->
         </dependency>
 
         <!-- Prometheues-->
