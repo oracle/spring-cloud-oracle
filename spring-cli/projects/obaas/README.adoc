@@ -37,7 +37,7 @@ response, as the following listing shows:
 
 [source,bash]
 ----
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local ????
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ----
 
 Then access the endpoint

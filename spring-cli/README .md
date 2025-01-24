@@ -28,32 +28,10 @@ export liquibase_datasource_password=<Liquibase database user password>
 export spring_datasource_username=<Application database user>
 export spring_datasource_password=<Application database user password>
 export otel_exporter_otlp_endpoint=http://localhost:8080 # Fake URL
-mvn spring-boot:run -DskipTests
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-You need to turn off registering to Eureka (unless you have an instance you can connect to). Set `eureka.client.enabled` to `false` and turn off exporting of tracing. Set `management.otlp.tracing.export.enabled` to `false`. The values are set in the `application.yaml` file. For example:
-
-```yaml
-eureka:
-  instance:
-    hostname: ${spring.application.name}
-    preferIpAddress: true
-  client:
-    service-url:
-      defaultZone: ${eureka.service-url}
-    fetch-registry: true
-    register-with-eureka: true
-    enabled: false
-```
-
-```yaml
-management:
-  otlp:
-    tracing:
-      endpoint: ${otel.exporter.otlp.endpoint
-      export:
-        enabled: false
-```
+The Spring profile `local` turns off Eureka discovery and OTLP tracing.
 
 Execute the shell script running the following command:
 
