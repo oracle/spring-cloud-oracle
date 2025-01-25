@@ -60,8 +60,8 @@ eureka:
   client:
     service-url:
       defaultZone: ${eureka.service-url}
-    fetch-registry: true
-    register-with-eureka: true
+    fetch-registry: false
+    register-with-eureka: false
     enabled: false
 
 # This section configures tracing and metrics 

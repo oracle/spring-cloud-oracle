@@ -25,7 +25,7 @@
     </properties>
 
     <dependencies>
-        <!-- Spring WebMVC for REST support.                                        -->
+        <!-- Spring WebMVC for REST support. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -57,7 +57,7 @@
 
         <!-- This dependency allows you to use Liquibase to manage your schema and  -->
         <!-- reference data.  Enable it in the application.yaml and edit the files  -->
-         <!-- in src/main/resources/db/changelog to add your definitions and data.   -->
+         <!-- in src/main/resources/db/changelog to add your definitions and data.  -->
         <!-- If you comment this out, or remove it, also comment/remove the         -->
         <!-- liquibase plugin in the build section below.                           -->
         <dependency>
@@ -71,7 +71,7 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- This adds metrics for data sources.                                    -->
+        <!-- This adds metrics for data sources. -->
         <dependency>
             <groupId>net.ttddyy.observation</groupId>
             <artifactId>datasource-micrometer-spring-boot</artifactId>
@@ -90,7 +90,7 @@
             <artifactId>micrometer-core</artifactId>
         </dependency>
 
-        <!-- Prometheues-->
+        <!-- Prometheus-->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
@@ -114,7 +114,7 @@
             <artifactId>micrometer-tracing</artifactId>
         </dependency>
 
-        <!-- Spring test support.                                                   -->
+        <!-- Spring test support. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
