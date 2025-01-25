@@ -89,8 +89,6 @@ management:
   otlp:
     tracing:
       endpoint: ${otel.exporter.otlp.endpoint}
-      export:
-        enabled: true
 
 logging:
   level:
