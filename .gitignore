@@ -42,3 +42,4 @@ build/
 .run
 target/
 Thumbs.db
+run-app.sh
