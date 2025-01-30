@@ -29,6 +29,7 @@ This project has dependency and transitive dependencies on Spring Projects. The 
 | 1.1.0               | 2023.0.x     | 3.2.x        | 3.44.x       |
 | 1.2.0               | 2023.0.x     | 3.2.x        | 3.44.x       |
 | 1.3.0               | 2023.0.x     | 3.2.x        | 3.44.x       |
+| 1.4.0               | 2024.0.x     | 3.4.x        | 3.55.1       |
 
 ## Sample applications
 
