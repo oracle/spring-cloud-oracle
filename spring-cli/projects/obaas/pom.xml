@@ -19,7 +19,7 @@
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2024.0.0</spring-cloud.version>
-        <oracle-springboot-starter.version>24.4.0</oracle-springboot-starter.version>
+        <oracle-springboot-starter.version>25.0.0</oracle-springboot-starter.version>
         <liquibase.version>4.31.0</liquibase.version>
         <datasource-micrometer-spring-boot.version>1.0.6</datasource-micrometer-spring-boot.version>
     </properties>
