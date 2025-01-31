@@ -11,10 +11,10 @@ import org.testcontainers.utility.MountableFile;
 
 public class Util {
     public static OracleContainer oracleContainer() {
-        return new OracleContainer("gvenzl/oracle-free:23.5-slim-faststart")
+        return new OracleContainer("gvenzl/oracle-free:23.6-slim-faststart")
                 .withStartupTimeout(Duration.ofMinutes(2)) // Needed for M1 Mac
                 .withUsername("testuser")
-                .withPassword(("testpwd"));
+                .withPassword("testpwd");
     }
 
     public static void startOracleContainer(OracleContainer oracleContainer) throws IOException, InterruptedException {
