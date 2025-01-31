@@ -20,10 +20,10 @@ import org.testcontainers.utility.MountableFile;
 @Testcontainers
 public class TxEventQSampleAppTest {
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.5-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.6-slim-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
-            .withPassword(("testpwd"));
+            .withPassword("testpwd");
 
     @BeforeAll
     public static void setUp() throws Exception {

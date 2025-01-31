@@ -29,10 +29,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = JsonCollectionsAutoConfiguration.class)
 @Testcontainers
 public class JsonCollectionsIT {
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.5-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.6-slim-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
-            .withPassword(("testpwd"));
+            .withPassword("testpwd");
 
     static DataSource dataSource;
     static JdbcTemplate jdbcTemplate;
