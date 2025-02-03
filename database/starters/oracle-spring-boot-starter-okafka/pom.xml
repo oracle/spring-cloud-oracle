@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>25.0.0</version>
+        <version>25.1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-okafka</artifactId>
-    <version>25.0.0</version>
+    <version>25.1.0</version>
 
     <name>Oracle Spring Boot Starter - Kafka Java Client for Oracle Database Transactional Event Queues</name>
     <description>Spring Boot Starter for the Kafka Java Client for Oracle Database Transactional Event Queues</description>
