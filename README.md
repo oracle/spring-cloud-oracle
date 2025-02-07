@@ -51,9 +51,11 @@ We’d love to hear from you! Please let us know about your experiences using Sp
 
 ## More great stuff to check out
 
-If you are building Spring Boot applications with Oracle Database, you should also check out [Oracle Backend for Spring Boot and Microservices](https://bit.ly/oraclespringboot) which simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications on any cloud or on your own infrastructure.
+If you are building Spring Boot applications with Oracle Database, you should also check out [Oracle Backend Microservices and AI](https://bit.ly/OracleAI-microservices) which simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications on any cloud or on your own infrastructure.
 
 If you'd like to try it out yourself, [CloudBank AI](https://bit.ly/cloudbankAI) is a great way to learn more.  It's a free self-paced hands-on lab that shows you how to build Spring Boot microservices and covers topics like REST, asynchronous services with JMS, storing data in Oracle, service discovery, using Spring Actuator for monitoring, Prometheus, Grafana, Loki, OpenTelemetry and Jaeger, implementing the saga pattern with Long Running Actions, exposing services using APISIX API Gateway and building an AI ChatBot using Ollama.
+
+Don't miss the Oracle AI Microservices Sandbox (in developer preview). The Oracle AI Microservices Sandbox provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Sandbox enables users to enhance existing Large Language Models (LLMs) through RAG. The Oracle AI Microservices Sandbox is available to install in your own environment, which may be a developer's desktop, on-premises data center environment, or a cloud provider. It can be run either on bare-metal, within a container, or in a Kubernetes Cluster. For more information, including more details on Setup and Configuration please visit the [documentation](https://oracle-samples.github.io/oaim-sandbox/).
 
 ## Contributing
 
