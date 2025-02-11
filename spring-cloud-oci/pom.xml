@@ -84,7 +84,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <jakarta-mail.version>2.0.3</jakarta-mail.version>
         <oci-sdk.version>3.55.1</oci-sdk.version>
         <jackson.version>2.18.2</jackson.version>
-        <netty.version>4.1.115.Final</netty.version>
+        <netty.version>4.1.118.Final</netty.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.10.1</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
