@@ -23,7 +23,11 @@ recipeList:
   - org.openrewrite.java.dependencies.AddDependency:
       groupId: com.oracle.database.spring
       artifactId: oracle-spring-boot-starter-ucp
-      version: 25.0.0
+      version: 25.1.0
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: com.oracle.database.spring
+      artifactId: oracle-spring-boot-starter-wallet
+      version: 25.1.0
 
   # spring.datasource.oracleucp.connection-factory-class: oracle.jdbc.pool.OracleDataSource
   - org.openrewrite.java.spring.ChangeSpringPropertyKey:
