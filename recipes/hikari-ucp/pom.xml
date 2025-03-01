@@ -16,6 +16,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <rewrite.version>8.47.2</rewrite.version> <!-- Latest as of Feb 2025 -->
+        <rewrite.recipe.version>3.3.0</rewrite.recipe.version>
+        <junit.version>5.12.0</junit.version>
     </properties>
 
     <dependencies>
@@ -39,16 +41,35 @@
 
         <dependency>
             <groupId>org.openrewrite</groupId>
-            <artifactId>rewrite-java</artifactId>
+            <artifactId>rewrite-maven</artifactId>
             <version>${rewrite.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.openrewrite</groupId>
-            <artifactId>rewrite-maven</artifactId>
-            <version>${rewrite.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openrewrite.recipe</groupId>
+                <artifactId>rewrite-recipe-bom</artifactId>
+                <version>${rewrite.recipe.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
