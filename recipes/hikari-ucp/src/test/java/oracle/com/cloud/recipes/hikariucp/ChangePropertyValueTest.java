@@ -1,3 +1,6 @@
+// Copyright (c) 2025, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package oracle.com.cloud.recipes.hikariucp;
 
 import org.junit.jupiter.api.Test;
@@ -8,7 +11,7 @@ import static org.openrewrite.properties.Assertions.properties;
 import static org.openrewrite.yaml.Assertions.yaml;
 
 class ChangeSpringPropertyValueTest implements RewriteTest {
-    
+
     // @DocumentExample
     // @Test
     // void propFile() {

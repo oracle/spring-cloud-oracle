@@ -6,9 +6,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>atael.example</groupId>
-    <artifactId>hikari-ucp</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>java.oracle.com.cloud.recipes</groupId>
+	<artifactId>hikariucp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>hikari-ucp</name>
+	<description>Openrewrite Recipe to convert Hikari Connection Pool to Oracle UCP</description>
+
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
 
     <properties>
         <java.version>17</java.version>
