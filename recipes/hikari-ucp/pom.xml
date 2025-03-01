@@ -12,28 +12,42 @@
 	<name>hikari-ucp</name>
 	<description>Openrewrite Recipe to convert Hikari Connection Pool to Oracle UCP</description>
 
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<url>https://github.com/oracle/spring-cloud-oracle/tree/hikari-ucp-recipe/recipes/hikari-ucp</url>
+
+    <organization>
+        <name>Oracle America, Inc.</name>
+        <url>https://www.oracle.com</url>
+    </organization>
+    <licenses>
+        <license>
+        <name>The Universal Permissive License (UPL), Version 1.0</name>
+        <url>https://oss.oracle.com/licenses/upl/</url>
+        <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+        <name>Oracle</name>
+        <email>obaas_ww at oracle.com</email>
+        <organization>Oracle America, Inc.</organization>
+        <organizationUrl>https://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/oracle/spring-cloud-oracle</url>
+        <connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
+        <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
+    </scm>
 
     <properties>
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <rewrite.version>8.47.2</rewrite.version> <!-- Latest as of Feb 2025 -->
-        <rewrite.recipe.version>3.3.0</rewrite.recipe.version>
-        <junit.version>5.12.0</junit.version>
+        <rewrite.version>8.47.2</rewrite.version> <!-- Latest as of Mar 2025 -->
+        <rewrite.recipe.version>3.3.0</rewrite.recipe.version> <!-- Latest as of Mar 2025 -->
+        <maven.rewrite.plugin.version>6.2.1</maven.rewrite.plugin.version>
+        <junit.version>5.12.0</junit.version> <!-- Latest as of Mar 2025 -->
     </properties>
 
     <dependencies>
@@ -98,7 +112,7 @@
             <plugin>
                 <groupId>org.openrewrite.maven</groupId>
                 <artifactId>rewrite-maven-plugin</artifactId>
-                <version>6.2.1</version>
+                <version>${maven.rewrite.plugin.version}</version>
 <!--                <configuration>-->
 <!--                    <exportDatatables>true</exportDatatables>-->
 <!--                    <activeRecipes>-->
