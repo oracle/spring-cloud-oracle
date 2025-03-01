@@ -50,6 +50,12 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -83,13 +89,13 @@
 <!--                        <recipe>ConvertHikariToUCP</recipe>-->
 <!--                    </activeRecipes>-->
 <!--                </configuration>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.openrewrite.recipe</groupId>-->
-<!--                        <artifactId>rewrite-spring</artifactId>-->
-<!--                        <version>6.1.0</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
+               <dependencies>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-spring</artifactId>
+                        <version>5.24.1</version>
+                    </dependency>
+               </dependencies>
             </plugin>
 
         </plugins>
