@@ -103,7 +103,7 @@ mvn install
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>java.oracle.com.cloud.recipes</groupId>
+                        <groupId>com.oracle.cloud.recipes</groupId>
                         <artifactId>hikariucp</artifactId>
                         <version>0.0.1-SNAPSHOT</version>
                     </dependency>

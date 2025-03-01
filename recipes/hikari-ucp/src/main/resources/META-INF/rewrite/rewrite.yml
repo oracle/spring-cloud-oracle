@@ -6,7 +6,7 @@
 # https://github.com/brettwooldridge/HikariCP?tab=readme-ov-file#gear-configuration-knobs-baby
 ---
 type: specs.openrewrite.org/v1beta/recipe
-name: oracle.com.cloud.recipes.hikariucp.ConvertHikariToUCP
+name: com.oracle.cloud.recipes.hikariucp.ConvertHikariToUCP
 displayName: Migrate Hikari CP to Oracle UCP
 description: Migrate Hikari Connection Pool to Oracle Universal Connection Pool
 tags:
