@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2025, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>atael.example</groupId>
+    <artifactId>hikari-ucp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <rewrite.version>8.47.2</rewrite.version> <!-- Latest as of Feb 2025 -->
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-java</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-properties</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-yaml</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-java</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-maven</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <version>6.2.1</version>
+<!--                <configuration>-->
+<!--                    <exportDatatables>true</exportDatatables>-->
+<!--                    <activeRecipes>-->
+<!--                        <recipe>ConvertHikariToUCP</recipe>-->
+<!--                    </activeRecipes>-->
+<!--                </configuration>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.openrewrite.recipe</groupId>-->
+<!--                        <artifactId>rewrite-spring</artifactId>-->
+<!--                        <version>6.1.0</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
