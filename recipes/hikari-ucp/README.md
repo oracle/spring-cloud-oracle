@@ -10,7 +10,7 @@ This recipe will change the Hikare connection pool parameters and dependency fro
 
 The following properties are rewritten:
 
-### Maven dependencies `pom.xml
+### Maven dependencies `pom.xml`
 
 The Hikari dependency is removed and replaced with SPring Boot starters for Oracle UCP and Oracle Wallet (commonly used to connect to an autonomous database (ADB)).
 
@@ -86,7 +86,7 @@ mvn install
 
 ## To use the Recipe
 
- In the repository you want to test your recipe against, update the pom.xml to include the following:
+ In the repository you want to test your recipe against, update the `pom.xml` to include the following:
 
  ```xml
  <project>
