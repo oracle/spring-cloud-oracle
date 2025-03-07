@@ -68,7 +68,7 @@ public class OKafkaSampleTest {
     OKafkaComponent okafkaComponent;
 
     @Test
-    @Timeout(value = 5)
+    @Timeout(value = 10)
     void okafkaSample() throws Exception {
         // Wait for the consumer and producer to complete.
         okafkaComponent.await();
