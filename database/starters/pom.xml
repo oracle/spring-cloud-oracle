@@ -54,6 +54,7 @@
 
   <modules>
     <module>oracle-spring-boot-json-relational-duality-views</module>
+    <module>oracle-spring-boot-json-data-tools</module>
     <module>oracle-spring-boot-starter-ucp</module>
     <module>oracle-spring-boot-starter-wallet</module>
     <module>oracle-spring-boot-starter-aqjms</module>

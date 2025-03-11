@@ -2,7 +2,6 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.json;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.time.Duration;
 import java.util.List;
@@ -12,6 +11,7 @@ import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
 import com.oracle.spring.json.test.Student;
 import com.oracle.spring.json.test.StudentDetails;
+import javax.sql.DataSource;
 import oracle.jdbc.OracleTypes;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;

@@ -12,12 +12,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>oracle-spring-boot-json-relational-duality-views</artifactId>
+    <artifactId>oracle-spring-boot-json-data-tools</artifactId>
     <version>25.2.0</version>
 
-    <name>Oracle Spring Boot - JSON Relational Duality Views</name>
-    <description>Spring Boot for Oracle Database JSON Relational duality Views</description>
-    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-json-relational-duality-views</url>
+    <name>Oracle Spring Boot - JSON Data Tools</name>
+    <description>Spring Boot for Oracle Database JSON Data Tools</description>
+    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-json-data-tools</url>
 
     <organization>
         <name>Oracle America, Inc.</name>
@@ -50,13 +50,33 @@
     <dependencies>
         <dependency>
             <groupId>com.oracle.database.spring</groupId>
-            <artifactId>oracle-spring-boot-json-data-tools</artifactId>
+            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.json.bind</groupId>
+            <artifactId>jakarta.json.bind-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
         </dependency>
 
         <dependency>
@@ -86,6 +106,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
