@@ -1,3 +1,6 @@
+// Copyright (c) 2025, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 package com.oracle.spring.json.duality.builder;
 
 import java.lang.annotation.Annotation;
@@ -7,6 +10,7 @@ import java.util.Set;
 import com.oracle.spring.json.duality.annotation.AccessMode;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -88,6 +92,10 @@ public final class Annotations {
         }
 
         return false;
+    }
+
+    static boolean isFieldIncluded(Field f) {
+        return f.getAnnotation(JsonbTransient.class) == null;
     }
 
 

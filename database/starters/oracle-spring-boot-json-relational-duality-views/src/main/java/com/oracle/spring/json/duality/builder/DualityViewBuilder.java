@@ -1,3 +1,6 @@
+// Copyright (c) 2025, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 package com.oracle.spring.json.duality.builder;
 
 import java.sql.Connection;
@@ -5,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import javax.sql.DataSource;

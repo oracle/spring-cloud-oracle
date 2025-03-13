@@ -1,14 +1,13 @@
+// Copyright (c) 2025, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 package com.oracle.spring.json.duality.builder;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import com.oracle.spring.json.duality.model.movie.Actor;
-import com.oracle.spring.json.duality.model.movie.Movie;
 import com.oracle.spring.json.duality.model.student.Student;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -45,12 +44,5 @@ public class DualityViewBuilderTest {
                 new JpaProperties(),
                 hibernateProperties
         );
-    }
-
-    @Test
-    void t() throws Exception {
-        Field m = Actor.class.getDeclaredField("movies");
-
-        System.out.println(m.getGenericType());
     }
 }

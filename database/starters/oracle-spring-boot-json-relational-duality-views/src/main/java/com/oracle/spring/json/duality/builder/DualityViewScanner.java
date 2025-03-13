@@ -1,9 +1,11 @@
+// Copyright (c) 2025, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 package com.oracle.spring.json.duality.builder;
 
 import java.util.Set;
 
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.EntityType;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

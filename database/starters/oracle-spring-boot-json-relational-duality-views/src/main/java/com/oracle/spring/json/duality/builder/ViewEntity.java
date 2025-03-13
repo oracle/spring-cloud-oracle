@@ -1,3 +1,6 @@
+// Copyright (c) 2025, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 package com.oracle.spring.json.duality.builder;
 
 import java.lang.reflect.Field;
@@ -21,6 +24,7 @@ import static com.oracle.spring.json.duality.builder.Annotations.getJoinTableAnn
 import static com.oracle.spring.json.duality.builder.Annotations.getJsonbPropertyName;
 import static com.oracle.spring.json.duality.builder.Annotations.getTableName;
 import static com.oracle.spring.json.duality.builder.Annotations.getNestedViewName;
+import static com.oracle.spring.json.duality.builder.Annotations.isFieldIncluded;
 import static com.oracle.spring.json.duality.builder.Annotations.isRelationalEntity;
 
 final class ViewEntity {
@@ -71,7 +75,9 @@ final class ViewEntity {
 
         incNesting();
         for (Field f : javaType.getDeclaredFields()) {
-            parseField(f);
+            if (isFieldIncluded(f)) {
+                parseField(f);
+            }
         }
         addTrailer(rootSnippet == null);
         return this;
@@ -215,7 +221,7 @@ final class ViewEntity {
     }
 
     private String getPadding() {
-        return String.format("%" + nesting + "s", " ");
+        return " ".repeat(nesting);
     }
 
     private void incNesting() {
