@@ -3,7 +3,7 @@ package com.oracle.spring.json.duality.model.movie;
 import java.util.Objects;
 import java.util.Set;
 
-import com.oracle.spring.json.duality.annotation.JsonRelationalDualityViewEntity;
+import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,13 +38,11 @@ public class Movie {
 
     @ManyToOne
     @JoinColumn(name = "director_id")
-    @JsonRelationalDualityViewEntity(entity = Director.class)
+    @JsonRelationalDualityView
     private Director director;
 
     @ManyToMany
-    @JsonRelationalDualityViewEntity(
-            entity = Actor.class
-    )
+    @JsonRelationalDualityView
     @JoinTable(
             name = "movie_actor",
             joinColumns = @JoinColumn(name = "movie_id"),

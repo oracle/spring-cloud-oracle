@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
-import com.oracle.spring.json.duality.annotation.JsonRelationalDualityViewEntity;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,9 +37,7 @@ public class Actor {
     private String lastName;
 
     @ManyToMany(mappedBy = "actors")
-    @JsonRelationalDualityViewEntity(
-            entity = Movie.class
-    )
+    @JsonRelationalDualityView
     private Set<Movie> movies;
 
     /**

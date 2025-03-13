@@ -1,10 +1,12 @@
 package com.oracle.spring.json.duality.builder;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.oracle.spring.json.duality.annotation.JsonRelationalDualityViewEntity;
+import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -18,7 +20,7 @@ import static com.oracle.spring.json.duality.builder.Annotations.getDatabaseColu
 import static com.oracle.spring.json.duality.builder.Annotations.getJoinTableAnnotation;
 import static com.oracle.spring.json.duality.builder.Annotations.getJsonbPropertyName;
 import static com.oracle.spring.json.duality.builder.Annotations.getTableName;
-import static com.oracle.spring.json.duality.builder.Annotations.getViewEntityName;
+import static com.oracle.spring.json.duality.builder.Annotations.getNestedViewName;
 import static com.oracle.spring.json.duality.builder.Annotations.isRelationalEntity;
 
 final class ViewEntity {
@@ -94,12 +96,12 @@ final class ViewEntity {
         if (id != null && rootSnippet != null) {
             parseId(f);
         } else if (isRelationalEntity(f)) {
-            JsonRelationalDualityViewEntity viewEntityAnnotation = f.getAnnotation(JsonRelationalDualityViewEntity.class);
+            JsonRelationalDualityView dvAnnotation = f.getAnnotation(JsonRelationalDualityView.class);
             // The entity should not be included in the view.
-            if (viewEntityAnnotation == null) {
+            if (dvAnnotation == null) {
                 return;
             }
-            parseRelationalEntity(f, viewEntityAnnotation);
+            parseRelationalEntity(f, dvAnnotation);
         } else {
             parseColumn(f);
         }
@@ -118,11 +120,11 @@ final class ViewEntity {
         addProperty(_ID_FIELD, getDatabaseColumnName(f));
     }
 
-    private void parseRelationalEntity(Field f, JsonRelationalDualityViewEntity viewEntityAnnotation) {
-        Class<?> entityJavaType = viewEntityAnnotation.entity();
+    private void parseRelationalEntity(Field f, JsonRelationalDualityView dvAnnotation) {
+        Class<?> entityJavaType = getGenericFieldType(f);
         if (entityJavaType == null) {
             throw new IllegalArgumentException("%s %s annotation must include the entity class".formatted(
-                    f.getName(), JsonRelationalDualityViewEntity.class.getSimpleName()
+                    f.getName(), JsonRelationalDualityView.class.getSimpleName()
             ));
         }
 
@@ -136,17 +138,29 @@ final class ViewEntity {
             parseManyToMany(manyToMany, f, entityJavaType);
         }
         // Add nested entity.
-        parseNestedEntity(entityJavaType, viewEntityAnnotation);
+        parseNestedEntity(entityJavaType, dvAnnotation);
         // Additional trailer for join table if present.
         if (manyToMany != null) {
             addTrailer(true);
         }
     }
 
-    private void parseNestedEntity(Class<?> entityJavaType, JsonRelationalDualityViewEntity viewEntityAnnotation) {
+    private Class<?> getGenericFieldType(Field f) {
+        Type genericType = f.getGenericType();
+        if (genericType instanceof ParameterizedType p) {
+            Type type = p.getActualTypeArguments()[0];
+            if (type instanceof Class<?> c) {
+                return c;
+            }
+            throw new IllegalStateException("failed to process type: " + type);
+        }
+        return f.getType();
+    }
+
+    private void parseNestedEntity(Class<?> entityJavaType, JsonRelationalDualityView dvAnnotation) {
         Table tableAnnotation = entityJavaType.getAnnotation(Table.class);
-        String viewEntityName = getViewEntityName(entityJavaType, viewEntityAnnotation, tableAnnotation);
-        String accessMode = getAccessModeStr(viewEntityAnnotation.accessMode());
+        String viewEntityName = getNestedViewName(entityJavaType, dvAnnotation, tableAnnotation);
+        String accessMode = getAccessModeStr(dvAnnotation.accessMode());
         ViewEntity ve = new ViewEntity(entityJavaType,
                 new StringBuilder(),
                 accessMode,

@@ -3,7 +3,7 @@ package com.oracle.spring.json.duality.model.movie;
 import java.util.Objects;
 import java.util.Set;
 
-import com.oracle.spring.json.duality.annotation.JsonRelationalDualityViewEntity;
+import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class Director {
     @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
-    @JsonRelationalDualityViewEntity(entity = Movie.class)
+    @JsonRelationalDualityView
     @OneToMany(mappedBy = "director") // Reference related entity's associated field
     private Set<Movie> movies;
 
@@ -44,7 +44,7 @@ public class Director {
     )
     // The primary key of the Director entity is used as the foreign key of the DirectorBio entity.
     @PrimaryKeyJoinColumn
-    @JsonRelationalDualityViewEntity(entity = DirectorBio.class)
+    @JsonRelationalDualityView
     private DirectorBio directorBio;
 
     public void setDirectorBio(DirectorBio directorBio) {

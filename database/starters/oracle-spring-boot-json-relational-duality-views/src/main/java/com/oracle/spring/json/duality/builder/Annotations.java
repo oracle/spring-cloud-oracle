@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.oracle.spring.json.duality.annotation.AccessMode;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
-import com.oracle.spring.json.duality.annotation.JsonRelationalDualityViewEntity;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinTable;
@@ -15,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import org.hibernate.mapping.Join;
 import org.springframework.util.StringUtils;
 
 public final class Annotations {
@@ -53,11 +51,11 @@ public final class Annotations {
         throw new IllegalArgumentException("No JoinTable found for field " + f.getName());
     }
 
-    static String getViewEntityName(Class<?> javaType,
-                              JsonRelationalDualityViewEntity viewEntityAnnotation,
-                              Table tableAnnotation) {
-        if (viewEntityAnnotation != null && StringUtils.hasText(viewEntityAnnotation.name())) {
-            return viewEntityAnnotation.name().toLowerCase();
+    static String getNestedViewName(Class<?> javaType,
+                                    JsonRelationalDualityView dvAnnotation,
+                                    Table tableAnnotation) {
+        if (dvAnnotation != null && StringUtils.hasText(dvAnnotation.name())) {
+            return dvAnnotation.name().toLowerCase();
         }
         return getTableName(javaType, tableAnnotation).toLowerCase();
     }
