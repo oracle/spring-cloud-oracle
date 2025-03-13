@@ -5,15 +5,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.stereotype.Component;
 
+import static com.oracle.spring.json.duality.builder.Annotations.getAccessModeStr;
+import static com.oracle.spring.json.duality.builder.Annotations.getViewName;
+
 @Component
 public final class DualityViewBuilder implements DisposableBean {
+    private static final String PREFIX = "JSON Relational Duality Views: ";
+
     private final DataSource dataSource;
     private final boolean isShowSql;
     private final RootSnippet rootSnippet;
@@ -29,20 +36,38 @@ public final class DualityViewBuilder implements DisposableBean {
         );
     }
 
-    void build(Class<?> javaType, JsonRelationalDualityView dvAnnotation) {
+    void apply(Class<?> javaType) {
         if (rootSnippet.equals(RootSnippet.NONE)) {
             return;
         }
-        ViewEntity ve = new ViewEntity(javaType, new StringBuilder(), rootSnippet, 0);
-        String ddl = ve.build().toString();
+        String ddl = build(javaType);
         if (isShowSql) {
-            // TODO: log sql statement
+            System.out.println(PREFIX + ddl);
         }
         if (rootSnippet.equals(RootSnippet.VALIDATE)) {
-            // TODO: handle duality view validation
+            // TODO: Handle view validation.
             return;
         }
+
         runDDL(ddl);
+    }
+
+    String build(Class<?> javaType) {
+        JsonRelationalDualityView dvAnnotation = javaType.getAnnotation(JsonRelationalDualityView.class);
+        if (dvAnnotation == null) {
+            throw new IllegalArgumentException("%s not found for type %s".formatted(
+                    JsonRelationalDualityView.class.getSimpleName(), javaType.getName())
+            );
+        }
+        String viewName = getViewName(javaType, dvAnnotation);
+        String accessMode = getAccessModeStr(dvAnnotation.accessMode());
+        ViewEntity ve = new ViewEntity(javaType,
+                new StringBuilder(),
+                rootSnippet,
+                accessMode,
+                viewName,
+                0);
+        return ve.build().toString();
     }
 
     private void runDDL(String ddl) {

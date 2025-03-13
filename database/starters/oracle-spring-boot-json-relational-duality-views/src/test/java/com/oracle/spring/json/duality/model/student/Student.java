@@ -1,8 +1,9 @@
 // Copyright (c) 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-package com.oracle.spring.json.duality.model;
+package com.oracle.spring.json.duality.model.student;
 
-import com.oracle.spring.json.duality.builder.JsonRelationalDualityView;
+import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
+import com.oracle.spring.json.duality.annotation.AccessMode;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,11 +12,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
+
 @Entity
 @Table(name = "STUDENT")
-@JsonRelationalDualityView
+@JsonRelationalDualityView(
+        accessMode = @AccessMode(
+                insert = true,
+                update = true,
+                delete = true
+        )
+)
 public class Student {
-    @JsonbProperty("_id")
+    @JsonbProperty(_ID_FIELD)
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
