@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
+import jakarta.json.bind.annotation.JsonbProperty;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,11 +22,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
+
 @Entity
 @Table(name = "director")
 @Getter
 @Setter
 public class Director {
+    @JsonbProperty(_ID_FIELD)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "director_id")
@@ -36,7 +41,7 @@ public class Director {
     @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
-    @JsonRelationalDualityView
+    @JsonbTransient
     @OneToMany(mappedBy = "director") // Reference related entity's associated field
     private Set<Movie> movies;
 

@@ -5,6 +5,8 @@ package com.oracle.spring.json.duality.model.movie;
 
 import java.util.Objects;
 
+import jakarta.json.bind.annotation.JsonbProperty;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,12 +18,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
+
 @Entity
 @Table(name = "director_bio")
 @Getter
 @Setter
 public class DirectorBio {
-
+    @JsonbProperty(_ID_FIELD)
     @Id
     @Column(name = "director_id")
     private Long directorId;
@@ -30,6 +34,7 @@ public class DirectorBio {
     // The primary key will be copied from the director entity
     @MapsId
     @JoinColumn(name = "director_id")
+    @JsonbTransient
     private Director director;
 
     @Column(name = "biography", columnDefinition = "CLOB")

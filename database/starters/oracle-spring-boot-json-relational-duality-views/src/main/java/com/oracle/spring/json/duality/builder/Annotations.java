@@ -64,7 +64,7 @@ public final class Annotations {
         return getTableName(javaType, tableAnnotation).toLowerCase();
     }
 
-    static String getViewName(Class<?> javaType, JsonRelationalDualityView dvAnnotation) {
+    public static String getViewName(Class<?> javaType, JsonRelationalDualityView dvAnnotation) {
         Table tableAnnotation = javaType.getAnnotation(Table.class);
         final String suffix = "_dv";
         if (dvAnnotation != null && StringUtils.hasText(dvAnnotation.name())) {

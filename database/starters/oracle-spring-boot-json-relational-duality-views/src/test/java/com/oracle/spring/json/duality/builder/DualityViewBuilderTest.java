@@ -6,6 +6,8 @@ package com.oracle.spring.json.duality.builder;
 import java.util.stream.Stream;
 
 import com.oracle.spring.json.duality.model.movie.Actor;
+import com.oracle.spring.json.duality.model.movie.Director;
+import com.oracle.spring.json.duality.model.movie.Movie;
 import com.oracle.spring.json.duality.model.student.Student;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,7 +34,6 @@ public class DualityViewBuilderTest {
         String expectedView = readViewFile(viewFile);
         DualityViewBuilder dualityViewBuilder = getDualityViewBuilder(ddlAuto);
         String actualView = dualityViewBuilder.build(entity);
-        System.out.println(actualView);
         assertThat(expectedView).isEqualTo(actualView);
     }
 
