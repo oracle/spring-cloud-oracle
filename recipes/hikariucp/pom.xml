@@ -44,10 +44,10 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <rewrite.version>8.47.2</rewrite.version> <!-- Latest as of Mar 2025 -->
-        <rewrite.recipe.version>3.3.0</rewrite.recipe.version> <!-- Latest as of Mar 2025 -->
-        <maven.rewrite.plugin.version>6.2.1</maven.rewrite.plugin.version>
-        <junit.version>5.12.0</junit.version> <!-- Latest as of Mar 2025 -->
+        <rewrite.version>8.48.1</rewrite.version>                           <!-- Latest as of Mar 2025 -->
+        <rewrite.recipe.version>3.3.0</rewrite.recipe.version>              <!-- Latest as of Mar 2025 -->
+        <maven.rewrite.plugin.version>6.3.2</maven.rewrite.plugin.version>  <!-- Latest as of Mar 2025 -->
+        <junit.version>5.12.1</junit.version>                                <!-- Latest as of Mar 2025 -->
     </properties>
 
     <dependencies>
