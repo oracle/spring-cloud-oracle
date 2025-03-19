@@ -3,9 +3,7 @@
 
 package com.oracle.spring.json.duality.builder;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Set;
 
 import com.oracle.spring.json.duality.annotation.AccessMode;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
@@ -14,21 +12,11 @@ import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import org.springframework.util.StringUtils;
 
 public final class Annotations {
     public static final String _ID_FIELD = "_id";
-
-    static final Set<Class<? extends Annotation>> RELATIONAL_ANNOTATIONS = Set.of(
-            OneToMany.class,
-            ManyToOne.class,
-            OneToOne.class,
-            ManyToMany.class
-    );
 
     static JoinTable getJoinTableAnnotation( Field f, ManyToMany manyToMany, Class<?> mappedType) {
         JoinTable annotation = f.getAnnotation(JoinTable.class);
@@ -81,17 +69,6 @@ public final class Annotations {
             return tableAnnotation.name().toLowerCase();
         }
         return javaType.getName().toLowerCase();
-    }
-
-    static boolean isRelationalEntity(Field f) {
-        Annotation[] annotations = f.getAnnotations();
-        for (Annotation annotation : annotations) {
-            if (RELATIONAL_ANNOTATIONS.contains(annotation.annotationType())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     static boolean isFieldIncluded(Field f) {

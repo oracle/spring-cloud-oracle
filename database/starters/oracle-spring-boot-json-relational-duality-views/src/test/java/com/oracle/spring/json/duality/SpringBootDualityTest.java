@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +18,8 @@ import com.oracle.spring.json.duality.model.movie.Actor;
 import com.oracle.spring.json.duality.model.movie.Director;
 import com.oracle.spring.json.duality.model.movie.DirectorBio;
 import com.oracle.spring.json.duality.model.movie.Movie;
+import com.oracle.spring.json.duality.model.products.Order;
+import com.oracle.spring.json.duality.model.products.Product;
 import com.oracle.spring.json.duality.model.student.Student;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +49,9 @@ public class SpringBootDualityTest {
      */
     @Container
     @ServiceConnection
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.6-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.7-slim-faststart")
             .withStartupTimeout(Duration.ofMinutes(5))
+            .withInitScript("products.sql")
             .withUsername("testuser")
             .withPassword("testpwd");
 
@@ -99,5 +103,24 @@ public class SpringBootDualityTest {
         dvClient.save(actor, Actor.class);
         Optional<Actor> actorById = dvClient.findById(Actor.class, 1);
         assertThat(actorById.isPresent()).isTrue();
+    }
+
+    @Test
+    void orders() {
+        Product product = new Product();
+        product.setName("my product");
+        product.setPrice(100.00);
+
+        dvClient.save(product, Product.class);
+        Optional<Product> productById = dvClient.findById(Product.class, 1);
+        assertThat(productById.isPresent()).isTrue();
+
+        Order order = new Order();
+        order.setProduct(productById.get());
+        order.setQuantity(10);
+
+        dvClient.save(order, Order.class);
+        Optional<Order> OrderById = dvClient.findById(Order.class, 1);
+        assertThat(OrderById.isPresent()).isTrue();
     }
 }

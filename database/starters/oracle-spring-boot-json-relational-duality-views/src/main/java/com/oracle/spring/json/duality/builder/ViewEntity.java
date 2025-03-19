@@ -25,7 +25,6 @@ import static com.oracle.spring.json.duality.builder.Annotations.getJsonbPropert
 import static com.oracle.spring.json.duality.builder.Annotations.getTableName;
 import static com.oracle.spring.json.duality.builder.Annotations.getNestedViewName;
 import static com.oracle.spring.json.duality.builder.Annotations.isFieldIncluded;
-import static com.oracle.spring.json.duality.builder.Annotations.isRelationalEntity;
 
 final class ViewEntity {
 
@@ -98,15 +97,11 @@ final class ViewEntity {
     }
 
     private void parseField(Field f) {
+        JsonRelationalDualityView dvAnnotation;
         Id id = f.getAnnotation(Id.class);
         if (id != null && rootSnippet != null) {
             parseId(f);
-        } else if (isRelationalEntity(f)) {
-            JsonRelationalDualityView dvAnnotation = f.getAnnotation(JsonRelationalDualityView.class);
-            // The entity should not be included in the view.
-            if (dvAnnotation == null) {
-                return;
-            }
+        } else if ((dvAnnotation = f.getAnnotation(JsonRelationalDualityView.class)) != null) {
             parseRelationalEntity(f, dvAnnotation);
         } else {
             parseColumn(f);

@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import com.oracle.spring.json.duality.model.movie.Actor;
 import com.oracle.spring.json.duality.model.movie.Director;
 import com.oracle.spring.json.duality.model.movie.Movie;
+import com.oracle.spring.json.duality.model.products.Order;
 import com.oracle.spring.json.duality.model.student.Student;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +25,8 @@ public class DualityViewBuilderTest {
         return Stream.of(
                 Arguments.of(Student.class, "student-update.sql", "update"),
                 Arguments.of(Student.class, "student-create.sql", "create"),
-                Arguments.of(Actor.class, "actor-create.sql", "create")
+                Arguments.of(Actor.class, "actor-create.sql", "create"),
+                Arguments.of(Order.class, "order-create.sql", "create")
         );
     }
 
@@ -34,6 +36,7 @@ public class DualityViewBuilderTest {
         String expectedView = readViewFile(viewFile);
         DualityViewBuilder dualityViewBuilder = getDualityViewBuilder(ddlAuto);
         String actualView = dualityViewBuilder.build(entity);
+        System.out.println(actualView);
         assertThat(expectedView).isEqualTo(actualView);
     }
 
