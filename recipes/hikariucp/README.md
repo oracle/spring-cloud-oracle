@@ -31,6 +31,15 @@ is changed to:
 </dependency>
 ```
 
+The following dependency is removed (all ojdbc* variants) and replaced by the UCP Starter:
+
+```xml
+<dependency>
+    <groupId>com.oracle.database.jdbc</groupId>
+    <artifactId>ojdbc*</artifactId>
+</dependency>
+```
+
 And the following dependency is added, as it is commonly used to connect to an autonomous database (ADB):
 
 ```xml
@@ -58,7 +67,7 @@ The following properties are rewritten. [UCP documentation](https://docs.oracle.
 | `spring.datasource.hikari.idle-timeout` | `spring.datasource.oracleucp.inactive-connection-timeout` | |
 | `spring.datasource.hikari.connection-test-query` | `spring.datasource.oracleucp.s-q-l-for-validate-connection` | |
 | `spring.datasource.hikari.max-lifetime` | `spring.datasource.oracleucp.max-connection-reuse-time` | |
-| `spring.datasource.hikari.validation-timeout` | `pring.datasource.oracleucp.connection-validation-timeout` | |
+| `spring.datasource.hikari.validation-timeout` | `spring.datasource.oracleucp.connection-validation-timeout` | |
 
 The following UCP properties are added:
 
@@ -95,7 +104,7 @@ mvn install
             <plugin>
                 <groupId>org.openrewrite.maven</groupId>
                 <artifactId>rewrite-maven-plugin</artifactId>
-                <version>6.2.2</version> <!-- Verify the version, March 2025 -->
+                <version>6.3.2</version> <!-- Verify the version, March 2025 -->
                 <configuration>
                     <activeRecipes>
                         <recipe>ConvertHikariToUCP </recipe>
