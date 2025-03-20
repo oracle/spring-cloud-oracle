@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -39,88 +39,89 @@ import org.springframework.jms.core.JmsTemplate;
 @Configuration
 public class JmsBinderGlobalConfiguration {
 
-    private final ConnectionFactory connectionFactory;
+  private ConnectionFactory connectionFactory;
+  
+  public JmsBinderGlobalConfiguration(ConnectionFactory connectionFactory) {
+	  this.connectionFactory = connectionFactory;
+  }
 
-    public JmsBinderGlobalConfiguration(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
+  @Bean
+  public DestinationNameResolver queueNameResolver() {
+    return new DestinationNameResolver(
+      new Base64UrlNamingStrategy("anonymous_")
+    );
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(MessageRecoverer.class)
+  MessageRecoverer defaultMessageRecoverer() {
+    return new RepublishMessageRecoverer(
+      jmsTemplate(),
+      new SpecCompliantJmsHeaderMapper()
+    );
+  }
+
+  @Bean
+  ListenerContainerFactory listenerContainerFactory() {
+    return new ListenerContainerFactory(connectionFactory);
+  }
+
+  @Bean
+  public JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory(
+    MessageRecoverer messageRecoverer,
+    ListenerContainerFactory listenerContainerFactory
+  ) {
+    return new JmsMessageDrivenChannelAdapterFactory(
+      listenerContainerFactory,
+      messageRecoverer
+    );
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(JmsSendingMessageHandlerFactory.class)
+  public JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory()
+  {
+    return new JmsSendingMessageHandlerFactory(
+      jmsTemplate(),
+      new SpecCompliantJmsHeaderMapper()
+    );
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(JmsTemplate.class)
+  public JmsTemplate jmsTemplate() {
+    return new JmsTemplate(connectionFactory);
+  }
+
+  @Configuration
+  @EnableConfigurationProperties(JmsExtendedBindingProperties.class)
+  public static class JmsBinderConfiguration {
 
     @Bean
-    public DestinationNameResolver queueNameResolver() {
-        return new DestinationNameResolver(
-                new Base64UrlNamingStrategy("anonymous_")
-        );
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(MessageRecoverer.class)
-    MessageRecoverer defaultMessageRecoverer() {
-        return new RepublishMessageRecoverer(
-                jmsTemplate(),
-                new SpecCompliantJmsHeaderMapper()
-        );
-    }
-
-    @Bean
-    ListenerContainerFactory listenerContainerFactory() {
-        return new ListenerContainerFactory(connectionFactory);
-    }
-
-    @Bean
-    public JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory(
-            MessageRecoverer messageRecoverer,
-            ListenerContainerFactory listenerContainerFactory
+    JMSMessageChannelBinder jmsMessageChannelBinder(
+      JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory,
+      JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory,
+      JmsTemplate jmsTemplate,
+      ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> provisioningProvider,
+      ConnectionFactory connectionFactory,
+      JmsExtendedBindingProperties jmsExtendedBindingProperties,
+      DestinationNameResolver destinationNameResolver
     ) {
-        return new JmsMessageDrivenChannelAdapterFactory(
-                listenerContainerFactory,
-                messageRecoverer
-        );
+      JMSMessageChannelBinder jmsMessageChannelBinder = new JMSMessageChannelBinder(
+        provisioningProvider,
+        jmsSendingMessageHandlerFactory,
+        jmsMessageDrivenChannelAdapterFactory,
+        jmsTemplate,
+        connectionFactory
+      );
+      
+      jmsMessageChannelBinder.setExtendedBindingProperties(
+        jmsExtendedBindingProperties
+      );
+      
+      jmsMessageChannelBinder.setDestinationNameResolver(destinationNameResolver);
+      
+      return jmsMessageChannelBinder;
     }
-
-    @Bean
-    @ConditionalOnMissingBean(JmsSendingMessageHandlerFactory.class)
-    public JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory() {
-        return new JmsSendingMessageHandlerFactory(
-                jmsTemplate(),
-                new SpecCompliantJmsHeaderMapper()
-        );
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(JmsTemplate.class)
-    public JmsTemplate jmsTemplate() {
-        return new JmsTemplate(connectionFactory);
-    }
-
-    @Configuration
-    @EnableConfigurationProperties(JmsExtendedBindingProperties.class)
-    public static class JmsBinderConfiguration {
-
-        @Bean
-        JMSMessageChannelBinder jmsMessageChannelBinder(
-                JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory,
-                JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory,
-                JmsTemplate jmsTemplate,
-                ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> provisioningProvider,
-                ConnectionFactory connectionFactory,
-                JmsExtendedBindingProperties jmsExtendedBindingProperties,
-                DestinationNameResolver destinationNameResolver
-        ) {
-            JMSMessageChannelBinder jmsMessageChannelBinder = new JMSMessageChannelBinder(
-                    provisioningProvider,
-                    jmsSendingMessageHandlerFactory,
-                    jmsMessageDrivenChannelAdapterFactory,
-                    jmsTemplate,
-                    connectionFactory
-            );
-
-            jmsMessageChannelBinder.setExtendedBindingProperties(
-                    jmsExtendedBindingProperties
-            );
-
-            jmsMessageChannelBinder.setDestinationNameResolver(destinationNameResolver);
-
-            return jmsMessageChannelBinder;
-        }
-    }
+  }
 }

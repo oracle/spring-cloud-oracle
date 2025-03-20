@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+**
+** This file has been modified by Oracle Corporation. 
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -32,6 +32,7 @@ import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
 import jakarta.jms.Session;
+import oracle.jakarta.jms.AQjmsSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,171 +51,176 @@ import org.springframework.retry.RetryContext;
 import org.springframework.retry.support.RetryTemplate;
 
 public class JmsMessageDrivenChannelAdapterFactory
-        implements ApplicationContextAware, BeanFactoryAware {
+  implements ApplicationContextAware, BeanFactoryAware {
 
-    private final ListenerContainerFactory listenerContainerFactory;
+  private final ListenerContainerFactory listenerContainerFactory;
+
+  private final MessageRecoverer messageRecoverer;
+
+  private BeanFactory beanFactory;
+
+  private ApplicationContext applicationContext;
+  
+  private Logger logger = LoggerFactory.getLogger(getClass());
+
+  public JmsMessageDrivenChannelAdapterFactory(
+    ListenerContainerFactory listenerContainerFactory,
+    MessageRecoverer messageRecoverer
+  ) {
+    this.listenerContainerFactory = listenerContainerFactory;
+    this.messageRecoverer = messageRecoverer;
+  }
+
+  @Override
+  public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    this.beanFactory = beanFactory;
+  }
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext)
+    throws BeansException {
+    this.applicationContext = applicationContext;
+  }
+
+  public JmsMessageDrivenChannelAdapter build(
+    Destination destination,
+    String groupName,
+    RetryTemplate retryTemplate,
+    RecoveryCallback<Object> recoveryCallback,
+    MessageChannel errorChannel,
+    final ExtendedConsumerProperties<JmsConsumerProperties> properties,
+    int dbversion
+  ) {
+	  ChannelPublishingJmsMessageListener listener = null;
+	  if(!properties.isBatchMode()) {
+		  	listener = new RetryingChannelPublishingJmsMessageListener(
+		  			properties,
+		  			messageRecoverer,
+		  			properties.getExtension().getDlqName(),
+		  			retryTemplate,
+		  			recoveryCallback
+		  			);
+		  	if(properties.isUseNativeDecoding()) {
+		  		((RetryingChannelPublishingJmsMessageListener) listener)
+		  			.setDeSerializerClassName(properties.getExtension().getDeSerializer());
+		  	}
+	  } else {
+		  listener = new TEQBatchMessageListener();
+		  ((TEQBatchMessageListener)listener).setRetryTemplate(retryTemplate);
+		  ((TEQBatchMessageListener)listener).setRecoverer(recoveryCallback);
+		  ((TEQBatchMessageListener)listener).setDeSerializerClassName(properties.getExtension().getDeSerializer());
+	  }
+    listener.setBeanFactory(this.beanFactory);
+    
+    if(dbversion == 19 && properties.getInstanceIndex() != -1) {
+    	logger.warn("Exact dequeue from a specific instanceIndex is not supported in Oracle Database version 19c. "
+    			+ "Please use Oracle DB version 23c if you want to perform exact dequeue from a partition.");
+    }
+    
+    JmsMessageDrivenChannelAdapter adapter = new JmsMessageDrivenChannelAdapter(
+      listenerContainerFactory.build(destination, 
+    		  groupName, 
+    		  properties.getInstanceIndex(), 
+    		  properties.getConcurrency(),
+    		  properties.isBatchMode(),
+    		  properties.getExtension().getBatchSize(),
+    		  properties.getExtension().getTimeout()),
+      listener
+    );
+    adapter.setApplicationContext(this.applicationContext);
+    adapter.setBeanFactory(this.beanFactory);
+    adapter.setErrorChannel(errorChannel);
+    return adapter;
+  }
+
+  private static class RetryingChannelPublishingJmsMessageListener
+    extends ChannelPublishingJmsMessageListener {
+
+    private static final String RETRY_CONTEXT_MESSAGE_ATTRIBUTE = "message";
+
+    private final ConsumerProperties properties;
 
     private final MessageRecoverer messageRecoverer;
 
-    private BeanFactory beanFactory;
+    private final String deadLetterQueueName;
+    
+    private final RetryTemplate retryTemplate;
+    
+    private RecoveryCallback<Object> recoverer;
+    
+    private String deSerializerClassName = null;
+    
+    SpecCompliantJmsHeaderMapper headerMapper = new SpecCompliantJmsHeaderMapper();
 
-    private ApplicationContext applicationContext;
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    public JmsMessageDrivenChannelAdapterFactory(
-            ListenerContainerFactory listenerContainerFactory,
-            MessageRecoverer messageRecoverer
+    RetryingChannelPublishingJmsMessageListener(
+      ConsumerProperties properties,
+      MessageRecoverer messageRecoverer,
+      String deadLetterQueueName,
+      RetryTemplate retryTemplate,
+      RecoveryCallback<Object> recoverer
     ) {
-        this.listenerContainerFactory = listenerContainerFactory;
-        this.messageRecoverer = messageRecoverer;
+      this.properties = properties;
+      this.messageRecoverer = messageRecoverer;
+      this.deadLetterQueueName = deadLetterQueueName;
+      this.retryTemplate = retryTemplate;
+      this.recoverer = recoverer;
+    }
+    
+    public void setDeSerializerClassName(String deSerializerClassName) {
+    	this.deSerializerClassName = deSerializerClassName;
     }
 
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    public JmsMessageDrivenChannelAdapter build(
-            Destination destination,
-            String groupName,
-            RetryTemplate retryTemplate,
-            RecoveryCallback<Object> recoveryCallback,
-            MessageChannel errorChannel,
-            final ExtendedConsumerProperties<JmsConsumerProperties> properties,
-            int dbversion
-    ) {
-        ChannelPublishingJmsMessageListener listener = null;
-        if (!properties.isBatchMode()) {
-            listener = new RetryingChannelPublishingJmsMessageListener(
-                    properties,
-                    messageRecoverer,
-                    properties.getExtension().getDlqName(),
-                    retryTemplate,
-                    recoveryCallback
-            );
-            if (properties.isUseNativeDecoding()) {
-                ((RetryingChannelPublishingJmsMessageListener) listener)
-                        .setDeSerializerClassName(properties.getExtension().getDeSerializer());
+    public void onMessage(final Message jmsMessage, final Session session)
+      throws JMSException {
+      this.retryTemplate
+        .execute(
+          new RetryCallback<Object, JMSException>() {
+            @Override
+            public Object doWithRetry(RetryContext retryContext)
+              throws JMSException {
+              try {
+            	// convert data if de-serialization is enabled
+            	if(deSerializerClassName != null) {
+            		// get class name and parameterized type name
+            		CustomSerializationMessageConverter customConverter = new CustomSerializationMessageConverter();
+            		customConverter.setDeserializer(deSerializerClassName);
+            		RetryingChannelPublishingJmsMessageListener.this.setMessageConverter(
+            				customConverter
+            				);
+            	}
+            	
+                retryContext.setAttribute(
+                  RETRY_CONTEXT_MESSAGE_ATTRIBUTE,
+                  jmsMessage
+                );
+                
+                headerMapper.setConnection(((AQjmsSession) session).getDBConnection());
+            	RetryingChannelPublishingJmsMessageListener.super.setHeaderMapper(headerMapper);
+                RetryingChannelPublishingJmsMessageListener.super.onMessage(
+                  jmsMessage,
+                  session
+                );
+              } catch (JMSException e) {
+                logger.error(e, "Failed to send message");
+                resetMessageIfRequired(jmsMessage);
+                throw e;
+              } catch (Exception e) {
+                resetMessageIfRequired(jmsMessage);
+                throw e;
+              }
+              return null;
             }
-        } else {
-            listener = new TEQBatchMessageListener();
-            ((TEQBatchMessageListener) listener).setRetryTemplate(retryTemplate);
-            ((TEQBatchMessageListener) listener).setRecoverer(recoveryCallback);
-            ((TEQBatchMessageListener) listener).setDeSerializerClassName(properties.getExtension().getDeSerializer());
-        }
-        listener.setBeanFactory(this.beanFactory);
-
-        if (dbversion == 19 && properties.getInstanceIndex() != -1) {
-            logger.warn("Exact dequeue from a specific instanceIndex is not supported in Oracle Database version 19c. "
-                    + "Please use Oracle DB version 23c if you want to perform exact dequeue from a partition.");
-        }
-
-        JmsMessageDrivenChannelAdapter adapter = new JmsMessageDrivenChannelAdapter(
-                listenerContainerFactory.build(destination,
-                        groupName,
-                        properties.getInstanceIndex(),
-                        properties.getConcurrency(),
-                        properties.isBatchMode(),
-                        properties.getExtension().getBatchSize(),
-                        properties.getExtension().getTimeout()),
-                listener
+          },
+          this.recoverer
         );
-        adapter.setApplicationContext(this.applicationContext);
-        adapter.setBeanFactory(this.beanFactory);
-        adapter.setErrorChannel(errorChannel);
-        return adapter;
     }
 
-    private static class RetryingChannelPublishingJmsMessageListener
-            extends ChannelPublishingJmsMessageListener {
-
-        private static final String RETRY_CONTEXT_MESSAGE_ATTRIBUTE = "message";
-
-        private final ConsumerProperties properties;
-
-        private final MessageRecoverer messageRecoverer;
-
-        private final String deadLetterQueueName;
-
-        private final RetryTemplate retryTemplate;
-
-        private final RecoveryCallback<Object> recoverer;
-
-        private String deSerializerClassName = null;
-
-        RetryingChannelPublishingJmsMessageListener(
-                ConsumerProperties properties,
-                MessageRecoverer messageRecoverer,
-                String deadLetterQueueName,
-                RetryTemplate retryTemplate,
-                RecoveryCallback<Object> recoverer
-        ) {
-            this.properties = properties;
-            this.messageRecoverer = messageRecoverer;
-            this.deadLetterQueueName = deadLetterQueueName;
-            this.retryTemplate = retryTemplate;
-            this.recoverer = recoverer;
-        }
-
-        public void setDeSerializerClassName(String deSerializerClassName) {
-            this.deSerializerClassName = deSerializerClassName;
-        }
-
-        @Override
-        public void onMessage(final Message jmsMessage, final Session session)
-                throws JMSException {
-            this.retryTemplate
-                    .execute(
-                            new RetryCallback<Object, JMSException>() {
-                                @Override
-                                public Object doWithRetry(RetryContext retryContext)
-                                        throws JMSException {
-                                    try {
-                                        // convert data if de-serialization is enabled
-                                        if (deSerializerClassName != null) {
-                                            // get class name and parameterized type name
-                                            CustomSerializationMessageConverter customConverter = new CustomSerializationMessageConverter();
-                                            customConverter.setDeserializer(deSerializerClassName);
-                                            RetryingChannelPublishingJmsMessageListener.this.setMessageConverter(
-                                                    customConverter
-                                            );
-                                        }
-
-                                        retryContext.setAttribute(
-                                                RETRY_CONTEXT_MESSAGE_ATTRIBUTE,
-                                                jmsMessage
-                                        );
-                                        RetryingChannelPublishingJmsMessageListener.super.onMessage(
-                                                jmsMessage,
-                                                session
-                                        );
-                                    } catch (JMSException e) {
-                                        logger.error(e, "Failed to send message");
-                                        resetMessageIfRequired(jmsMessage);
-                                        throw e;
-                                    } catch (Exception e) {
-                                        resetMessageIfRequired(jmsMessage);
-                                        throw e;
-                                    }
-                                    return null;
-                                }
-                            },
-                            this.recoverer
-                    );
-        }
-
-        protected void resetMessageIfRequired(Message jmsMessage)
-                throws JMSException {
-            if (jmsMessage instanceof BytesMessage message) {
-                message.reset();
-            }
-        }
+    protected void resetMessageIfRequired(Message jmsMessage)
+      throws JMSException {
+      if (jmsMessage instanceof BytesMessage message) {
+        message.reset();
+      }
     }
+  }
 }

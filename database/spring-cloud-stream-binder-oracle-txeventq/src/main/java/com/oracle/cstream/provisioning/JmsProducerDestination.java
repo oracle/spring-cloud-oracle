@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -32,48 +32,48 @@ import org.springframework.jms.support.JmsUtils;
 
 public class JmsProducerDestination implements ProducerDestination {
 
-    private final Topic topic;
-    private final int partitionCount;
-    private final int dbversion;
+  private final Topic topic;
+  private final int partitionCount;
+  private int dbversion;
 
-    public JmsProducerDestination(Topic topic, int pCount, int dbversion) {
-        this.topic = topic;
-        this.partitionCount = pCount;
-        this.dbversion = dbversion;
-    }
+  public JmsProducerDestination(Topic topic, int pCount, int dbversion) {
+    this.topic = topic;
+    this.partitionCount = pCount;
+    this.dbversion = dbversion;
+  }
 
-    @Override
-    public String getName() {
-        try {
-            return topic.getTopicName();
-        } catch (JMSException e) {
-            throw new ProvisioningException(
-                    "Error getting topic name",
-                    JmsUtils.convertJmsAccessException(e)
-            );
-        }
+  @Override
+  public String getName() {
+    try {
+      return topic.getTopicName();
+    } catch (JMSException e) {
+      throw new ProvisioningException(
+        "Error getting topic name",
+        JmsUtils.convertJmsAccessException(e)
+      );
     }
+  }
 
-    @Override
-    public String getNameForPartition(int partition) {
-        try {
-            return topic.getTopicName();
-        } catch (JMSException e) {
-            throw new ProvisioningException(
-                    "Error getting topic name",
-                    JmsUtils.convertJmsAccessException(e)
-            );
-        }
+  @Override
+  public String getNameForPartition(int partition) {
+    try {
+      return topic.getTopicName();
+    } catch (JMSException e) {
+      throw new ProvisioningException(
+        "Error getting topic name",
+        JmsUtils.convertJmsAccessException(e)
+      );
     }
+  }
+  
+  public int getDBVersion() {
+	  return this.dbversion;
+  }
 
-    public int getDBVersion() {
-        return this.dbversion;
-    }
-
-    @Override
-    public String toString() {
-        return (
-                "JmsProducerDestination{" + "topic=" + topic + ", partitions=" + partitionCount + ", DB Version: " + this.dbversion + "}"
-        );
-    }
+  @Override
+  public String toString() {
+    return (
+      "JmsProducerDestination{" + "topic=" + topic + ", partitions=" + partitionCount + ", DB Version: " + this.dbversion + "}"
+    );
+  }
 }

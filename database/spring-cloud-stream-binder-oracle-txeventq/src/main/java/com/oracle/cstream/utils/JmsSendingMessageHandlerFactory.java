@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -37,48 +37,48 @@ import jakarta.jms.Destination;
 
 public class JmsSendingMessageHandlerFactory implements ApplicationContextAware, BeanFactoryAware {
 
-    private final JmsTemplate template;
+	private final JmsTemplate template;
 
-    private ApplicationContext applicationContext;
+	private ApplicationContext applicationContext;
 
-    private BeanFactory beanFactory;
+	private BeanFactory beanFactory;
 
-    private final JmsHeaderMapper headerMapper;
+	private final JmsHeaderMapper headerMapper;
 
-    public JmsSendingMessageHandlerFactory(JmsTemplate template,
-                                           JmsHeaderMapper headerMapper) {
-        this.template = template;
-        this.headerMapper = headerMapper;
-    }
+	public JmsSendingMessageHandlerFactory(JmsTemplate template,
+										   JmsHeaderMapper headerMapper) {
+		this.template = template;
+		this.headerMapper = headerMapper;
+	}
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+		this.beanFactory = beanFactory;
+	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
-    public PartitionAwareJmsSendingMessageHandler build(Destination destination,
-                                                        MessageChannel errorChannel,
-                                                        boolean mapHeaders,
-                                                        String serializer,
-                                                        int dbversion) {
-        template.setPubSubDomain(true);
-        PartitionAwareJmsSendingMessageHandler handler = new PartitionAwareJmsSendingMessageHandler(
-                this.template,
-                destination,
-                headerMapper,
-                errorChannel,
-                mapHeaders);
-        handler.setSerializerClassName(serializer);
-        handler.setApplicationContext(this.applicationContext);
-        handler.setBeanFactory(this.beanFactory);
-        handler.afterPropertiesSet();
-        handler.setDBVersion(dbversion);
-        return handler;
-    }
+	public PartitionAwareJmsSendingMessageHandler build(Destination destination,
+			MessageChannel errorChannel,
+			boolean mapHeaders,
+			String serializer,
+			int dbversion) {
+		template.setPubSubDomain(true);
+		PartitionAwareJmsSendingMessageHandler handler = new PartitionAwareJmsSendingMessageHandler(
+				this.template,
+				destination,
+				headerMapper,
+				errorChannel,
+				mapHeaders);
+		handler.setSerializerClassName(serializer);
+		handler.setApplicationContext(this.applicationContext);
+		handler.setBeanFactory(this.beanFactory);
+		handler.afterPropertiesSet();
+		handler.setDBVersion(dbversion);
+		return handler;
+	}
 
 }

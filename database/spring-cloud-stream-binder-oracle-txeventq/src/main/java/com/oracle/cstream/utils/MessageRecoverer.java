@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -27,11 +27,11 @@ package com.oracle.cstream.utils;
 import jakarta.jms.Message;
 
 public interface MessageRecoverer {
-    /**
-     * Recover from the failure to deliver a message.
-     *
-     * @param undeliveredMessage the message that has not been delivered.
-     * @param cause              the reason for the failure to deliver.
-     */
-    void recover(Message undeliveredMessage, String dlq, Throwable cause);
+  /**
+   * Recover from the failure to deliver a message.
+   *
+   * @param undeliveredMessage the message that has not been delivered.
+   * @param cause the reason for the failure to deliver.
+   */
+  void recover(Message undeliveredMessage, String dlq, Throwable cause);
 }

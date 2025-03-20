@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -25,49 +25,47 @@
 package com.oracle.cstream.config;
 
 public class JmsConsumerProperties {
-    private static final String DEFAULT_DLQ_NAME = "Spring_Cloud_Stream_dlq";
+	private static final String DEFAULT_DLQ_NAME = "Spring_Cloud_Stream_dlq";
 
-    /* Properties relevant for batching of messages */
-    private int batchSize = 10;
+	/* Properties relevant for batching of messages */
+	private int batchSize = 10;
+	
+	private int timeout = 1000;  // in milliseconds, default => 1 second
+	
+	/** the name of the dead letter queue **/
+	private String dlqName = DEFAULT_DLQ_NAME;
+	
+	private String deSerializer = null;
 
-    private int timeout = 1000;  // in milliseconds, default => 1 second
+	public String getDeSerializer() {
+		return deSerializer;
+	}
 
-    /**
-     * the name of the dead letter queue
-     **/
-    private String dlqName = DEFAULT_DLQ_NAME;
+	public void setDeSerializer(String deSerializer) {
+		this.deSerializer = deSerializer;
+	}
 
-    private String deSerializer = null;
+	public String getDlqName() {
+		return dlqName;
+	}
 
-    public String getDeSerializer() {
-        return deSerializer;
-    }
+	public void setDlqName(String dlqName) {
+		this.dlqName = dlqName;
+	}
 
-    public void setDeSerializer(String deSerializer) {
-        this.deSerializer = deSerializer;
-    }
+	public int getTimeout() {
+		return this.timeout;
+	}
 
-    public String getDlqName() {
-        return dlqName;
-    }
+	public int getBatchSize() {
+		return batchSize;
+	}
 
-    public void setDlqName(String dlqName) {
-        this.dlqName = dlqName;
-    }
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
+	}
 
-    public int getTimeout() {
-        return this.timeout;
-    }
-
-    public int getBatchSize() {
-        return batchSize;
-    }
-
-    public void setBatchSize(int batchSize) {
-        this.batchSize = batchSize;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
 }

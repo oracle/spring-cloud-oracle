@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -30,32 +30,31 @@ import java.util.UUID;
 
 public class Base64UrlNamingStrategy implements AnonymousNamingStrategy {
 
-    private String prefix = "spring.gen-";
+  private String prefix = "spring.gen-";
 
-    public Base64UrlNamingStrategy() {
-    }
+  public Base64UrlNamingStrategy() {}
 
-    public Base64UrlNamingStrategy(String prefix) {
-        this.prefix = prefix;
-    }
+  public Base64UrlNamingStrategy(String prefix) {
+    this.prefix = prefix;
+  }
 
-    @Override
-    public String generateName() {
-        return generateName(this.prefix);
-    }
+  @Override
+  public String generateName() {
+    return generateName(this.prefix);
+  }
 
-    @Override
-    public String generateName(String prefix) {
-        UUID uuid = UUID.randomUUID();
-        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
-        bb
-                .putLong(uuid.getMostSignificantBits())
-                .putLong(uuid.getLeastSignificantBits());
-        // Convert to base64 and remove trailing =
-        Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
-        return (
-                prefix +
-                        encoder.encodeToString(bb.array()).replace("=", "").replace("-", "\\$")
-        );
-    }
+  @Override
+  public String generateName(String prefix) {
+    UUID uuid = UUID.randomUUID();
+    ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+    bb
+      .putLong(uuid.getMostSignificantBits())
+      .putLong(uuid.getLeastSignificantBits());
+    // Convert to base64 and remove trailing =
+    Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+    return (
+      prefix +
+      encoder.encodeToString(bb.array()).replace("=", "").replace("-", "\\$")
+    );
+  }
 }

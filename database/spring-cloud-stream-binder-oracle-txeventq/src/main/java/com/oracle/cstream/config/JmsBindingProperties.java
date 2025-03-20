@@ -1,9 +1,9 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -28,23 +28,23 @@ import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 
 public class JmsBindingProperties implements BinderSpecificPropertiesProvider {
 
-    private JmsConsumerProperties consumer = new JmsConsumerProperties();
+  private JmsConsumerProperties consumer = new JmsConsumerProperties();
 
-    private JmsProducerProperties producer = new JmsProducerProperties();
+  private JmsProducerProperties producer = new JmsProducerProperties();
 
-    public JmsConsumerProperties getConsumer() {
-        return consumer;
-    }
+  public JmsConsumerProperties getConsumer() {
+    return consumer;
+  }
 
-    public void setConsumer(JmsConsumerProperties consumer) {
-        this.consumer = consumer;
-    }
+  public void setConsumer(JmsConsumerProperties consumer) {
+    this.consumer = consumer;
+  }
 
-    public JmsProducerProperties getProducer() {
-        return producer;
-    }
+  public JmsProducerProperties getProducer() {
+    return producer;
+  }
 
-    public void setProducer(JmsProducerProperties producer) {
-        this.producer = producer;
-    }
+  public void setProducer(JmsProducerProperties producer) {
+    this.producer = producer;
+  }
 }

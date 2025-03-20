@@ -1,10 +1,10 @@
 /*
- ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
- **
- ** This file has been modified by Oracle Corporation.
- **
- */
+** TxEventQ Support for Spring Cloud Stream
+** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+** 
+** This file has been modified by Oracle Corporation.
+** 
+*/
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -53,138 +53,138 @@ import org.springframework.retry.support.RetryTemplate;
 
 
 public class JMSMessageChannelBinder
-        extends AbstractMessageChannelBinder<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>, ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>>>
-        implements
-        ExtendedPropertiesBinder<MessageChannel, JmsConsumerProperties, JmsProducerProperties> {
+  extends AbstractMessageChannelBinder<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>, ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>>>
+  implements
+    ExtendedPropertiesBinder<MessageChannel, JmsConsumerProperties, JmsProducerProperties> {
 
-    private JmsExtendedBindingProperties extendedBindingProperties = new JmsExtendedBindingProperties();
+  private JmsExtendedBindingProperties extendedBindingProperties = new JmsExtendedBindingProperties();
 
-    private final JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory;
-    private final JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory;
-    private final ConnectionFactory connectionFactory;
+  private final JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory;
+  private final JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory;
+  private final ConnectionFactory connectionFactory;
 
-    private final DestinationResolver destinationResolver;
+  private final DestinationResolver destinationResolver;
 
-    private DestinationNameResolver destinationNameResolver;
+  private DestinationNameResolver destinationNameResolver;
+  
+  public JMSMessageChannelBinder(
+    ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> provisioningProvider,
+    JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory,
+    JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory,
+    JmsTemplate jmsTemplate,
+    ConnectionFactory connectionFactory
+  ) {
+    super(null, provisioningProvider);
+    this.jmsSendingMessageHandlerFactory = jmsSendingMessageHandlerFactory;
+    this.jmsMessageDrivenChannelAdapterFactory =
+      jmsMessageDrivenChannelAdapterFactory;
+    this.connectionFactory = connectionFactory;
+    this.destinationResolver = jmsTemplate.getDestinationResolver();
+  }
 
-    public JMSMessageChannelBinder(
-            ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> provisioningProvider,
-            JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory,
-            JmsMessageDrivenChannelAdapterFactory jmsMessageDrivenChannelAdapterFactory,
-            JmsTemplate jmsTemplate,
-            ConnectionFactory connectionFactory
-    ) {
-        super(null, provisioningProvider);
-        this.jmsSendingMessageHandlerFactory = jmsSendingMessageHandlerFactory;
-        this.jmsMessageDrivenChannelAdapterFactory =
-                jmsMessageDrivenChannelAdapterFactory;
-        this.connectionFactory = connectionFactory;
-        this.destinationResolver = jmsTemplate.getDestinationResolver();
+  public void setExtendedBindingProperties(
+    JmsExtendedBindingProperties extendedBindingProperties
+  ) {
+    this.extendedBindingProperties = extendedBindingProperties;
+  }
+  
+  public void setDestinationNameResolver(DestinationNameResolver destinationNameResolver) {
+	  this.destinationNameResolver = destinationNameResolver;
+  }
+
+  @Override
+  protected MessageHandler createProducerMessageHandler(
+    ProducerDestination producerDestination,
+    ExtendedProducerProperties<JmsProducerProperties> producerProperties,
+    MessageChannel errorChannel
+  ) throws Exception {
+	 Topic topic = null;
+	 try(Connection conn = connectionFactory.createConnection()) {
+		 Session session = conn.createSession(true, 1);
+
+		 String destination = producerDestination.getName();
+		 topic = (Topic) destinationResolver.resolveDestinationName(
+				 			session,
+				 			destination,
+				 			true);
+	 }
+    
+     if(producerProperties.isUseNativeEncoding()) {
+    	return this.jmsSendingMessageHandlerFactory
+        		.build(topic, errorChannel, 
+        				producerProperties.getHeaderMode() == null 
+        					|| producerProperties.getHeaderMode().equals(HeaderMode.headers),
+        		producerProperties.getExtension().getSerializer(),
+        		((JmsProducerDestination)producerDestination).getDBVersion());
     }
+    
+    return this.jmsSendingMessageHandlerFactory
+    		.build(topic, errorChannel, 
+    				producerProperties.getHeaderMode() == null || 
+    				producerProperties.getHeaderMode().equals(HeaderMode.headers),
+    				null,
+    				((JmsProducerDestination)producerDestination).getDBVersion());
+  }
 
-    public void setExtendedBindingProperties(
-            JmsExtendedBindingProperties extendedBindingProperties
-    ) {
-        this.extendedBindingProperties = extendedBindingProperties;
-    }
+  @Override
+  protected org.springframework.integration.core.MessageProducer createConsumerEndpoint(
+    ConsumerDestination consumerDestination,
+    String group,
+    ExtendedConsumerProperties<JmsConsumerProperties> properties
+  ) throws Exception {
+	  group = this.destinationNameResolver.resolveGroupName(group);
+	  Topic topic = null;
+	  try(Connection conn = connectionFactory.createConnection()) {
+			 Session session = conn.createSession(true, 1);
 
-    public void setDestinationNameResolver(DestinationNameResolver destinationNameResolver) {
-        this.destinationNameResolver = destinationNameResolver;
-    }
+			 topic = (Topic) destinationResolver.resolveDestinationName(
+					 			session,
+					 			consumerDestination.getName(),
+					 			true);
+	  }
+	  
+    
+	  RetryTemplate retryTemplate = buildRetryTemplate(properties);
+	  ErrorInfrastructure errorInfrastructure = registerErrorInfrastructure(consumerDestination, group, properties);
+	  RecoveryCallback<Object> recoveryCallback = errorInfrastructure
+    					.getRecoverer();
+    
+	  return jmsMessageDrivenChannelAdapterFactory.build(
+			  topic,
+			  group,
+			  retryTemplate,
+			  recoveryCallback,
+			  errorInfrastructure.getErrorChannel(),
+			  properties,
+			  ((JmsConsumerDestination)consumerDestination).getDBVersion()
+	  );
+  }
 
-    @Override
-    protected MessageHandler createProducerMessageHandler(
-            ProducerDestination producerDestination,
-            ExtendedProducerProperties<JmsProducerProperties> producerProperties,
-            MessageChannel errorChannel
-    ) throws Exception {
-        Topic topic = null;
-        try (Connection conn = connectionFactory.createConnection()) {
-            Session session = conn.createSession(true, 1);
+  @Override
+  public JmsConsumerProperties getExtendedConsumerProperties(
+    String channelName
+  ) {
+    return this.extendedBindingProperties.getExtendedConsumerProperties(
+        channelName
+      );
+  }
 
-            String destination = producerDestination.getName();
-            topic = (Topic) destinationResolver.resolveDestinationName(
-                    session,
-                    destination,
-                    true);
-        }
+  @Override
+  public JmsProducerProperties getExtendedProducerProperties(
+    String channelName
+  ) {
+    return this.extendedBindingProperties.getExtendedProducerProperties(
+        channelName
+      );
+  }
 
-        if (producerProperties.isUseNativeEncoding()) {
-            return this.jmsSendingMessageHandlerFactory
-                    .build(topic, errorChannel,
-                            producerProperties.getHeaderMode() == null
-                                    || producerProperties.getHeaderMode().equals(HeaderMode.headers),
-                            producerProperties.getExtension().getSerializer(),
-                            ((JmsProducerDestination) producerDestination).getDBVersion());
-        }
+  @Override
+  public String getDefaultsPrefix() {
+    return this.extendedBindingProperties.getDefaultsPrefix();
+  }
 
-        return this.jmsSendingMessageHandlerFactory
-                .build(topic, errorChannel,
-                        producerProperties.getHeaderMode() == null ||
-                                producerProperties.getHeaderMode().equals(HeaderMode.headers),
-                        null,
-                        ((JmsProducerDestination) producerDestination).getDBVersion());
-    }
-
-    @Override
-    protected org.springframework.integration.core.MessageProducer createConsumerEndpoint(
-            ConsumerDestination consumerDestination,
-            String group,
-            ExtendedConsumerProperties<JmsConsumerProperties> properties
-    ) throws Exception {
-        group = this.destinationNameResolver.resolveGroupName(group);
-        Topic topic = null;
-        try (Connection conn = connectionFactory.createConnection()) {
-            Session session = conn.createSession(true, 1);
-
-            topic = (Topic) destinationResolver.resolveDestinationName(
-                    session,
-                    consumerDestination.getName(),
-                    true);
-        }
-
-
-        RetryTemplate retryTemplate = buildRetryTemplate(properties);
-        ErrorInfrastructure errorInfrastructure = registerErrorInfrastructure(consumerDestination, group, properties);
-        RecoveryCallback<Object> recoveryCallback = errorInfrastructure
-                .getRecoverer();
-
-        return jmsMessageDrivenChannelAdapterFactory.build(
-                topic,
-                group,
-                retryTemplate,
-                recoveryCallback,
-                errorInfrastructure.getErrorChannel(),
-                properties,
-                ((JmsConsumerDestination) consumerDestination).getDBVersion()
-        );
-    }
-
-    @Override
-    public JmsConsumerProperties getExtendedConsumerProperties(
-            String channelName
-    ) {
-        return this.extendedBindingProperties.getExtendedConsumerProperties(
-                channelName
-        );
-    }
-
-    @Override
-    public JmsProducerProperties getExtendedProducerProperties(
-            String channelName
-    ) {
-        return this.extendedBindingProperties.getExtendedProducerProperties(
-                channelName
-        );
-    }
-
-    @Override
-    public String getDefaultsPrefix() {
-        return this.extendedBindingProperties.getDefaultsPrefix();
-    }
-
-    @Override
-    public Class<? extends BinderSpecificPropertiesProvider> getExtendedPropertiesEntryClass() {
-        return this.extendedBindingProperties.getExtendedPropertiesEntryClass();
-    }
+  @Override
+  public Class<? extends BinderSpecificPropertiesProvider> getExtendedPropertiesEntryClass() {
+    return this.extendedBindingProperties.getExtendedPropertiesEntryClass();
+  }
 }
