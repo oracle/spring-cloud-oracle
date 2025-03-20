@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -24,17 +24,15 @@
 
 package com.oracle.database.spring.cloud.stream.binder.config;
 
+import java.sql.SQLException;
+
 import com.oracle.database.spring.cloud.stream.binder.TxEventQQueueProvisioner;
 import com.oracle.database.spring.cloud.stream.binder.plsql.OracleDBUtils;
-
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
 import oracle.jakarta.jms.AQjmsConnectionFactory;
 import oracle.jakarta.jms.AQjmsFactory;
 import oracle.ucp.jdbc.PoolDataSource;
-
-import java.sql.SQLException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -51,43 +49,43 @@ import org.springframework.context.annotation.Import;
 @Configuration
 //It is important to include the root JMS configuration class.
 @Import(JmsBinderAutoConfiguration.class)
-@AutoConfigureAfter({ JndiConnectionFactoryAutoConfiguration.class })
-@ConditionalOnClass({ ConnectionFactory.class, AQjmsConnectionFactory.class })
+@AutoConfigureAfter({JndiConnectionFactoryAutoConfiguration.class})
+@ConditionalOnClass({ConnectionFactory.class, AQjmsConnectionFactory.class})
 public class TxEventQJmsConfiguration {
-  
-  private final Logger logger = LoggerFactory.getLogger(TxEventQJmsConfiguration.class);
 
-  @Bean
-  @ConditionalOnMissingBean(ConnectionFactory.class)
-  public ConnectionFactory aqJmsConnectionFactory(PoolDataSource ds) {
-    ConnectionFactory connectionFactory = null;
-    try {
-      connectionFactory = AQjmsFactory.getConnectionFactory(ds);
-    } catch (JMSException ignore) {
-    	logger.error("Error creating connection factory bean.", ignore);
-    	throw new IllegalArgumentException("Error while trying to obtain connectionFactory.");
+    private final Logger logger = LoggerFactory.getLogger(TxEventQJmsConfiguration.class);
+
+    @Bean
+    @ConditionalOnMissingBean(ConnectionFactory.class)
+    public ConnectionFactory aqJmsConnectionFactory(PoolDataSource ds) {
+        ConnectionFactory connectionFactory = null;
+        try {
+            connectionFactory = AQjmsFactory.getConnectionFactory(ds);
+        } catch (JMSException ignore) {
+            logger.error("Error creating connection factory bean.", ignore);
+            throw new IllegalArgumentException("Error while trying to obtain connectionFactory.");
+        }
+        return connectionFactory;
     }
-    return connectionFactory;
-  }
-  
-  @Bean
-  public OracleDBUtils getOracleDBUtils(PoolDataSource pds) {
-	  try(java.sql.Connection conn = pds.getConnection()) {
-		  return new OracleDBUtils(pds, conn.getMetaData().getDatabaseMajorVersion());
-	} catch (SQLException e) {
-		logger.error("Error creating OracleDBUtils Bean.");
-		throw new IllegalArgumentException("Cannot initialize OracleDBUtils", e);
-	}
-  }
 
-  @Bean
-  ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>,ExtendedProducerProperties<JmsProducerProperties>> txeventQQueueProvisioner(
-    ConnectionFactory connectionFactory,
-    OracleDBUtils dbutils
-  ) {
-    return new TxEventQQueueProvisioner(
-      connectionFactory,
-      dbutils
-    );
-  }
+    @Bean
+    public OracleDBUtils getOracleDBUtils(PoolDataSource pds) {
+        try (java.sql.Connection conn = pds.getConnection()) {
+            return new OracleDBUtils(pds, conn.getMetaData().getDatabaseMajorVersion());
+        } catch (SQLException e) {
+            logger.error("Error creating OracleDBUtils Bean.");
+            throw new IllegalArgumentException("Cannot initialize OracleDBUtils", e);
+        }
+    }
+
+    @Bean
+    ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> txeventQQueueProvisioner(
+            ConnectionFactory connectionFactory,
+            OracleDBUtils dbutils
+    ) {
+        return new TxEventQQueueProvisioner(
+                connectionFactory,
+                dbutils
+        );
+    }
 }

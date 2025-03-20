@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -27,14 +27,14 @@ package com.oracle.database.spring.cloud.stream.binder.utils;
 import org.springframework.util.StringUtils;
 
 public class DestinationNameResolver {
-	private AnonymousNamingStrategy namingStrategy;
+    private AnonymousNamingStrategy namingStrategy;
 
-	public DestinationNameResolver(AnonymousNamingStrategy namingStrategy) {
-		this.namingStrategy = namingStrategy;
-	}
+    public DestinationNameResolver(AnonymousNamingStrategy namingStrategy) {
+        this.namingStrategy = namingStrategy;
+    }
 
-	public String resolveGroupName(String group) {
-		boolean anonymous = !StringUtils.hasText(group);
-		return anonymous ? namingStrategy.generateName() : group;
-	}
+    public String resolveGroupName(String group) {
+        boolean anonymous = !StringUtils.hasText(group);
+        return anonymous ? namingStrategy.generateName() : group;
+    }
 }

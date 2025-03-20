@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -25,29 +25,30 @@
 package com.oracle.database.spring.cloud.stream.binder.config;
 
 import java.util.Map;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 import org.springframework.cloud.stream.binder.AbstractExtendedBindingProperties;
+import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 
 @ConfigurationProperties("spring.cloud.stream.txeventq")
 public class JmsExtendedBindingProperties
-  extends
-    AbstractExtendedBindingProperties<JmsConsumerProperties, JmsProducerProperties, JmsBindingProperties> {
+        extends
+        AbstractExtendedBindingProperties<JmsConsumerProperties, JmsProducerProperties, JmsBindingProperties> {
 
-  private static final String DEFAULT_PREFIX = "spring.cloud.stream.txeventq.default";
+    private static final String DEFAULT_PREFIX = "spring.cloud.stream.txeventq.default";
 
-  @Override
-  public Map<String, JmsBindingProperties> getBindings() {
-    return this.doGetBindings();
-  }
+    @Override
+    public Map<String, JmsBindingProperties> getBindings() {
+        return this.doGetBindings();
+    }
 
-  @Override
-  public String getDefaultsPrefix() {
-    return DEFAULT_PREFIX;
-  }
+    @Override
+    public String getDefaultsPrefix() {
+        return DEFAULT_PREFIX;
+    }
 
-  @Override
-  public Class<? extends BinderSpecificPropertiesProvider> getExtendedPropertiesEntryClass() {
-    return JmsBindingProperties.class;
-  }
+    @Override
+    public Class<? extends BinderSpecificPropertiesProvider> getExtendedPropertiesEntryClass() {
+        return JmsBindingProperties.class;
+    }
 }

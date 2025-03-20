@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-** 
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -28,26 +28,26 @@ import org.springframework.cloud.stream.provisioning.ConsumerDestination;
 
 public class JmsConsumerDestination implements ConsumerDestination {
 
-  private final String topicName;
-  
-  private final int dbversion;
+    private final String topicName;
 
-  public JmsConsumerDestination(final String topicName, final int dbversion) {
-    this.topicName = topicName;
-    this.dbversion = dbversion;
-  }
+    private final int dbversion;
 
-  @Override
-  public String getName() {
-      return this.topicName;
-  }
+    public JmsConsumerDestination(final String topicName, final int dbversion) {
+        this.topicName = topicName;
+        this.dbversion = dbversion;
+    }
 
-  @Override
-  public String toString() {
-    return "JmsConsumerDestination{" + "topic=" + topicName + '}';
-  }
-  
-  public int getDBVersion() {
-	  return this.dbversion;
-  }
+    @Override
+    public String getName() {
+        return this.topicName;
+    }
+
+    @Override
+    public String toString() {
+        return "JmsConsumerDestination{" + "topic=" + topicName + '}';
+    }
+
+    public int getDBVersion() {
+        return this.dbversion;
+    }
 }

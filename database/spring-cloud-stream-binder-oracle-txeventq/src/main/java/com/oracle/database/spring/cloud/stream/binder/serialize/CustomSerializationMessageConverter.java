@@ -1,9 +1,9 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
-**
-** This file has been modified by Oracle Corporation.
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -24,63 +24,62 @@
 
 package com.oracle.database.spring.cloud.stream.binder.serialize;
 
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
 
-import jakarta.jms.JMSException;
-import jakarta.jms.Message;
-
 public class CustomSerializationMessageConverter extends SimpleMessageConverter {
-	public String deserializer = null;
+    public String deserializer = null;
 
-	private static final Logger logger = LoggerFactory.getLogger(CustomSerializationMessageConverter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomSerializationMessageConverter.class);
 
-	public String getDeserializer() {
-		return deserializer;
-	}
+    public String getDeserializer() {
+        return deserializer;
+    }
 
-	public void setDeserializer(String deserializer) {
-		this.deserializer = deserializer;
-	}
+    public void setDeserializer(String deserializer) {
+        this.deserializer = deserializer;
+    }
 
-	@Override
-	public Object fromMessage(Message jmsMessage) throws JMSException {
-		Object result = super.fromMessage(jmsMessage);
+    @Override
+    public Object fromMessage(Message jmsMessage) throws JMSException {
+        Object result = super.fromMessage(jmsMessage);
 
-		// get class object
-		Class<?> deserializeClass = null;
-		try {
-			deserializeClass = Class.forName(deserializer);
-		} catch (ClassNotFoundException e) {
-			throw new IllegalArgumentException("Deserialization class not found: " + this.deserializer);
-		}
+        // get class object
+        Class<?> deserializeClass = null;
+        try {
+            deserializeClass = Class.forName(deserializer);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Deserialization class not found: " + this.deserializer);
+        }
 
-		//verify that it is correct instance
-		boolean isInstanceOfDeserializer = false;
-    	for(Class<?> inter_face: deserializeClass.getInterfaces()) {
-    		if(inter_face.toString().equals(Deserializer.class.toString())) {
-    			isInstanceOfDeserializer = true;
-    			break;
-    		}
-    	}
+        //verify that it is correct instance
+        boolean isInstanceOfDeserializer = false;
+        for (Class<?> inter_face : deserializeClass.getInterfaces()) {
+            if (inter_face.toString().equals(Deserializer.class.toString())) {
+                isInstanceOfDeserializer = true;
+                break;
+            }
+        }
 
-    	if(!isInstanceOfDeserializer) {
-    		logger.debug("The configured deserializer class is not an instance of 'com.oracle.cstream.serialize.DeSerializer'");
-    		throw new IllegalArgumentException("The configured serializer class is not an instance of 'com.oracle.cstream.serialize.DeSerializer'");
-    	}
+        if (!isInstanceOfDeserializer) {
+            logger.debug("The configured deserializer class is not an instance of 'com.oracle.cstream.serialize.DeSerializer'");
+            throw new IllegalArgumentException("The configured serializer class is not an instance of 'com.oracle.cstream.serialize.DeSerializer'");
+        }
 
-    	Deserializer<?> s = null;
+        Deserializer<?> s = null;
 
-    	try {
-    		s = (Deserializer<?>)(deserializeClass.getDeclaredConstructor().newInstance());
-    	} catch(Exception e) {
-    		logger.debug("Serializer object could not be initiated.");
-    		throw new IllegalArgumentException("Serializer object could not be initiated.");
-    	}
+        try {
+            s = (Deserializer<?>) (deserializeClass.getDeclaredConstructor().newInstance());
+        } catch (Exception e) {
+            logger.debug("Serializer object could not be initiated.");
+            throw new IllegalArgumentException("Serializer object could not be initiated.");
+        }
 
-    	result = (Object)(s.deserialize((byte[])result));
+        result = (Object) (s.deserialize((byte[]) result));
 
-		return result;
-	}
+        return result;
+    }
 }

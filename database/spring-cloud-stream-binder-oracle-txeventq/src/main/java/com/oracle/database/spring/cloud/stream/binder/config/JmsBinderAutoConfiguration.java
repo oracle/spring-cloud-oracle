@@ -1,10 +1,10 @@
 /*
-** TxEventQ Support for Spring Cloud Stream
-** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
-**
-** This file has been modified by Oracle Corporation.
-** 
-*/
+ ** TxEventQ Support for Spring Cloud Stream
+ ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ **
+ ** This file has been modified by Oracle Corporation.
+ **
+ */
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -34,5 +34,5 @@ import org.springframework.context.annotation.Import;
 @ConditionalOnMissingBean(Binder.class)
 @Import({JmsBinderGlobalConfiguration.class})
 public class JmsBinderAutoConfiguration {
-	
+
 }
