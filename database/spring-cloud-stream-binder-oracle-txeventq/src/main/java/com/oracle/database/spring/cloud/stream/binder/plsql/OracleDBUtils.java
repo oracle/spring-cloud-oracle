@@ -29,15 +29,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import oracle.ucp.jdbc.PoolDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import oracle.ucp.jdbc.PoolDataSource;
 
 public class OracleDBUtils {
 
     private PoolDataSource pds = null;
-    private final int dbversion;
+    private int dbversion;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String CREATE_KB2_TEQ =

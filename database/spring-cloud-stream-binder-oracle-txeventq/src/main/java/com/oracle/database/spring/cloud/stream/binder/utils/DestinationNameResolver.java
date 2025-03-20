@@ -27,7 +27,7 @@ package com.oracle.database.spring.cloud.stream.binder.utils;
 import org.springframework.util.StringUtils;
 
 public class DestinationNameResolver {
-    private final AnonymousNamingStrategy namingStrategy;
+    private AnonymousNamingStrategy namingStrategy;
 
     public DestinationNameResolver(AnonymousNamingStrategy namingStrategy) {
         this.namingStrategy = namingStrategy;

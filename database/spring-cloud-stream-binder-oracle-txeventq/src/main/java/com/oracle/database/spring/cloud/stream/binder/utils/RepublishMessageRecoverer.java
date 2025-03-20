@@ -24,11 +24,10 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
-import jakarta.jms.JMSException;
-import jakarta.jms.Message;
-
 import java.util.Map;
 
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.integration.jms.JmsHeaderMapper;

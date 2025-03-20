@@ -25,18 +25,7 @@
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import org.springframework.jms.connection.ConnectionFactoryUtils;
-import org.springframework.jms.connection.JmsResourceHolder;
-import org.springframework.jms.connection.SingleConnectionFactory;
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.jms.support.JmsUtils;
-import org.springframework.lang.Nullable;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 
 import jakarta.jms.Connection;
 import jakarta.jms.Destination;
@@ -45,6 +34,14 @@ import jakarta.jms.Message;
 import jakarta.jms.MessageConsumer;
 import jakarta.jms.Session;
 import oracle.jakarta.jms.AQjmsConsumer;
+import org.springframework.jms.connection.ConnectionFactoryUtils;
+import org.springframework.jms.connection.JmsResourceHolder;
+import org.springframework.jms.connection.SingleConnectionFactory;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
+import org.springframework.jms.support.JmsUtils;
+import org.springframework.lang.Nullable;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 public class TEQBatchMessageListenerContainer extends DefaultMessageListenerContainer {
     private final MessageListenerContainerResourceFactory transactionalResourceFactory =
@@ -102,15 +99,21 @@ public class TEQBatchMessageListenerContainer extends DefaultMessageListenerCont
         if (timeout > 0) {
             Message[] messages = ((AQjmsConsumer) consumer).bulkReceive(this.batchSize, timeout);
             if (messages == null) return null;
-            Collections.addAll(msgs, messages);
+            for (Message msg : messages) {
+                msgs.add(msg);
+            }
         } else if (timeout < 0) {
             Message[] messages = ((AQjmsConsumer) consumer).bulkReceiveNoWait(this.batchSize);
             if (messages == null) return null;
-            Collections.addAll(msgs, messages);
+            for (Message msg : messages) {
+                msgs.add(msg);
+            }
         } else {
             Message[] messages = ((AQjmsConsumer) consumer).bulkReceive(this.batchSize);
             if (messages == null) return null;
-            Collections.addAll(msgs, messages);
+            for (Message msg : messages) {
+                msgs.add(msg);
+            }
         }
         return msgs;
     }
@@ -264,7 +267,7 @@ public class TEQBatchMessageListenerContainer extends DefaultMessageListenerCont
         Object listener = getMessageListener();
 
         if (listener instanceof TEQBatchMessageListener teqBatchListener) {
-            this.doInvokeListener(teqBatchListener, session, messages);
+            this.doInvokeListener((TEQBatchMessageListener) teqBatchListener, session, messages);
         } else if (listener != null) {
             throw new IllegalArgumentException(
                     "Only TEQBatchMessageListener supported: " + listener);

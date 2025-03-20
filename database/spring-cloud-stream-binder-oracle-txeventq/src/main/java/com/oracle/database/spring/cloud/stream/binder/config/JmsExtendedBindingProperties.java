@@ -27,8 +27,8 @@ package com.oracle.database.spring.cloud.stream.binder.config;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 import org.springframework.cloud.stream.binder.AbstractExtendedBindingProperties;
+import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 
 @ConfigurationProperties("spring.cloud.stream.txeventq")
 public class JmsExtendedBindingProperties

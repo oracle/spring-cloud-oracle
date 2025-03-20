@@ -30,8 +30,6 @@ import com.oracle.database.spring.cloud.stream.binder.config.JmsExtendedBindingP
 import com.oracle.database.spring.cloud.stream.binder.config.JmsProducerProperties;
 import com.oracle.database.spring.cloud.stream.binder.provisioning.JmsConsumerDestination;
 import com.oracle.database.spring.cloud.stream.binder.provisioning.JmsProducerDestination;
-
-
 import com.oracle.database.spring.cloud.stream.binder.utils.DestinationNameResolver;
 import com.oracle.database.spring.cloud.stream.binder.utils.JmsMessageDrivenChannelAdapterFactory;
 import com.oracle.database.spring.cloud.stream.binder.utils.JmsSendingMessageHandlerFactory;
@@ -39,7 +37,6 @@ import jakarta.jms.Connection;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Session;
 import jakarta.jms.Topic;
-
 import org.springframework.cloud.stream.binder.AbstractMessageChannelBinder;
 import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 import org.springframework.cloud.stream.binder.ExtendedConsumerProperties;

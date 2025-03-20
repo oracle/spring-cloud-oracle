@@ -26,13 +26,12 @@ package com.oracle.database.spring.cloud.stream.binder.utils;
 
 import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
 import com.oracle.database.spring.cloud.stream.binder.serialize.CustomSerializationMessageConverter;
-
 import jakarta.jms.BytesMessage;
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
 import jakarta.jms.Session;
-
+import oracle.jakarta.jms.AQjmsSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -60,7 +59,7 @@ public class JmsMessageDrivenChannelAdapterFactory
 
     private ApplicationContext applicationContext;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public JmsMessageDrivenChannelAdapterFactory(
             ListenerContainerFactory listenerContainerFactory,
@@ -145,9 +144,11 @@ public class JmsMessageDrivenChannelAdapterFactory
 
         private final RetryTemplate retryTemplate;
 
-        private final RecoveryCallback<Object> recoverer;
+        private RecoveryCallback<Object> recoverer;
 
         private String deSerializerClassName = null;
+
+        SpecCompliantJmsHeaderMapper headerMapper = new SpecCompliantJmsHeaderMapper();
 
         RetryingChannelPublishingJmsMessageListener(
                 ConsumerProperties properties,
@@ -191,6 +192,9 @@ public class JmsMessageDrivenChannelAdapterFactory
                                                 RETRY_CONTEXT_MESSAGE_ATTRIBUTE,
                                                 jmsMessage
                                         );
+
+                                        headerMapper.setConnection(((AQjmsSession) session).getDBConnection());
+                                        RetryingChannelPublishingJmsMessageListener.super.setHeaderMapper(headerMapper);
                                         RetryingChannelPublishingJmsMessageListener.super.onMessage(
                                                 jmsMessage,
                                                 session

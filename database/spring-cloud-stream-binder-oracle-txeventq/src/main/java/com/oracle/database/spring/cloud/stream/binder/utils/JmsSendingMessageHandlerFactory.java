@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import jakarta.jms.Destination;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -32,8 +33,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.integration.jms.JmsHeaderMapper;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.MessageChannel;
-
-import jakarta.jms.Destination;
 
 public class JmsSendingMessageHandlerFactory implements ApplicationContextAware, BeanFactoryAware {
 

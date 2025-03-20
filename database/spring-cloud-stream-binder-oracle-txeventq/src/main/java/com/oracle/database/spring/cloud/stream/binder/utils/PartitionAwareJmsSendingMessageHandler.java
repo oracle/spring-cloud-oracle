@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,9 +24,16 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import java.sql.Connection;
+import java.util.function.Consumer;
+
+import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
-
+import jakarta.jms.MessageProducer;
+import jakarta.jms.Session;
+import oracle.jakarta.jms.AQjmsSession;
+import oracle.jakarta.jms.AQjmsTopicConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.stream.binder.BinderHeaders;
@@ -35,11 +42,10 @@ import org.springframework.integration.handler.AbstractMessageHandler;
 import org.springframework.integration.jms.JmsHeaderMapper;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessagePostProcessor;
+import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ErrorMessage;
-
-import com.oracle.database.spring.cloud.stream.binder.serialize.Serializer;
 
 public class PartitionAwareJmsSendingMessageHandler
         extends AbstractMessageHandler
@@ -59,7 +65,7 @@ public class PartitionAwareJmsSendingMessageHandler
 
     private int dbversion = 23;
 
-    private static final Logger logger = LoggerFactory.getLogger(PartitionAwareJmsSendingMessageHandler.class);
+    private static final Logger sendLogger = LoggerFactory.getLogger(PartitionAwareJmsSendingMessageHandler.class);
 
     public PartitionAwareJmsSendingMessageHandler(
             JmsTemplate jmsTemplate,
@@ -85,9 +91,9 @@ public class PartitionAwareJmsSendingMessageHandler
 
     protected void handleMessageInternal(Message<?> message) {
         try {
-            this.jmsHandleMessageInternal(message);
+            this.handleJMSMessageInternal(message);
         } catch (Exception e) {
-            logger.error("An error occurred while trying to send message: " + e);
+            sendLogger.error("An error occurred while trying to send message:", e);
             if (this.errorChannel != null) {
                 this.errorChannel.send(new ErrorMessage(e, message));
             }
@@ -95,18 +101,73 @@ public class PartitionAwareJmsSendingMessageHandler
         }
     }
 
-    protected void jmsHandleMessageInternal(Message<?> message) {
+    protected void handleJMSMessageInternal(Message<?> message) {
         if (message == null) {
             throw new IllegalArgumentException("message must not be null");
         }
-        Object objectToSend = message.getPayload();
+        Object objectToSend = this.serializeMessageIfRequired(message.getPayload());
 
+        Integer partitionToSend = getPartition(message);
+        HeaderMappingMessagePostProcessor messagePostProcessor = new HeaderMappingMessagePostProcessor(
+                message,
+                this.headerMapper,
+                partitionToSend,
+                mapHeaders
+        );
+        messagePostProcessor.setDBVersion(this.dbversion);
+
+        // try to read ConnectionCallback - if set
+        @SuppressWarnings("unchecked")
+        Consumer<Connection> connCallback = (Consumer<Connection>) message.getHeaders().get(TxEventQBinderHeaderConstants.CONNECTION_CONSUMER);
+        if (connCallback == null) {
+            this.jmsTemplate.convertAndSend(
+                    destination,
+                    objectToSend,
+                    messagePostProcessor
+            );
+            return;
+        }
+
+        Connection c = (Connection) message.getHeaders().get(TxEventQBinderHeaderConstants.MESSAGE_CONTEXT);
+        if (c == null) {
+            final Object actualPayload = objectToSend;
+            jmsTemplate.send(destination, session -> {
+                Connection sessionConnection = ((AQjmsSession) session).getDBConnection();
+                connCallback.accept(sessionConnection);
+                MessageConverter msgConverter = this.jmsTemplate.getMessageConverter();
+                if (msgConverter == null) {
+                    throw new IllegalStateException("No 'messageConverter' specified. Check configuration of JmsTemplate.");
+                }
+                jakarta.jms.Message msg = msgConverter.toMessage(actualPayload, session);
+                return messagePostProcessor.postProcessMessage(msg);
+            });
+        } else {
+            connCallback.accept(c);
+            // create topic connection and session using c
+            try (jakarta.jms.Connection conn = AQjmsTopicConnectionFactory.createTopicConnection(c);
+                 Session s = conn.createSession(true, this.jmsTemplate.getSessionAcknowledgeMode());
+                 MessageProducer p = s.createProducer(destination)) {
+                MessageConverter msgConverter = this.jmsTemplate.getMessageConverter();
+                if (msgConverter == null) {
+                    throw new IllegalStateException("No 'messageConverter' specified. Check configuration of JmsTemplate.");
+                }
+                jakarta.jms.Message msg = msgConverter.toMessage(objectToSend, s);
+                jakarta.jms.Message msgToSend = messagePostProcessor.postProcessMessage(msg);
+                p.send(msgToSend);
+                s.commit();
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Object serializeMessageIfRequired(Object objectToSend) {
         if (this.serializerClassName != null) {
             Class<?> serializer = null;
             try {
                 serializer = Class.forName(this.serializerClassName);
             } catch (ClassNotFoundException ce) {
-                logger.debug("The class name: " + serializerClassName + "is invalid.");
+                sendLogger.debug("The class name: {} is invalid.", serializerClassName);
                 throw new IllegalArgumentException(ce.getMessage());
             }
 
@@ -119,44 +180,28 @@ public class PartitionAwareJmsSendingMessageHandler
             }
 
             if (!isInstanceOfSerializer) {
-                logger.debug("The configured serializer class is not an instance of 'com.oracle.database.spring.cloud.stream.binder.serialize.Serializer'");
-                throw new IllegalArgumentException("The configured serializer class is not an instance of 'com.oracle.database.spring.cloud.stream.binder.serialize.Serializer'");
+                sendLogger.debug("The configured serializer class is not an instance of 'com.oracle.cstream.serialize.Serializer'");
+                throw new IllegalArgumentException("The configured serializer class is not an instance of 'com.oracle.cstream.serialize.Serializer'");
             }
             Serializer s = null;
 
             try {
                 s = (Serializer) (serializer.getDeclaredConstructor().newInstance());
             } catch (Exception e) {
-                logger.debug("Serializer object could not be initiated.");
+                sendLogger.debug("Serializer object could not be initiated.");
                 throw new IllegalArgumentException("Serializer object could not be initiated.");
             }
 
             objectToSend = s.serialize(objectToSend);
         }
-
-        Integer partitionToSend = getPartition(message);
-        HeaderMappingMessagePostProcessor messagePostProcessor = new HeaderMappingMessagePostProcessor(
-                message,
-                this.headerMapper,
-                partitionToSend,
-                mapHeaders
-        );
-        messagePostProcessor.setDBVersion(this.dbversion);
-
-        this.jmsTemplate.convertAndSend(
-                destination,
-                objectToSend,
-                messagePostProcessor
-        );
-
-
+        return objectToSend;
     }
 
     private Integer getPartition(Message<?> message) {
         try {
             return (Integer) (message.getHeaders().get(BinderHeaders.PARTITION_HEADER));
         } catch (Exception e) {
-            logger.info("Invalid Partition Index");
+            sendLogger.info("Invalid Partition Index");
             throw new IllegalArgumentException("The partition index cannot be converted to an integer");
         }
     }
@@ -201,11 +246,11 @@ public class PartitionAwareJmsSendingMessageHandler
                 if (this.dbversion == 19)
                     jmsMessage.setJMSCorrelationID("" + this.partition);
                 else
-                    jmsMessage.setLongProperty("AQINTERNAL_PARTITION", this.partition * 2);
+                    jmsMessage.setLongProperty("AQINTERNAL_PARTITION", this.partition * 2L);
             } else {
                 // choose 0 by default
                 if (this.dbversion != 19)
-                    jmsMessage.setLongProperty("AQINTERNAL_PARTITION", 0);
+                    jmsMessage.setLongProperty("AQINTERNAL_PARTITION", 0L);
             }
 
             return jmsMessage;

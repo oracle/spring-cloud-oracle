@@ -46,7 +46,7 @@ import org.springframework.jms.core.JmsTemplate;
 @Configuration
 public class JmsBinderGlobalConfiguration {
 
-    private final ConnectionFactory connectionFactory;
+    private ConnectionFactory connectionFactory;
 
     public JmsBinderGlobalConfiguration(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;

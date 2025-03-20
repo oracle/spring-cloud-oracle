@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,6 +24,8 @@
 
 package com.oracle.database.spring.cloud.stream.binder;
 
+import java.sql.SQLException;
+
 import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
 import com.oracle.database.spring.cloud.stream.binder.config.JmsProducerProperties;
 import com.oracle.database.spring.cloud.stream.binder.plsql.OracleDBUtils;
@@ -34,9 +36,6 @@ import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
 import jakarta.jms.Session;
 import jakarta.jms.Topic;
-
-import java.sql.SQLException;
-
 import oracle.jakarta.jms.AQjmsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,7 +136,7 @@ public class TxEventQQueueProvisioner
                                          ExtendedProducerProperties<JmsProducerProperties> properties) {
         Connection aQConnection = null;
         Session session = null;
-        Topic topic = null;
+        Topic topic;
         try {
             aQConnection = connectionFactory.createConnection();
             session = aQConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -177,7 +176,7 @@ public class TxEventQQueueProvisioner
                                          ExtendedConsumerProperties<JmsConsumerProperties> properties) {
         Connection aQConnection = null;
         Session session = null;
-        Topic topic = null;
+        Topic topic;
         try {
             aQConnection = connectionFactory.createConnection();
             session = aQConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
