@@ -17,7 +17,7 @@ To add this starter to your project, add this Maven dependency:
 <dependency>
     <groupId>com.oracle.database.spring</groupId>
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
-    <version>23.4.0</version>
+    <version>24.4.0</version>
 </dependency>
 ----
 
@@ -26,7 +26,7 @@ For Gradle projects, add this dependency:
 [source,subs="normal"]
 ----
 dependencies {
-    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:23.4.0'
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:24.4.0'
 }
 ----
 
@@ -131,7 +131,7 @@ To add this starter to your project, add this Maven dependency:
 <dependency>
     <groupId>com.oracle.database.spring</groupId>
     <artifactId>oracle-spring-boot-starter-ucp</artifactId>
-    <version>23.4.0</version>
+    <version>24.4.0</version>
 </dependency>
 ----
 
@@ -140,7 +140,7 @@ For Gradle projects, add this dependency:
 [source,subs="normal"]
 ----
 dependencies {
-    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0'
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:24.4.0'
 }
 ----
 
@@ -223,3 +223,80 @@ public class DataSourceConfiguration {
 }
 ----
 
+=== Oracle Database Wallet
+
+This starter provides authentication mechanisms for Oracle Database connections using Oracle Database Wallet, such as connections to Autonomous Database with mTLS enabled.
+
+To add this starter to your project, add this Maven dependency:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.database.spring</groupId>
+    <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+    <version>24.4.0</version>
+</dependency>
+----
+
+For Gradle projects, add this dependency:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-wallet:24.4.0'
+}
+----
+
+=== Oracle JSON Collections
+
+This starter provides dependencies and tooling for using JSON with Oracle Database, including Oracle Database JSON Relational Duality Views.
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.database.spring</groupId>
+    <artifactId>oracle-spring-boot-starter-json-collections</artifactId>
+    <version>24.4.0</version>
+</dependency>
+----
+
+For Gradle projects, add this dependency:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-json-collections:24.4.0'
+}
+----
+
+==== Using the Oracle JSON Collections Starter
+
+The `JSONB` bean is used to convert Java Obects to and from OSON (Oracle Database serialized JSON), using the `fromOSON` and `toOSON` methods.
+
+[source,java]
+----
+@Autowired
+JSONB jsonb;
+
+// Convert from OSON to Java Object
+Student student = jsonb.fromOSON(inputStream, Student.class);
+// Convert from Java Object to OSON
+byte[] bytes = jsonb.toOSON(student);
+----
+
+The `JSONBRowMapper` implementation converts OSON database columns to Java Objects:
+
+[source,java]
+----
+RowMapper<Student> rowMapper = new JSONBRowMapper<>(this.jsonb, Student.class);
+List<Student> students = jdbcTemplate.query(con -> {
+    PreparedStatement ps = con.prepareStatement("""
+        select * from students_dv v
+        where v.data.first_name = ?
+        and v.data.last_name = ?
+        """);
+    ps.setString(1, firstName);
+    ps.setString(2, lastName);
+    return ps;
+}, rowMapper);
+----

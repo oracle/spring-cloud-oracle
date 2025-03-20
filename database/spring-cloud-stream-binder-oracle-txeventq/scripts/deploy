@@ -1,0 +1,52 @@
+#!/bin/bash
+# Copyright (c) 2024, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: $0 -v version -u repository.url -r repository.name "
+    exit 1
+}
+
+VERSION=""
+REPOSITORY_NAME=""
+REPOSITORY_URL=""
+
+if [ -z "$(command -v mvn)" ]; then
+  echo "Error: 'mvn' binary not found on PATH. Install 'mvn' before running this script."
+fi
+
+while getopts ":v:r:u:" opt; do
+    case $opt in
+        v) VERSION="$OPTARG";;
+        u) REPOSITORY_URL="$OPTARG";;
+        r) REPOSITORY_NAME="$OPTARG";;
+        \?) echo "Invalid option -$OPTARG" >&2; usage;;
+        :) echo "Option -$OPTARG requires an argument." >&2; usage;;
+    esac
+done
+
+if [ -z "$VERSION" ] || [ -z "$REPOSITORY_URL" ] || [ -z "$REPOSITORY_NAME" ]; then
+    echo "Error: -v, -u, and -r options are required."
+    usage
+fi
+
+echo "Setting project version = $VERSION"
+
+mvn -q versions:set -DnewVersion="$VERSION"
+
+echo "Successfully set project version = $VERSION"
+
+echo "Deploying project to ${REPOSITORY_URL}/${REPOSITORY_NAME}"
+
+mvn -q deploy -Drepository.url="$REPOSITORY_URL" -Drepository.name="$REPOSITORY_NAME" -DskipTests
+
+echo "Successfully deployed project to ${REPOSITORY_URL}/${REPOSITORY_NAME}"
+
+# shellcheck disable=SC2016
+PACKAGES="$(mvn -Dexec.executable='echo' -Dexec.args='${project.artifactId}' exec:exec -q)"
+printf "The following artifacts have been created for upload:\n\n"
+for PACKAGE in $PACKAGES; do
+  echo "com.oracle.database.spring.cloud-stream-binder:${PACKAGE}:${VERSION}"
+done

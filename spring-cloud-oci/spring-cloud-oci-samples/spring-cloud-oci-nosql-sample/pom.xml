@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2024, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>com.oracle.cloud.spring</groupId>
+		<artifactId>spring-cloud-oci-samples</artifactId>
+		<version>1.4.1-SNAPSHOT</version>
+		</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.oracle.cloud.spring.sample.nosql</groupId>
+	<artifactId>spring-cloud-oci-nosql-sample</artifactId>
+	<name>spring-cloud-oci-nosql-sample</name>
+	<description>spring-cloud-oci-nosql-sample</description>
+
+	<organization>
+		<name>Oracle America, Inc.</name>
+		<url>https://www.oracle.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Oracle</name>
+			<email>obaas_ww at oracle.com</email>
+			<organization>Oracle America, Inc.</organization>
+			<organizationUrl>https://www.oracle.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Universal Permissive License (UPL), Version 1.0</name>
+			<url>https://oss.oracle.com/licenses/upl/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/oracle/spring-cloud-oracle</url>
+		<connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
+		<developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
+	</scm>
+
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.oracle.cloud.spring</groupId>
+			<artifactId>spring-cloud-oci-starter-nosql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.cloud.spring.sample.common</groupId>
+			<artifactId>spring-cloud-oci-common-samples-utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.cloud.spring.sample.common</groupId>
+			<artifactId>spring-cloud-oci-common-samples-utils</artifactId>
+			<type>test-jar</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

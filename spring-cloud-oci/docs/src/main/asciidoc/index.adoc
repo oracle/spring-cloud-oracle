@@ -6,7 +6,7 @@
 
 include::_attributes.adoc[]
 
-Documentation for version *+{project-version}+*
+Documentation for version *{project-version}*
 
 == Introduction
 
@@ -14,9 +14,9 @@ Spring Cloud Oracle, part of the Spring Cloud umbrella project, eases the integr
 
 include::getting-started.adoc[]
 
-include::adb.adoc[]
-
 include::core.adoc[]
+
+include::adb.adoc[]
 
 include::email.adoc[]
 
@@ -29,6 +29,8 @@ include::genai.adoc[]
 include::storage.adoc[]
 
 include::notifications.adoc[]
+
+include::nosql.adoc[]
 
 include::queues.adoc[]
 

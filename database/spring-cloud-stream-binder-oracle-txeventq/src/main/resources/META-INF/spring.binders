@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 txeventqjms:\
 com.oracle.cstream.config.TxEventQJmsConfiguration
+=======
+txeventqjms=\
+com.oracle.database.spring.cloud.stream.binder.config.TxEventQJmsConfiguration
+>>>>>>> 2ae791e79f499734bb809fc7c193110f1669a51e

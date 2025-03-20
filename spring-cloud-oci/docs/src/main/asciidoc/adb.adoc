@@ -72,4 +72,4 @@ The Spring Boot Starter for Oracle Autonomous Database provides the following co
 
 === Sample
 
-A sample application provided https://github.com/oracle/spring-cloud-oci/tree/main/spring-cloud-oci-samples/spring-cloud-oci-adb-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Autonomous Database module.
+A sample application provided https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-adb-sample[here] contains the examples to demonstrates the usage of OCI Spring Cloud Autonomous Database module.

@@ -5,26 +5,15 @@ package com.oracle.spring.aqjms;
 
 import javax.sql.DataSource;
 
-import java.sql.SQLException;
-
 import com.oracle.spring.ucp.UCPAutoConfiguration;
-import jakarta.annotation.PostConstruct;
 import jakarta.jms.ConnectionFactory;
 
-import oracle.jdbc.pool.OracleDataSource;
-import oracle.ucp.jdbc.PoolDataSourceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import oracle.jakarta.jms.AQjmsFactory;
-import oracle.ucp.jdbc.PoolDataSource;
-import oracle.ucp.jdbc.PoolDataSourceFactory;
-import org.springframework.util.ClassUtils;
 
 /**
  * This class autowires the configuration and injects both a JDBC DataSource

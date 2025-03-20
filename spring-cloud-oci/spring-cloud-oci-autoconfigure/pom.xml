@@ -11,7 +11,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <artifactId>spring-cloud-oci</artifactId>
         <groupId>com.oracle.cloud.spring</groupId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>1.4.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>spring-cloud-oci-autoconfigure</artifactId>
@@ -79,6 +79,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <dependency>
             <groupId>com.oracle.cloud.spring</groupId>
             <artifactId>spring-cloud-oci-adb</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.oracle.cloud.spring</groupId>
@@ -98,6 +99,11 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <dependency>
             <groupId>com.oracle.cloud.spring</groupId>
             <artifactId>spring-cloud-oci-logging</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.nosql.sdk</groupId>
+            <artifactId>spring-data-oracle-nosql</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

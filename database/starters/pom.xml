@@ -7,12 +7,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.oracle.database.spring</groupId>
   <artifactId>oracle-spring-boot-starters</artifactId>
-  <version>24.1.0</version>
+  <version>25.2.0</version>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.7</version>
+    <version>3.4.3</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -54,27 +54,41 @@
 
   <modules>
     <module>oracle-spring-boot-starter-ucp</module>
+    <module>oracle-spring-boot-starter-wallet</module>
     <module>oracle-spring-boot-starter-aqjms</module>
+    <module>oracle-spring-boot-starter-json-collections</module>
+    <module>oracle-spring-boot-starter-samples</module>
+    <module>oracle-spring-boot-starter-okafka</module>
   </modules>
 
   <properties>
-    <spring-boot-dependencies.version>3.2.7</spring-boot-dependencies.version>
-    <spring-framework-bom.version>6.1.10</spring-framework-bom.version>
+    <spring-boot-dependencies.version>3.4.3</spring-boot-dependencies.version>
+    <spring-framework-bom.version>6.2.3</spring-framework-bom.version>
 
-    <java.version>17</java.version>
+    <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.root>${basedir}</project.root>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
-    <ojdbc.version>23.4.0.24.05</ojdbc.version>
+    <okafka.version>23.6.0.0</okafka.version>
+    <jackson.version>2.18.3</jackson.version>
+    <kafka-clients.version>3.7.1</kafka-clients.version>
+    <oracle.version>23.7.0.25.01</oracle.version>
+    <osdt.version>21.17.0.0</osdt.version>
     <oracledb-messaging.version>23.3.1.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
-    <micrometer.version>1.11.5</micrometer.version>
-    <micrometer-tracing.version>1.1.6</micrometer-tracing.version>
+    <micrometer.version>1.14.2</micrometer.version>
+    <micrometer-tracing.version>1.4.1</micrometer-tracing.version>
     <junit5.version>5.9.3</junit5.version>
-    <jackson.version>2.15.3</jackson.version>
+    <testcontainers.version>1.20.6</testcontainers.version>
+
+    <jakarta.json-api.version>2.1.3</jakarta.json-api.version>
+    <jakarta.json.bind-api.version>3.0.1</jakarta.json.bind-api.version>
+    <orajsoda.version>1.1.7.3</orajsoda.version>
+    <parrson.version>1.1.7</parrson.version>
+    <yasson.version>3.0.4</yasson.version>
 
     <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
@@ -89,6 +103,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-configuration-processor</artifactId>
@@ -121,14 +142,29 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>com.oracle.database.security</groupId>
+        <artifactId>oraclepki</artifactId>
+        <version>${oracle.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle.database.security</groupId>
+        <artifactId>osdt_core</artifactId>
+        <version>${osdt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle.database.security</groupId>
+        <artifactId>osdt_cert</artifactId>
+        <version>${osdt.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.oracle.database.jdbc</groupId>
         <artifactId>ojdbc11</artifactId>
-        <version>${ojdbc.version}</version>
+        <version>${oracle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.oracle.database.jdbc</groupId>
         <artifactId>ucp</artifactId>
-        <version>${ojdbc.version}</version>
+        <version>${oracle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.oracle.database.messaging</groupId>
@@ -159,18 +195,64 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>com.fasterxml.jackson</groupId>
-        <artifactId>jackson-bom</artifactId>
-        <version>${jackson.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
         <version>${junit5.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+        <scope>compile</scope>
+        <version>${spring-boot-dependencies.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <scope>compile</scope>
+        <version>${spring-boot-dependencies.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.oracle.database.messaging</groupId>
+        <artifactId>okafka</artifactId>
+        <version>${okafka.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>${kafka-clients.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.oracle.database.soda</groupId>
+        <artifactId>orajsoda</artifactId>
+        <version>${orajsoda.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>jakarta.json</groupId>
+        <artifactId>jakarta.json-api</artifactId>
+        <version>${jakarta.json-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.parsson</groupId>
+        <artifactId>parsson</artifactId>
+        <version>${parrson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>jakarta.json.bind</groupId>
+        <artifactId>jakarta.json.bind-api</artifactId>
+        <version>${jakarta.json.bind-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>yasson</artifactId>
+        <version>${yasson.version}</version>
       </dependency>
 
       <!-- Test -->
@@ -191,12 +273,51 @@
         <artifactId>spring-boot-starter-test</artifactId>
         <version>${spring-boot-dependencies.version}</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
-        <groupId>com.oracle.database.jdbc</groupId>
-        <artifactId>ucp</artifactId>
-        <version>${ojdbc.version}</version>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${testcontainers.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers</artifactId>
+        <version>${testcontainers.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>oracle-free</artifactId>
+        <version>${testcontainers.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jdbc</artifactId>
+        <version>${spring-boot-dependencies.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

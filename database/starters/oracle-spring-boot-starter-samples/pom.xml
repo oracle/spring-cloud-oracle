@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2024, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>oracle-spring-boot-starters</artifactId>
+        <groupId>com.oracle.database.spring</groupId>
+        <version>25.2.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oracle-spring-boot-starter-samples</artifactId>
+    <version>25.2.0</version>
+    <packaging>pom</packaging>
+
+    <name>Oracle Spring Boot Starter - Samples</name>
+    <description>Oracle Spring Boot Starter Sample Parent Module</description>
+    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/samples</url>
+
+    <organization>
+        <name>Oracle America, Inc.</name>
+        <url>https://www.oracle.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Oracle</name>
+            <email>obaas_ww at oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <organizationUrl>https://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Universal Permissive License (UPL), Version 1.0</name>
+            <url>https://oss.oracle.com/licenses/upl/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/oracle/spring-cloud-oracle</url>
+        <connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
+        <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
+    </scm>
+
+    <modules>
+        <module>oracle-spring-boot-sample-ucp-jpa</module>
+        <module>oracle-spring-boot-sample-json-duality</module>
+        <module>oracle-spring-boot-sample-json-events</module>
+        <module>oracle-spring-boot-sample-okafka</module>
+        <module>oracle-spring-boot-sample-wallet</module>
+        <module>oracle-spring-boot-sample-txeventqjms</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Skip deploy of sample code-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

@@ -8,18 +8,18 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>24.1.0</version>
+        <version>25.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
-    <version>24.1.0</version>
+    <version>25.2.0</version>
     <packaging>jar</packaging>
 
     <!-- Project Information -->
     <name>Oracle Spring Boot Starter - AQ JMS</name>
     <description>Oracle's implementation of Spring Boot Starter for using with Oracle AQ JMS</description>
-    <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters</url>
+    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-aqjms</url>
 
     <organization>
         <name>Oracle America, Inc.</name>
@@ -69,6 +69,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.transaction</groupId>

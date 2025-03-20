@@ -54,7 +54,7 @@ echo "Successfully deployed project to ${REPOSITORY_URL}/${REPOSITORY_NAME}"
 PACKAGES="$(mvn -Dexec.executable='echo' -Dexec.args='${project.artifactId}' exec:exec -q)"
 printf "The following artifacts have been created for upload:\n\n"
 for PACKAGE in $PACKAGES; do
-  if [[ "$PACKAGE" != *"-sample"* ]] && [[ "$PACKAGE" != "spring-cloud-oci-docs" ]] && [[ "$PACKAGE" != "spring-cloud-oci-dependencies" ]]; then
+  if [[ "$PACKAGE" != *"-sample"* ]] && [[ "$PACKAGE" != "spring-cloud-oci-docs" ]]; then
     echo "com.oracle.cloud.spring:${PACKAGE}:${VERSION}"
   fi
 done

@@ -65,6 +65,12 @@
       "type": "java.lang.Boolean",
       "description": "Auto-configure OCI Autonomous Database components.",
       "defaultValue": true
+    },
+    {
+      "name": "spring.cloud.oci.nosql.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Auto-configure Oracle NoSQL Database components.",
+      "defaultValue": true
     }
   ]
 }

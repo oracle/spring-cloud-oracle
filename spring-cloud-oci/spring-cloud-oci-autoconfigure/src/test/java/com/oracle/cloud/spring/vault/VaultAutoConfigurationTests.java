@@ -5,10 +5,10 @@ package com.oracle.cloud.spring.vault;
 import com.oracle.cloud.spring.autoconfigure.TestCommonConfigurationBeans;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.test.context.assertj.AssertableApplicationContext;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.oracle.cloud.spring.autoconfigure.TestCommonConfigurationBeans.assertBeanLoaded;
+import static com.oracle.cloud.spring.autoconfigure.TestCommonConfigurationBeans.assertBeanNotLoaded;
 
 public class VaultAutoConfigurationTests {
     private final String vaultIdProperty = "spring.cloud.oci.vault.vault-id=xyz";
@@ -22,23 +22,18 @@ public class VaultAutoConfigurationTests {
     @Test
     void beansAreLoaded() {
         contextRunner.withPropertyValues(vaultIdProperty)
-                .run(ctx -> assertVaultTemplateBean(ctx, true));
+                .run(ctx -> assertBeanLoaded(ctx, VaultTemplate.class));
     }
 
     @Test
     void beansAreNotLoadedWhenDisabled() {
         contextRunner.withPropertyValues(vaultIdProperty,
                         "spring.cloud.oci.vault.enabled=false")
-                .run(ctx -> assertVaultTemplateBean(ctx, false));
+                .run(ctx -> assertBeanNotLoaded(ctx, VaultTemplate.class));
     }
 
     @Test
     void beansAreNotLoadedWhenNoVault() {
-        contextRunner.run(ctx -> assertVaultTemplateBean(ctx, false));
-    }
-
-    private void assertVaultTemplateBean(AssertableApplicationContext ctx, boolean hasBean) {
-        String[] beans = ctx.getBeanNamesForType(VaultTemplate.class);
-        assertThat(beans).hasSize(hasBean ? 2 : 0);
+        contextRunner.run(ctx -> assertBeanNotLoaded(ctx, VaultTemplate.class));
     }
 }

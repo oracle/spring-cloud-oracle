@@ -16,6 +16,7 @@ For a deep dive into the project, refer to the Spring Cloud Oracle documentation
 | Spring Cloud Oracle 1.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/javadocs/index.html) |
 | Spring Cloud Oracle 1.1.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/javadocs/index.html) |
 | Spring Cloud Oracle 1.2.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/index.html) |
+| Spring Cloud Oracle 1.3.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/javadocs/index.html) |
 
 ## Compatibility with Spring Project Versions
 
@@ -27,6 +28,8 @@ This project has dependency and transitive dependencies on Spring Projects. The 
 | 1.0.1               | 2023.0.x     | 3.2.x        | 3.44.3       |
 | 1.1.0               | 2023.0.x     | 3.2.x        | 3.44.x       |
 | 1.2.0               | 2023.0.x     | 3.2.x        | 3.44.x       |
+| 1.3.0               | 2023.0.x     | 3.2.x        | 3.44.x       |
+| 1.4.0               | 2024.0.x     | 3.4.x        | 3.55.1       |
 
 ## Sample applications
 
