@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2025, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.json.jsonb;
 
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.stream.JsonGenerator;
 import jakarta.json.stream.JsonParser;
 import oracle.sql.json.OracleJsonFactory;
@@ -15,6 +16,10 @@ import org.eclipse.yasson.YassonJsonb;
 public class JSONB {
     private final OracleJsonFactory oracleJsonFactory;
     private final YassonJsonb jsonb;
+
+    public static JSONB createDefault() {
+        return new JSONB(new OracleJsonFactory(), (YassonJsonb) JsonbBuilder.create());
+    }
 
     public JSONB(OracleJsonFactory oracleJsonFactory, YassonJsonb jsonb) {
         this.oracleJsonFactory = oracleJsonFactory;

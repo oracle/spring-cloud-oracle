@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2025, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.json.jsonb;
 
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JSONBTest {
 
-    private JSONB jsonb = new JSONB(new OracleJsonFactory(), (YassonJsonb) JsonbBuilder.create());
+    private JSONB jsonb = JSONB.createDefault();
     private Student s = new Student(Student.newId(), "Alice", new StudentDetails(
             "Mathematics",
             3.77,
