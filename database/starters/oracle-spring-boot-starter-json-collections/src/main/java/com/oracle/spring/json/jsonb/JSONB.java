@@ -2,6 +2,7 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.json.jsonb;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +42,12 @@ public class JSONB {
         byte[] oson = toOSON(o);
         ByteBuffer buf = ByteBuffer.wrap(oson);
         return oracleJsonFactory.createJsonBinaryParser(buf).wrap(JsonParser.class);
+    }
+
+    public <T> T fromOSON(byte[] oson, Class<T> clazz) throws IOException {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(oson)) {
+            return fromOSON(inputStream, clazz);
+        }
     }
 
     public <T> T fromOSON(JsonParser parser, Class<T> clazz) {

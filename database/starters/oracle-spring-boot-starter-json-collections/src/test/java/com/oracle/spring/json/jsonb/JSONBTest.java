@@ -3,6 +3,7 @@
 package com.oracle.spring.json.jsonb;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
@@ -36,8 +37,7 @@ public class JSONBTest {
     void parserToObject() {
         JsonParser parser = jsonb.toJsonParser(s);
         Student student = jsonb.fromOSON(parser, Student.class);
-        assertThat(student).isNotNull();
-        assertThat(student).isEqualTo(s);
+        validateStudent(student);
     }
 
     @Test
@@ -46,16 +46,26 @@ public class JSONBTest {
         InputStream is = new ByteArrayInputStream(oson);
 
         Student student = jsonb.fromOSON(is, Student.class);
-        assertThat(student).isNotNull();
-        assertThat(student).isEqualTo(s);
+        validateStudent(student);
     }
 
     @Test
-    void byteBufferToOjbect() {
+    void byteBufferToObject() {
         byte[] oson = jsonb.toOSON(s);
         ByteBuffer buf = ByteBuffer.wrap(oson);
 
         Student student = jsonb.fromOSON(buf, Student.class);
+        validateStudent(student);
+    }
+
+    @Test
+    void byteArrayToObject() throws IOException {
+        byte[] oson = jsonb.toOSON(s);
+        Student student = jsonb.fromOSON(oson, Student.class);
+        validateStudent(student);
+    }
+
+    void validateStudent(Student student) {
         assertThat(student).isNotNull();
         assertThat(student).isEqualTo(s);
     }
