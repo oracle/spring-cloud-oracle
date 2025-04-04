@@ -24,13 +24,12 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import oracle.jakarta.jms.AQjmsConsumer;
-
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
 import jakarta.jms.MessageConsumer;
 import jakarta.jms.Session;
+import oracle.jakarta.jms.AQjmsConsumer;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
 public class TEQMessageListenerContainer extends DefaultMessageListenerContainer {
 

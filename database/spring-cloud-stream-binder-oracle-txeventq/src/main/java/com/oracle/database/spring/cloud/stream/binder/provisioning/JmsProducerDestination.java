@@ -34,7 +34,7 @@ public class JmsProducerDestination implements ProducerDestination {
 
     private final Topic topic;
     private final int partitionCount;
-    private final int dbversion;
+    private int dbversion;
 
     public JmsProducerDestination(Topic topic, int pCount, int dbversion) {
         this.topic = topic;

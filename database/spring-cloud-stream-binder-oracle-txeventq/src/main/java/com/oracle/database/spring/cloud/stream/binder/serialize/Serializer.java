@@ -25,5 +25,5 @@
 package com.oracle.database.spring.cloud.stream.binder.serialize;
 
 public interface Serializer {
-    byte[] serialize(Object data);
+    public byte[] serialize(Object data);
 }

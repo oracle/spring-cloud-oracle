@@ -1,8 +1,9 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2025, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.json.jsonb;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JSONBTest {
 
-    private JSONB jsonb = new JSONB(new OracleJsonFactory(), (YassonJsonb) JsonbBuilder.create());
+    private JSONB jsonb = JSONB.createDefault();
     private Student s = new Student(Student.newId(), "Alice", new StudentDetails(
             "Mathematics",
             3.77,
@@ -36,8 +37,7 @@ public class JSONBTest {
     void parserToObject() {
         JsonParser parser = jsonb.toJsonParser(s);
         Student student = jsonb.fromOSON(parser, Student.class);
-        assertThat(student).isNotNull();
-        assertThat(student).isEqualTo(s);
+        validateStudent(student);
     }
 
     @Test
@@ -46,16 +46,26 @@ public class JSONBTest {
         InputStream is = new ByteArrayInputStream(oson);
 
         Student student = jsonb.fromOSON(is, Student.class);
-        assertThat(student).isNotNull();
-        assertThat(student).isEqualTo(s);
+        validateStudent(student);
     }
 
     @Test
-    void byteBufferToOjbect() {
+    void byteBufferToObject() {
         byte[] oson = jsonb.toOSON(s);
         ByteBuffer buf = ByteBuffer.wrap(oson);
 
         Student student = jsonb.fromOSON(buf, Student.class);
+        validateStudent(student);
+    }
+
+    @Test
+    void byteArrayToObject() throws IOException {
+        byte[] oson = jsonb.toOSON(s);
+        Student student = jsonb.fromOSON(oson, Student.class);
+        validateStudent(student);
+    }
+
+    void validateStudent(Student student) {
         assertThat(student).isNotNull();
         assertThat(student).isEqualTo(s);
     }

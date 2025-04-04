@@ -24,17 +24,15 @@
 
 package com.oracle.database.spring.cloud.stream.binder.config;
 
+import java.sql.SQLException;
+
 import com.oracle.database.spring.cloud.stream.binder.TxEventQQueueProvisioner;
 import com.oracle.database.spring.cloud.stream.binder.plsql.OracleDBUtils;
-
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
 import oracle.jakarta.jms.AQjmsConnectionFactory;
 import oracle.jakarta.jms.AQjmsFactory;
 import oracle.ucp.jdbc.PoolDataSource;
-
-import java.sql.SQLException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

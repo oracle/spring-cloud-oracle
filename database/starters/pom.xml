@@ -164,6 +164,11 @@
         <version>${oracle.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.oracle.database.ha</groupId>
+        <artifactId>ons</artifactId>
+        <version>${oracle.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.oracle.database.jdbc</groupId>
         <artifactId>ucp</artifactId>
         <version>${oracle.version}</version>

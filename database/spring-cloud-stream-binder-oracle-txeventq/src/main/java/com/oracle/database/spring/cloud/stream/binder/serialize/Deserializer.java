@@ -25,5 +25,5 @@
 package com.oracle.database.spring.cloud.stream.binder.serialize;
 
 public interface Deserializer<T> {
-    T deserialize(byte[] bytes);
+    public T deserialize(byte[] bytes);
 }

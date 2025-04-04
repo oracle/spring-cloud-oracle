@@ -26,14 +26,14 @@ package com.oracle.database.spring.cloud.stream.binder.utils;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Destination;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.listener.AbstractMessageListenerContainer;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
 public class ListenerContainerFactory {
-    private final ConnectionFactory factory;
+
+    private ConnectionFactory factory;
 
     private static final Logger logger = LoggerFactory.getLogger(ListenerContainerFactory.class);
 

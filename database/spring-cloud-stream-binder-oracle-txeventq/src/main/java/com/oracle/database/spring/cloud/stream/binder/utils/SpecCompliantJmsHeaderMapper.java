@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,9 +24,8 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
-import jakarta.jms.Message;
-
 import java.io.Serializable;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.jms.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.jms.DefaultJmsHeaderMapper;
@@ -64,12 +64,18 @@ public class SpecCompliantJmsHeaderMapper extends DefaultJmsHeaderMapper {
         return new ArrayList<>(SpecCompliantJmsHeaderMapper.DEFAULT_TO_STRING_CLASSES);
     }
 
+    private Connection conn;
+
+    public void setConnection(Connection c) {
+        this.conn = c;
+    }
+
     @Override
     public void fromHeaders(MessageHeaders headers, Message jmsMessage) {
         Map<String, Object> compliantHeaders = new HashMap<>(headers.size());
         for (Map.Entry<String, Object> entry : headers.entrySet()) {
             if (entry.getKey().contains("-")) {
-                String key = entry.getKey().replaceAll("-", "_");
+                String key = entry.getKey().replace("-", "_");
                 logger.trace("Rewriting header name '{}' to conform to JMS spec", key);
                 compliantHeaders.put(key, entry.getValue());
             } else {
@@ -85,15 +91,22 @@ public class SpecCompliantJmsHeaderMapper extends DefaultJmsHeaderMapper {
                 compliantHeaders.put(entry.getKey(), value.toString());
             } else if (!SUPPORTED_PROPERTY_TYPES.contains(value.getClass())) {
                 if (value instanceof Serializable) {
-                    logger.debug("Serializing {} header object", value);
+                    logger.info("Serializing {} header object", value);
                     compliantHeaders.put(entry.getKey(), SerializationUtils.serialize(value));
                 } else {
-                    logger.debug("Storing String representation for header: {}", entry.getKey());
+                    logger.info("Storing String representation for header: {}", entry.getKey());
                     compliantHeaders.put(entry.getKey(), value.toString());
                 }
             }
         }
 
         super.fromHeaders(new MessageHeaders(compliantHeaders), jmsMessage);
+    }
+
+    @Override
+    public Map<String, Object> toHeaders(Message jmsMessage) {
+        Map<String, Object> headers = super.toHeaders(jmsMessage);
+        headers.put(TxEventQBinderHeaderConstants.MESSAGE_CONNECTION, this.conn);
+        return headers;
     }
 }

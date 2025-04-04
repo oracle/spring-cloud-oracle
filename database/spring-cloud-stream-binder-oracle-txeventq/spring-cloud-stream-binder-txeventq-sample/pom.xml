@@ -42,9 +42,9 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <txeventq.streambinder.version>0.10.0</txeventq.streambinder.version>
-        <spring.boot.version>3.4.2</spring.boot.version>
-        <testcontainers.version>1.20.4</testcontainers.version>
+        <txeventq.streambinder.version>0.12.0</txeventq.streambinder.version>
+        <spring.boot.version>3.4.3</spring.boot.version>
+        <testcontainers.version>1.20.6</testcontainers.version>
     </properties>
 
     <dependencies>

@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 public class OKafkaSampleTest {
     // Oracle Database 23ai Free container image
-    private static final String oracleImage = "gvenzl/oracle-free:23.6-slim-faststart";
+    private static final String oracleImage = "gvenzl/oracle-free:23.7-slim-faststart";
     private static final String testUser = "testuser";
     private static final String testPassword = "Welcome123#";
 

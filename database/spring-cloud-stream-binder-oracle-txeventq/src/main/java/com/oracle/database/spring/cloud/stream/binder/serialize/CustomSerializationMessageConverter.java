@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,12 +24,11 @@
 
 package com.oracle.database.spring.cloud.stream.binder.serialize;
 
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
-
-import jakarta.jms.JMSException;
-import jakarta.jms.Message;
 
 public class CustomSerializationMessageConverter extends SimpleMessageConverter {
     public String deserializer = null;
@@ -66,8 +65,8 @@ public class CustomSerializationMessageConverter extends SimpleMessageConverter 
         }
 
         if (!isInstanceOfDeserializer) {
-            logger.debug("The configured deserializer class is not an instance of 'com.oracle.database.spring.cloud.stream.binder.serialize.DeSerializer'");
-            throw new IllegalArgumentException("The configured serializer class is not an instance of 'com.oracle.database.spring.cloud.stream.binder.serialize.DeSerializer'");
+            logger.debug("The configured deserializer class is not an instance of 'com.oracle.cstream.serialize.DeSerializer'");
+            throw new IllegalArgumentException("The configured serializer class is not an instance of 'com.oracle.cstream.serialize.DeSerializer'");
         }
 
         Deserializer<?> s = null;
@@ -79,7 +78,7 @@ public class CustomSerializationMessageConverter extends SimpleMessageConverter 
             throw new IllegalArgumentException("Serializer object could not be initiated.");
         }
 
-        result = s.deserialize((byte[]) result);
+        result = (Object) (s.deserialize((byte[]) result));
 
         return result;
     }

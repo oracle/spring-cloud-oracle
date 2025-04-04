@@ -28,6 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.oracle.database.spring.cloud.stream.binder.serialize.CustomSerializationMessageConverter;
+import jakarta.jms.BytesMessage;
+import jakarta.jms.JMSException;
+import jakarta.jms.Session;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.integration.core.MessagingTemplate;
@@ -46,12 +50,6 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.ErrorMessage;
 import org.springframework.retry.RecoveryCallback;
 import org.springframework.retry.support.RetryTemplate;
-
-import com.oracle.database.spring.cloud.stream.binder.serialize.CustomSerializationMessageConverter;
-
-import jakarta.jms.BytesMessage;
-import jakarta.jms.JMSException;
-import jakarta.jms.Session;
 
 public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener {
     private final GatewayDelegate gatewayDelegate = new GatewayDelegate();
@@ -74,7 +72,7 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
 
     private RecoveryCallback<Object> recoverer;
 
-    private final String RETRY_CONTEXT_MESSAGE_ATTRIBUTE = "message";
+    private String RETRY_CONTEXT_MESSAGE_ATTRIBUTE = "message";
 
     private String deSerializerClassName = null;
 
@@ -231,7 +229,8 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
 
     protected void resetMessageIfRequired(jakarta.jms.Message jmsMessage)
             throws JMSException {
-        if (jmsMessage instanceof BytesMessage message) {
+        if (jmsMessage instanceof BytesMessage) {
+            BytesMessage message = (BytesMessage) jmsMessage;
             message.reset();
         }
     }
@@ -253,7 +252,7 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
                 }
             } else {
                 for (jakarta.jms.Message jmsMessage : jmsMessages)
-                    result.add(jmsMessage);
+                    result.add((Object) jmsMessage);
             }
 
             requestMessage = this.messageBuilderFactory
