@@ -52,21 +52,22 @@ final public class DualityViewScanner {
             }
         }
         for (Class<?> javaType : dvScan.basePackageClasses()) {
-            applyClass(javaType);
+            addClass(javaType);
         }
+        dualityViewBuilder.apply();
     }
 
     private void scanPackage(String packageName) {
         Set<Class<?>> types = scanner.findTypes(packageName);
         for (Class<?> type : types) {
-            applyClass(type);
+            addClass(type);
         }
     }
 
-    private void applyClass(Class<?> javaType) {
+    private void addClass(Class<?> javaType) {
         JsonRelationalDualityView dvAnnotation = javaType.getAnnotation(JsonRelationalDualityView.class);
         if (dvAnnotation != null) {
-            dualityViewBuilder.apply(javaType);
+            dualityViewBuilder.build(javaType);
         }
     }
 }

@@ -12,10 +12,10 @@ import java.util.Set;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import org.springframework.util.StringUtils;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 import static com.oracle.spring.json.duality.builder.Annotations.getAccessModeStr;
@@ -27,10 +27,10 @@ import static com.oracle.spring.json.duality.builder.Annotations.getNestedViewNa
 import static com.oracle.spring.json.duality.builder.Annotations.isFieldIncluded;
 
 final class ViewEntity {
-
     private static final String SEPARATOR = " : ";
     private static final String END_ENTITY = "}";
-    private static final String BEGIN_ENTITY = " {\n";
+    private static final String END_ARRAY_ENTITY = "} ]";
+    private static final String BEGIN_ARRAY_ENTITY = "[ {\n";
     private static final int TAB_WIDTH = 2;
 
     private final Class<?> javaType;
@@ -91,8 +91,11 @@ final class ViewEntity {
 
     private String getNestedEntityPrefix(Table tableAnnotation) {
         String tableName = getTableName(javaType, tableAnnotation);
-        return "%s : %s %s{\n".formatted(
-                viewName, tableName, accessMode
+        if (tableName.equals(viewName)) {
+            return "%s %s{\n".formatted(tableName, accessMode);
+        }
+        return "%s%s%s %s{\n".formatted(
+                viewName, SEPARATOR, tableName, accessMode
         );
     }
 
@@ -136,13 +139,13 @@ final class ViewEntity {
         // Add join table if present.
         ManyToMany manyToMany = f.getAnnotation(ManyToMany.class);
         if (manyToMany != null) {
-            parseManyToMany(manyToMany, f, entityJavaType);
+            parseManyToMany(manyToMany, dvAnnotation, f, entityJavaType);
         }
         // Add nested entity.
-        parseNestedEntity(entityJavaType, dvAnnotation);
+        parseNestedEntity(entityJavaType, dvAnnotation, manyToMany);
         // Additional trailer for join table if present.
         if (manyToMany != null) {
-            addTrailer(true);
+            addTrailer(true, END_ARRAY_ENTITY);
         }
     }
 
@@ -158,10 +161,10 @@ final class ViewEntity {
         return f.getType();
     }
 
-    private void parseNestedEntity(Class<?> entityJavaType, JsonRelationalDualityView dvAnnotation) {
+    private void parseNestedEntity(Class<?> entityJavaType, JsonRelationalDualityView dvAnnotation, ManyToMany manyToMany) {
         Table tableAnnotation = entityJavaType.getAnnotation(Table.class);
-        String viewEntityName = getNestedViewName(entityJavaType, dvAnnotation, tableAnnotation);
-        String accessMode = getAccessModeStr(dvAnnotation.accessMode());
+        String viewEntityName = getNestedViewName(entityJavaType, manyToMany == null ? dvAnnotation : null, tableAnnotation);
+        String accessMode = getAccessModeStr(dvAnnotation.accessMode(), manyToMany);
         ViewEntity ve = new ViewEntity(entityJavaType,
                 new StringBuilder(),
                 accessMode,
@@ -176,23 +179,19 @@ final class ViewEntity {
         addProperty(getJsonbPropertyName(f), getDatabaseColumnName(f));
     }
 
-    private void parseManyToMany(ManyToMany manyToMany, Field f, Class<?> entityJavaType) {
+    private void parseManyToMany(ManyToMany manyToMany, JsonRelationalDualityView dvAnnotation,  Field f, Class<?> entityJavaType) {
         JoinTable joinTable = getJoinTableAnnotation(f, manyToMany, entityJavaType);
-        sb.append(getPadding());
-        sb.append(joinTable.name());
-        sb.append(BEGIN_ENTITY);
-        incNesting();
-        addJoinColumns(joinTable.joinColumns());
-        addJoinColumns(joinTable.inverseJoinColumns());
-    }
-
-    private void addJoinColumns(JoinColumn[] joinColumns) {
-        for (JoinColumn joinColumn : joinColumns) {
-            addProperty(joinColumn.name(), joinColumn.name());
+        String propertyName = dvAnnotation.name();
+        if (!StringUtils.hasText(propertyName)) {
+            propertyName = getJsonbPropertyName(f);
         }
+        addProperty(propertyName, joinTable.name(), false);
+        sb.append(" ").append(getAccessModeStr(dvAnnotation.accessMode(), null));
+        sb.append(BEGIN_ARRAY_ENTITY);
+        incNesting();
     }
 
-    private void addProperty(String jsonbPropertyName, String databaseColumnName) {
+    private void addProperty(String jsonbPropertyName, String databaseColumnName, boolean addNewLine) {
         sb.append(getPadding());
         if (jsonbPropertyName.equals(databaseColumnName)) {
             sb.append(jsonbPropertyName);
@@ -201,16 +200,26 @@ final class ViewEntity {
                     .append(SEPARATOR)
                     .append(databaseColumnName);
         }
-        sb.append("\n");
+        if (addNewLine) {
+            sb.append("\n");
+        }
     }
 
-    private void addTrailer(boolean addNewline) {
+    private void addProperty(String jsonbPropertyName, String databaseColumnName) {
+        addProperty(jsonbPropertyName, databaseColumnName, true);
+    }
+
+    private void addTrailer(boolean addNewLine) {
+        addTrailer(addNewLine, END_ENTITY);
+    }
+
+    private void addTrailer(boolean addNewLine, String terminal) {
         decNesting();
         if (nesting > 0) {
             sb.append(getPadding());
         }
-        sb.append(END_ENTITY);
-        if (addNewline) {
+        sb.append(terminal);
+        if (addNewLine) {
             sb.append("\n");
         }
     }

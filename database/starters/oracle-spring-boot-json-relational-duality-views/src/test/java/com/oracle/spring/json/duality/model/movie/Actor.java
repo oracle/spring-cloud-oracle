@@ -7,12 +7,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.oracle.spring.json.duality.annotation.AccessMode;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -25,13 +24,12 @@ import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 @Table(name = "actor")
 @Getter
 @Setter
-@JsonRelationalDualityView
+@JsonRelationalDualityView(accessMode = @AccessMode(insert = true))
 public class Actor {
     @JsonbProperty(_ID_FIELD)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "actor_id")
-    private Long actorId;
+    private String actorId;
 
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
@@ -40,7 +38,7 @@ public class Actor {
     private String lastName;
 
     @ManyToMany(mappedBy = "actors")
-    @JsonRelationalDualityView
+    @JsonRelationalDualityView(name = "movies", accessMode = @AccessMode(insert = true))
     private Set<Movie> movies;
 
     /**

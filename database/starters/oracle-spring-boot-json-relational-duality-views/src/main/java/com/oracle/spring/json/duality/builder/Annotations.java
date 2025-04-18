@@ -47,9 +47,9 @@ public final class Annotations {
                                     JsonRelationalDualityView dvAnnotation,
                                     Table tableAnnotation) {
         if (dvAnnotation != null && StringUtils.hasText(dvAnnotation.name())) {
-            return dvAnnotation.name().toLowerCase();
+            return dvAnnotation.name();
         }
-        return getTableName(javaType, tableAnnotation).toLowerCase();
+        return getTableName(javaType, tableAnnotation);
     }
 
     public static String getViewName(Class<?> javaType, JsonRelationalDualityView dvAnnotation) {
@@ -92,21 +92,23 @@ public final class Annotations {
         return f.getName();
     }
 
-    static String getAccessModeStr(AccessMode accessMode) {
-        if (accessMode == null) {
-            return "";
+    static String getAccessModeStr(AccessMode accessMode, ManyToMany manyToMany) {
+        StringBuilder sb = new StringBuilder();
+        if (manyToMany != null) {
+            sb.append("@unnest ");
+        }
+        if (accessMode != null) {
+            if (accessMode.insert()) {
+                sb.append("@insert ");
+            }
+            if (accessMode.update()) {
+                sb.append("@update ");
+            }
+            if (accessMode.delete()) {
+                sb.append("@delete ");
+            }
         }
 
-        StringBuilder sb = new StringBuilder();
-        if (accessMode.insert()) {
-            sb.append("@insert ");
-        }
-        if (accessMode.update()) {
-            sb.append("@update ");
-        }
-        if (accessMode.delete()) {
-            sb.append("@delete ");
-        }
         return sb.toString();
     }
 }

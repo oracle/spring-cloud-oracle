@@ -27,7 +27,7 @@ public class JsonRelationalDualityClient {
     public <T> int save(T entity, Class<T> entityJavaType) {
         String viewName = getViewName(entityJavaType, entityJavaType.getAnnotation(JsonRelationalDualityView.class));
         final String sql = """
-                insert into %s (data) values(?)
+                insert into %s (data) values (?)
                 """.formatted(viewName);
 
         byte[] oson = jsonb.toOSON(entity);

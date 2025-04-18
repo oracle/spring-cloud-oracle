@@ -28,7 +28,7 @@ public class DirectorBio {
     @JsonbProperty(_ID_FIELD)
     @Id
     @Column(name = "director_id")
-    private Long directorId;
+    private String directorId;
 
     @OneToOne(fetch = FetchType.LAZY)
     // The primary key will be copied from the director entity

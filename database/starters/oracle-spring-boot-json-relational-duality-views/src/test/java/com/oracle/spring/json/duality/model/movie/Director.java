@@ -31,9 +31,8 @@ import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 public class Director {
     @JsonbProperty(_ID_FIELD)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "director_id")
-    private Long directorId;
+    private String directorId;
 
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
@@ -52,7 +51,8 @@ public class Director {
     )
     // The primary key of the Director entity is used as the foreign key of the DirectorBio entity.
     @PrimaryKeyJoinColumn
-    @JsonRelationalDualityView
+    @JsonbTransient
+    //@JsonRelationalDualityView(name = "directorBio", accessMode = @AccessMode(insert = true))
     private DirectorBio directorBio;
 
     public void setDirectorBio(DirectorBio directorBio) {

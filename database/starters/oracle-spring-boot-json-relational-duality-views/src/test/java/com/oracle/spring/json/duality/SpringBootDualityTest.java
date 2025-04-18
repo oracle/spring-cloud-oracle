@@ -81,27 +81,35 @@ public class SpringBootDualityTest {
 
     @Test
     void actor() {
+        String actorId = UUID.randomUUID().toString();
+        String directorId = UUID.randomUUID().toString();
+        String movieId = UUID.randomUUID().toString();
+
         DirectorBio directorBio = new DirectorBio();
+        directorBio.setDirectorId(directorId);
         directorBio.setBiography("biography");
 
         Director director = new Director();
+        directorBio.setDirectorId(directorId);
         director.setDirectorBio(directorBio);
         director.setFirstName("John");
         director.setLastName("Doe");
 
         Movie m = new Movie();
-        m.setDirector(director);
+        m.setMovieId(movieId);
         m.setTitle("my movie");
         m.setGenre("action");
         m.setReleaseYear(1993);
+        dvClient.save(m, Movie.class);
 
         Actor actor = new Actor();
+        actor.setActorId(actorId);
         actor.setFirstName("John");
         actor.setLastName("Doe");
         actor.setMovies(Set.of(m));
 
         dvClient.save(actor, Actor.class);
-        Optional<Actor> actorById = dvClient.findById(Actor.class, 1);
+        Optional<Actor> actorById = dvClient.findById(Actor.class, actorId);
         assertThat(actorById.isPresent()).isTrue();
     }
 

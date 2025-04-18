@@ -6,6 +6,7 @@ package com.oracle.spring.json.duality.model.movie;
 import java.util.Objects;
 import java.util.Set;
 
+import com.oracle.spring.json.duality.annotation.AccessMode;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.json.bind.annotation.JsonbTransient;
@@ -28,12 +29,14 @@ import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 @Table(name = "movie")
 @Getter
 @Setter
+@JsonRelationalDualityView(name = "movie_dv", accessMode = @AccessMode(
+        insert = true
+))
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
-    @JsonbProperty(_ID_FIELD)
-    private Long movieId;
+    @JsonbProperty("_id")
+    private String movieId;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
@@ -46,7 +49,8 @@ public class Movie {
 
     @ManyToOne
     @JoinColumn(name = "director_id")
-    @JsonRelationalDualityView
+    //@JsonRelationalDualityView(accessMode = @AccessMode(insert = true))
+    @JsonbTransient
     private Director director;
 
     @ManyToMany
