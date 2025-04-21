@@ -8,12 +8,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import com.oracle.spring.json.duality.builder.DualityViewScanner;
+import com.oracle.spring.json.duality.model.book.Book;
+import com.oracle.spring.json.duality.model.book.Loan;
+import com.oracle.spring.json.duality.model.book.Member;
 import com.oracle.spring.json.duality.model.movie.Actor;
 import com.oracle.spring.json.duality.model.movie.Director;
 import com.oracle.spring.json.duality.model.movie.DirectorBio;
@@ -130,5 +133,28 @@ public class SpringBootDualityTest {
         dvClient.save(order, Order.class);
         Optional<Order> OrderById = dvClient.findById(Order.class, 1);
         assertThat(OrderById.isPresent()).isTrue();
+    }
+
+    @Test
+    void books() {
+        Book book = new Book();
+        book.setTitle("my book");
+
+        dvClient.save(book, Book.class);
+
+        Loan loan = new Loan();
+        loan.setBook(book);
+
+        Member member = new Member();
+        member.setFullName("member");
+        member.setLoans(List.of(loan));
+
+        dvClient.save(member, Member.class);
+
+        Optional<Member> byId = dvClient.findById(Member.class, 1);
+        assertThat(byId.isPresent()).isTrue();
+        assertThat(byId.get().getFullName()).isEqualTo("member");
+        assertThat(byId.get().getLoans()).hasSize(1);
+        assertThat(byId.get().getLoans().get(0).getBook().getTitle()).isEqualTo("my book");
     }
 }

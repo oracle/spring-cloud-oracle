@@ -5,9 +5,8 @@ package com.oracle.spring.json.duality.builder;
 
 import java.util.stream.Stream;
 
+import com.oracle.spring.json.duality.model.book.Member;
 import com.oracle.spring.json.duality.model.movie.Actor;
-import com.oracle.spring.json.duality.model.movie.Director;
-import com.oracle.spring.json.duality.model.movie.Movie;
 import com.oracle.spring.json.duality.model.products.Order;
 import com.oracle.spring.json.duality.model.student.Student;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +25,8 @@ public class DualityViewBuilderTest {
                 Arguments.of(Student.class, "student-update.sql", "update"),
                 Arguments.of(Student.class, "student-create.sql", "create"),
                 Arguments.of(Actor.class, "actor-create.sql", "create"),
-                Arguments.of(Order.class, "order-create.sql", "create")
+                Arguments.of(Order.class, "order-create.sql", "create"),
+                Arguments.of(Member.class, "member-create-drop.sql", "create-drop")
         );
     }
 

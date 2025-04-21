@@ -27,10 +27,15 @@ import static com.oracle.spring.json.duality.builder.Annotations.getNestedViewNa
 import static com.oracle.spring.json.duality.builder.Annotations.isFieldIncluded;
 
 final class ViewEntity {
+    // Separates JSON keys from database column names
     private static final String SEPARATOR = " : ";
-    private static final String END_ENTITY = "}";
-    private static final String END_ARRAY_ENTITY = "} ]";
-    private static final String BEGIN_ARRAY_ENTITY = "[ {\n";
+    // Terminal for view entity
+    private static final String OBJECT_TERMINAL = "}";
+    // Terminal for view array entity
+    private static final String ARRAY_TERMINAL = "} ]";
+    // Begin array entity
+    private static final String BEGIN_ARRAY = "[ {\n";
+    // Nesting spacing
     private static final int TAB_WIDTH = 2;
 
     private final Class<?> javaType;
@@ -38,6 +43,7 @@ final class ViewEntity {
     private final RootSnippet rootSnippet;
     private final String accessMode;
     private final String viewName;
+    // Tracks number of spaces for key nesting (pretty print)
     private int nesting;
 
     // Track parent types to prevent stacking of nested types
@@ -61,27 +67,41 @@ final class ViewEntity {
         this.parentTypes.addAll(parentTypes);
     }
 
+    /**
+     * Parse view from javaType.
+     * @return this
+     */
     ViewEntity build() {
         Table tableAnnotation = javaType.getAnnotation(Table.class);
 
         if (rootSnippet != null) {
-            // Root duality view statement
+            // Add create view snippet
             sb.append(getStatementPrefix(tableAnnotation));
         } else {
+            // Process nested entity
             sb.append(getPadding());
             sb.append(getNestedEntityPrefix(tableAnnotation));
         }
 
+        // Increment the nesting (left padding) after processing an entity.
         incNesting();
+        // Parse each field of the javaType.
         for (Field f : javaType.getDeclaredFields()) {
             if (isFieldIncluded(f)) {
                 parseField(f);
             }
         }
+        // Close the entity after processing fields.
         addTrailer(rootSnippet == null);
         return this;
     }
 
+    /**
+     * Parse the javaType and tableAnnotation to generate the view prefix, e.g.,
+     * 'create force editionable json relational duality view my_view as my table @insert @update @delete {}
+     * @param tableAnnotation of the javaType.
+     * @return view prefix String.
+     */
     private String getStatementPrefix(Table tableAnnotation) {
         String tableName = getTableName(javaType, tableAnnotation);
         return "%s %s as %s %s{\n".formatted(
@@ -103,14 +123,21 @@ final class ViewEntity {
         JsonRelationalDualityView dvAnnotation;
         Id id = f.getAnnotation(Id.class);
         if (id != null && rootSnippet != null) {
+            // Parse the root entity's _id field.
             parseId(f);
         } else if ((dvAnnotation = f.getAnnotation(JsonRelationalDualityView.class)) != null) {
+            // Parse the related sub-entity.
             parseRelationalEntity(f, dvAnnotation);
         } else {
+            // Parse the field as a database column.
             parseColumn(f);
         }
     }
 
+    /**
+     * Parse the view's root _id field.
+     * @param f The view's root _id field.
+     */
     private void parseId(Field f) {
         String jsonbPropertyName = getJsonbPropertyName(f);
         if (!jsonbPropertyName.equals(_ID_FIELD)) {
@@ -121,6 +148,7 @@ final class ViewEntity {
                     _ID_FIELD
             ));
         }
+        // Add the root _id field to the view.
         addProperty(_ID_FIELD, getDatabaseColumnName(f));
     }
 
@@ -145,10 +173,15 @@ final class ViewEntity {
         parseNestedEntity(entityJavaType, dvAnnotation, manyToMany);
         // Additional trailer for join table if present.
         if (manyToMany != null) {
-            addTrailer(true, END_ARRAY_ENTITY);
+            addTrailer(true, ARRAY_TERMINAL);
         }
     }
 
+    /**
+     * Returns the type of f, or parameterized type of f.
+     * @param f to introspect for type information.
+     * @return type of f or parameterized type of f.
+     */
     private Class<?> getGenericFieldType(Field f) {
         Type genericType = f.getGenericType();
         if (genericType instanceof ParameterizedType p) {
@@ -187,7 +220,7 @@ final class ViewEntity {
         }
         addProperty(propertyName, joinTable.name(), false);
         sb.append(" ").append(getAccessModeStr(dvAnnotation.accessMode(), null));
-        sb.append(BEGIN_ARRAY_ENTITY);
+        sb.append(BEGIN_ARRAY);
         incNesting();
     }
 
@@ -210,7 +243,7 @@ final class ViewEntity {
     }
 
     private void addTrailer(boolean addNewLine) {
-        addTrailer(addNewLine, END_ENTITY);
+        addTrailer(addNewLine, OBJECT_TERMINAL);
     }
 
     private void addTrailer(boolean addNewLine, String terminal) {
