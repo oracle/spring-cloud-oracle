@@ -10,6 +10,7 @@ import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -92,7 +93,7 @@ public final class Annotations {
         return f.getName();
     }
 
-    static String getAccessModeStr(AccessMode accessMode, ManyToMany manyToMany) {
+    static String getAccessModeStr(AccessMode accessMode, ManyToMany manyToMany, JoinColumn joinColumn) {
         StringBuilder sb = new StringBuilder();
         if (manyToMany != null) {
             sb.append("@unnest ");
@@ -107,6 +108,11 @@ public final class Annotations {
             if (accessMode.delete()) {
                 sb.append("@delete ");
             }
+        }
+
+        // Add join from if join column present
+        if (joinColumn != null && StringUtils.hasText(joinColumn.name())) {
+            sb.append("@link (from : [%s]) ".formatted(joinColumn.name()));
         }
 
         return sb.toString();

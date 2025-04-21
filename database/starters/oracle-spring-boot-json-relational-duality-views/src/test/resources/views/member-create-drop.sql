@@ -3,7 +3,7 @@ create force editionable json relational duality view members_dv as members @ins
   fullName : name
   loans @insert @update {
     _id : loan_id
-    book : books @insert @update {
+    book : books @insert @update @link (from : [book_id]) {
       _id : book_id
       title
     }

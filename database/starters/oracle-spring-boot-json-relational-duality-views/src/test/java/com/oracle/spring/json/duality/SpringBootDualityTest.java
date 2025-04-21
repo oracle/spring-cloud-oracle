@@ -17,6 +17,7 @@ import com.oracle.spring.json.duality.builder.DualityViewScanner;
 import com.oracle.spring.json.duality.model.book.Book;
 import com.oracle.spring.json.duality.model.book.Loan;
 import com.oracle.spring.json.duality.model.book.Member;
+import com.oracle.spring.json.duality.model.employee.Employee;
 import com.oracle.spring.json.duality.model.movie.Actor;
 import com.oracle.spring.json.duality.model.movie.Director;
 import com.oracle.spring.json.duality.model.movie.DirectorBio;
@@ -156,5 +157,20 @@ public class SpringBootDualityTest {
         assertThat(byId.get().getFullName()).isEqualTo("member");
         assertThat(byId.get().getLoans()).hasSize(1);
         assertThat(byId.get().getLoans().get(0).getBook().getTitle()).isEqualTo("my book");
+    }
+
+    @Test
+    void employees() {
+        Employee manager = new Employee();
+        manager.setName("manager");
+
+        Employee report = new Employee();
+        report.setName("report");
+        manager.setReports(List.of(report));
+        dvClient.save(manager, Employee.class);
+
+        Optional<Employee> byId = dvClient.findById(Employee.class, 1);
+        assertThat(byId.isPresent()).isTrue();
+        assertThat(byId.get().getReports()).hasSize(1);
     }
 }

@@ -10,4 +10,4 @@ create force editionable json relational duality view actor_dv as actor @insert 
       genre
     }
   } ]
-}
+  }

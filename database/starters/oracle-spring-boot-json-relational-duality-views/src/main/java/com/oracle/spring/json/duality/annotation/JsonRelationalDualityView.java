@@ -15,5 +15,7 @@ import java.lang.annotation.Target;
 public @interface JsonRelationalDualityView {
     String name() default "";
 
+    boolean selfReferential() default false;
+
     AccessMode accessMode() default @AccessMode();
 }

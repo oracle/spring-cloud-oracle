@@ -75,13 +75,14 @@ public final class DualityViewBuilder implements DisposableBean {
             );
         }
         String viewName = getViewName(javaType, dvAnnotation);
-        String accessMode = getAccessModeStr(dvAnnotation.accessMode(), null);
+        String accessMode = getAccessModeStr(dvAnnotation.accessMode(), null, null);
         ViewEntity ve = new ViewEntity(javaType,
                 new StringBuilder(),
                 rootSnippet,
                 accessMode,
                 viewName,
-                0);
+                0,
+                false);
         String ddl = ve.build().toString();
         dualityViews.put(viewName, ddl);
         return ddl;

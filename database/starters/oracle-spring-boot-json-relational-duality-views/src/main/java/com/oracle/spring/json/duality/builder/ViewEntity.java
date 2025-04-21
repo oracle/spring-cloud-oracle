@@ -6,12 +6,15 @@ package com.oracle.spring.json.duality.builder;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -45,26 +48,30 @@ final class ViewEntity {
     private final String viewName;
     // Tracks number of spaces for key nesting (pretty print)
     private int nesting;
+    private final boolean manyToMany;
 
-    // Track parent types to prevent stacking of nested types
-    private final Set<Class<?>> parentTypes = new HashSet<>();
+    // Track views to prevent stacking of nested types
+    private final Set<String> views = new HashSet<>();
 
-    ViewEntity(Class<?> javaType, StringBuilder sb, String accessMode, String viewName, int nesting) {
-        this(javaType, sb, null, accessMode, viewName, nesting);
+    private final List<ViewEntity> nestedEntities = new ArrayList<>();
+
+    ViewEntity(Class<?> javaType, StringBuilder sb, String accessMode, String viewName, int nesting, boolean manyToMany) {
+        this(javaType, sb, null, accessMode, viewName, nesting, manyToMany);
     }
 
-    ViewEntity(Class<?> javaType, StringBuilder sb, RootSnippet rootSnippet, String accessMode, String viewName, int nesting) {
+    ViewEntity(Class<?> javaType, StringBuilder sb, RootSnippet rootSnippet, String accessMode, String viewName, int nesting, boolean manyToMany) {
         this.javaType = javaType;
         this.sb = sb;
         this.rootSnippet = rootSnippet;
         this.accessMode = accessMode;
         this.viewName = viewName;
         this.nesting = nesting;
-        parentTypes.add(javaType);
+        this.manyToMany = manyToMany;
+        views.add(viewName);
     }
 
-    void addParentTypes(Set<Class<?>> parentTypes) {
-        this.parentTypes.addAll(parentTypes);
+    void addViews(Set<String> views) {
+        this.views.addAll(views);
     }
 
     /**
@@ -91,8 +98,16 @@ final class ViewEntity {
                 parseField(f);
             }
         }
+        for (ViewEntity ve : nestedEntities) {
+            ve.addViews(views);
+            sb.append(ve.build());
+        }
         // Close the entity after processing fields.
         addTrailer(rootSnippet == null);
+        if (manyToMany) {
+            // Add join table trailer if necessary
+            addTrailer(true, ARRAY_TERMINAL);
+        }
         return this;
     }
 
@@ -160,21 +175,20 @@ final class ViewEntity {
             ));
         }
 
-        // Prevent stack overflow of circular references.
-        if (parentTypes.contains(entityJavaType)) {
-            return;
-        }
         // Add join table if present.
         ManyToMany manyToMany = f.getAnnotation(ManyToMany.class);
         if (manyToMany != null) {
             parseManyToMany(manyToMany, dvAnnotation, f, entityJavaType);
         }
         // Add nested entity.
-        parseNestedEntity(entityJavaType, dvAnnotation, manyToMany);
-        // Additional trailer for join table if present.
-        if (manyToMany != null) {
-            addTrailer(true, ARRAY_TERMINAL);
-        }
+        JoinColumn joinColumn = f.getAnnotation(JoinColumn.class);
+        parseNestedEntity(entityJavaType, dvAnnotation, manyToMany, joinColumn);
+    }
+
+    private boolean visit(String viewName) {
+        boolean visited = views.contains(viewName);
+        views.add(viewName);
+        return visited;
     }
 
     /**
@@ -194,18 +208,25 @@ final class ViewEntity {
         return f.getType();
     }
 
-    private void parseNestedEntity(Class<?> entityJavaType, JsonRelationalDualityView dvAnnotation, ManyToMany manyToMany) {
+    private void parseNestedEntity(Class<?> entityJavaType,
+                                   JsonRelationalDualityView dvAnnotation,
+                                   ManyToMany manyToMany,
+                                   JoinColumn joinColumn) {
         Table tableAnnotation = entityJavaType.getAnnotation(Table.class);
         String viewEntityName = getNestedViewName(entityJavaType, manyToMany == null ? dvAnnotation : null, tableAnnotation);
-        String accessMode = getAccessModeStr(dvAnnotation.accessMode(), manyToMany);
+        // Prevent infinite recursion
+        if (visit(viewEntityName)) {
+            return;
+        }
+        String accessMode = getAccessModeStr(dvAnnotation.accessMode(), manyToMany, joinColumn);
         ViewEntity ve = new ViewEntity(entityJavaType,
                 new StringBuilder(),
                 accessMode,
                 viewEntityName,
-                nesting
+                nesting,
+                manyToMany != null
         );
-        ve.addParentTypes(parentTypes);
-        sb.append(ve.build());
+        nestedEntities.add(ve);
     }
 
     private void parseColumn(Field f) {
@@ -218,8 +239,12 @@ final class ViewEntity {
         if (!StringUtils.hasText(propertyName)) {
             propertyName = getJsonbPropertyName(f);
         }
+        // Don't parse if we've already visited this entity.
+        if (visit(propertyName)) {
+            return;
+        }
         addProperty(propertyName, joinTable.name(), false);
-        sb.append(" ").append(getAccessModeStr(dvAnnotation.accessMode(), null));
+        sb.append(" ").append(getAccessModeStr(dvAnnotation.accessMode(), null, null));
         sb.append(BEGIN_ARRAY);
         incNesting();
     }
