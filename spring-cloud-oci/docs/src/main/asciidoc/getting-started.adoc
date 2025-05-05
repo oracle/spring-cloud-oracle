@@ -40,7 +40,7 @@ A summary of these artifacts is provided here.
 
 | Object Storage
 | Provides integrations with OCI Cloud Storage
-| <<storage.adoc#spring-cloud-storage, com.oracle.cloud.spring:spring-cloud-oci-starter-storage>>
+| <<storage.adoc#cloud-storage, com.oracle.cloud.spring:spring-cloud-oci-starter-storage>>
 
 |===
 
