@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -18,10 +18,10 @@
 
     <properties>
         <java.version>21</java.version>
-        <spring-cloud.version>2024.0.0</spring-cloud.version>
-        <oracle-springboot-starter.version>25.0.0</oracle-springboot-starter.version>
-        <liquibase.version>4.31.0</liquibase.version>
-        <datasource-micrometer-spring-boot.version>1.0.6</datasource-micrometer-spring-boot.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <oracle-springboot-starter.version>25.1.0</oracle-springboot-starter.version>
+        <liquibase.version>4.31.1</liquibase.version>
+        <datasource-micrometer-spring-boot.version>1.1.0</datasource-micrometer-spring-boot.version>
     </properties>
 
     <dependencies>
