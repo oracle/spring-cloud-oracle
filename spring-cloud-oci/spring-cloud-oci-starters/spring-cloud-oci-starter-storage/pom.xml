@@ -11,7 +11,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <artifactId>spring-cloud-oci-starters</artifactId>
         <groupId>com.oracle.cloud.spring</groupId>
-        <version>1.4.1-SNAPSHOT</version>
+        <version>1.4.2</version>
     </parent>
 
     <artifactId>spring-cloud-oci-starter-storage</artifactId>
