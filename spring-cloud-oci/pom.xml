@@ -11,7 +11,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-build</artifactId>
-        <version>4.2.0</version>
+        <version>4.2.1</version>
         <relativePath/>
     </parent>
     <groupId>com.oracle.cloud.spring</groupId>
