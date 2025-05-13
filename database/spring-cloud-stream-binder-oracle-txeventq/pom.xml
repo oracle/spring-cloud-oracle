@@ -43,11 +43,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <oracle-database.version>23.7.0.25.01</oracle-database.version>
+        <oracle-database.version>23.8.0.25.04</oracle-database.version>
         <oracle.database.security.version>21.17.0.0</oracle.database.security.version>
         <org.springframework.cloud.version>4.2.1</org.springframework.cloud.version>
-        <spring.boot.version>3.4.3</spring.boot.version>
-        <spring.framework.version>6.2.3</spring.framework.version>
+        <spring.boot.version>3.4.5</spring.boot.version>
+        <spring.framework.version>6.2.6</spring.framework.version>
         <testcontainers.version>1.20.6</testcontainers.version>
         <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
         <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
