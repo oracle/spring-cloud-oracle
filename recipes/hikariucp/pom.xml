@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2025, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.oracle.cloud.recipes</groupId>
+	<artifactId>hikariucp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>hikari-ucp</name>
+	<description>Openrewrite Recipe to convert Hikari Connection Pool to Oracle UCP</description>
+
+	<url>https://github.com/oracle/spring-cloud-oracle/tree/hikari-ucp-recipe/recipes/hikari-ucp</url>
+
+    <organization>
+        <name>Oracle America, Inc.</name>
+        <url>https://www.oracle.com</url>
+    </organization>
+    <licenses>
+        <license>
+        <name>The Universal Permissive License (UPL), Version 1.0</name>
+        <url>https://oss.oracle.com/licenses/upl/</url>
+        <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+        <name>Oracle</name>
+        <email>obaas_ww at oracle.com</email>
+        <organization>Oracle America, Inc.</organization>
+        <organizationUrl>https://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <url>https://github.com/oracle/spring-cloud-oracle</url>
+        <connection>scm:git:https://github.com/oracle/spring-cloud-oracle.git</connection>
+        <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
+    </scm>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <rewrite.version>8.48.1</rewrite.version>                           <!-- Latest as of Mar 2025 -->
+        <rewrite.recipe.version>3.3.0</rewrite.recipe.version>              <!-- Latest as of Mar 2025 -->
+        <maven.rewrite.plugin.version>6.3.2</maven.rewrite.plugin.version>  <!-- Latest as of Mar 2025 -->
+        <junit.version>5.12.1</junit.version>                                <!-- Latest as of Mar 2025 -->
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-java</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-properties</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-yaml</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-maven</artifactId>
+            <version>${rewrite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openrewrite</groupId>
+            <artifactId>rewrite-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openrewrite.recipe</groupId>
+                <artifactId>rewrite-recipe-bom</artifactId>
+                <version>${rewrite.recipe.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <version>${maven.rewrite.plugin.version}</version>
+<!--                <configuration>-->
+<!--                    <exportDatatables>true</exportDatatables>-->
+<!--                    <activeRecipes>-->
+<!--                        <recipe>ConvertHikariToUCP</recipe>-->
+<!--                    </activeRecipes>-->
+<!--                </configuration>-->
+               <dependencies>
+                    <dependency>
+                        <groupId>org.openrewrite.recipe</groupId>
+                        <artifactId>rewrite-spring</artifactId>
+                        <version>5.24.1</version>
+                    </dependency>
+               </dependencies>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
