@@ -18,7 +18,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 	<name>spring-cloud-oci-docs</name>
 	<groupId>com.oracle.cloud.spring</groupId>
 	<artifactId>spring-cloud-oci-docs</artifactId>
-	<version>1.4.1-SNAPSHOT</version>
+	<version>1.4.2</version>
 	<packaging>pom</packaging>
 
 	<organization>
@@ -54,7 +54,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		<asciidoctor.maven.plugin.version>3.0.0</asciidoctor.maven.plugin.version>
 		<asciidoctorj.version>2.5.13</asciidoctorj.version>
 		<spring-asciidoctor-backends.version>0.0.7</spring-asciidoctor-backends.version>
-		<jruby.version>9.4.8.0</jruby.version>
+		<jruby.version>9.4.12.1</jruby.version>
 
 		<!-- Distribution management -->
 		<repository.id>artifactory</repository.id>

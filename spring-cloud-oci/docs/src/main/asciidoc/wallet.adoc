@@ -1,0 +1,27 @@
+// Copyright (c) 2025, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+[#wallet]
+== Oracle Database Wallet
+
+This starter provides authentication mechanisms for Oracle Database connections using Oracle Database Wallet, such as connections to Autonomous Database with mTLS enabled.
+
+To add this starter to your project, add this Maven dependency:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.oracle.database.spring</groupId>
+    <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+    <version>24.4.0</version>
+</dependency>
+----
+
+For Gradle projects, add this dependency:
+
+[source,subs="normal"]
+----
+dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-wallet:24.4.0'
+}
+----

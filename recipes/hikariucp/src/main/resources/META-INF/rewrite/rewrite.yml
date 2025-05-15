@@ -1,0 +1,188 @@
+#
+# Copyright © 2025, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
+#
+# Source for the recipe:
+# https://github.com/brettwooldridge/HikariCP?tab=readme-ov-file#gear-configuration-knobs-baby
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: com.oracle.cloud.recipes.hikariucp.ConvertHikariToUCP
+displayName: Migrate Hikari CP to Oracle UCP
+description: Migrate Hikari Connection Pool to Oracle Universal Connection Pool
+tags:
+  - spring
+  - oracle
+  - ucp
+  - hikari
+recipeList:
+
+  # For pom.xml
+  - org.openrewrite.java.dependencies.RemoveDependency:
+      GroupId: com.oracle.database.jdbc
+      ArtifactId: ojdbc*
+  - org.openrewrite.java.dependencies.RemoveDependency:
+      groupId: com.zaxxer*
+      artifactId: HikariCP*
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: com.oracle.database.spring
+      artifactId: oracle-spring-boot-starter-ucp
+      version: 25.1.0
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: com.oracle.database.spring
+      artifactId: oracle-spring-boot-starter-wallet
+      version: 25.1.0
+
+  # https://docs.openrewrite.org/recipes/java/spring/addspringproperty
+  # Add a spring configuration property to a configuration file if it does not already exist in that file.
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.driver-class-name
+      value: oracle.jdbc.OracleDriver
+      comment: "JDBC driver class"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.type
+      value: oracle.ucp.jdbc.PoolDataSource
+      comment: specify the connection pool driver to use"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.connection-pool-name
+      value: UCPConnectionPool
+      comment: "Connection Pool Name"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.max-pool-size
+      value: 20
+      comment: "Specifies the maximum number of available and borrowed connections that our pool is maintaining"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.min-pool-size
+      value: 5
+      comment: "Specifies the minimum number of available and borrowed connections that our pool is maintaining"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.initial-pool-size
+      value: 10
+      comment: "Specifies the number of available connections created after the pool is initiated"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.connection-wait-timeout
+      value: 3
+      comment: "specifies how long an application request waits to obtain a connection if there are no longer any connections in the pool"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.inactive-connection-timeout
+      value: 0
+      comment: "Specifies how long an available connection can remain idle before it is closed and removed from the pool"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.max-connection-reuse-time
+      value: 0
+      comment: "Allows connections to be gracefully closed and removed from a connection pool after a specific amount of time"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.connection-validation-timeout
+      value: 15
+      comment: "Specifies the duration within which a borrowed connection from the pool is validated"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.fast-connection-failover-enabled
+      value: false
+      comment: "Enables faster failover for connection attempts"
+      pathExpressions: ["**/application.properties"]
+
+  - org.openrewrite.java.spring.AddSpringProperty:
+      property: spring.datasource.oracleucp.validate-connection-on-borrow
+      value: false
+      comment: "Whether to validate connections when borrowed from the pool"
+      pathExpressions: ["**/application.properties"]
+
+  # spring.datasource.oracleucp.connection-factory-class: oracle.jdbc.pool.OracleDataSource
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.data-source-class-name
+      newPropertyKey: spring.datasource.oracleucp.connection-factory-class-name
+  - org.openrewrite.java.spring.ChangeSpringPropertyValue:
+      propertyKey: spring.datasource.oracleucp.connection-factory-class-name
+      newValue: oracle.jdbc.pool.OracleDataSource
+
+  # spring.datasource.driver-class-name: OracleDriver
+  - org.openrewrite.java.spring.ChangeSpringPropertyValue:
+      propertyKey: spring.datasource.driver-class-name
+      newValue: oracle.jdbc.OracleDriver
+
+  # spring.datasource.type: oracle.ucp.jdbc.PoolDataSource
+  - org.openrewrite.java.spring.ChangeSpringPropertyValue:
+      propertyKey: spring.datasource.type
+      newValue: oracle.ucp.jdbc.PoolDataSource
+
+  # spring.datasource.oracleucp.connection-pool-name
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.pool-name
+      newPropertyKey: spring.datasource.oracleucp.connection-pool-name
+
+  # spring.datasource.oracleucp.max-pool-size
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.maximum-pool-size
+      newPropertyKey: spring.datasource.oracleucp.max-pool-size
+
+  # spring.datasource.oracleucp.min-pool-size
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.minimum-idle
+      newPropertyKey: spring.datasource.oracleucp.min-pool-size
+
+  # spring.datasource.oracleucp.connection-validation-timeout
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.connection-timeout
+      newPropertyKey: spring.datasource.oracleucp.connection-wait-timeout
+
+  # spring.datasource.oracleucp.inactive-connection-timeout
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.idle-timeout
+      newPropertyKey: spring.datasource.oracleucp.inactive-connection-timeout
+
+  # spring.datasource.oracleucp.s-q-l-for-validate-connection
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.connection-test-query
+      newPropertyKey: spring.datasource.oracleucp.s-q-l-for-validate-connection
+
+  # spring.datasource.oracleucp.max-connection-reuse-time
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.max-lifetime
+      newPropertyKey: spring.datasource.oracleucp.max-connection-reuse-time
+
+  # spring.datasource.oracleucp.max-connection-reuse-time
+  - org.openrewrite.java.spring.ChangeSpringPropertyKey:
+      oldPropertyKey: spring.datasource.hikari.validation-timeout
+      newPropertyKey: spring.datasource.oracleucp.connection-validation-timeout
+
+  # HikariCP properties that don’t have identical UCP properties
+  - org.openrewrite.java.spring.CommentOutSpringPropertyKey:
+      propertyKey: spring.datasource.hikari.auto-commit
+      comment: "Use Oracle JDBC driver connection property autoCommit."
+  - org.openrewrite.java.spring.CommentOutSpringPropertyKey:
+      propertyKey: spring.datasource.hikari.register-mbeans
+      comment: "UCP always attempts registration."
+  - org.openrewrite.java.spring.CommentOutSpringPropertyKey:
+      propertyKey: spring.datasource.hikari.thread-factory
+      comment: "UCP supports setTaskManager instead."
+  - org.openrewrite.java.spring.CommentOutSpringPropertyKey:
+      propertyKey: spring.datasource.hikari.scheduled-executor
+      comment: "UCP supports setTaskManager instead."
+  - org.openrewrite.java.spring.CommentOutSpringPropertyKey:
+      propertyKey: spring.datasource.hikari.keepalive-time
+      comment: "Closest is to use driver connection properties oracle.net.keepAlive + oracle.net.TCP_KEEPIDLE"
+
+  # Convert milliseconds to seconds
+  - oracle.com.cloud.recipes.hikariucp.ConvertMsToSecondsInPropertiesRecipe:
+      keyRegex: 'spring\.datasource\.hikari\.(connectionTimeout|idleTimeout|maxLifetime|leakDetectionThreshold)'
+  - oracle.com.cloud.recipes.hikariucp.ConvertMsToSecondsInYamlRecipe:
+      pathRegex: 'spring\.datasource\.hikari\.(connectionTimeout|idleTimeout|maxLifetime|leakDetectionThreshold)'
