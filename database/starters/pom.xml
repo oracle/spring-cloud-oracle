@@ -64,7 +64,7 @@
   </modules>
 
   <properties>
-    <spring-boot-dependencies.version>3.4.3</spring-boot-dependencies.version>
+    <spring-boot-dependencies.version>3.4.5</spring-boot-dependencies.version>
     <spring-framework-bom.version>6.2.3</spring-framework-bom.version>
 
     <java.version>21</java.version>
