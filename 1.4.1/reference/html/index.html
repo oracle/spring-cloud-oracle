@@ -131,6 +131,7 @@
 <li><a href="#aqjms">15.1. AQ/JMS</a></li>
 <li><a href="#universal-connection-pool">15.2. Universal Connection Pool</a></li>
 <li><a href="#oracle-database-wallet">15.3. Oracle Database Wallet</a></li>
+<li><a href="#oracle-json-collections">15.4. Oracle JSON Collections</a></li>
 </ul>
 </li>
 <li><a href="#configuration-properties">16. Configuration properties</a>
@@ -145,7 +146,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Documentation for version <strong>1.4.0</strong></p>
+<p>Documentation for version <strong>1.4.1</strong></p>
 </div>
 </div>
 </div>
@@ -481,7 +482,7 @@ performing all routine database maintenance tasks while the system is running, w
 <h3 id="using-autonomous-database"><a class="anchor" href="#using-autonomous-database"></a>4.1. Using Autonomous Database</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers an <code>AutonomousDb</code> bean in the Spring application context.
-The <code>AutonomousDb</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/adb/package-summary.html">Javadoc</a>) can be used to create an Autonomous Database, get details of an Autonomous Database,
+The <code>AutonomousDb</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/adb/package-summary.html">Javadoc</a>) can be used to create an Autonomous Database, get details of an Autonomous Database,
 delete an Autonomous Database and generate a wallet for an Autonomous Database.</p>
 </div>
 <div class="listingblock">
@@ -713,7 +714,7 @@ A Spring Boot starter is provided to autoconfigure the Function component.</p>
 <h3 id="using-cloud-functions"><a class="anchor" href="#using-cloud-functions"></a>6.1. Using Cloud Functions</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Function</code> bean in the Spring application context.
-The <code>Function</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/function/package-summary.html">Javadoc</a>) can be used to invoke a function with parameter inputs 'functionOcid' and 'endpoint'</p>
+The <code>Function</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/function/package-summary.html">Javadoc</a>) can be used to invoke a function with parameter inputs 'functionOcid' and 'endpoint'</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -798,7 +799,7 @@ A Spring Boot starter is provided to autoconfigure the Logging component.</p>
 <h3 id="using-cloud-logging"><a class="anchor" href="#using-cloud-logging"></a>7.1. Using Cloud Logging</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Logging</code> bean in the Spring application context.
-The <code>Logging</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/logging/package-summary.html">Javadoc</a>) can be used to ingest logs associated with a logId specified in the property <code>spring.cloud.oci.logging.logId</code> within the application configuration file</p>
+The <code>Logging</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/logging/package-summary.html">Javadoc</a>) can be used to ingest logs associated with a logId specified in the property <code>spring.cloud.oci.logging.logId</code> within the application configuration file</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -880,7 +881,7 @@ The <code>Logging</code> bean (<a href="https://oracle.github.io/spring-cloud-oc
 <h3 id="using-generative-ai-chat"><a class="anchor" href="#using-generative-ai-chat"></a>8.1. Using Generative AI Chat</h3>
 <div class="paragraph">
 <p>The starter configures and registers a <code>ChatModel</code> bean in the Spring application context.
-The <code>ChatModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to interact with OCI Generative AI Chat Models.</p>
+The <code>ChatModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to interact with OCI Generative AI Chat Models.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -898,7 +899,7 @@ The <code>ChatModel</code> bean (<a href="https://oracle.github.io/spring-cloud-
 <h3 id="using-generative-ai-embedding"><a class="anchor" href="#using-generative-ai-embedding"></a>8.2. Using Generative AI Embedding</h3>
 <div class="paragraph">
 <p>The starter configures and registers an <code>EmbeddingModel</code> bean in the Spring application context.
-The <code>EmbeddingModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to create text embeddings using OCI Generative AI Embedding Models.</p>
+The <code>EmbeddingModel</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/genai/package-summary.html">Javadoc</a>) can be used to create text embeddings using OCI Generative AI Embedding Models.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1076,7 +1077,7 @@ A Spring Boot starter is provided to autoconfigure the various Storage component
 <h3 id="using-cloud-storage"><a class="anchor" href="#using-cloud-storage"></a>9.1. Using Cloud Storage</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Storage</code> bean in the Spring application context.
-The <code>Storage</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/storage/package-summary.html">Javadoc</a>) can be used to list, create, update or delete buckets and objects.</p>
+The <code>Storage</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/storage/package-summary.html">Javadoc</a>) can be used to list, create, update or delete buckets and objects.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1189,7 +1190,7 @@ A Spring Boot starter is provided to autoconfigure the various Notification comp
 <h3 id="using-cloud-notifications"><a class="anchor" href="#using-cloud-notifications"></a>10.1. Using Cloud Notifications</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Notification</code> bean in the Spring application context.
-The <code>Notification</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/notification/package-summary.html">Javadoc</a>) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.</p>
+The <code>Notification</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/notification/package-summary.html">Javadoc</a>) can be used to create a Topic, create, list, get a Subscription, and publish messages to the Subscriptions in a Topic.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1398,7 +1399,7 @@ A Spring Boot starter is provided to autoconfigure the various Queue components.
 <h3 id="using-cloud-queues"><a class="anchor" href="#using-cloud-queues"></a>12.1. Using Cloud Queues</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Queue</code> bean in the Spring application context.
-The <code>Queue</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/queue/package-summary.html">Javadoc</a>) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.</p>
+The <code>Queue</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/queue/package-summary.html">Javadoc</a>) can be used to create a queue, get a queue, list queues, delete a queue, put messages, get messages, update messages and delete a message.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1483,7 +1484,7 @@ A Spring Boot starter is provided to autoconfigure the Streaming component.</p>
 <h3 id="using-cloud-streaming"><a class="anchor" href="#using-cloud-streaming"></a>13.1. Using Cloud Streaming</h3>
 <div class="paragraph">
 <p>The starter automatically configures and registers a <code>Streaming</code> bean in the Spring application context.
-The <code>Streaming</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.0/javadocs/com/oracle/cloud/spring/streaming/package-summary.html">Javadoc</a>) can be used to create streamPool, stream in OCI and ingest and consume high-volume data streams with a streamId</p>
+The <code>Streaming</code> bean (<a href="https://oracle.github.io/spring-cloud-oci/1.4.1/javadocs/com/oracle/cloud/spring/streaming/package-summary.html">Javadoc</a>) can be used to create streamPool, stream in OCI and ingest and consume high-volume data streams with a streamId</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1985,6 +1986,68 @@ topic, and providing the object to be converted and sent in the payload of the m
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="oracle-json-collections"><a class="anchor" href="#oracle-json-collections"></a>15.4. Oracle JSON Collections</h3>
+<div class="paragraph">
+<p>This starter provides dependencies and tooling for using JSON with Oracle Database, including Oracle Database JSON Relational Duality Views.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.database.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>oracle-spring-boot-starter-json-collections<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>24.4.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Gradle projects, add this dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-json-collections:24.4.0'
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="using-the-oracle-json-collections-starter"><a class="anchor" href="#using-the-oracle-json-collections-starter"></a>15.4.1. Using the Oracle JSON Collections Starter</h4>
+<div class="paragraph">
+<p>The <code>JSONB</code> bean is used to convert Java Obects to and from OSON (Oracle Database serialized JSON), using the <code>fromOSON</code> and <code>toOSON</code> methods.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="no">JSONB</span> <span class="n">jsonb</span><span class="o">;</span>
+
+<span class="c1">// Convert from OSON to Java Object</span>
+<span class="nc">Student</span> <span class="n">student</span> <span class="o">=</span> <span class="n">jsonb</span><span class="o">.</span><span class="na">fromOSON</span><span class="o">(</span><span class="n">inputStream</span><span class="o">,</span> <span class="nc">Student</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="c1">// Convert from Java Object to OSON</span>
+<span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span> <span class="o">=</span> <span class="n">jsonb</span><span class="o">.</span><span class="na">toOSON</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>JSONBRowMapper</code> implementation converts OSON database columns to Java Objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nc">RowMapper</span><span class="o">&lt;</span><span class="nc">Student</span><span class="o">&gt;</span> <span class="n">rowMapper</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JSONBRowMapper</span><span class="o">&lt;&gt;(</span><span class="k">this</span><span class="o">.</span><span class="na">jsonb</span><span class="o">,</span> <span class="nc">Student</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Student</span><span class="o">&gt;</span> <span class="n">students</span> <span class="o">=</span> <span class="n">jdbcTemplate</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">con</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="nc">PreparedStatement</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="s">"""
+        select * from students_dv v
+        where v.data.first_name = ?
+        and v.data.last_name = ?
+        """</span><span class="o">);</span>
+    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">firstName</span><span class="o">);</span>
+    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">lastName</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">ps</span><span class="o">;</span>
+<span class="o">},</span> <span class="n">rowMapper</span><span class="o">);</span>
+</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2096,7 +2159,7 @@ topic, and providing the object to be converted and sent in the payload of the m
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-05-19 12:23:02 -0500
+Last updated 2025-05-19 13:35:49 -0500
 </div>
 </div>
 </div>
