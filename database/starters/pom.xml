@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2023, 2024, Oracle and/or its affiliates. -->
+<!-- Copyright (c) 2023, 2024, 2025 Oracle and/or its affiliates. -->
 <!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +18,7 @@
 
   <packaging>pom</packaging>
 
-  <name>Oracle Spring Boot Starters - General parent module</name>
+  <name>Oracle Spring Boot Starters - Database Starters</name>
   <description>
     Global parent pom.xml to be used by Oracle Spring Boot Starters modules.
   </description>
@@ -94,7 +94,7 @@
 
     <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
     <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
+    <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
     <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
 
     <!-- Distribution management -->
@@ -349,7 +349,7 @@
           <author>true</author>
           <header>${project.name}</header>
           <reportOutputDirectory>${project.build.directory}/site/${project.version}/apidocs</reportOutputDirectory>
-          <excludePackageNames>com.oracle.cloud.spring.sample.*</excludePackageNames>
+          <excludePackageNames>com.oracle.database.spring.sample:com.oracle.database.spring.*:com.oracle.spring.json.duality.annotation:com.oracle.spring.json.jsonb</excludePackageNames>
         </configuration>
         <executions>
           <execution>
