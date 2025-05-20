@@ -3,8 +3,11 @@
 package com.oracle.spring.json;
 
 import com.oracle.spring.json.jsonb.JSONB;
+import com.oracle.spring.json.kafka.OSONKafkaSerializationFactory;
 import jakarta.json.bind.JsonbBuilder;
 import oracle.sql.json.OracleJsonFactory;
+import org.apache.kafka.common.serialization.Deserializer;
+import org.apache.kafka.common.serialization.Serializer;
 import org.eclipse.yasson.YassonJsonb;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -28,5 +31,14 @@ public class JsonCollectionsAutoConfiguration {
     @ConditionalOnClass({OracleJsonFactory.class, YassonJsonb.class})
     public JSONB jsonb(OracleJsonFactory oracleJsonFactory, YassonJsonb yassonJsonb) {
         return new JSONB(oracleJsonFactory, yassonJsonb);
+    }
+
+    @Bean
+    @ConditionalOnClass(value = {
+            Deserializer.class,
+            Serializer.class
+    })
+    public OSONKafkaSerializationFactory osonSerializationFactory(JSONB jsonb) {
+        return new OSONKafkaSerializationFactory(jsonb);
     }
 }

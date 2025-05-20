@@ -5,9 +5,7 @@ package com.oracle.database.spring.jsonevents;
 import java.util.Properties;
 
 import com.oracle.database.spring.jsonevents.model.Sensor;
-import com.oracle.database.spring.jsonevents.serde.JSONBDeserializer;
-import com.oracle.database.spring.jsonevents.serde.JSONBSerializer;
-import com.oracle.spring.json.jsonb.JSONB;
+import com.oracle.spring.json.kafka.OSONKafkaSerializationFactory;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -26,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class OKafkaConfiguration {
-    private final JSONB jsonb;
 
     @Value("${app.ojdbcPath}")
     private String ojdbcPath;
@@ -46,10 +43,6 @@ public class OKafkaConfiguration {
     @Value("${app.consumerGroup:SensorEvents}")
     private String consumerGroup;
 
-    public OKafkaConfiguration(JSONB jsonb) {
-        this.jsonb = jsonb;
-    }
-
     @Bean
     @Qualifier("okafkaProperties")
     public Properties okafkaProperties() {
@@ -64,7 +57,7 @@ public class OKafkaConfiguration {
 
     @Bean
     @Qualifier("okafkaConsumer")
-    public Consumer<String, Sensor> okafkaConsumer() {
+    public Consumer<String, Sensor> okafkaConsumer(OSONKafkaSerializationFactory osonKafkaSerializationFactory) {
         Properties props = okafkaProperties();
         props.put("group.id", consumerGroup);
         props.put("enable.auto.commit","false");
@@ -72,18 +65,18 @@ public class OKafkaConfiguration {
         props.put("auto.offset.reset", "earliest");
 
         Deserializer<String> keyDeserializer = new StringDeserializer();
-        Deserializer<Sensor> valueDeserializer = new JSONBDeserializer<>(jsonb, Sensor.class);
+        Deserializer<Sensor> valueDeserializer = osonKafkaSerializationFactory.createDeserializer(Sensor.class);
         return new KafkaConsumer<>(props, keyDeserializer, valueDeserializer);
     }
 
     @Bean
     @Qualifier("okafkaProducer")
-    public Producer<String, Sensor> okafkaProducer() {
+    public Producer<String, Sensor> okafkaProducer(OSONKafkaSerializationFactory osonKafkaSerializationFactory) {
         Properties props = okafkaProperties();
         props.put("enable.idempotence", "true");
 
         Serializer<String> keySerializer = new StringSerializer();
-        Serializer<Sensor> valueSerializer = new JSONBSerializer<>(jsonb);
+        Serializer<Sensor> valueSerializer = osonKafkaSerializationFactory.createSerializer();
         return new KafkaProducer<>(props, keySerializer, valueSerializer);
     }
 }
