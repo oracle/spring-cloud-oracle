@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Oracle JSON Collections</title>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/setup.js"></script><script defer src="js/site.js"></script>
+
+</head>
+<body class="article toc2 toc-left"><div id="banner-container" class="container" role="banner">
+  <div id="banner" class="contained" role="banner">
+    <div id="switch-theme">
+      <input type="checkbox" id="switch-theme-checkbox" />
+      <label for="switch-theme-checkbox">Dark Theme</label>
+    </div>
+  </div>
+</div>
+<div id="tocbar-container" class="container" role="navigation">
+  <div id="tocbar" class="contained" role="navigation">
+    <button id="toggle-toc"></button>
+  </div>
+</div>
+<div id="main-container" class="container">
+  <div id="main" class="contained">
+    <div id="doc" class="doc">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<span id="back-to-index"><a href="index.html">Back to index</a></span><ul class="sectlevel1">
+<li><a href="#jsoncoll">Oracle JSON Collections</a>
+<ul class="sectlevel2">
+<li><a href="#using-the-oracle-json-collections-starter">Using the Oracle JSON Collections Starter</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="jsoncoll"><a class="anchor" href="#jsoncoll"></a>Oracle JSON Collections</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This starter provides dependencies and tooling for using JSON with Oracle Database, including Oracle Database JSON Relational Duality Views.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.oracle.database.spring<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>oracle-spring-boot-starter-json-collections<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>24.4.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Gradle projects, add this dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>dependencies {
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-json-collections:24.4.0'
+}</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-the-oracle-json-collections-starter"><a class="anchor" href="#using-the-oracle-json-collections-starter"></a>Using the Oracle JSON Collections Starter</h3>
+<div class="paragraph">
+<p>The <code>JSONB</code> bean is used to convert Java Obects to and from OSON (Oracle Database serialized JSON), using the <code>fromOSON</code> and <code>toOSON</code> methods.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nd">@Autowired</span>
+<span class="no">JSONB</span> <span class="n">jsonb</span><span class="o">;</span>
+
+<span class="c1">// Convert from OSON to Java Object</span>
+<span class="nc">Student</span> <span class="n">student</span> <span class="o">=</span> <span class="n">jsonb</span><span class="o">.</span><span class="na">fromOSON</span><span class="o">(</span><span class="n">inputStream</span><span class="o">,</span> <span class="nc">Student</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="c1">// Convert from Java Object to OSON</span>
+<span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span> <span class="o">=</span> <span class="n">jsonb</span><span class="o">.</span><span class="na">toOSON</span><span class="o">(</span><span class="n">student</span><span class="o">);</span>
+</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>JSONBRowMapper</code> implementation converts OSON database columns to Java Objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="nc">RowMapper</span><span class="o">&lt;</span><span class="nc">Student</span><span class="o">&gt;</span> <span class="n">rowMapper</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JSONBRowMapper</span><span class="o">&lt;&gt;(</span><span class="k">this</span><span class="o">.</span><span class="na">jsonb</span><span class="o">,</span> <span class="nc">Student</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Student</span><span class="o">&gt;</span> <span class="n">students</span> <span class="o">=</span> <span class="n">jdbcTemplate</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">con</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="nc">PreparedStatement</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="s">"""
+        select * from students_dv v
+        where v.data.first_name = ?
+        and v.data.last_name = ?
+        """</span><span class="o">);</span>
+    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">firstName</span><span class="o">);</span>
+    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">lastName</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">ps</span><span class="o">;</span>
+<span class="o">},</span> <span class="n">rowMapper</span><span class="o">);</span>
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-05-19 14:20:05 -0500
+</div>
+</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
