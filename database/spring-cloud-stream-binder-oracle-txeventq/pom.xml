@@ -40,12 +40,12 @@
     </scm>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <oracle-database.version>23.8.0.25.04</oracle-database.version>
         <oracle.database.security.version>21.17.0.0</oracle.database.security.version>
-        <org.springframework.cloud.version>4.2.1</org.springframework.cloud.version>
+        <org.springframework.cloud.version>4.3.0</org.springframework.cloud.version>
         <spring.boot.version>3.5.0</spring.boot.version>
         <spring.framework.version>6.2.8</spring.framework.version>
         <testcontainers.version>1.21.1</testcontainers.version>
