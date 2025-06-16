@@ -72,13 +72,13 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </modules>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
-        <spring-boot.version>3.4.2</spring-boot.version>
+        <spring-boot.version>3.5.0</spring-boot.version>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
-        <spring-cloud-dependencies.version>2024.0.0</spring-cloud-dependencies.version>
-        <spring-framework.version>6.2.2</spring-framework.version>
+        <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version>
+        <spring-framework.version>6.2.8</spring-framework.version>
         <spring-data-oracle-nosql.version>2.1.0</spring-data-oracle-nosql.version>
         <oracle.nosql.driver.version>5.4.15</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.3</jakarta-mail.version>
@@ -88,7 +88,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.10.1</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <lombok.version>1.18.34</lombok.version>
