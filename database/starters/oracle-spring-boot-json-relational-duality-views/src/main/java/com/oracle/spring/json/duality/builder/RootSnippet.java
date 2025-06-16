@@ -27,9 +27,9 @@ public enum RootSnippet {
         return switch (ddlAuto) {
             case "none" -> NONE;
             case "validate" -> VALIDATE;
-            case "create" -> CREATE;
+            case "create-only" -> CREATE;
             case "create-drop" -> CREATE_DROP;
-            case "update" -> UPDATE;
+            case "create", "update" -> UPDATE;
             default -> throw new IllegalStateException("Unexpected value: " + ddlAuto);
         };
     }

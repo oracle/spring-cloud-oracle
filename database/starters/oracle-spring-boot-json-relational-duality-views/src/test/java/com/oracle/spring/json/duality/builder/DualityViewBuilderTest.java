@@ -14,8 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 
 import static com.oracle.spring.json.duality.SpringBootDualityTest.readViewFile;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,11 +22,11 @@ public class DualityViewBuilderTest {
     public static @NotNull Stream<Arguments> entityClasses() {
         return Stream.of(
                 Arguments.of(Student.class, "student-update.sql", "update"),
-                Arguments.of(Student.class, "student-create.sql", "create"),
-                Arguments.of(Actor.class, "actor-create.sql", "create"),
-                Arguments.of(Order.class, "order-create.sql", "create"),
+                Arguments.of(Student.class, "student-create.sql", "create-only"),
+                Arguments.of(Actor.class, "actor-create.sql", "create-only"),
+                Arguments.of(Order.class, "order-create.sql", "create-only"),
                 Arguments.of(Member.class, "member-create-drop.sql", "create-drop"),
-                Arguments.of(Employee.class, "employee-create.sql", "create")
+                Arguments.of(Employee.class, "employee-create.sql", "create-only")
         );
     }
 
@@ -43,12 +41,10 @@ public class DualityViewBuilderTest {
     }
 
     private DualityViewBuilder getDualityViewBuilder(String ddlAuto) {
-        HibernateProperties hibernateProperties = new HibernateProperties();
-        hibernateProperties.setDdlAuto(ddlAuto);
         return new DualityViewBuilder(
                 null,
-                new JpaProperties(),
-                hibernateProperties
+                false,
+                ddlAuto
         );
     }
 }

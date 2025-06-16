@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import static com.oracle.spring.json.duality.builder.Annotations.getAccessModeStr;
 import static com.oracle.spring.json.duality.builder.Annotations.getViewName;
 
-@Component
 public final class DualityViewBuilder implements DisposableBean {
     private static final String PREFIX = "JSON Relational Duality Views: ";
     private static final int TABLE_OR_VIEW_DOES_NOT_EXIST = 942;
@@ -31,13 +30,11 @@ public final class DualityViewBuilder implements DisposableBean {
     private final Map<String, String> dualityViews = new HashMap<>();
 
     public DualityViewBuilder(DataSource dataSource,
-                              JpaProperties jpaProperties,
-                              HibernateProperties hibernateProperties) {
+                              boolean isShowSql,
+                              String ddlAuto) {
         this.dataSource = dataSource;
-        this.isShowSql = jpaProperties.isShowSql();
-        this.rootSnippet = RootSnippet.fromDdlAuto(
-                hibernateProperties.getDdlAuto()
-        );
+        this.isShowSql = isShowSql;
+        this.rootSnippet = RootSnippet.fromDdlAuto(ddlAuto);
     }
 
     void apply() {
