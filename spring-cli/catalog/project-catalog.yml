@@ -5,7 +5,7 @@ project-repositories:
   url: "https://github.com/oracle/spring-cloud-oci/tree/main/spring-cli/projects/obaas"
   tags:
   - "obaas"
-  - "java-17"
+  - "java-21"
   - "rest"
   - "web"
   - "boot-3.4.x"

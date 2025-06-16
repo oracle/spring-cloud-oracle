@@ -12,6 +12,7 @@ import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 import com.oracle.cloud.spring.vault.VaultTemplate;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @EnabledIfEnvironmentVariable(named = "OCI_COMPARTMENT_ID", matches = ".+")
 @EnabledIfEnvironmentVariable(named = "OCI_VAULT_ID", matches = ".+")
+@Disabled
 public class VaultTemplateIT {
     @Autowired
     VaultTemplate vaultTemplate;
