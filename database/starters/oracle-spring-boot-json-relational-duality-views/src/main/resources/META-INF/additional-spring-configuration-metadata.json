@@ -1,0 +1,39 @@
+{
+  "groups": [],
+  "properties": [],
+  "hints": [
+    {
+      "name": "spring.jpa.dv.ddl-auto",
+      "values": [
+        {
+          "value": "create",
+          "description": "Create the duality view, overwriting the existing view if necessary."
+        },
+        {
+          "value": "create-drop",
+          "description": "Create and then destroy the duality view at the end of the session."
+        },
+        {
+          "value": "create-only",
+          "description": "Create the duality view."
+        },
+        {
+          "value": "drop",
+          "description": "Drop the duality view."
+        },
+        {
+          "value": "none",
+          "description": "Disable DDL handling."
+        },
+        {
+          "value": "update",
+          "description": "Update the duality view if necessary."
+        },
+        {
+          "value": "validate",
+          "description": "Validate the duality view, make no changes to the database."
+        }
+      ]
+    }
+  ]
+}
