@@ -42,7 +42,7 @@
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <txeventq.streambinder.version>0.13.0</txeventq.streambinder.version>
+        <txeventq.streambinder.version>0.14.0</txeventq.streambinder.version>
         <spring.boot.version>3.5.0</spring.boot.version>
         <testcontainers.version>1.21.1</testcontainers.version>
     </properties>
