@@ -10,11 +10,11 @@ Spring Cloud Oracle goes beyond simply wrapping the OCI APIs in starters and add
 
 The following sub-projects are included in Spring Cloud Oracle:
 
-| Project                                                                                                           | Description                                                            |
-|-------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| [Spring Cloud OCI v1.4.2](./spring-cloud-oci/README.md)                                                                  | Use OCI services with well-known Spring idioms and APIs                |
-| [Oracle Database Spring Boot Starters v25.2.0](./database/starters/README.md)                                             | Integrate Oracle Database with Spring Boot                             |
-| [Spring Cloud Stream Binder for Oracle TxEventQ v0.13.0](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | Build highly scalable event-driven microservices with Oracle TxEventQ. |
+| Project                                                                                                                   | Description                                                            |
+|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| [Spring Cloud OCI v1.4.3](./spring-cloud-oci/README.md)                                                                   | Use OCI services with well-known Spring idioms and APIs                |
+| [Oracle Database Spring Boot Starters v25.3.0](./database/starters/README.md)                                             | Integrate Oracle Database with Spring Boot                             |
+| [Spring Cloud Stream Binder for Oracle TxEventQ v0.14.0](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | Build highly scalable event-driven microservices with Oracle TxEventQ. |
 
 ## Some key features
 
