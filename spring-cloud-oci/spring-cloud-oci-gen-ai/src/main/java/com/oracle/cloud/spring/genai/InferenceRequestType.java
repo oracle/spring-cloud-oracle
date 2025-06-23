@@ -5,12 +5,9 @@
 
 package com.oracle.cloud.spring.genai;
 
-import lombok.Getter;
-
 /**
  * Supported OCI Inference model request types.
  */
-@Getter
 public enum InferenceRequestType {
     COHERE("COHERE"),
     LLAMA("LLAMA");
@@ -21,4 +18,7 @@ public enum InferenceRequestType {
         this.type = type;
     }
 
+    public String getType() {
+        return type;
+    }
 }

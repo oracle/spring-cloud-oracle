@@ -8,16 +8,12 @@ import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 import java.util.Objects;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
-@Getter
-@Setter
 @JsonRelationalDualityView(accessMode = @AccessMode(insert = true))
 @Table(name = "orders")
 public class Order {
@@ -44,5 +40,37 @@ public class Order {
         result = 31 * result + Objects.hashCode(getQuantity());
         result = 31 * result + Objects.hashCode(getOrderDate());
         return result;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 }

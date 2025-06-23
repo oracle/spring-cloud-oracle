@@ -13,8 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
@@ -24,8 +22,6 @@ import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
         insert = true,
         update = true
 ))
-@Getter
-@Setter
 public class Book {
 
     @Id
@@ -49,5 +45,21 @@ public class Book {
         int result = Objects.hashCode(bookId);
         result = 31 * result + Objects.hashCode(title);
         return result;
+    }
+
+    public Long getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

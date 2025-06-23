@@ -10,13 +10,9 @@ import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
-@Getter
-@Setter
 @Table(name = "products")
 @JsonRelationalDualityView(
     name = "product_dv",
@@ -42,5 +38,29 @@ public class Product {
         result = 31 * result + Objects.hashCode(getName());
         result = 31 * result + Objects.hashCode(getPrice());
         return result;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

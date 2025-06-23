@@ -15,15 +15,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
 @Entity
 @Table(name = "director_bio")
-@Getter
-@Setter
 public class DirectorBio {
     @JsonbProperty(_ID_FIELD)
     @Id
@@ -49,5 +45,29 @@ public class DirectorBio {
     @Override
     public int hashCode() {
         return Objects.hashCode(getDirectorId());
+    }
+
+    public String getDirectorId() {
+        return directorId;
+    }
+
+    public void setDirectorId(String directorId) {
+        this.directorId = directorId;
+    }
+
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 }

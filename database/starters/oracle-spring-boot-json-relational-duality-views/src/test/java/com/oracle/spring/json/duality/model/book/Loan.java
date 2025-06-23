@@ -17,15 +17,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
 @Entity
 @Table(name = "loans")
-@Getter
-@Setter
 @JsonRelationalDualityView(name = "loan_dv", accessMode = @AccessMode(
         insert = true,
         update = true
@@ -61,5 +57,29 @@ public class Loan {
     @Override
     public int hashCode() {
         return Objects.hashCode(getLoanId());
+    }
+
+    public Long getLoanId() {
+        return loanId;
+    }
+
+    public void setLoanId(Long loanId) {
+        this.loanId = loanId;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
 }

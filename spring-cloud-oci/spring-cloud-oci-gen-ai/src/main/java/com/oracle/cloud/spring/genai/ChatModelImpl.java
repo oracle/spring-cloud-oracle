@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2025, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -27,7 +27,6 @@ import com.oracle.bmc.generativeaiinference.model.TextContent;
 import com.oracle.bmc.generativeaiinference.model.UserMessage;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
 import com.oracle.bmc.generativeaiinference.responses.ChatResponse;
-import lombok.Builder;
 import org.springframework.util.Assert;
 
 /**
@@ -48,7 +47,97 @@ public class ChatModelImpl implements ChatModel {
     private List<CohereMessage> cohereChatMessages;
     private List<ChatChoice> genericChatMessages;
 
-    @Builder
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private GenerativeAiInference client;
+        private ServingMode servingMode;
+        private String compartment;
+        private String preambleOverride;
+        private Double temperature;
+        private Double frequencyPenalty;
+        private Integer maxTokens;
+        private Double presencePenalty;
+        private Double topP;
+        private Integer topK;
+        private InferenceRequestType inferenceRequestType;
+
+        public Builder client(GenerativeAiInference client) {
+            this.client = client;
+            return this;
+        }
+
+        public Builder servingMode(ServingMode servingMode) {
+            this.servingMode = servingMode;
+            return this;
+        }
+
+        public Builder compartment(String compartment) {
+            this.compartment = compartment;
+            return this;
+        }
+
+        public Builder preambleOverride(String preambleOverride) {
+            this.preambleOverride = preambleOverride;
+            return this;
+        }
+
+        public Builder temperature(Double temperature) {
+            this.temperature = temperature;
+            return this;
+        }
+
+        public Builder frequencyPenalty(Double frequencyPenalty) {
+            this.frequencyPenalty = frequencyPenalty;
+            return this;
+        }
+
+        public Builder maxTokens(Integer maxTokens) {
+            this.maxTokens = maxTokens;
+            return this;
+        }
+
+        public Builder presencePenalty(Double presencePenalty) {
+            this.presencePenalty = presencePenalty;
+            return this;
+        }
+
+        public Builder topP(Double topP) {
+            this.topP = topP;
+            return this;
+        }
+
+        public Builder topK(Integer topK) {
+            this.topK = topK;
+            return this;
+        }
+
+        public Builder inferenceRequestType(InferenceRequestType inferenceRequestType) {
+            this.inferenceRequestType = inferenceRequestType;
+            return this;
+        }
+
+        public ChatModelImpl build() {
+            return new ChatModelImpl(this);
+        }
+    }
+
+    public ChatModelImpl(Builder builder) {
+        this(builder.client,
+                builder.servingMode,
+                builder.compartment,
+                builder.preambleOverride,
+                builder.temperature,
+                builder.frequencyPenalty,
+                builder.maxTokens,
+                builder.presencePenalty,
+                builder.topP,
+                builder.topK,
+                builder.inferenceRequestType);
+    }
+
     public ChatModelImpl(GenerativeAiInference client,
                          ServingMode servingMode,
                          String compartment,
@@ -81,6 +170,8 @@ public class ChatModelImpl implements ChatModel {
             return -1;
         });
     }
+
+
 
     /**
      * Chat using OCI GenAI.
