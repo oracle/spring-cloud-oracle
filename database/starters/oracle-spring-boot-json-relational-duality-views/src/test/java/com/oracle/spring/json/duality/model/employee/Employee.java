@@ -17,8 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
@@ -29,8 +27,6 @@ import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
         update = true,
         delete = true
 ))
-@Getter
-@Setter
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,5 +62,37 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hashCode(getId());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Employee getManager() {
+        return manager;
+    }
+
+    public void setManager(Employee manager) {
+        this.manager = manager;
+    }
+
+    public List<Employee> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Employee> reports) {
+        this.reports = reports;
     }
 }

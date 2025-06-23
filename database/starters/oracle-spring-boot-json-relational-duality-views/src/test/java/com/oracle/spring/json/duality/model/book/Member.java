@@ -15,8 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
@@ -27,8 +25,6 @@ import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
         update = true,
         delete = true
 ))
-@Getter
-@Setter
 public class Member {
 
     @Id
@@ -46,4 +42,28 @@ public class Member {
     ))
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Loan> loans;
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
+    }
 }

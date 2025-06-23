@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2025, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -14,7 +14,6 @@ import com.oracle.bmc.generativeaiinference.model.EmbedTextDetails;
 import com.oracle.bmc.generativeaiinference.model.ServingMode;
 import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
-import lombok.Builder;
 import org.springframework.util.Assert;
 
 /**
@@ -33,7 +32,45 @@ public class EmbeddingModelImpl implements EmbeddingModel {
     private final EmbedTextDetails.Truncate truncate;
     private final String compartment;
 
-    @Builder
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private GenerativeAiInference client;
+        private ServingMode servingMode;
+        private EmbedTextDetails.Truncate truncate;
+        private String compartment;
+
+        public Builder client(GenerativeAiInference client) {
+            this.client = client;
+            return this;
+        }
+
+        public Builder servingMode(ServingMode servingMode) {
+            this.servingMode = servingMode;
+            return this;
+        }
+
+        public Builder truncate(EmbedTextDetails.Truncate truncate) {
+            this.truncate = truncate;
+            return this;
+        }
+
+        public Builder compartment(String compartment) {
+            this.compartment = compartment;
+            return this;
+        }
+
+        public EmbeddingModelImpl build() {
+            return new EmbeddingModelImpl(this);
+        }
+    }
+
+    private EmbeddingModelImpl(Builder builder) {
+        this(builder.client, builder.servingMode, builder.truncate, builder.compartment);
+    }
+
     public EmbeddingModelImpl(GenerativeAiInference client, ServingMode servingMode, EmbedTextDetails.Truncate truncate, String compartment) {
         Assert.notNull(client, "client must not be null");
         Assert.notNull(servingMode, "servingMode must not be null");

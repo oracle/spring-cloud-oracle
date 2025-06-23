@@ -15,15 +15,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import static com.oracle.spring.json.duality.builder.Annotations._ID_FIELD;
 
 @Entity
 @Table(name = "actor")
-@Getter
-@Setter
 @JsonRelationalDualityView(accessMode = @AccessMode(insert = true))
 public class Actor {
     @JsonbProperty(_ID_FIELD)
@@ -63,5 +59,37 @@ public class Actor {
     @Override
     public int hashCode() {
         return Objects.hashCode(getActorId());
+    }
+
+    public String getActorId() {
+        return actorId;
+    }
+
+    public void setActorId(String actorId) {
+        this.actorId = actorId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Set<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(Set<Movie> movies) {
+        this.movies = movies;
     }
 }
