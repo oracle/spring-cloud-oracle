@@ -4,6 +4,9 @@ package com.oracle.spring.json.kafka;
 
 import com.oracle.spring.json.jsonb.JSONB;
 
+/**
+ * Factory class to create OSONDeserializer and OSONSerializer instances.
+ */
 public class OSONKafkaSerializationFactory {
     private final JSONB jsonb;
 

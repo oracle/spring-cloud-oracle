@@ -13,6 +13,11 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * Autoconfiguration for the JSON Collections beans.
+ * OKafka-related beans are only instantiated if the required interfaces
+ * are on the classpath.
+ */
 @AutoConfiguration
 public class JsonCollectionsAutoConfiguration {
     @Bean
