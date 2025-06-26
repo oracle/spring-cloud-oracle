@@ -11,7 +11,7 @@ This starter provides dependencies and tooling for using JSON with Oracle Databa
 <dependency>
     <groupId>com.oracle.database.spring</groupId>
     <artifactId>oracle-spring-boot-starter-json-collections</artifactId>
-    <version>24.4.0</version>
+    <version>25.3.0</version>
 </dependency>
 ----
 
@@ -20,7 +20,7 @@ For Gradle projects, add this dependency:
 [source,subs="normal"]
 ----
 dependencies {
-    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-json-collections:24.4.0'
+    implementation 'com.oracle.database.spring:oracle-spring-boot-starter-json-collections:25.3.0'
 }
 ----
 

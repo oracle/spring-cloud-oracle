@@ -61,5 +61,5 @@ To use Oracle Spring Boot Starter for TxEventQ and JMS for your Spring Boot appl
 or if you are using Gradle:
 
 ```text
-implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:24.4.0'
+implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:25.3.0'
 ```

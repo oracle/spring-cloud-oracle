@@ -15,7 +15,7 @@ To add this starter to your project, add this Maven dependency:
 <dependency>
     <groupId>com.oracle.database.spring</groupId>
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
-    <version>25.1.0</version>
+    <version>25.3.0</version>
 </dependency>
 ----
 

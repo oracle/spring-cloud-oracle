@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import jakarta.json.stream.JsonParser;
 import org.springframework.jdbc.core.RowMapper;
 
+/**
+ * JSONBRowMapper maps Oracle Database JSON row data to Java objects.
+ * @param <T> Type parameter to convert JSON row data into.
+ */
 public class JSONBRowMapper<T> implements RowMapper<T> {
     private final JSONB mapper;
     private final Class<T> clazz;
