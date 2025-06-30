@@ -20,7 +20,7 @@ import org.testcontainers.utility.MountableFile;
 @Testcontainers
 public class TxEventQSampleAppTest {
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.7-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.8-slim-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");

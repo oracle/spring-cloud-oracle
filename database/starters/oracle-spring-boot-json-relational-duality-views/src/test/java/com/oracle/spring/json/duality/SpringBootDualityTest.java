@@ -55,7 +55,7 @@ public class SpringBootDualityTest {
      */
     @Container
     @ServiceConnection
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.7-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.8-slim-faststart")
             .withStartupTimeout(Duration.ofMinutes(5))
             .withInitScript("products.sql")
             .withUsername("testuser")
