@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.oracle.database.spring.cloud-stream-binder</groupId>
     <artifactId>spring-cloud-stream-binder-oracle-txeventq</artifactId>
-    <version>0.14.0</version>
+    <version>0.15.0</version>
     <packaging>jar</packaging>
 
     <name>spring-cloud-stream-binder-oracle-txeventq</name>
