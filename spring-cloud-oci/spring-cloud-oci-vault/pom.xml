@@ -10,7 +10,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 	<parent>
 		<artifactId>spring-cloud-oci</artifactId>
 		<groupId>com.oracle.cloud.spring</groupId>
-		<version>1.4.3-SNAPSHOT</version>
+		<version>1.4.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>spring-cloud-oci-vault</artifactId>
