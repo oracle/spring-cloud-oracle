@@ -4,7 +4,7 @@ Many Oracle customers make extensive use of Spring in their environments. They u
 
 *Spring Cloud Oracle* provides tools and services to integrate Oracle Cloud Infrastructure and Software with the Spring ecosystem in an idiomatic and flexible manner It is designed to simplify microservices development that uses Oracle Database, middleware, and messaging on Oracle and non-Oracle clouds as well as on-premises.
 
-Spring Cloud Oracle (OCI) 1.4.3 is the most recent release which brings together in one place Spring Boot Starters, autoconfiguration and sample code for Oracle Database and OCI services.
+Spring Cloud Oracle (OCI) 1.4.4 is the most recent release which brings together in one place Spring Boot Starters, autoconfiguration and sample code for Oracle Database and OCI services.
 
 Spring Cloud Oracle goes beyond simply wrapping the OCI APIs in starters and adds idiomatic ways to integrate with Spring including for example the ability to use OCI Vault as a Spring Property Source and OCI Object Storage as a Spring Resource provider. We also provide Spring CLI integration with a project catalog to help you create Spring Boot projects using Oracle.
 
@@ -12,13 +12,13 @@ The following sub-projects are included in Spring Cloud Oracle:
 
 | Project                                                                                                                   | Description                                                            |
 |---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| [Spring Cloud OCI v1.4.3](./spring-cloud-oci/README.md)                                                                   | Use OCI services with well-known Spring idioms and APIs                |
-| [Oracle Database Spring Boot Starters v25.3.0](./database/starters/README.md)                                             | Integrate Oracle Database with Spring Boot                             |
-| [Spring Cloud Stream Binder for Oracle TxEventQ v0.14.0](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | Build highly scalable event-driven microservices with Oracle TxEventQ. |
+| [Spring Cloud OCI v1.4.4](./spring-cloud-oci/README.md)                                                                   | Use OCI services with well-known Spring idioms and APIs                |
+| [Oracle Database Spring Boot Starters v25.4.0](./database/starters/README.md)                                             | Integrate Oracle Database with Spring Boot                             |
+| [Spring Cloud Stream Binder for Oracle TxEventQ v0.15.0](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | Build highly scalable event-driven microservices with Oracle TxEventQ. |
 
 ## Some key features
 
-- Compatible with Spring Boot, using Spring Boot 3.4.5
+- Compatible with Spring Boot, using Spring Boot 3.5.3
 - Support for several common OCI services including Object Storage, Functions, Logging, Notifications, Queues, Streaming, Email Delivery, Vault, Autonomous Database and Generative AI (for embeddings and inferencing)
 - Improved autoconfiguration for Spring Boot Starters for Oracle Database, and support for Oracle Database 23ai
 - Implementation of the Spring Cloud Stream API for Oracle Database Transactional Event Queues
@@ -39,6 +39,7 @@ We encourage you to learn more in the  Spring Cloud Oracle documentation:
 | Spring Cloud Oracle 1.4.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/javadocs/index.html) | |
 | Spring Cloud Oracle 1.4.2 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/javadocs/index.html) | |
 | Spring Cloud Oracle 1.4.3 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.4 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs-db/index.html) |
 
 Additionally, you can explore sample applications for each module in the [OCI starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples) and the [Database starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-samples).
 
