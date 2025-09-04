@@ -19,8 +19,7 @@ assignees: ""
 
 ## Environment
 - OS:
-- Oracle Database version:
-- Exporter version:
+- Spring Cloud Oracle version:
 
 ## Screenshots / Logs
 <!-- If applicable -->
