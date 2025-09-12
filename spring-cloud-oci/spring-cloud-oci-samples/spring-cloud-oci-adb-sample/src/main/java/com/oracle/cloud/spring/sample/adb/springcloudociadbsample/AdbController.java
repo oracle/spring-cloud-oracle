@@ -34,11 +34,12 @@ public class AdbController {
         @Parameter(required = true, example = "databaseName") @RequestParam String databaseName,
         @Parameter(required = true, example = "compartmentId") @RequestParam String compartmentId,
         @Parameter(required = true, example = "adminPassword") @RequestParam String adminPassword,
+        @Parameter(required = true, example = "displayName") @RequestParam String displayName,
         @Parameter(required = true, example = "200") @RequestParam Integer dataStorageSizeInGBs,
         @Parameter(required = true, example = "2.0") @RequestParam Float computeCount
     ) {
         CreateAutonomousDatabaseResponse response = autonomousDatabase.createAutonomousDatabase(
-            databaseName, compartmentId, adminPassword, dataStorageSizeInGBs, computeCount);
+            databaseName, compartmentId, adminPassword, displayName, dataStorageSizeInGBs, computeCount);
         return ResponseEntity.accepted().body("opcRequestId : " + response.getOpcRequestId());
     }
 

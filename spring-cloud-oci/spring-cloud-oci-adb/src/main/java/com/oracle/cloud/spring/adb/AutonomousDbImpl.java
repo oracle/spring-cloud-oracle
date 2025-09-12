@@ -47,6 +47,7 @@ public class AutonomousDbImpl implements AutonomousDb {
         String databaseName, 
         String compartmentId, 
         String adminPassword,
+        String displayName,
         Integer dataStorageSizeInGBs,
         Float computeCount
     ) {
@@ -55,6 +56,7 @@ public class AutonomousDbImpl implements AutonomousDb {
                 .compartmentId(compartmentId)
                 .dbName(databaseName)
                 .adminPassword(adminPassword)
+                .displayName(displayName)
                 .dataStorageSizeInGBs(dataStorageSizeInGBs)
                 .computeModel(CreateAutonomousDatabaseBase.ComputeModel.Ecpu)
                 .computeCount(computeCount)

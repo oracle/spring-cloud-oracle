@@ -30,6 +30,7 @@ public interface AutonomousDb {
         String databaseName, 
         String compartmentId, 
         String adminPassword,
+        String displayName,
         Integer dataStorageSizeInGBs,
         Float computeCount
         );
