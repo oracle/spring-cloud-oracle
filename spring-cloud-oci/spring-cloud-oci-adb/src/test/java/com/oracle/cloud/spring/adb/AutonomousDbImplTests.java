@@ -34,7 +34,7 @@ public class AutonomousDbImplTests {
         when(client.deleteAutonomousDatabase(any())).thenReturn(mock(DeleteAutonomousDatabaseResponse.class));
 
         CreateAutonomousDatabaseResponse cadr = autonomousDatabase.createAutonomousDatabase(
-            "name", "compartment", "password", 200, 2f);
+            "name", "compartment", "password", "displayName", 200, 2f);
         assertNotNull(cadr);
 
         //AutonomousDbDetails add = autonomousDatabase.getAutonomousDatabase("ocid");
