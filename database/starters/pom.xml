@@ -65,7 +65,7 @@
 
   <properties>
     <spring-boot-dependencies.version>3.5.0</spring-boot-dependencies.version>
-    <spring-framework-bom.version>6.2.8</spring-framework-bom.version>
+    <spring-framework-bom.version>6.2.11</spring-framework-bom.version>
 
     <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
