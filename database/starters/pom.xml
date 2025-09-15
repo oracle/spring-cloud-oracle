@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.3</version>
+    <version>3.5.5</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -64,8 +64,8 @@
   </modules>
 
   <properties>
-    <spring-boot-dependencies.version>3.5.0</spring-boot-dependencies.version>
-    <spring-framework-bom.version>6.2.8</spring-framework-bom.version>
+    <spring-boot-dependencies.version>3.5.5</spring-boot-dependencies.version>
+    <spring-framework-bom.version>6.2.11</spring-framework-bom.version>
 
     <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -74,12 +74,12 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
-    <okafka.version>23.6.0.0</okafka.version>
+    <okafka.version>23.6.1.0</okafka.version>
     <jackson.version>2.18.3</jackson.version>
     <kafka-clients.version>3.7.1</kafka-clients.version>
-    <oracle.version>23.8.0.25.04</oracle.version>
-    <osdt.version>21.17.0.0</osdt.version>
-    <oracledb-messaging.version>23.3.1.0</oracledb-messaging.version>
+    <oracle.version>23.9.0.25.07</oracle.version>
+    <osdt.version>21.19.0.0</osdt.version>
+    <oracledb-messaging.version>23.8.0.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
     <micrometer.version>1.14.2</micrometer.version>
     <micrometer-tracing.version>1.4.1</micrometer-tracing.version>

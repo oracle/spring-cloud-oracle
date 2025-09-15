@@ -75,10 +75,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <spring-boot.version>3.5.3</spring-boot.version>
+        <spring-boot.version>3.5.5</spring-boot.version>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version>
-        <spring-framework.version>6.2.8</spring-framework.version>
+        <spring-framework.version>6.2.11</spring-framework.version>
         <spring-data-oracle-nosql.version>2.1.0</spring-data-oracle-nosql.version>
         <oracle.nosql.driver.version>5.4.15</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.3</jakarta-mail.version>
