@@ -5,6 +5,8 @@
 
 package com.oracle.cloud.spring.sample.genai.springcloudocigenaisample;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,11 +46,15 @@ public class EmbeddingModelController {
     @PostMapping(value = "embedAll")
     ResponseEntity<?> embed(@Parameter(required = true, example = "embedding text") @RequestBody List<String> inputs) {
         List<EmbedTextResponse> embedded = embeddingModel.embedAll(inputs);
-        List<Map<String, Object>> response = embedded.stream().map(r -> Map.of(
-                "inputs", r.getEmbedTextResult().getInputs(),
-                "opcRequestId", r.getOpcRequestId(),
-                "embeddings", embeddingModel.fromResponse(r)
-        )).toList();
+        List<Map<String, Object>> response = embedded.stream()
+            .map(r -> {
+                Map<String, Object> map = new HashMap<>();
+                map.put("inputs", r.getEmbedTextResult() != null ? r.getEmbedTextResult().getInputs() : Collections.emptyList());
+                map.put("opcRequestId", r.getOpcRequestId() != null ? r.getOpcRequestId() : "N/A");
+                map.put("embeddings", embeddingModel.fromResponse(r));
+                return map;
+            })
+            .toList();
         return ResponseEntity.ok().body(response);
     }
 }
