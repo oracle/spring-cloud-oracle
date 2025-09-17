@@ -18,7 +18,7 @@ The following sub-projects are included in Spring Cloud Oracle:
 
 ## Some key features
 
-- Compatible with Spring Boot, using Spring Boot 3.5.3
+- Compatible with Spring Boot, using Spring Boot 3.5.5
 - Support for several common OCI services including Object Storage, Functions, Logging, Notifications, Queues, Streaming, Email Delivery, Vault, Autonomous Database and Generative AI (for embeddings and inferencing)
 - Improved autoconfiguration for Spring Boot Starters for Oracle Database, and support for Oracle Database 23ai
 - Implementation of the Spring Cloud Stream API for Oracle Database Transactional Event Queues
