@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>25.4.0</version>
+        <version>26.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-wallet</artifactId>
-    <version>25.4.0</version>
+    <version>26.0.0</version>
 
     <name>Oracle Spring Boot Starter - Wallet</name>
     <description>Oracle's implementation of Spring Boot Starter for Oracle Wallet</description>

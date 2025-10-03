@@ -7,12 +7,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.oracle.database.spring</groupId>
   <artifactId>oracle-spring-boot-starters</artifactId>
-  <version>25.4.0</version>
+  <version>26.0.0</version>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.5</version>
+    <version>3.5.6</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -64,7 +64,7 @@
   </modules>
 
   <properties>
-    <spring-boot-dependencies.version>3.5.5</spring-boot-dependencies.version>
+    <spring-boot-dependencies.version>3.5.6</spring-boot-dependencies.version>
     <spring-framework-bom.version>6.2.11</spring-framework-bom.version>
 
     <java.version>21</java.version>
@@ -75,7 +75,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
     <okafka.version>23.6.1.0</okafka.version>
-    <jackson.version>2.18.3</jackson.version>
+    <jackson.version>2.20.0</jackson.version>
     <kafka-clients.version>3.7.1</kafka-clients.version>
     <oracle.version>23.9.0.25.07</oracle.version>
     <osdt.version>21.19.0.0</osdt.version>
