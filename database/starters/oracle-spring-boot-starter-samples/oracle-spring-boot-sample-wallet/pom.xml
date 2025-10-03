@@ -7,12 +7,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starter-samples</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>25.4.0</version>
+        <version>26.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-sample-wallet</artifactId>
-    <version>25.4.0</version>
+    <version>26.0.0</version>
 
     <name>Oracle Spring Boot Starter - UCP using a Wallet</name>
     <description>oracle-spring-boot-starter-samples-ucp-wallet</description>
