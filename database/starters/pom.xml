@@ -266,12 +266,14 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
+        <version>${junit-jupiter.version}</version>
         <scope>test</scope>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
+        <version>${spring-framework-bom.version}</version>
         <scope>test</scope>
       </dependency>
 
