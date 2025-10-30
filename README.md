@@ -18,7 +18,7 @@ The following sub-projects are included in Spring Cloud Oracle:
 
 ## Some key features
 
-- Compatible with Spring Boot, using Spring Boot 3.5.5
+- Compatible with Spring Boot, using Spring Boot 3.5.6
 - Support for several common OCI services including Object Storage, Functions, Logging, Notifications, Queues, Streaming, Email Delivery, Vault, Autonomous Database and Generative AI (for embeddings and inferencing)
 - Improved autoconfiguration for Spring Boot Starters for Oracle Database, and support for Oracle Database 23ai
 - Implementation of the Spring Cloud Stream API for Oracle Database Transactional Event Queues
@@ -40,7 +40,7 @@ We encourage you to learn more in the  Spring Cloud Oracle documentation:
 | Spring Cloud Oracle 1.4.2 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/javadocs/index.html) |                                                                                                       |
 | Spring Cloud Oracle 1.4.3 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/reference/html/index.html)        | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs-db/index.html)        |
 | Spring Cloud Oracle 1.4.4 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/reference/html/index.html)        | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs-db/index.html)        |
-| Spring Cloud Oracle 1.4.5 | [Reference Docs - TODO](https://oracle.github.io/spring-cloud-oracle/1.4.4/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs/index.html) | [Database API Docs - TODO](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.5 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/reference/html/index.html)        | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs-db/index.html) |
 
 Additionally, you can explore sample applications for each module in the [OCI starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples) and the [Database starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-samples).
 
