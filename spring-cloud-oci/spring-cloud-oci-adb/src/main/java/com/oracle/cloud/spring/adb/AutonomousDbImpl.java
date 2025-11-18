@@ -12,10 +12,14 @@ import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
 import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.StartAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.StopAutonomousDatabaseResponse;
 import com.oracle.bmc.database.requests.GetAutonomousDatabaseRequest;
 import com.oracle.bmc.database.requests.GenerateAutonomousDatabaseWalletRequest;
 import com.oracle.bmc.database.requests.CreateAutonomousDatabaseRequest;
 import com.oracle.bmc.database.requests.DeleteAutonomousDatabaseRequest;
+import com.oracle.bmc.database.requests.StartAutonomousDatabaseRequest;
+import com.oracle.bmc.database.requests.StopAutonomousDatabaseRequest;
 
 /**
  * Implementation for the OCI Autonomous Database module.
@@ -137,5 +141,21 @@ public class AutonomousDbImpl implements AutonomousDb {
         
         return response;
     }
+    @Override
+    public StartAutonomousDatabaseResponse startAutonomousDatabase(String databaseId) {
+        return getDatabaseClient().startAutonomousDatabase(
+            StartAutonomousDatabaseRequest.builder()
+                .autonomousDatabaseId(databaseId)
+                .build()
+        );
+    }
 
+    @Override
+    public StopAutonomousDatabaseResponse stopAutonomousDatabase(String databaseId) {
+        return getDatabaseClient().stopAutonomousDatabase(
+            StopAutonomousDatabaseRequest.builder()
+                .autonomousDatabaseId(databaseId)
+                .build()
+        );
+    }
 }
