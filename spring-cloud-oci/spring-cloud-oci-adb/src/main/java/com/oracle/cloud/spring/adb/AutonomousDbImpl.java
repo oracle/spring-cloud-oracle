@@ -141,7 +141,6 @@ public class AutonomousDbImpl implements AutonomousDb {
         
         return response;
     }
-    @Override
     public StartAutonomousDatabaseResponse startAutonomousDatabase(String databaseId) {
         return getDatabaseClient().startAutonomousDatabase(
             StartAutonomousDatabaseRequest.builder()
@@ -150,7 +149,6 @@ public class AutonomousDbImpl implements AutonomousDb {
         );
     }
 
-    @Override
     public StopAutonomousDatabaseResponse stopAutonomousDatabase(String databaseId) {
         return getDatabaseClient().stopAutonomousDatabase(
             StopAutonomousDatabaseRequest.builder()
