@@ -6,6 +6,8 @@ package com.oracle.cloud.spring.adb;
 import com.oracle.bmc.database.DatabaseClient;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
+import com.oracle.bmc.database.responses.StartAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.StopAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 
 /**
@@ -60,4 +62,19 @@ public interface AutonomousDb {
      */
     DeleteAutonomousDatabaseResponse deleteAutonomousDatabase(String databaseId);
 
+    /**
+     * Start an Autonomous Database.
+     * 
+     * @param databaseId OCID of the Autonomous Database to be started
+     * @return StartAutonomousDatabaseResponse
+     */
+    StartAutonomousDatabaseResponse startAutonomousDatabase(String databaseId);
+
+    /**
+     * Stop an Autonomous Database.
+     * 
+     * @param databaseId OCID of the Autonomous Database to be stopped
+     * @return StopAutonomousDatabaseResponse
+     */
+    StopAutonomousDatabaseResponse stopAutonomousDatabase(String databaseId);
 }

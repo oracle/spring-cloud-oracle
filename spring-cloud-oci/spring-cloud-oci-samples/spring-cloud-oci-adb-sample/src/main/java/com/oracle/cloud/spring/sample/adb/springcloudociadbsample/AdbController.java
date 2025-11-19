@@ -6,10 +6,15 @@ package com.oracle.cloud.spring.sample.adb.springcloudociadbsample;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
+import com.oracle.bmc.database.responses.StartAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.StopAutonomousDatabaseResponse;
 import com.oracle.cloud.spring.adb.AutonomousDb;
 import com.oracle.cloud.spring.adb.AutonomousDbDetails;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -40,7 +45,15 @@ public class AdbController {
     ) {
         CreateAutonomousDatabaseResponse response = autonomousDatabase.createAutonomousDatabase(
             databaseName, compartmentId, adminPassword, displayName, dataStorageSizeInGBs, computeCount);
-        return ResponseEntity.accepted().body("opcRequestId : " + response.getOpcRequestId());
+        var adb = response.getAutonomousDatabase();
+    var result = Map.of(
+        "opcRequestId", response.getOpcRequestId(),
+        "autonomousDatabaseOcid", adb.getId(),
+        "displayName", adb.getDisplayName(),
+        "lifecycleState", adb.getLifecycleState().getValue()
+    );
+
+    return ResponseEntity.accepted().body(result);
     }
 
     @GetMapping
@@ -65,6 +78,32 @@ public class AdbController {
     ResponseEntity<?> deleteAutonomousDatabase(@Parameter(required = true, example ="databaseId") @RequestParam String databaseId) {
         DeleteAutonomousDatabaseResponse response = autonomousDatabase.deleteAutonomousDatabase(databaseId);
         return ResponseEntity.ok().body("opcRequestId for deleting the database : " +response.getOpcRequestId());
+    }
+
+    @PostMapping("/start")
+    ResponseEntity<?> startAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
+        StartAutonomousDatabaseResponse response = autonomousDatabase.startAutonomousDatabase(databaseId);
+        var adb = response.getAutonomousDatabase();
+        var result = Map.of(
+            "opcRequestId", response.getOpcRequestId(),
+            "autonomousDatabaseOcid", adb.getId(),
+            "displayName", adb.getDisplayName(),
+            "lifecycleState", adb.getLifecycleState().getValue()
+        );
+        return ResponseEntity.accepted().body(result);
+    }
+
+    @PostMapping("/stop")
+    ResponseEntity<?> stopAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
+        StopAutonomousDatabaseResponse response = autonomousDatabase.stopAutonomousDatabase(databaseId);
+        var adb = response.getAutonomousDatabase();
+        var result = Map.of(
+            "opcRequestId", response.getOpcRequestId(),
+            "autonomousDatabaseOcid", adb.getId(),
+            "displayName", adb.getDisplayName(),
+            "lifecycleState", adb.getLifecycleState().getValue()
+        );
+        return ResponseEntity.accepted().body(result);
     }
 
 }

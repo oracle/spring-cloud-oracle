@@ -31,7 +31,7 @@ dependencies {
 
 The starter automatically configures and registers an `AutonomousDb` bean in the Spring application context.
 The `AutonomousDb` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/adb/package-summary.html[Javadoc]) can be used to create an Autonomous Database, get details of an Autonomous Database,
-delete an Autonomous Database and generate a wallet for an Autonomous Database.
+start and stop the Autonomous Database, generate a wallet for an Autonomous Database and, ultimately, deleta an Autonomous Databse.
 
 [source,java]
 ----
@@ -54,8 +54,12 @@ public void getAutonomousDatabaseWallet() {
     // read the InputStream to get the wallet
 }
 
-public void deleteAutonomousDatabase() {
-    DeleteAutonomousDatabaseResponse response = autonomousDatabase.deleteAutonomousDatabase(databaseId);
+public void startAutonomousDatabase() {
+    StartAutonomousDatabaseResponse response = autonomousDatabase.startAutonomousDatabase(databaseId);
+}
+
+public void stopAutonomousDatabase() {
+    StopAutonomousDatabaseResponse response = autonomousDatabase.stopAutonomousDatabase(databaseId);
 }
 ----
 
