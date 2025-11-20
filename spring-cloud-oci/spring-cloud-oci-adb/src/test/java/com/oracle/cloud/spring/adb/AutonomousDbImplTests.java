@@ -6,6 +6,8 @@ package com.oracle.cloud.spring.adb;
 import com.oracle.bmc.database.DatabaseClient;
 import com.oracle.bmc.database.responses.CreateAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GetAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.StartAutonomousDatabaseResponse;
+import com.oracle.bmc.database.responses.StopAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.GenerateAutonomousDatabaseWalletResponse;
 import com.oracle.bmc.database.responses.DeleteAutonomousDatabaseResponse;
 import org.junit.jupiter.api.Test;
@@ -45,6 +47,12 @@ public class AutonomousDbImplTests {
 
         DeleteAutonomousDatabaseResponse dadr = autonomousDatabase.deleteAutonomousDatabase("ocid");
         assertNotNull(dadr);
+
+        StartAutonomousDatabaseResponse startadr = autonomousDatabase.startAutonomousDatabase("ocid");
+        assertNotNull(startadr);
+
+        StopAutonomousDatabaseResponse stopadr = autonomousDatabase.stopAutonomousDatabase("ocid");
+        assertNotNull(stopadr);
 
     }
 
