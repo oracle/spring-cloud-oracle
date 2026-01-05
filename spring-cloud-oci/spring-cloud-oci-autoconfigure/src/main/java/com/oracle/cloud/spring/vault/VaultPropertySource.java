@@ -65,7 +65,7 @@ public class VaultPropertySource extends EnumerablePropertySource<VaultPropertyL
 
     private static CredentialsProvider getCredentialsProvider(CredentialsProperties credentialsProperties) {
         try {
-            return new CredentialsProvider(credentialsProperties);
+            return new CredentialsProvider(credentialsProperties.createBasicAuthenticationDetailsProvider());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

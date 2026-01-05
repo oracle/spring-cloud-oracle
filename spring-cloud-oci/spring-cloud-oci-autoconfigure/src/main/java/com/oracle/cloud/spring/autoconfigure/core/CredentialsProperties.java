@@ -5,9 +5,15 @@
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
+import com.oracle.bmc.ClientRuntime;
+import com.oracle.bmc.Region;
+import com.oracle.bmc.auth.*;
+import com.oracle.bmc.auth.okeworkloadidentity.OkeWorkloadIdentityAuthenticationDetailsProvider;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
+
+import java.io.IOException;
 
 import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProperties.ConfigType.FILE;
 
@@ -17,6 +23,10 @@ import static com.oracle.cloud.spring.autoconfigure.core.CredentialsProperties.C
 @ConfigurationProperties(prefix = CredentialsProperties.PREFIX)
 public class CredentialsProperties {
     public static final String PREFIX = "spring.cloud.oci.config";
+
+    private static final String PROFILE_DEFAULT = "DEFAULT";
+    public static final String USER_AGENT_SPRING_CLOUD = "Oracle-SpringCloud";
+
 
     public enum ConfigType {
         FILE,
@@ -140,5 +150,54 @@ public class CredentialsProperties {
 
     public void setRegion(@Nullable String region) {
         this.region = region;
+    }
+
+    public BasicAuthenticationDetailsProvider createBasicAuthenticationDetailsProvider() throws IOException {
+        BasicAuthenticationDetailsProvider authenticationDetailsProvider;
+
+        switch (getType()) {
+            case WORKLOAD_IDENTITY:
+                authenticationDetailsProvider = OkeWorkloadIdentityAuthenticationDetailsProvider.builder().build();
+                break;
+            case RESOURCE_PRINCIPAL:
+                authenticationDetailsProvider = ResourcePrincipalAuthenticationDetailsProvider.builder().build();
+                break;
+            case INSTANCE_PRINCIPAL:
+                authenticationDetailsProvider = InstancePrincipalsAuthenticationDetailsProvider.builder().build();
+                break;
+            case SIMPLE:
+                SimpleAuthenticationDetailsProvider.SimpleAuthenticationDetailsProviderBuilder builder = SimpleAuthenticationDetailsProvider.builder()
+                        .userId(getUserId())
+                        .tenantId(getTenantId())
+                        .fingerprint(getFingerprint())
+                        .privateKeySupplier(new SimplePrivateKeySupplier(getPrivateKey()))
+                        .passPhrase(getPassPhrase());
+                if (getRegion() != null) {
+                    builder.region(Region.valueOf(getRegion()));
+                }
+                authenticationDetailsProvider = builder.build();
+                break;
+            case SESSION_TOKEN:
+                String configProfile = hasProfile() ? getProfile() : PROFILE_DEFAULT;
+
+                if (hasFile()) {
+                    authenticationDetailsProvider = new SessionTokenAuthenticationDetailsProvider(getFile(), configProfile);
+                } else {
+                    authenticationDetailsProvider = new SessionTokenAuthenticationDetailsProvider(configProfile);
+                }
+                break;
+            default:
+                String profile = hasProfile() ? getProfile() : PROFILE_DEFAULT;
+
+                if (hasFile()) {
+                    authenticationDetailsProvider = new ConfigFileAuthenticationDetailsProvider(getFile(), profile);
+                } else {
+                    authenticationDetailsProvider = new ConfigFileAuthenticationDetailsProvider(profile);
+                }
+
+                break;
+        }
+        ClientRuntime.setClientUserAgent(USER_AGENT_SPRING_CLOUD);
+        return authenticationDetailsProvider;
     }
 }

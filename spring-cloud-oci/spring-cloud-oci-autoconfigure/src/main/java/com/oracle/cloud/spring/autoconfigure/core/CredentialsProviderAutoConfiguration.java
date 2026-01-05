@@ -5,7 +5,10 @@
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
-import com.oracle.bmc.auth.AuthenticationDetailsProvider;
+import com.oracle.bmc.ClientRuntime;
+import com.oracle.bmc.Region;
+import com.oracle.bmc.auth.*;
+import com.oracle.bmc.auth.okeworkloadidentity.OkeWorkloadIdentityAuthenticationDetailsProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -31,6 +34,12 @@ public class CredentialsProviderAutoConfiguration {
         this.properties = properties;
     }
 
+
+    @Bean
+    public BasicAuthenticationDetailsProvider basicAuthenticationDetailsProvider() throws IOException {
+        return properties.createBasicAuthenticationDetailsProvider();
+    }
+
     /**
      * Creates an CredentialsProvider based on {@link CredentialsProperties.ConfigType} type
      * @return CredentialsProvider
@@ -39,9 +48,7 @@ public class CredentialsProviderAutoConfiguration {
     @Bean (name = credentialsProviderQualifier)
     @RefreshScope
     @ConditionalOnMissingBean
-    public CredentialsProvider credentialsProvider() throws IOException {
-        return new CredentialsProvider(properties);
+    public CredentialsProvider credentialsProvider(BasicAuthenticationDetailsProvider authenticationDetailsProvider) throws IOException {
+        return new CredentialsProvider(authenticationDetailsProvider);
     }
-
-
 }

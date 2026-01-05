@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
  */
 public class StaticCompartmentProvider implements CompartmentProvider {
 
-    public static final String COMPARTMENT_MISSING_MSG = "compartmentOCID is required";
+    public static final String COMPARTMENT_MISSING_MSG = "compartment OCID is required";
     private final String compartmentOCID;
 
     public StaticCompartmentProvider(String compartmentOCID) {

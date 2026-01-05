@@ -54,7 +54,7 @@ class CredentialsProviderAutoConfigurationTests {
                 .withPropertyValues("spring.cloud.oci.config.profile=profile")
                 .withPropertyValues("spring.cloud.oci.config.file=file")
                 .withPropertyValues("spring.cloud.oci.config.passPhrase=passPhrase")
-                .withPropertyValues("spring.cloud.oci.config.region=region")
+                .withPropertyValues("spring.cloud.oci.config.region=us-ashburn-1")
                 .run(
                         context -> {
                             CredentialsProperties config = context.getBean(CredentialsProperties.class);
@@ -68,7 +68,7 @@ class CredentialsProviderAutoConfigurationTests {
                             assertTrue(config.hasFile());
                             assertEquals(config.getFile(), CONFIG_FILE);
                             assertEquals(config.getPassPhrase(), "passPhrase");
-                            assertEquals(config.getRegion(), "region");
+                            assertEquals(config.getRegion(), "us-ashburn-1");
                         });
     }
 
@@ -81,7 +81,7 @@ class CredentialsProviderAutoConfigurationTests {
             OkeWorkloadIdentityAuthenticationDetailsProvider.OkeWorkloadIdentityAuthenticationDetailsProviderBuilder builder =
                     mock(OkeWorkloadIdentityAuthenticationDetailsProvider.OkeWorkloadIdentityAuthenticationDetailsProviderBuilder.class);
             when(OkeWorkloadIdentityAuthenticationDetailsProvider.builder()).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
         }
     }
 
@@ -94,7 +94,7 @@ class CredentialsProviderAutoConfigurationTests {
             ResourcePrincipalAuthenticationDetailsProviderBuilder builder =
                     mock(ResourcePrincipalAuthenticationDetailsProviderBuilder.class);
             when(ResourcePrincipalAuthenticationDetailsProvider.builder()).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
         }
     }
 
@@ -107,7 +107,7 @@ class CredentialsProviderAutoConfigurationTests {
             InstancePrincipalsAuthenticationDetailsProviderBuilder builder =
                     mock(InstancePrincipalsAuthenticationDetailsProviderBuilder.class);
             when(InstancePrincipalsAuthenticationDetailsProvider.builder()).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
         }
     }
 
@@ -126,7 +126,7 @@ class CredentialsProviderAutoConfigurationTests {
             when(builder.fingerprint(any())).thenReturn(builder);
             when(builder.passPhrase(any())).thenReturn(builder);
             when(builder.privateKeySupplier(any())).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
         }
     }
 
@@ -139,7 +139,7 @@ class CredentialsProviderAutoConfigurationTests {
         try (MockedStatic mocked = mockStatic(ConfigFileAuthenticationDetailsProvider.class)) {
             try (MockedConstruction<ConfigFileAuthenticationDetailsProvider> mock =
                          mockConstruction(ConfigFileAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
                 assertNotNull(provider);
             }
         }
@@ -154,7 +154,7 @@ class CredentialsProviderAutoConfigurationTests {
         try (MockedStatic mocked = mockStatic(ConfigFileAuthenticationDetailsProvider.class)) {
             try (MockedConstruction<ConfigFileAuthenticationDetailsProvider> mock =
                          mockConstruction(ConfigFileAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
                 assertNotNull(provider);
             }
         }
@@ -169,7 +169,7 @@ class CredentialsProviderAutoConfigurationTests {
         try (MockedStatic mocked = mockStatic(SessionTokenAuthenticationDetailsProvider.class)) {
             try (MockedConstruction<SessionTokenAuthenticationDetailsProvider> mock =
                          mockConstruction(SessionTokenAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
                 assertNotNull(provider);
             }
         }
@@ -184,7 +184,7 @@ class CredentialsProviderAutoConfigurationTests {
         try (MockedStatic mocked = mockStatic(SessionTokenAuthenticationDetailsProvider.class)) {
             try (MockedConstruction<SessionTokenAuthenticationDetailsProvider> mock =
                          mockConstruction(SessionTokenAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = configuration.credentialsProvider().getAuthenticationDetailsProvider();
+                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
                 assertNotNull(provider);
             }
         }
