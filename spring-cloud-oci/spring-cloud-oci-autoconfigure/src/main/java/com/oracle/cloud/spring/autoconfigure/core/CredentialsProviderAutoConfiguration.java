@@ -33,6 +33,7 @@ public class CredentialsProviderAutoConfiguration {
 
 
     @Bean
+    @ConditionalOnMissingBean
     public BasicAuthenticationDetailsProvider basicAuthenticationDetailsProvider() throws IOException {
         return properties.createBasicAuthenticationDetailsProvider();
     }
