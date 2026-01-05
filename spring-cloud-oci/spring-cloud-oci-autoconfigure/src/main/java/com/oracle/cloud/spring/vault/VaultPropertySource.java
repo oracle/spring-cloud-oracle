@@ -15,6 +15,7 @@ import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MutablePropertySources;
+import org.springframework.util.CollectionUtils;
 
 import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration.createRegionProvider;
 import static com.oracle.cloud.spring.vault.VaultAutoConfiguration.createSecretsClient;
@@ -35,6 +36,12 @@ public class VaultPropertySource extends EnumerablePropertySource<VaultPropertyL
                 .orElse(new RegionProperties());
         VaultProperties vaultProperties = binder.bind(VaultProperties.PREFIX, Bindable.of(VaultProperties.class))
                 .orElse(new VaultProperties());
+
+        final var vaultPropertySourceProperties = vaultProperties.getPropertySources();
+        if(CollectionUtils.isEmpty(vaultPropertySourceProperties)) {
+            //No need to waste time or possibly fail to create clients when there are no sources to populate.
+            return;
+        }
 
         // Create vault/secrets clients
         RegionProvider regionProvider = createRegionProvider(regionProperties);
