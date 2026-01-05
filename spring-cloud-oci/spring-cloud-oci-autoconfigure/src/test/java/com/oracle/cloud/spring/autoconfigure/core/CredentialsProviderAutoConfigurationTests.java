@@ -9,16 +9,18 @@ import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.*;
 import com.oracle.bmc.auth.okeworkloadidentity.OkeWorkloadIdentityAuthenticationDetailsProvider;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedConstruction;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 import static com.oracle.bmc.auth.ResourcePrincipalAuthenticationDetailsProvider.ResourcePrincipalAuthenticationDetailsProviderBuilder;
 import static com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider.InstancePrincipalsAuthenticationDetailsProviderBuilder;
 import static com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider.SimpleAuthenticationDetailsProviderBuilder;
@@ -32,14 +34,23 @@ class CredentialsProviderAutoConfigurationTests {
                     CredentialsProviderAutoConfiguration.class)).withUserConfiguration(TestConfigurationBean.class);
 
     @Test
+    void testAutoConfigBacksOffWithUserSuppliedBean() {
+        contextRunner.run(ctx ->
+            assertThat(ctx.getBeanNamesForType(BasicAuthenticationDetailsProvider.class))
+                    .containsExactly("userSuppliedBasicAuthenticationDetailsProvider")
+        );
+    }
+
+    @Test
     void testConfigurationValueDefaultsAreAsExpected() {
         contextRunner
                 .run(
                         context -> {
                             CredentialsProperties config = context.getBean(CredentialsProperties.class);
                             assertNull(config.getTenantId());
-                            assertNotNull(config.getType());
-                            assertEquals(config.getType(), CredentialsProperties.ConfigType.FILE);
+                            assertEquals(CredentialsProperties.ConfigType.FILE, config.getType());
+                            assertFalse(config.hasProfile());
+                            assertFalse(config.hasFile());
                         });
     }
 
@@ -47,6 +58,7 @@ class CredentialsProviderAutoConfigurationTests {
     void testConfigurationValueConfiguredAreAsExpected() {
         contextRunner
                 .withPropertyValues("spring.cloud.oci.config.type=SIMPLE")
+                .withPropertyValues("spring.cloud.oci.config.federation-endpoint=federationEndpoint")
                 .withPropertyValues("spring.cloud.oci.config.userId=userId")
                 .withPropertyValues("spring.cloud.oci.config.tenantId=tenantId")
                 .withPropertyValues("spring.cloud.oci.config.fingerprint=fingerprint")
@@ -58,17 +70,18 @@ class CredentialsProviderAutoConfigurationTests {
                 .run(
                         context -> {
                             CredentialsProperties config = context.getBean(CredentialsProperties.class);
-                            assertEquals(config.getType(), CredentialsProperties.ConfigType.SIMPLE);
-                            assertEquals(config.getUserId(), "userId");
-                            assertEquals(config.getTenantId(), "tenantId");
-                            assertEquals(config.getFingerprint(), "fingerprint");
-                            assertEquals(config.getPrivateKey(), "privateKey");
+                            assertEquals(CredentialsProperties.ConfigType.SIMPLE, config.getType());
+                            assertEquals("federationEndpoint", config.getFederationEndpoint());
+                            assertEquals("userId", config.getUserId());
+                            assertEquals("tenantId", config.getTenantId());
+                            assertEquals("fingerprint", config.getFingerprint());
+                            assertEquals("privateKey", config.getPrivateKey());
                             assertTrue(config.hasProfile());
-                            assertEquals(config.getProfile(), PROFILE);
+                            assertEquals(PROFILE, config.getProfile());
                             assertTrue(config.hasFile());
-                            assertEquals(config.getFile(), CONFIG_FILE);
-                            assertEquals(config.getPassPhrase(), "passPhrase");
-                            assertEquals(config.getRegion(), "us-ashburn-1");
+                            assertEquals(CONFIG_FILE, config.getFile());
+                            assertEquals("passPhrase", config.getPassPhrase());
+                            assertEquals("us-ashburn-1", config.getRegion());
                         });
     }
 
@@ -76,12 +89,20 @@ class CredentialsProviderAutoConfigurationTests {
     void testWorkloadIdentityProvider() throws Exception {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.WORKLOAD_IDENTITY);
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(OkeWorkloadIdentityAuthenticationDetailsProvider.class)) {
+        properties.setFederationEndpoint("https://ds9");
+
+        try (final var ignored = mockStatic(OkeWorkloadIdentityAuthenticationDetailsProvider.class)) {
             OkeWorkloadIdentityAuthenticationDetailsProvider.OkeWorkloadIdentityAuthenticationDetailsProviderBuilder builder =
-                    mock(OkeWorkloadIdentityAuthenticationDetailsProvider.OkeWorkloadIdentityAuthenticationDetailsProviderBuilder.class);
+                    mock(OkeWorkloadIdentityAuthenticationDetailsProvider.OkeWorkloadIdentityAuthenticationDetailsProviderBuilder.class, RETURNS_SELF);
             when(OkeWorkloadIdentityAuthenticationDetailsProvider.builder()).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+
+            final var mockProvider = mock(OkeWorkloadIdentityAuthenticationDetailsProvider.class);
+            when(builder.build()).then(__ -> {
+                verify(builder).federationEndpoint("https://ds9");
+                return mockProvider;
+            });
+
+            assertSame(mockProvider, properties.createBasicAuthenticationDetailsProvider());
         }
     }
 
@@ -89,12 +110,20 @@ class CredentialsProviderAutoConfigurationTests {
     void testResourcePrincipalProvider() throws Exception {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.RESOURCE_PRINCIPAL);
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(ResourcePrincipalAuthenticationDetailsProvider.class)) {
+        properties.setFederationEndpoint("https://ds9");
+
+        try (final var ignored = mockStatic(ResourcePrincipalAuthenticationDetailsProvider.class)) {
             ResourcePrincipalAuthenticationDetailsProviderBuilder builder =
-                    mock(ResourcePrincipalAuthenticationDetailsProviderBuilder.class);
+                    mock(ResourcePrincipalAuthenticationDetailsProviderBuilder.class, RETURNS_SELF);
             when(ResourcePrincipalAuthenticationDetailsProvider.builder()).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+
+            final var mockProvider = mock(ResourcePrincipalAuthenticationDetailsProvider.class);
+            when(builder.build()).then(__ -> {
+                verify(builder).federationEndpoint("https://ds9");
+                return mockProvider;
+            });
+
+            assertSame(mockProvider, properties.createBasicAuthenticationDetailsProvider());
         }
     }
 
@@ -102,12 +131,20 @@ class CredentialsProviderAutoConfigurationTests {
     void testInstancePrincipalProvider() throws Exception {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.INSTANCE_PRINCIPAL);
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(InstancePrincipalsAuthenticationDetailsProvider.class)) {
+        properties.setFederationEndpoint("https://ds9");
+
+        try (final var ignored = mockStatic(InstancePrincipalsAuthenticationDetailsProvider.class)) {
             InstancePrincipalsAuthenticationDetailsProviderBuilder builder =
-                    mock(InstancePrincipalsAuthenticationDetailsProviderBuilder.class);
+                    mock(InstancePrincipalsAuthenticationDetailsProviderBuilder.class, RETURNS_SELF);
             when(InstancePrincipalsAuthenticationDetailsProvider.builder()).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+
+            final var mockProvider = mock(InstancePrincipalsAuthenticationDetailsProvider.class);
+            when(builder.build()).then(__ -> {
+                verify(builder).federationEndpoint("https://ds9");
+                return mockProvider;
+            });
+
+            assertSame(mockProvider, properties.createBasicAuthenticationDetailsProvider());
         }
     }
 
@@ -116,8 +153,8 @@ class CredentialsProviderAutoConfigurationTests {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.SIMPLE);
         properties.setRegion(Region.US_PHOENIX_1.getRegionId());
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(SimpleAuthenticationDetailsProvider.class)) {
+
+        try (final var ignored = mockStatic(SimpleAuthenticationDetailsProvider.class)) {
             SimpleAuthenticationDetailsProviderBuilder builder =
                     mock(SimpleAuthenticationDetailsProviderBuilder.class);
             when(SimpleAuthenticationDetailsProvider.builder()).thenReturn(builder);
@@ -126,7 +163,10 @@ class CredentialsProviderAutoConfigurationTests {
             when(builder.fingerprint(any())).thenReturn(builder);
             when(builder.passPhrase(any())).thenReturn(builder);
             when(builder.privateKeySupplier(any())).thenReturn(builder);
-            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+            final var mockProvider = mock(SimpleAuthenticationDetailsProvider.class);
+            when(builder.build()).thenReturn(mockProvider);
+
+            assertSame(mockProvider, properties.createBasicAuthenticationDetailsProvider());
         }
     }
 
@@ -135,28 +175,42 @@ class CredentialsProviderAutoConfigurationTests {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.FILE);
         properties.setProfile(PROFILE);
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(ConfigFileAuthenticationDetailsProvider.class)) {
-            try (MockedConstruction<ConfigFileAuthenticationDetailsProvider> mock =
-                         mockConstruction(ConfigFileAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
-                assertNotNull(provider);
-            }
+
+        try (final var ignored = mockStatic(ConfigFileAuthenticationDetailsProvider.class);
+             final var mock = mockConstruction(ConfigFileAuthenticationDetailsProvider.class,
+                     (__, ctx) -> assertEquals(List.of(PROFILE), ctx.arguments()))
+        ) {
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+            assertNotNull(provider);
+            assertSame(mock.constructed().getFirst(), provider);
         }
     }
 
-    @Test
-    void testFileProviderWithProfileAndCustomConfigFile() throws Exception {
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void testFileProviderWithCustomConfigFile(boolean andProfile) throws Exception {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.FILE);
         properties.setFile(CONFIG_FILE);
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(ConfigFileAuthenticationDetailsProvider.class)) {
-            try (MockedConstruction<ConfigFileAuthenticationDetailsProvider> mock =
-                         mockConstruction(ConfigFileAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
-                assertNotNull(provider);
-            }
+
+        final String expectedProfile;
+        if(andProfile) {
+            properties.setProfile(PROFILE);
+            expectedProfile = PROFILE;
+        }
+        else {
+            expectedProfile = "DEFAULT";
+        }
+
+        try (final var ignored = mockStatic(ConfigFileAuthenticationDetailsProvider.class);
+             final var mock = mockConstruction(ConfigFileAuthenticationDetailsProvider.class,
+                     (__, ctx) ->
+                             assertEquals(List.of(CONFIG_FILE, expectedProfile), ctx.arguments()))
+        ) {
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+            assertNotNull(provider);
+            assertSame(mock.constructed().getFirst(), provider);
         }
     }
 
@@ -165,36 +219,49 @@ class CredentialsProviderAutoConfigurationTests {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.SESSION_TOKEN);
         properties.setProfile(PROFILE);
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(SessionTokenAuthenticationDetailsProvider.class)) {
-            try (MockedConstruction<SessionTokenAuthenticationDetailsProvider> mock =
-                         mockConstruction(SessionTokenAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
-                assertNotNull(provider);
-            }
+
+        try (final var ignored = mockStatic(SessionTokenAuthenticationDetailsProvider.class);
+             final var mock = mockConstruction(SessionTokenAuthenticationDetailsProvider.class,
+                     (__, ctx) -> assertEquals(List.of(PROFILE), ctx.arguments()))
+        ) {
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+            assertNotNull(provider);
+            assertSame(mock.constructed().getFirst(), provider);
         }
     }
 
-    @Test
-    void testSessionTokenProviderWithProfileAndCustomConfigFile() throws Exception {
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void testSessionTokenProviderWithProfileAndCustomConfigFile(boolean andProfile) throws Exception {
         CredentialsProperties properties = new CredentialsProperties();
         properties.setType(CredentialsProperties.ConfigType.SESSION_TOKEN);
         properties.setFile(CONFIG_FILE);
-        CredentialsProviderAutoConfiguration configuration = new CredentialsProviderAutoConfiguration(properties);
-        try (MockedStatic mocked = mockStatic(SessionTokenAuthenticationDetailsProvider.class)) {
-            try (MockedConstruction<SessionTokenAuthenticationDetailsProvider> mock =
-                         mockConstruction(SessionTokenAuthenticationDetailsProvider.class)) {
-                BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
-                assertNotNull(provider);
-            }
+
+        final String expectedProfile;
+        if(andProfile) {
+            properties.setProfile(PROFILE);
+            expectedProfile = PROFILE;
+        }
+        else {
+            expectedProfile = "DEFAULT";
+        }
+
+        try (final var ignored = mockStatic(SessionTokenAuthenticationDetailsProvider.class);
+             final var mock = mockConstruction(SessionTokenAuthenticationDetailsProvider.class,
+                     (__, ctx) ->
+                             assertEquals(List.of(CONFIG_FILE, expectedProfile), ctx.arguments()))
+        ) {
+            BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+            assertNotNull(provider);
+            assertSame(mock.constructed().getFirst(), provider);
         }
     }
 
     @Configuration
     static class TestConfigurationBean {
         @Bean
-        CredentialsProvider credentialsProvider() throws Exception {
-            return mock(CredentialsProvider.class);
+        BasicAuthenticationDetailsProvider userSuppliedBasicAuthenticationDetailsProvider() {
+            return mock(BasicAuthenticationDetailsProvider.class);
         }
     }
 }

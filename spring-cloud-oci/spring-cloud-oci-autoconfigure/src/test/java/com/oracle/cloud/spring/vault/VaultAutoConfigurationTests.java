@@ -2,6 +2,7 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
+import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.secrets.SecretsClient;
 import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
 import com.oracle.bmc.secrets.model.SecretBundle;
@@ -12,7 +13,6 @@ import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.requests.ListSecretsRequest;
 import com.oracle.bmc.vault.responses.ListSecretsResponse;
 import com.oracle.cloud.spring.autoconfigure.TestCommonConfigurationBeans;
-import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -96,7 +96,7 @@ public class VaultAutoConfigurationTests {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void propertySourceAdded(boolean enableExplicitly) {
-        try(final var ignored1 = mockStatic(CredentialsProvider.class);
+        try(final var ignored1 = mockConstruction(ConfigFileAuthenticationDetailsProvider.class);
             final var ignored2 = mockStatic(SecretsClient.class, Answers.RETURNS_DEEP_STUBS);
             final var ignored3 = mockStatic(VaultsClient.class, Answers.RETURNS_DEEP_STUBS);
             final var mockSecretsClient = mock(SecretsClient.class);

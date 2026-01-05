@@ -34,6 +34,8 @@ public class AutonomousDbImplTests {
         //when(client.getAutonomousDatabase(any())).thenReturn(mock(GetAutonomousDatabaseResponse.class));
         when(client.generateAutonomousDatabaseWallet(any())).thenReturn(mock(GenerateAutonomousDatabaseWalletResponse.class));
         when(client.deleteAutonomousDatabase(any())).thenReturn(mock(DeleteAutonomousDatabaseResponse.class));
+        when(client.startAutonomousDatabase(any())).thenReturn(mock(StartAutonomousDatabaseResponse.class));
+        when(client.stopAutonomousDatabase(any())).thenReturn(mock(StopAutonomousDatabaseResponse.class));
 
         CreateAutonomousDatabaseResponse cadr = autonomousDatabase.createAutonomousDatabase(
             "name", "compartment", "password", "displayName", 200, 2f);

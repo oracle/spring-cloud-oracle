@@ -41,6 +41,9 @@ public class CredentialsProperties {
     private ConfigType type;
 
     @Nullable
+    private String federationEndpoint;
+
+    @Nullable
     private String profile;
 
     @Nullable
@@ -73,7 +76,7 @@ public class CredentialsProperties {
         return StringUtils.hasText(profile);
     }
 
-    public void setProfile(String profile) {
+    public void setProfile(@Nullable String profile) {
         this.profile = profile;
     }
 
@@ -86,7 +89,7 @@ public class CredentialsProperties {
         return StringUtils.hasText(file);
     }
 
-    public void setFile(String file) {
+    public void setFile(@Nullable String file) {
         this.file = file;
     }
 
@@ -94,8 +97,17 @@ public class CredentialsProperties {
         return type != null ? type : FILE;
     }
 
-    public void setType(ConfigType type) {
+    public void setType(@Nullable ConfigType type) {
         this.type = type;
+    }
+
+    @Nullable
+    public String getFederationEndpoint() {
+        return federationEndpoint;
+    }
+
+    public void setFederationEndpoint(@Nullable String federationEndpoint) {
+        this.federationEndpoint = federationEndpoint;
     }
 
     @Nullable
@@ -157,13 +169,19 @@ public class CredentialsProperties {
 
         switch (getType()) {
             case WORKLOAD_IDENTITY:
-                authenticationDetailsProvider = OkeWorkloadIdentityAuthenticationDetailsProvider.builder().build();
+                authenticationDetailsProvider = OkeWorkloadIdentityAuthenticationDetailsProvider.builder()
+                        .federationEndpoint(getFederationEndpoint())
+                        .build();
                 break;
             case RESOURCE_PRINCIPAL:
-                authenticationDetailsProvider = ResourcePrincipalAuthenticationDetailsProvider.builder().build();
+                authenticationDetailsProvider = ResourcePrincipalAuthenticationDetailsProvider.builder()
+                        .federationEndpoint(getFederationEndpoint())
+                        .build();
                 break;
             case INSTANCE_PRINCIPAL:
-                authenticationDetailsProvider = InstancePrincipalsAuthenticationDetailsProvider.builder().build();
+                authenticationDetailsProvider = InstancePrincipalsAuthenticationDetailsProvider.builder()
+                        .federationEndpoint(getFederationEndpoint())
+                        .build();
                 break;
             case SIMPLE:
                 SimpleAuthenticationDetailsProvider.SimpleAuthenticationDetailsProviderBuilder builder = SimpleAuthenticationDetailsProvider.builder()
