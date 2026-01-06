@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.oracle.database.spring.cloud-stream-binder</groupId>
     <artifactId>spring-cloud-stream-binder-oracle-txeventq</artifactId>
-    <version>0.16.0</version>
+    <version>0.17.0</version>
     <packaging>jar</packaging>
 
     <name>spring-cloud-stream-binder-oracle-txeventq</name>
@@ -43,12 +43,12 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <oracle-database.version>23.9.0.25.07</oracle-database.version>
-        <oracle.database.security.version>21.19.0.0</oracle.database.security.version>
+        <oracle-database.version>23.26.0.0.0</oracle-database.version>
+        <oracle.database.security.version>21.20.0.0</oracle.database.security.version>
         <org.springframework.cloud.version>4.3.0</org.springframework.cloud.version>
-        <spring.boot.version>3.5.6</spring.boot.version>
-        <spring.framework.version>6.2.11</spring.framework.version>
-        <testcontainers.version>1.21.1</testcontainers.version>
+        <spring.boot.version>3.5.9</spring.boot.version>
+        <spring.framework.version>6.2.15</spring.framework.version>
+        <testcontainers.version>1.21.4</testcontainers.version>
         <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
         <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>

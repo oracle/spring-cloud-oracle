@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>26.0.0</version>
+        <version>26.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-samples</artifactId>
-    <version>26.0.0</version>
+    <version>26.0.1</version>
     <packaging>pom</packaging>
 
     <name>Oracle Spring Boot Starter - Samples</name>

@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starter-samples</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>26.0.0</version>
+        <version>26.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-sample-ucp-jpa</artifactId>
-    <version>26.0.0</version>
+    <version>26.0.1</version>
 
     <name>Oracle Spring Boot Starter - UCP with JPA Sample</name>
     <description>Oracle Spring Boot Starter Sample UCP with JPA</description>
