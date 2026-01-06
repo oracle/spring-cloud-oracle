@@ -57,19 +57,21 @@ Note: All the preceding properties are mandatory except `spring.cloud.oci.config
 
 ==== Instance Principal Configuration
 
-Set the config.type to `INSTANCE_PRINCIPAL` as shown here.
+Set the config.type to `INSTANCE_PRINCIPAL` as shown here. The Federation endpoint is optional.
 
 ----
 spring.cloud.oci.config.type = INSTANCE_PRINCIPAL
+spring.cloud.oci.config.federation-endpoint = https://auth.us-ashburn-1.oraclecloud.com
 ----
 For further details, refer to https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm[OCI Instance Principal Authentication]
 
 ==== Resource Principal Configuration
 
-Set the config.type to `RESOURCE_PRINCIPAL` as shown here.
+Set the config.type to `RESOURCE_PRINCIPAL` as shown here. The Federation endpoint is optional.
 
 ----
 spring.cloud.oci.config.type = RESOURCE_PRINCIPAL
+spring.cloud.oci.config.federation-endpoint = https://auth.us-ashburn-1.oraclecloud.com
 ----
 
 For further details, refer to https://docs.public.oneportal.content.oci.oraclecloud.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#sdk_authentication_methods_resource_principal[OCI Resource Principal Authentication]
@@ -82,17 +84,18 @@ Set the config.type to `SESSION_TOKEN` as shown here.
 spring.cloud.oci.config.type = SESSION_TOKEN
 ----
 
+For further details, refer to https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12
+
 ==== Workload Identity Configuration
 
-Set the config.type to `WORKLOAD_IDENTITY` as shown here.
+Set the config.type to `WORKLOAD_IDENTITY` as shown here. The Federation endpoint is optional.
 
 ----
 spring.cloud.oci.config.type = WORKLOAD_IDENTITY
+spring.cloud.oci.config.federation-endpoint = https://auth.us-ashburn-1.oraclecloud.com
 ----
 
 For further details, refer to https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm[OKE Workload Identity Authentication]
-
-For further details, refer to https://docs.oracle.com/en-us/iaas/Content/API/Concepts/sdk_authentication_methods.htm#ariaid-title12
 
 === Region Configuration
 
