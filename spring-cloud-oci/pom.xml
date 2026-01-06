@@ -90,7 +90,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
-        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
