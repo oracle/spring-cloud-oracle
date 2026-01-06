@@ -1,11 +1,11 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package com.oracle.cloud.spring.autoconfigure.core;
 
-import com.oracle.bmc.auth.AuthenticationDetailsProvider;
+import com.oracle.bmc.auth.*;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -31,6 +31,13 @@ public class CredentialsProviderAutoConfiguration {
         this.properties = properties;
     }
 
+
+    @Bean
+    @ConditionalOnMissingBean
+    public BasicAuthenticationDetailsProvider basicAuthenticationDetailsProvider() throws IOException {
+        return properties.createBasicAuthenticationDetailsProvider();
+    }
+
     /**
      * Creates an CredentialsProvider based on {@link CredentialsProperties.ConfigType} type
      * @return CredentialsProvider
@@ -39,9 +46,7 @@ public class CredentialsProviderAutoConfiguration {
     @Bean (name = credentialsProviderQualifier)
     @RefreshScope
     @ConditionalOnMissingBean
-    public CredentialsProvider credentialsProvider() throws IOException {
-        return new CredentialsProvider(properties);
+    public CredentialsProvider credentialsProvider(BasicAuthenticationDetailsProvider authenticationDetailsProvider) throws IOException {
+        return new CredentialsProvider(authenticationDetailsProvider);
     }
-
-
 }

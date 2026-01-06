@@ -1,5 +1,6 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.oracle.cloud.spring.vault;
 
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class VaultPropertySource extends EnumerablePropertySource<VaultPropertyL
 
     private static CredentialsProvider getCredentialsProvider(CredentialsProperties credentialsProperties) {
         try {
-            return new CredentialsProvider(credentialsProperties);
+            return new CredentialsProvider(credentialsProperties.createBasicAuthenticationDetailsProvider());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

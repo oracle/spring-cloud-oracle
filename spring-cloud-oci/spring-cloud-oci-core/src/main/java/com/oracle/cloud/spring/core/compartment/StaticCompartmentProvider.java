@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
  */
 public class StaticCompartmentProvider implements CompartmentProvider {
 
-    public static final String COMPARTMENT_MISSING_MSG = "compartmentOCID is required";
+    public static final String COMPARTMENT_MISSING_MSG = "compartment OCID is required";
     private final String compartmentOCID;
 
     public StaticCompartmentProvider(String compartmentOCID) {
