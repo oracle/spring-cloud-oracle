@@ -11,12 +11,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-build</artifactId>
-        <version>4.2.1</version>
+        <version>4.3.2</version>
         <relativePath/>
     </parent>
     <groupId>com.oracle.cloud.spring</groupId>
     <artifactId>spring-cloud-oci</artifactId>
-    <version>1.4.5</version>
+    <version>1.4.6</version>
     <packaging>pom</packaging>
 
     <name>Spring Cloud Oracle</name>
@@ -75,14 +75,14 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-boot.version>3.5.9</spring-boot.version>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version>
-        <spring-framework.version>6.2.11</spring-framework.version>
+        <spring-framework.version>6.2.15</spring-framework.version>
         <spring-data-oracle-nosql.version>2.1.0</spring-data-oracle-nosql.version>
         <oracle.nosql.driver.version>5.4.15</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.3</jakarta-mail.version>
-        <oci-sdk.version>3.74.1</oci-sdk.version>
+        <oci-sdk.version>3.77.2</oci-sdk.version>
         <jackson.version>2.18.2</jackson.version>
         <netty.version>4.1.118.Final</netty.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
