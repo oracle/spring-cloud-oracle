@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.sample.vault.springcloudocivaultsample;
 
@@ -12,9 +12,8 @@ import com.oracle.bmc.vault.model.SecretSummary;
 import com.oracle.bmc.vault.model.UpdateSecretDetails;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
 import com.oracle.cloud.spring.vault.VaultTemplate;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,9 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * This secret must be in the "ACTIVE" lifecycle state.
  */
 @SpringBootTest
-@EnabledIfEnvironmentVariable(named = "OCI_COMPARTMENT_ID", matches = ".+")
-@EnabledIfEnvironmentVariable(named = "OCI_VAULT_ID", matches = ".+")
-@Disabled
+@EnabledIfSystemProperty(named = "it.vault", matches = "true")
 public class VaultTemplateIT {
     @Autowired
     VaultTemplate vaultTemplate;
