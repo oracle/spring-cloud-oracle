@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (c) 2023, 2024, Oracle and/or its affiliates.
+Copyright (c) 2023, 2026, Oracle and/or its affiliates.
 Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 -->
 
@@ -18,7 +18,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 	<name>spring-cloud-oci-docs</name>
 	<groupId>com.oracle.cloud.spring</groupId>
 	<artifactId>spring-cloud-oci-docs</artifactId>
-	<version>1.4.6</version>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 
 	<organization>

@@ -18,7 +18,9 @@ The following sub-projects are included in Spring Cloud Oracle:
 
 ## Some key features
 
-- Compatible with Spring Boot, using Spring Boot 3.5.9
+- Compatible with Spring Boot
+  - The release 1.x branch tracks Spring Boot 3
+  - The main branch tracks Spring Boot 4 under the currently unreleased 2.0 tag line.
 - Support for several common OCI services including Object Storage, Functions, Logging, Notifications, Queues, Streaming, Email Delivery, Vault, Autonomous Database and Generative AI (for embeddings and inferencing)
 - Improved autoconfiguration for Spring Boot Starters for Oracle Database, and support for Oracle Database 23ai
 - Implementation of the Spring Cloud Stream API for Oracle Database Transactional Event Queues
@@ -28,19 +30,21 @@ The following sub-projects are included in Spring Cloud Oracle:
 
 We encourage you to learn more in the  Spring Cloud Oracle documentation:
 
-| Version                   | Reference Docs                                                                                        | API Docs                                                                           | Database API Docs                                                                                     |
-|---------------------------|-------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| Spring Cloud Oracle 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.1.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.2.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.3.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.4.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.4.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.4.2 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/reference/html/index.html)        | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/javadocs/index.html) |                                                                                                       |
-| Spring Cloud Oracle 1.4.3 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/reference/html/index.html)        | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs-db/index.html)        |
-| Spring Cloud Oracle 1.4.4 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/reference/html/index.html)        | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs-db/index.html)        |
-| Spring Cloud Oracle 1.4.5 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/reference/html/index.html)        | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs-db/index.html) |
+| Version                   | Reference Docs                                                                                 | API Docs                                                                               | Database API Docs                                                                              |
+|---------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| Spring Cloud Oracle 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.1.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.2.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.3.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.4.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.4.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.4.2 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.4.3 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.4 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.5 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.6 | Pending release                                                                                | Pending release                                                                        | Pending release                                                                                |
+| Spring Cloud Oracle 2.0.0 | Pending release                                                                                | Pending release                                                                        | Pending release                                                                                |
 
 Additionally, you can explore sample applications for each module in the [OCI starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples) and the [Database starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-samples).
 
@@ -74,7 +78,7 @@ Please consult the [security guide](./SECURITY.md) for our responsible security 
 
 ## License
 
-Copyright (c) 2023, 2025, Oracle and/or its affiliates.
+Copyright (c) 2023, 2026, Oracle and/or its affiliates.
 
 Released under the Universal Permissive License v1.0 as shown at
 <https://oss.oracle.com/licenses/upl/>.
