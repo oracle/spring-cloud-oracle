@@ -7,7 +7,7 @@ spring:
     username: testuser
     password: testpwd
     driver-class-name: oracle.jdbc.OracleDriver
-    type: oracle.ucp.jdbc.PoolDataSource
+    type: oracle.ucp.jdbc.PoolDataSourceImpl
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
       connection-pool-name: ConsumerConnectionPool

@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starter-samples</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>26.0.1</version>
+        <version>26.1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-sample-json-duality</artifactId>
-    <version>26.0.1</version>
+    <version>26.1.0</version>
 
     <name>Oracle Spring Boot Starter - JSON Relational Duality Views Sample</name>
     <description>Oracle Spring Boot Starter Sample for JSON Relational Duality Views</description>
@@ -64,14 +64,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-boot-dependencies.version}</version>
+
             <scope>test</scope>
         </dependency>
 
         <!-- Test Dependencies-->
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -83,7 +83,7 @@
 
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>oracle-free</artifactId>
+            <artifactId>testcontainers-oracle-free</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

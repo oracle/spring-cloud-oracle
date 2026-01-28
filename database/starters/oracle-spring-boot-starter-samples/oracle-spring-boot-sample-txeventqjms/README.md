@@ -30,7 +30,7 @@ Open a terminal window and go to the `producer` directory and run `mvn spring-bo
 Open a terminal window and execute the following command to send a message via the Producer `/api/v1/message` endpoint:
 
 ```shell
-curl -X POST http://localhost:8080/api/v1/message?message=MyMessage
+curl -X POST 'http://localhost:8080/api/v1/message?message=MyMessage'
 ```
 
 The command returns the message `Message was sent successfully`.
@@ -60,6 +60,6 @@ To use Oracle Spring Boot Starter for TxEventQ and JMS for your Spring Boot appl
 
 or if you are using Gradle:
 
-```text
-implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:25.3.0'
+```groovy
+implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:${oracle-database-starters-version'
 ```

@@ -1,5 +1,5 @@
 -- This must be executed as SYS
-create user testuser identified by Welcome12345;
+create user testuser identified by testpwd;
 grant resource, connect, unlimited tablespace to testuser;
 grant aq_user_role to testuser;
 grant execute on dbms_aq to testuser;

@@ -6,7 +6,7 @@ package com.oracle.spring.json.duality;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityViewScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 
 @SpringBootApplication
 @EntityScan(basePackages = {
