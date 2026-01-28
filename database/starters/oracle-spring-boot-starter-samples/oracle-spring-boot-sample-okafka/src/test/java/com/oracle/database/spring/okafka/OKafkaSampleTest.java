@@ -28,7 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Testcontainers
-public class OKafkaSampleTest {
+public class
+OKafkaSampleTest {
     // Oracle Database 23ai Free container image
     private static final String oracleImage = "gvenzl/oracle-free:23.26.0-slim-faststart";
     private static final String testUser = "testuser";

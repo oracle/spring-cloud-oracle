@@ -13,9 +13,6 @@ import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import jakarta.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
-import org.springframework.stereotype.Component;
 
 import static com.oracle.spring.json.duality.builder.Annotations.getAccessModeStr;
 import static com.oracle.spring.json.duality.builder.Annotations.getViewName;
