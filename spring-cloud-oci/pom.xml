@@ -480,6 +480,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
+                    <skipITs>true</skipITs>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
@@ -513,6 +514,20 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 		</plugins>
 	</build>
     <profiles>
+        <profile>
+            <id>spring-cloud-oci-ci-it</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <skipITs>false</skipITs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
 			<id>docs</id>
 			<build>
