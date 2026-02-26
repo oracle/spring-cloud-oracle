@@ -10,4 +10,5 @@ public class TxEventQSampleApp {
     public static void main(String[] args) {
         SpringApplication.run(TxEventQSampleApp.class, args);
     }
+    
 }

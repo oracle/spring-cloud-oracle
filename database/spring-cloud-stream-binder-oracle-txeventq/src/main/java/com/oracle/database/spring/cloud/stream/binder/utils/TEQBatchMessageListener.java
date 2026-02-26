@@ -36,7 +36,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.gateway.MessagingGatewaySupport;
-import org.springframework.integration.jms.ChannelPublishingJmsMessageListener;
+import org.springframework.integration.jms.inbound.ChannelPublishingJmsMessageListener;
 import org.springframework.integration.jms.DefaultJmsHeaderMapper;
 import org.springframework.integration.jms.JmsHeaderMapper;
 import org.springframework.integration.support.DefaultMessageBuilderFactory;
@@ -45,11 +45,14 @@ import org.springframework.integration.support.utils.IntegrationUtils;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.support.ErrorMessage;
-import org.springframework.retry.RecoveryCallback;
-import org.springframework.retry.support.RetryTemplate;
+import org.springframework.integration.core.RecoveryCallback;
+import org.springframework.core.retry.RetryTemplate;
+import org.springframework.core.AttributeAccessor;
 
 public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener {
     private final GatewayDelegate gatewayDelegate = new GatewayDelegate();
@@ -72,7 +75,7 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
 
     private RecoveryCallback<Object> recoverer;
 
-    private String RETRY_CONTEXT_MESSAGE_ATTRIBUTE = "message";
+    private static final String RETRY_CONTEXT_MESSAGE_ATTRIBUTE = "message";
 
     private String deSerializerClassName = null;
 
@@ -104,6 +107,7 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
         this.gatewayDelegate.setRequestChannelName(requestChannelName);
     }
 
+    @Override
     public void setRetryTemplate(RetryTemplate retryTemplate) {
         this.retryTemplate = retryTemplate;
     }
@@ -189,48 +193,80 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
     }
 
     public void onMessage(List<jakarta.jms.Message> jmsMessages, Session session) throws JMSException {
-        this.retryTemplate
-                .execute(retryContext -> {
-                            try {
+    	 // Setup the converter at the start
+        final MessageConverter converter = (deSerializerClassName != null) 
+                ? new CustomSerializationMessageConverter() 
+                : new SimpleMessageConverter();
 
-                                if (deSerializerClassName != null) {
-                                    // get class name and parameterized type name
-                                    CustomSerializationMessageConverter customConverter = new CustomSerializationMessageConverter();
-                                    customConverter.setDeserializer(deSerializerClassName);
-                                    TEQBatchMessageListener.this.setMessageConverter(
-                                            customConverter
-                                    );
-                                }
+        if (deSerializerClassName != null) {
+            ((CustomSerializationMessageConverter) converter).setDeserializer(deSerializerClassName);
+            this.setMessageConverter(converter);
+        }
+        
+    	try {
+            this.retryTemplate.execute(() -> {
 
-                                retryContext.setAttribute(
-                                        RETRY_CONTEXT_MESSAGE_ATTRIBUTE,
-                                        jmsMessages
-                                );
+                // Standard helper call
+                this.onMessageHelper(jmsMessages, session);
+                return null;
+                
+            });
+        } catch (Exception e) { 
+            // Catching Exception handles RetryException and the wrapped RuntimeException
+            logger.error(e, "Batch processing failed after all retry attempts");
 
-                                TEQBatchMessageListener.this.onMessageHelper(
-                                        jmsMessages,
-                                        session
-                                );
-                            } catch (JMSException e) {
-                                logger.error(e, "Failed to send message");
-                                for (jakarta.jms.Message jmsMessage : jmsMessages)
-                                    TEQBatchMessageListener.this.resetMessageIfRequired(jmsMessage);
-                                throw new RuntimeException(e);
-                            } catch (Exception e) {
-                                for (jakarta.jms.Message jmsMessage : jmsMessages)
-                                    TEQBatchMessageListener.this.resetMessageIfRequired(jmsMessage);
-                                throw e;
-                            }
-                            return null;
-                        },
-                        this.recoverer
-                );
+            // Perform cleanup ONLY on final failure
+            for (jakarta.jms.Message jmsMessage : jmsMessages) {
+                this.resetMessageIfRequired(jmsMessage);
+            }
+
+            if (this.recoverer != null) {
+                try {
+                	  //  Convert the entire batch into a List of payloads
+                    List<Object> batchPayload = new ArrayList<>();
+                    for (jakarta.jms.Message jmsMsg : jmsMessages) {
+                        batchPayload.add(converter.fromMessage(jmsMsg));
+                    }
+
+                    // Map headers from the first message in the batch for context
+                    // This is standard for batch error handling
+                    Map<String, Object> headers = this.headerMapper.toHeaders(jmsMessages.get(0));
+
+                    // Wrap the List in a Spring Message
+                    // This prevents the ClassCastException in ErrorMessageSendingRecoverer
+                    final Message<?> springBatchMessage = MessageBuilder.createMessage(batchPayload, new MessageHeaders(headers));
+
+                	 // Use a simple anonymous implementation of AttributeAccessor
+                	AttributeAccessor context = new AttributeAccessor() {
+                        private final java.util.Map<String, Object> attrs = new java.util.HashMap<>();
+                        @Override public void setAttribute(String n, Object v) { attrs.put(n, v); }
+                        @Override public Object getAttribute(String n) { return attrs.get(n); }
+                        @Override public Object removeAttribute(String n) { return attrs.remove(n); }
+                        @Override public boolean hasAttribute(String n) { return attrs.containsKey(n); }
+                        @Override public String[] attributeNames() { return attrs.keySet().toArray(new String[0]); }
+                    };
+
+                    // Put the messages in so the recoverer can find them
+                    context.setAttribute(RETRY_CONTEXT_MESSAGE_ATTRIBUTE, springBatchMessage);
+
+                    // Pass the context and the actual exception (e) to the recoverer
+                    this.recoverer.recover(context, e); 
+                } catch (Exception ex) {
+                	logger.error(ex, "Recovery logic failed for batch");
+                    throw new JMSException("Batch recovery failed: " + ex.getMessage());
+                }
+            } else {
+                // Rethrow the cause if it's a JMSException to maintain the contract
+                Throwable cause = (e.getCause() != null) ? e.getCause() : e;
+                if (cause instanceof JMSException jmsEx) throw jmsEx;
+                throw new JMSException("Batch retry exhausted: " + cause.getMessage());
+            }
+        }
     }
 
     protected void resetMessageIfRequired(jakarta.jms.Message jmsMessage)
             throws JMSException {
-        if (jmsMessage instanceof BytesMessage) {
-            BytesMessage message = (BytesMessage) jmsMessage;
+        if (jmsMessage instanceof BytesMessage message) {
             message.reset();
         }
     }
@@ -240,13 +276,13 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
         try {
             // result will store the list of appropriately converted message
             final List<Object> result = new ArrayList<>();
-            List<Map<String, Object>> individual_headers = new ArrayList<>();
+            List<Map<String, Object>> individualHeaders = new ArrayList<>();
             if (this.extractRequestPayload) {
                 for (jakarta.jms.Message jmsMessage : jmsMessages) {
                     Object payload = this.messageConverter.fromMessage(jmsMessage);
                     result.add(payload);
                     Map<String, Object> headers = this.headerMapper.toHeaders(jmsMessage);
-                    individual_headers.add(headers);
+                    individualHeaders.add(headers);
                     this.logger.debug(() -> "converted JMS Message [" + jmsMessage + "] to integration Message payload ["
                             + payload + "]");
                 }
@@ -257,7 +293,7 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
 
             requestMessage = this.messageBuilderFactory
                     .withPayload(result)
-                    .setHeader(TEQ_BATCHED_HEADERS, individual_headers)
+                    .setHeader(TEQ_BATCHED_HEADERS, individualHeaders)
                     .build();
 
         } catch (RuntimeException e) {
@@ -284,10 +320,12 @@ public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener
         this.messageBuilderFactory = IntegrationUtils.getMessageBuilderFactory(this.beanFactory);
     }
 
+    @Override
     protected void start() {
         this.gatewayDelegate.start();
     }
 
+    @Override
     protected void stop() {
         this.gatewayDelegate.stop();
     }

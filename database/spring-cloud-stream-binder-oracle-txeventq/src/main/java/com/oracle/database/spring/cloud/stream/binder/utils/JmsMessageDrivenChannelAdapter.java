@@ -28,21 +28,26 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.integration.context.OrderlyShutdownCapable;
 import org.springframework.integration.endpoint.MessageProducerSupport;
-import org.springframework.integration.jms.ChannelPublishingJmsMessageListener;
-import org.springframework.integration.jms.JmsMessageDrivenEndpoint;
+import org.springframework.integration.jms.inbound.ChannelPublishingJmsMessageListener;
+import org.springframework.integration.jms.inbound.JmsMessageDrivenEndpoint;
 import org.springframework.jms.listener.AbstractMessageListenerContainer;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.integration.context.IntegrationContextUtils;
+import org.springframework.messaging.MessagingException;
 
 public class JmsMessageDrivenChannelAdapter extends MessageProducerSupport implements
         OrderlyShutdownCapable {
 
-    private final JmsMessageDrivenEndpoint endpoint;
+    private JmsMessageDrivenEndpoint endpoint;
 
     private final ChannelPublishingJmsMessageListener listener;
+    private final AbstractMessageListenerContainer listenerContainer;
 
     public JmsMessageDrivenChannelAdapter(AbstractMessageListenerContainer listenerContainer,
                                           ChannelPublishingJmsMessageListener listener) {
-        this.endpoint = new JmsMessageDrivenEndpoint(listenerContainer, listener);
+    	this.listenerContainer = listenerContainer;
         this.listener = listener;
     }
 
@@ -86,21 +91,50 @@ public class JmsMessageDrivenChannelAdapter extends MessageProducerSupport imple
 
     @Override
     public void setComponentName(String componentName) {
-        super.setComponentName(componentName);
-        this.endpoint.setComponentName(getComponentName());
+    	super.setComponentName(componentName);
+        
+        // Add this null check because endpoint doesn't exist yet during early setup
+        if (this.endpoint != null) {
+            this.endpoint.setComponentName(getComponentName() + ".endpoint");
+        }
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        super.setApplicationContext(applicationContext);
-        this.endpoint.setApplicationContext(applicationContext);
-        this.endpoint.setBeanFactory(applicationContext);
-        this.listener.setBeanFactory(applicationContext);
+    	super.setApplicationContext(applicationContext);
+    	
+    	// The endpoint is created in onInit, so we only set the listener here
+    	if (this.listener != null) {
+    		this.listener.setBeanFactory(applicationContext);
+    	}
     }
 
     @Override
-    protected void onInit() {
-        this.endpoint.afterPropertiesSet();
+    protected void onInit() {    	
+    	 // Prepare infrastructure via parent
+        super.onInit(); 
+
+        ConfigurableListableBeanFactory beanFactory = (ConfigurableListableBeanFactory) getBeanFactory();
+
+        // Resolve the official TaskScheduler
+        TaskScheduler scheduler = IntegrationContextUtils.getTaskScheduler(beanFactory);
+
+        // Create and "Wire" the endpoint manually
+        this.endpoint = new JmsMessageDrivenEndpoint(this.listenerContainer, this.listener);
+        
+        // This tells Spring to treat this object as a managed bean
+        beanFactory.autowireBean(this.endpoint);
+        this.endpoint.setBeanFactory(beanFactory);
+        this.endpoint.setApplicationContext(getApplicationContext());
+        this.endpoint.setTaskScheduler(scheduler);
+        this.endpoint.setComponentName(getComponentName() + ".endpoint");
+
+        // Initialize the endpoint
+        try {
+            this.endpoint.afterPropertiesSet();
+        } catch (Exception e) {
+            throw new MessagingException("Endpoint initialization failed", e);
+        }
     }
 
     ChannelPublishingJmsMessageListener getListener() {

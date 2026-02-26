@@ -50,8 +50,8 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
-import org.springframework.retry.RecoveryCallback;
-import org.springframework.retry.support.RetryTemplate;
+import org.springframework.integration.core.RecoveryCallback;
+import org.springframework.core.retry.RetryTemplate;
 
 
 public class JMSMessageChannelBinder

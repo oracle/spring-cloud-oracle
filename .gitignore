@@ -43,3 +43,6 @@ build/
 target/
 Thumbs.db
 run-app.sh
+
+### Eclipse ###
+*.metadata

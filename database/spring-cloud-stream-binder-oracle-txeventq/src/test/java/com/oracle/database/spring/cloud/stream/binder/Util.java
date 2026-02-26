@@ -6,10 +6,12 @@ import java.time.Duration;
 import java.util.UUID;
 
 import oracle.ucp.jdbc.PoolDataSource;
+
 import org.testcontainers.oracle.OracleContainer;
 import org.testcontainers.utility.MountableFile;
 
 public class Util {
+	@SuppressWarnings("resource")
     public static OracleContainer oracleContainer() {
         return new OracleContainer("gvenzl/oracle-free:23.26.0-slim-faststart")
                 .withStartupTimeout(Duration.ofMinutes(2)) // Needed for M1 Mac

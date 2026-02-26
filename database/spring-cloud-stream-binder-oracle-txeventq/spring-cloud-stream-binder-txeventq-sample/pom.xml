@@ -43,7 +43,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <txeventq.streambinder.version>0.17.0</txeventq.streambinder.version>
-        <spring.boot.version>3.5.9</spring.boot.version>
+        <spring.boot.version>4.0.2</spring.boot.version>
         <testcontainers.version>1.21.4</testcontainers.version>
     </properties>
 
@@ -67,6 +67,27 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
+		<dependency>
+    		<groupId>org.springframework</groupId>
+    		<artifactId>spring-jms</artifactId>
+    		<version>7.0.3</version> <!-- Matches your spring-core version -->
+		</dependency>
+		<dependency>
+        	<groupId>org.awaitility</groupId>
+        	<artifactId>awaitility</artifactId>
+        	<version>4.3.0</version>
+        	<scope>test</scope>
+    	</dependency>
+        <dependency>
+    		<groupId>com.oracle.database.spring</groupId>
+    		<artifactId>oracle-spring-boot-starter-ucp</artifactId>
+    		<version>26.0.0</version>
+		</dependency>
+        <dependency>
+    		<groupId>com.oracle.database.spring</groupId>
+    		<artifactId>oracle-spring-boot-starter-aqjms</artifactId>
+    		<version>26.0.0</version>
+		</dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -86,4 +107,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version> <!-- Recommended version for Java 21 -->
+                <configuration>
+                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
