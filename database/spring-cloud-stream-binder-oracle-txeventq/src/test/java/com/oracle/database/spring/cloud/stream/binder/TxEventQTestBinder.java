@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024, 2026 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
