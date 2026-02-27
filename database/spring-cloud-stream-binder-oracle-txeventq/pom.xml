@@ -43,11 +43,11 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <oracle-database.version>23.26.0.0.0</oracle-database.version>
+        <oracle-database.version>23.26.1.0.0</oracle-database.version>
         <oracle.database.security.version>21.20.0.0</oracle.database.security.version>
-        <org.springframework.cloud.version>4.3.0</org.springframework.cloud.version>
-        <spring.boot.version>3.5.9</spring.boot.version>
-        <spring.framework.version>6.2.15</spring.framework.version>
+        <org.springframework.cloud.version>5.0.1</org.springframework.cloud.version>
+        <spring.boot.version>4.0.2</spring.boot.version>
+        <spring.framework.version>7.0.3</spring.framework.version>
         <testcontainers.version>1.21.4</testcontainers.version>
         <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
         <maven-javadoc-plugin.version>3.7.0</maven-javadoc-plugin.version>
@@ -73,13 +73,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
+        <dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-jms</artifactId>
+    		<version>${spring.boot.version}</version>
+		</dependency>
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc11</artifactId>
@@ -98,7 +102,7 @@
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-jms</artifactId>
-            <version>6.4.1</version>
+            <version>7.0.2</version>
         </dependency>
         <dependency>
             <groupId>jakarta.jms</groupId>
@@ -108,23 +112,23 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.16.1</version>
+            <version>1.21.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
+            <version>3.20.0</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.messaging</groupId>
             <artifactId>aqapi-jakarta</artifactId>
-            <version>23.3.1.0</version>
+            <version>23.8.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.17.1</version>
-        </dependency>
+    		<groupId>tools.jackson.core</groupId>
+    		<artifactId>jackson-databind</artifactId>
+    		<version>3.0.4</version>
+		</dependency>
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>oraclepki</artifactId>
@@ -210,6 +214,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.5.4</version>
                 <configuration>
                     <includes>
                         <include>**/*IT.java</include>
@@ -292,6 +297,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.4</version>
                 <executions>
                     <execution>
                         <id>deploy</id>

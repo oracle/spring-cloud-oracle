@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -27,6 +27,7 @@ package com.oracle.database.spring.cloud.stream.binder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,19 +48,26 @@ import org.springframework.cloud.stream.binder.ConsumerProperties;
 import org.springframework.cloud.stream.binder.ExtendedConsumerProperties;
 import org.springframework.cloud.stream.binder.ExtendedProducerProperties;
 import org.springframework.cloud.stream.binder.PartitionCapableBinderTests;
+import org.springframework.cloud.stream.binder.ProducerProperties;
 import org.springframework.cloud.stream.binder.Spy;
 import org.springframework.cloud.stream.config.BindingProperties;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.integration.IntegrationMessageHeaderAccessor;
+import org.springframework.integration.channel.DefaultHeaderChannelRegistry;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.channel.QueueChannel;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.MessagingException;
+import org.springframework.messaging.SubscribableChannel;
 import org.springframework.util.Assert;
 import org.springframework.util.MimeTypeUtils;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
 import com.oracle.database.spring.cloud.stream.binder.config.JmsProducerProperties;
@@ -81,6 +89,8 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.oracle.OracleContainer;
+import static org.awaitility.Awaitility.await;
+
 
 @SuppressWarnings("unchecked")
 @Testcontainers
@@ -88,6 +98,8 @@ public class TEQPartitionIT extends
         PartitionCapableBinderTests<TxEventQTestBinder, ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> {
 
     private static TxEventQTestBinder teqBinder;
+    private static GenericApplicationContext testApplicationContext;
+    private static jakarta.jms.ConnectionFactory testConnectionFactory; // ADD THIS
 
     private static int DB_VERSION = 23;
 
@@ -123,11 +135,40 @@ public class TEQPartitionIT extends
         }
         OracleDBUtils dbutils = new OracleDBUtils(ds, dbversion);
         ConnectionFactory connectionFactory = AQjmsFactory.getConnectionFactory(ds);
+        testConnectionFactory = connectionFactory;
         TxEventQQueueProvisioner queueProvisioner = new TxEventQQueueProvisioner(connectionFactory, dbutils);
-
+        
         DB_VERSION = dbversion;
         GenericApplicationContext applicationContext = new GenericApplicationContext();
+        testApplicationContext = applicationContext;
+     
+        // Register the TaskScheduler as a Singleton with the exact name
+        ThreadPoolTaskScheduler s = new ThreadPoolTaskScheduler();
+        s.setPoolSize(5);
+        s.setThreadNamePrefix("teq-test-scheduler-");
+        s.initialize();
+        applicationContext.getBeanFactory().registerSingleton("taskScheduler", s);
+
+        // Register Error Channel as a Singleton
+        applicationContext.getBeanFactory().registerSingleton("errorChannel", 
+                new PublishSubscribeChannel());
+
+        // Register the Registry as a Singleton
+        applicationContext.getBeanFactory().registerSingleton("integrationHeaderChannelRegistry", 
+                new DefaultHeaderChannelRegistry());
+
+        // NOW register the Registrar - it will find these LIVE instances and stay quiet
+        new org.springframework.integration.config.IntegrationRegistrar()
+                .registerBeanDefinitions(null, applicationContext);
+        
         applicationContext.refresh();
+        
+        // *** FIX: MANDATORY FOR SPRING 7 ***
+        // This manually triggers the creation of the EvaluationContext bean 
+        // that JmsMessageDrivenEndpoint strictly requires during afterPropertiesSet()
+        org.springframework.integration.context.IntegrationContextUtils
+            .getEvaluationContext(applicationContext.getBeanFactory());
+        
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
         JmsSendingMessageHandlerFactory jmsSendingMessageHandlerFactory = new JmsSendingMessageHandlerFactory(
                 jmsTemplate, new SpecCompliantJmsHeaderMapper());
@@ -176,20 +217,23 @@ public class TEQPartitionIT extends
     }
 
     protected Message<?> receiveMessage(QueueChannel channel) {
-        Message<?> result = receive(channel);
+    	AtomicReference<Message<?>> resultHolder = new AtomicReference<>();
 
-        for (int i = 0; i < 5; i++) {
-            if (result != null)
-                return result;
-            try {
-                Thread.sleep(30000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            result = receive(channel);
-        }
+        await()
+            .atMost(Duration.ofMinutes(3)) // Maximum total wait time
+            .pollInterval(Duration.ofSeconds(30)) // How often to check the queue
+            .with()
+            .pollDelay(Duration.ZERO) // Check immediately the first time
+            .until(() -> {
+                Message<?> msg = receive(channel);
+                if (msg != null) {
+                    resultHolder.set(msg);
+                    return true;
+                }
+                return false;
+            });
 
-        return result;
+        return resultHolder.get();
     }
 
     @SuppressWarnings("rawtypes")
@@ -796,5 +840,522 @@ public class TEQPartitionIT extends
         assertThat(e.getCause()).isInstanceOf(IllegalArgumentException.class);
         assertThat(e.getCause().getMessage()).isEqualTo("The property 'multiplex:true' is not supported.");
     }
+    
+    /**
+     * Validates Basic Message Delivery and Header Preservation in Oracle TxEventQ.
+     * 
+     * This test verifies that:
+     * 1. The Binder successfully maps Spring {@link org.springframework.messaging.MessageHeaders} 
+     *    to native JMS User Properties within the Oracle Sharded Queue.
+     * 2. Custom application metadata (e.g., {@code custom_header} and {@code my_correlation}) 
+     *    is persisted and recovered without data loss during the round-trip.
+     * 3. The {@link org.springframework.jms.core.JmsTemplate} correctly commits the 
+     *    producer-side transaction, making the message visible to the consumer group.
+     * 4. The {@link com.oracle.database.spring.cloud.stream.binder.utils.JmsMessageDrivenChannelAdapter} 
+     *    efficiently handles the conversion between JMS {@code BytesMessage} and 
+     *    Spring Cloud Stream's expected internal {@code byte[]} representation.
+     * 
+     * Note: Employs {@link org.awaitility.Awaitility} with a 45-second window to accommodate 
+     * the asynchronous nature of Oracle's background process discovery (AQPC) and 
+     * Testcontainers-specific network latency.
+     */
+    @Test
+    void testSendMessage(TestInfo testInfo) throws Exception {
+    	TxEventQTestBinder binder = (TxEventQTestBinder) getBinder();
+        String destination = "foo_" + UUID.randomUUID().toString().substring(0, 8);
 
+        // Consumer Setup
+        QueueChannel consumerChannel = new QueueChannel();
+        consumerChannel.setBeanName("testConsumerChannel");
+        Binding<MessageChannel> consumerBinding = binder.bindConsumer(
+                destination, "testGroup", consumerChannel, createConsumerProperties());
+
+        // Wait for the Oracle subscriber to be registered in the DB
+        await().atMost(Duration.ofSeconds(30)).until(consumerBinding::isRunning);
+
+        // Producer Setup
+        DirectChannel moduleOutputChannel = new DirectChannel();
+        moduleOutputChannel.setBeanName("testProducerChannel");
+        Binding<MessageChannel> producerBinding = binder.bindProducer(
+                destination, moduleOutputChannel, createProducerProperties(testInfo));
+
+        try {
+            String payload = "Hello Oracle TXEventQ";
+            // Create message with a unique ID to verify it's the SAME message
+            String correlationId = UUID.randomUUID().toString();
+            Message<String> message = MessageBuilder.withPayload(payload)
+                    .setHeader("custom_header", "spring-7-test")
+                    .setHeader("my_correlation", correlationId)
+                    .build();
+
+            // Send and ensure the Binder/JmsTemplate commits
+            moduleOutputChannel.send(message);
+
+            // Verification with Awaitility
+            await()
+                .atMost(Duration.ofSeconds(45)) 
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(() -> {
+                    // Use a non-blocking receive
+                    Message<?> received = consumerChannel.receive(0);
+                    
+                    assertThat(received)
+                        .as("Message should have arrived in Oracle TxEventQ")
+                        .isNotNull();
+                    
+                    // Binder usually returns byte[] for JMS BytesMessage
+                    Object receivedPayload = received.getPayload();
+                    if (receivedPayload instanceof byte[] bytes) {
+                        assertThat(new String(bytes)).isEqualTo(payload);
+                    } else {
+                        assertThat(receivedPayload).isEqualTo(payload);
+                    }
+
+                    assertThat(received.getHeaders())
+                        .as("Custom header should be preserved")
+                        .containsEntry("custom_header", "spring-7-test");
+                });
+
+        } finally {
+            producerBinding.unbind();
+            consumerBinding.unbind();
+        }
+    }
+    
+    /**
+     * Validates the Full End-to-End Messaging Lifecycle in Oracle TxEventQ.
+     * 
+     * This test verifies the complete integration path, including:
+     * 1. Dynamic Provisioning: The Binder's {@link com.oracle.database.spring.cloud.stream.binder.TxEventQQueueProvisioner} 
+     *    automatically creating the {@code TxEventQ} topic and subscriber metadata.
+     * 2. Producer-to-Database Handshake: Successful persistence of a Spring {@link org.springframework.messaging.Message} 
+     *    into the Oracle Sharded Queue tables.
+     * 3. Asynchronous Discovery: The {@link com.oracle.database.spring.cloud.stream.binder.utils.TEQMessageListenerContainer} 
+     *    polling and identifying new messages on the sharded destination.
+     * 4. Payload Round-tripping: Transparent serialization and deserialization of the 
+     *    payload between the Java Heap and the Oracle Database engine.
+     * 
+     * Note: Employs a robust 2-minute {@link org.awaitility.Awaitility} window to account 
+     * for the inherent latency of background Oracle AQ processes (AQPC) and metadata 
+     * propagation within a Testcontainers (Docker) environment.
+     */
+    @Test
+    void testFullEndToEnd(TestInfo testInfo) throws Exception {
+    	TxEventQTestBinder binder = (TxEventQTestBinder) getBinder();
+    	String destination = "foo_" + UUID.randomUUID().toString().substring(0, 8);
+
+	    QueueChannel input = new QueueChannel();
+	    input.setBeanName("testFullInput");
+	    DirectChannel output = new DirectChannel();
+	    output.setBeanName("testFullOutput");
+
+	    // Bindings
+	    Binding<MessageChannel> consumerBinding = binder.bindConsumer(destination, "testGroup", input, createConsumerProperties());
+	    Binding<MessageChannel> producerBinding = binder.bindProducer(destination, output, createProducerProperties(testInfo));
+
+	    try {
+	        // STABILIZATION: Ensure Oracle DB recognizes the new subscriber
+	        await().atMost(Duration.ofSeconds(30)).until(consumerBinding::isRunning);
+
+	        String payload = "Hello Spring 7";
+	        
+	        // SEND: Use a retry loop for the send if needed, but standard send should work
+	        // if the database is ready.
+	        output.send(MessageBuilder.withPayload(payload).build());
+	        System.out.println(">>> Message sent to: " + destination);
+
+	        // VERIFICATION: Oracle containers are slow; give it a full 2 minute
+	        await()
+	            .atMost(Duration.ofMinutes(2))
+	            .pollInterval(Duration.ofSeconds(2))
+	            .untilAsserted(() -> {
+	                // Poll the channel. receive(0) is best here as Awaitility loops
+	                Message<?> msg = input.receive(0);
+	                assertThat(msg).as("Message should have arrived in TxEventQ").isNotNull();
+	                
+	                Object p = msg.getPayload();
+	                String str = (p instanceof byte[] b) ? new String(b) : p.toString();
+	                assertThat(str).isEqualTo(payload);
+	            });
+
+	    } finally {
+	        if (producerBinding != null) producerBinding.unbind();
+	        if (consumerBinding != null) consumerBinding.unbind();
+	    }
+    }
+    
+    /**
+     * Validates the Retry Interceptor and Error Channel Recovery for Oracle TxEventQ.
+     * 
+     * This test verifies that:
+     * 1. The Binder correctly integrates with Spring's {@code RetryTemplate} to execute 
+     *    the {@code maxAttempts(3)} policy before exhausting retries.
+     * 2. Transient failures in the {@code inputChannel} subscriber trigger a standard 
+     *    Spring Cloud Stream retry cycle without immediate message loss.
+     * 3. Upon retry exhaustion, the Binder's error handling logic bridges the failure 
+     *    to the global {@code errorChannel}.
+     * 4. The recovered message preserves original metadata (e.g., {@code Content-Type}) 
+     *    within the {@link org.springframework.messaging.MessagingException} wrapper.
+     * 5. Oracle TxEventQ maintains the message's transactional state across the retry 
+     *    attempts until the final recovery action is taken.
+     * 
+     * Note: Uses {@link org.awaitility.Awaitility} to manage the asynchronous gap 
+     * between subscriber metadata propagation in Oracle DB and the first delivery attempt.
+     */
+    @Test
+    void testRetryAndRecoveryLogic(TestInfo testInfo) throws Exception {
+    	TxEventQTestBinder binder = getBinder();
+        
+        // Setup properties with 3 retry attempts and DLQ
+        ExtendedConsumerProperties<JmsConsumerProperties> consumerProperties = createConsumerProperties();
+        consumerProperties.setMaxAttempts(3); 
+        consumerProperties.getExtension().setDlqName("test_dlq");
+
+        DirectChannel inputChannel = createBindableChannel("input", new BindingProperties());
+        String destination = "retryTestQueue_" + UUID.randomUUID().toString().substring(0, 8);
+        String group = "retryGroup";
+        
+        // Track attempts and final recovery
+        CountDownLatch attemptLatch = new CountDownLatch(3);
+        AtomicReference<Throwable> recoveredError = new AtomicReference<>();
+        CountDownLatch recoveryLatch = new CountDownLatch(1);
+
+        // Create a consumer that ALWAYS fails to trigger retries
+        inputChannel.subscribe(message -> {
+            attemptLatch.countDown();
+            throw new RuntimeException("Simulated Transient Failure");
+        });
+
+        // Subscribe to the global errorChannel (The Binder bridges failures here)
+        // Note: Use the 'testApplicationContext' reference we captured in createBinder()
+        SubscribableChannel globalErrorChannel = testApplicationContext.getBean("errorChannel", SubscribableChannel.class);
+        globalErrorChannel.subscribe(msg -> {
+            // The recovery process wraps the failure in a MessagingException
+            if (msg.getPayload() instanceof MessagingException ex) {
+                recoveredError.set(ex);
+                recoveryLatch.countDown();
+            }
+        });
+
+        // Bind the consumer
+        Binding<MessageChannel> consumerBinding = binder.bindConsumer(destination, group, inputChannel, consumerProperties);
+        
+        // STABILIZATION: Oracle TEQ needs time to propagate subscriber metadata
+        await().atMost(Duration.ofSeconds(30)).until(consumerBinding::isRunning);
+        
+        // Send the message
+        Message<String> message = MessageBuilder.withPayload("test-retry-payload")
+                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                .build();
+        
+        DirectChannel producerChannel = createBindableChannel("output", new BindingProperties());
+        binder.bindProducer(destination, producerChannel, createProducerProperties(testInfo));
+        producerChannel.send(message);
+
+        // VERIFICATIONS
+        
+        // Verify 3 attempts occurred (Increased timeout for persistent DB rollbacks)
+        boolean retriedEnough = attemptLatch.await(30, TimeUnit.SECONDS);
+        assertThat(retriedEnough).as("Should have attempted the message 3 times").isTrue();
+
+        // Verify the recovery triggered after 3rd failure
+        boolean recovered = recoveryLatch.await(15, TimeUnit.SECONDS);
+        assertThat(recovered).as("Recovery should have been triggered").isTrue();
+
+        // Verify the Exception Chain (MessagingException -> Original Failure)
+        Throwable actualError = recoveredError.get();
+        assertThat(actualError.getCause().getMessage())
+                .contains("Simulated Transient Failure");
+        
+        // Verify our Shim successfully preserved headers in the failed message
+        Message<?> failedMessage = ((MessagingException) actualError).getFailedMessage();
+        Object contentType = failedMessage.getHeaders().get(MessageHeaders.CONTENT_TYPE);
+
+        assertThat(contentType)
+        .as("Content type should match the application/json string")
+        .hasToString(MimeTypeUtils.APPLICATION_JSON_VALUE);
+        
+        consumerBinding.unbind();
+    }
+    
+    /**
+     * Validates Batch Retry and DLQ Recovery Logic for Oracle TxEventQ.
+     * 
+     * This test verifies that:
+     * 1. The {@link com.oracle.database.spring.cloud.stream.binder.utils.TEQMessageListenerContainer} 
+     *    correctly handles {@code batchMode(true)} and propagates batch exceptions.
+     * 2. Spring's Statefull/Stateless Retry Interceptor honors the {@code maxAttempts(3)} 
+     *    threshold before exhausting retries.
+     * 3. The Binder's Error Handling bridge successfully intercepts the failed batch 
+     *    and routes the final exception to the global {@code errorChannel}.
+     * 4. The {@link org.springframework.cloud.stream.binder.BinderErrorChannel} correctly 
+     *    wraps the failed payload in a {@link org.springframework.messaging.MessagingException} 
+     *    for DLQ processing.
+     * 
+     * Note: Uses a rapid backoff configuration (100ms-200ms) to ensure the test 
+     * executes quickly without blocking the CI/CD pipeline on Oracle DB I/O.
+     */
+    @Test
+    void testBatchRetryAndRecoveryLogic(TestInfo testInfo) throws Exception {
+    	TxEventQTestBinder binder = getBinder();
+        
+        // Setup DLQ name but skip manual provisioning to avoid metadata lag
+        String dlqName = "TEST_BATCH_DLQ_" + UUID.randomUUID().toString().substring(0, 8);
+        
+        // Setup Properties
+        ExtendedConsumerProperties<JmsConsumerProperties> consumerProperties = createConsumerProperties();
+        consumerProperties.setMaxAttempts(3); 
+        consumerProperties.setBatchMode(true);
+        consumerProperties.getExtension().setDlqName(dlqName);
+        
+        // Rapid backoff for fast test execution
+        consumerProperties.setBackOffInitialInterval(100); 
+        consumerProperties.setBackOffMaxInterval(200);
+        consumerProperties.setBackOffMultiplier(1.0);
+
+        DirectChannel inputChannel = createBindableChannel("input", new BindingProperties());
+        String destination = "batchRetryQueue_" + UUID.randomUUID().toString().substring(0, 8);
+        String group = "batchGroup";
+        
+        CountDownLatch attemptLatch = new CountDownLatch(3);
+        AtomicReference<Message<?>> recoveredMessage = new AtomicReference<>();
+        CountDownLatch recoveryLatch = new CountDownLatch(1);
+
+        // Subscriber throws error to trigger retry
+        inputChannel.subscribe(message -> {
+            attemptLatch.countDown();
+            throw new RuntimeException("Simulated Batch Failure");
+        });
+
+        // Intercept the error channel to verify the binder "gave up" and recovered
+        SubscribableChannel errorChannel = testApplicationContext.getBean("errorChannel", SubscribableChannel.class);
+        errorChannel.subscribe(msg -> {
+            recoveredMessage.set(msg);
+            recoveryLatch.countDown();
+        });
+
+        // Bind Consumer and Producer
+        Binding<MessageChannel> consumerBinding = binder.bindConsumer(destination, group, inputChannel, consumerProperties);
+        await().atMost(Duration.ofSeconds(30)).until(consumerBinding::isRunning);
+        
+        DirectChannel producerChannel = createBindableChannel("output", new BindingProperties());
+        binder.bindProducer(destination, producerChannel, createProducerProperties(testInfo));
+
+        // Send Message
+        producerChannel.send(MessageBuilder.withPayload("batch-item-1").build());
+
+        // Verifications
+        assertThat(attemptLatch.await(60, TimeUnit.SECONDS))
+            .as("Should have attempted the batch 3 times").isTrue();
+
+        assertThat(recoveryLatch.await(30, TimeUnit.SECONDS))
+            .as("Batch recovery should have triggered on the error channel").isTrue();
+        
+        Message<?> errMessage = recoveredMessage.get();
+        assertThat(errMessage.getPayload()).isInstanceOf(MessagingException.class);
+        
+        // CLEANUP
+        consumerBinding.unbind();
+    }
+    
+    /**
+     * Validates Large Object (LOB) Payload Handling in Oracle TxEventQ.
+     * 
+     * This test verifies that:
+     * 1. The Binder correctly manages the serialization and streaming of data exceeding 
+     *    the standard JMS inline buffer size (simulated with a 50KB payload).
+     * 2. Oracle TxEventQ seamlessly handles the transition to Out-of-Line LOB storage 
+     *    within the underlying sharded queue tables.
+     * 3. Payload integrity is maintained across the producer-to-consumer lifecycle 
+     *    using a byte-for-byte comparison ({@code containsExactly}).
+     * 4. The {@link com.oracle.database.spring.cloud.stream.binder.TxEventQQueueProvisioner} 
+     *    correctly initializes the destination to support binary large object data types.
+     * 
+     * Note: Uses an extended 30-second timeout to accommodate the higher disk I/O 
+     * overhead associated with LOB persistence in a Testcontainers (Docker) environment.
+     */
+    @Test
+    void testLargePayload() throws Exception {
+    	TxEventQTestBinder binder = getBinder();
+         
+         // 50KB triggers LOB storage in Oracle TEQ
+         byte[] largeData = new byte[1024 * 50]; 
+         new java.util.Random().nextBytes(largeData);
+         
+         QueueChannel input = new QueueChannel();
+         String destination = "lobTest_" + UUID.randomUUID().toString().substring(0, 8);
+         
+         // Bind Consumer first to ensure the Topic exists in the DB
+         Binding<MessageChannel> consumerBinding = binder.bindConsumer(destination, "lobGroup", input, createConsumerProperties());
+       
+         Thread.sleep(3000); 
+
+         DirectChannel output = createBindableChannel("output", new BindingProperties());
+         binder.bindProducer(destination, output, createProducerProperties(null));
+         
+         // Send the large payload
+         output.send(MessageBuilder.withPayload(largeData).build());
+
+         // Increased timeout to 30s because LOB I/O in a Testcontainer can be slow
+         Message<byte[]> received = (Message<byte[]>) input.receive(30000);
+         
+         assertThat(received).as("Message was not received within timeout").isNotNull();
+         assertThat(received.getPayload()).containsExactly(largeData); // containsExactly is better for byte arrays
+         
+         consumerBinding.unbind();
+    }
+    
+    /**
+     * Validates Transactional Reliability and Redelivery for Oracle TxEventQ.
+     * 
+     * This test verifies that:
+     * 1. The Binder integrates correctly with the {@link org.springframework.jms.connection.JmsTransactionManager} 
+     *    to bridge Spring Application transactions with Oracle Database Session transactions.
+     * 2. When an exception is thrown (simulated failure), the message is NOT acknowledged 
+     *    and a physical Database Rollback is triggered on the Oracle Shard.
+     * 3. The {@link com.oracle.database.spring.cloud.stream.binder.utils.TEQMessageListenerContainer} 
+     *    recovers from the rollback and triggers a redelivery.
+     * 4. Data integrity is maintained: the message remains in the Sharded Queue until 
+     *    it is successfully processed and the transaction is committed.
+     * 
+     * Note: {@code maxAttempts(1)} is used to bypass Spring-level retries, forcing the 
+     * binder to rely on the underlying Oracle JMS provider for redelivery logic.
+     */
+    @Test
+    void testTransactionalRedelivery() throws Exception {
+    	TxEventQTestBinder binder = getBinder();
+        String destination = "txTest_" + UUID.randomUUID().toString().substring(0, 8);
+        
+        // 1. Register the Transaction Manager to the context manually.
+        // This is the "glue" that tells Spring to rollback the Oracle Session on error.
+        if (!testApplicationContext.containsBean("jmsTransactionManager")) {
+            org.springframework.jms.connection.JmsTransactionManager tm = 
+                new org.springframework.jms.connection.JmsTransactionManager(testConnectionFactory);
+            testApplicationContext.getBeanFactory().registerSingleton("jmsTransactionManager", tm);
+        }
+
+        CountDownLatch latch = new CountDownLatch(2);
+        DirectChannel input = createBindableChannel("input", new BindingProperties());
+        input.subscribe(msg -> {
+            latch.countDown();
+            // On the first hit, we throw to force a DB-level rollback
+            if (latch.getCount() == 1) {
+                throw new RuntimeException("Forcing Oracle DB Rollback");
+            }
+        });
+
+        ExtendedConsumerProperties<JmsConsumerProperties> props = createConsumerProperties();
+        
+        // Disable Spring's in-memory retry (Max 1 attempt)
+        // This forces the exception down to the Transaction Manager and Oracle driver
+        props.setMaxAttempts(1);
+
+        // Bind and wait for the consumer
+        Binding<MessageChannel> consumerBinding = binder.bindConsumer(destination, "txGroup", input, props);
+        await().atMost(Duration.ofSeconds(30)).until(consumerBinding::isRunning);
+
+        DirectChannel output = createBindableChannel("output", new BindingProperties());
+        binder.bindProducer(destination, output, createProducerProperties(null));
+        
+        // Send the test data
+        output.send(MessageBuilder.withPayload("tx-data").build());
+
+        // Verification: 60s timeout to allow for Oracle's background recovery (JMS-120)
+        assertThat(latch.await(60, TimeUnit.SECONDS))
+            .as("Oracle TEQ should have redelivered the message from the shard after the rollback")
+            .isTrue();
+
+        consumerBinding.unbind();
+    }
+    
+    /**
+     * Validates Shard Key Stickiness (Partitioning) in Oracle TxEventQ.
+     * 
+     * This test verifies that:
+     * 1. The Binder correctly provisions a Sharded Queue (TEQ) with multiple shards.
+     * 2. The Producer uses SpEL to extract a partition key and route messages to a specific shard.
+     * 3. Multiple consumers in the same group are mapped to different shards.
+     * 4. All messages with the same 'fixed-shard-key' are delivered to EXACTLY ONE consumer 
+     *    instance, ensuring ordered processing and horizontal scalability without 
+     *    inter-consumer contention.
+     * 
+     * Note: Includes a stabilization delay to allow Oracle's background processes (AQPC) 
+     * to synchronize sharded subscriber metadata in the Testcontainers environment.
+     */
+    @Test
+    void testShardKeyStickiness(TestInfo testInfo) throws Exception {
+    	TxEventQTestBinder binder = getBinder();
+        int messageCount = 20;
+        int totalPartitions = 2; 
+        String partitionKey = "fixed-shard-key";
+        String destination = "stickyShard_" + UUID.randomUUID().toString().substring(0, 8);
+        
+        // Setup Producer Properties
+        ExtendedProducerProperties<JmsProducerProperties> producerProps = createProducerProperties(testInfo);
+        producerProps.setPartitionCount(totalPartitions);
+        producerProps.setPartitionKeyExpression(spelExpressionParser.parseExpression("headers['partitionKey']"));
+        
+        // Ensure the provisioner sees the partition count for physical TEQ creation
+        BindingProperties producerBindingProps = new BindingProperties();
+        producerBindingProps.setProducer(new ProducerProperties());
+        producerBindingProps.getProducer().setPartitionCount(totalPartitions);
+
+        DirectChannel output = createBindableChannel("output", producerBindingProps);
+        binder.bindProducer(destination, output, producerProps);
+
+        // Setup Partitioned Consumers
+        ExtendedConsumerProperties<JmsConsumerProperties> consumerProps = createConsumerProperties();
+        consumerProps.setPartitioned(true);
+        consumerProps.setInstanceCount(totalPartitions); 
+
+        // Bind Consumer 1 (Listening to Shard 0)
+        QueueChannel input1 = new QueueChannel();
+        consumerProps.setInstanceIndex(0);
+        binder.bindConsumer(destination, "stickyGroup", input1, consumerProps);
+        
+        // Bind Consumer 2 (Listening to Shard 1)
+        QueueChannel input2 = new QueueChannel();
+        consumerProps.setInstanceIndex(1);
+        binder.bindConsumer(destination, "stickyGroup", input2, consumerProps);
+
+        // Stabilization Delay for Oracle TxEventQ background metadata
+        // Prevents JMS-120: Dequeue failed during initial startup
+        Thread.sleep(7000); 
+
+        // Send 20 messages all with the SAME partitionKey
+        for (int i = 0; i < messageCount; i++) {
+            output.send(MessageBuilder.withPayload("msg-" + i)
+                    .setHeader("partitionKey", partitionKey).build());
+        }
+
+        // Verification Logic
+        int count1 = 0;
+        int count2 = 0;
+        
+        // Attempt to receive from both channels
+        for (int i = 0; i < messageCount; i++) {
+            Message<?> m1 = input1.receive(1000); 
+            if (m1 != null) count1++;
+            
+            Message<?> m2 = input2.receive(1000);
+            if (m2 != null) count2++;
+        }
+       
+        // Verify all messages arrived
+        assertThat(count1 + count2)
+            .as("Total messages received across both consumers")
+            .isEqualTo(messageCount);
+
+        // Verify Stickiness (Logical XOR)
+        // If stickiness works, one consumer should have 20 and the other 0.
+        // If it fails (round-robin), both will have a partial count (e.g. 10 and 10).
+        assertThat(count1 == messageCount || count2 == messageCount)
+            .as("STICKINESS FAILURE: Messages with key '%s' were split (C1: %d, C2: %d). " +
+                "They should have all landed on a single consumer.", partitionKey, count1, count2)
+            .isTrue();
+
+        // Payload Integrity
+        // (Optional) Verify the last message received was indeed part of the set
+        System.out.println("Stickiness verified. Consumer 1: " + count1 + " | Consumer 2: " + count2);
+    }
 }

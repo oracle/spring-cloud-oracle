@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,14 +24,6 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
-import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
-import com.oracle.database.spring.cloud.stream.binder.serialize.CustomSerializationMessageConverter;
-import jakarta.jms.BytesMessage;
-import jakarta.jms.Destination;
-import jakarta.jms.JMSException;
-import jakarta.jms.Message;
-import jakarta.jms.Session;
-import oracle.jakarta.jms.AQjmsSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -41,12 +33,25 @@ import org.springframework.cloud.stream.binder.ConsumerProperties;
 import org.springframework.cloud.stream.binder.ExtendedConsumerProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.integration.jms.ChannelPublishingJmsMessageListener;
+import org.springframework.core.AttributeAccessor;
+import org.springframework.core.retry.RetryTemplate;
+import org.springframework.integration.core.RecoveryCallback;
+import org.springframework.integration.jms.inbound.ChannelPublishingJmsMessageListener;
+import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.SimpleMessageConverter;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.retry.RecoveryCallback;
-import org.springframework.retry.RetryCallback;
-import org.springframework.retry.RetryContext;
-import org.springframework.retry.support.RetryTemplate;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.MessageBuilder;
+
+import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
+import com.oracle.database.spring.cloud.stream.binder.serialize.CustomSerializationMessageConverter;
+
+import jakarta.jms.BytesMessage;
+import jakarta.jms.Destination;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.Session;
+import oracle.jakarta.jms.AQjmsSession;
 
 public class JmsMessageDrivenChannelAdapterFactory
         implements ApplicationContextAware, BeanFactoryAware {
@@ -89,9 +94,9 @@ public class JmsMessageDrivenChannelAdapterFactory
             final ExtendedConsumerProperties<JmsConsumerProperties> properties,
             int dbversion
     ) {
-        ChannelPublishingJmsMessageListener listener = null;
+        ChannelPublishingJmsMessageListener listener;
         if (!properties.isBatchMode()) {
-            listener = new RetryingChannelPublishingJmsMessageListener(
+        	RetryingChannelPublishingJmsMessageListener retryingListener = new RetryingChannelPublishingJmsMessageListener(
                     properties,
                     messageRecoverer,
                     properties.getExtension().getDlqName(),
@@ -99,15 +104,17 @@ public class JmsMessageDrivenChannelAdapterFactory
                     recoveryCallback
             );
             if (properties.isUseNativeDecoding()) {
-                ((RetryingChannelPublishingJmsMessageListener) listener)
-                        .setDeSerializerClassName(properties.getExtension().getDeSerializer());
+            	retryingListener.setDeSerializerClassName(properties.getExtension().getDeSerializer());
             }
+            listener = retryingListener;
         } else {
-            listener = new TEQBatchMessageListener();
-            ((TEQBatchMessageListener) listener).setRetryTemplate(retryTemplate);
-            ((TEQBatchMessageListener) listener).setRecoverer(recoveryCallback);
-            ((TEQBatchMessageListener) listener).setDeSerializerClassName(properties.getExtension().getDeSerializer());
+        	 TEQBatchMessageListener batchListener  = new TEQBatchMessageListener();
+        	 batchListener.setRetryTemplate(retryTemplate);
+        	 batchListener.setRecoverer(recoveryCallback);
+        	 batchListener.setDeSerializerClassName(properties.getExtension().getDeSerializer());
+        	 listener = batchListener;
         }
+        
         listener.setBeanFactory(this.beanFactory);
 
         if (dbversion == 19 && properties.getInstanceIndex() != -1) {
@@ -171,47 +178,71 @@ public class JmsMessageDrivenChannelAdapterFactory
         @Override
         public void onMessage(final Message jmsMessage, final Session session)
                 throws JMSException {
-            this.retryTemplate
-                    .execute(
-                            new RetryCallback<Object, JMSException>() {
-                                @Override
-                                public Object doWithRetry(RetryContext retryContext)
-                                        throws JMSException {
-                                    try {
-                                        // convert data if de-serialization is enabled
-                                        if (deSerializerClassName != null) {
-                                            // get class name and parameterized type name
-                                            CustomSerializationMessageConverter customConverter = new CustomSerializationMessageConverter();
-                                            customConverter.setDeserializer(deSerializerClassName);
-                                            RetryingChannelPublishingJmsMessageListener.this.setMessageConverter(
-                                                    customConverter
-                                            );
-                                        }
+        	
+        	// Maintain a reference to the converter being used.
+            // If none is set, Spring Integration defaults to SimpleMessageConverter.
+            final MessageConverter converter = (deSerializerClassName != null) ? new CustomSerializationMessageConverter() : new SimpleMessageConverter();
+            
+            if (deSerializerClassName != null) {
+                ((CustomSerializationMessageConverter)converter).setDeserializer(deSerializerClassName);
+                this.setMessageConverter(converter);
+            }
+            
+        	try {
+                // Spring 7 RetryTemplate.execute now takes a single Retryable lambda
+                this.retryTemplate.execute(() -> {
+                    // Oracle AQ Connection Setup
+                    if (session instanceof AQjmsSession aqSession) {
+                    	headerMapper.setConnection(aqSession.getDBConnection());
+                    }
 
-                                        retryContext.setAttribute(
-                                                RETRY_CONTEXT_MESSAGE_ATTRIBUTE,
-                                                jmsMessage
-                                        );
+                    // Delegate to the superclass implementation (ChannelPublishingJmsMessageListener)
+                    super.setHeaderMapper(headerMapper);
+                    super.onMessage(jmsMessage, session);
+                        
+                    return null; 
+                });
+            } catch (Exception e) {
+            	// Final failure: handle recovery
+                resetMessageIfRequired(jmsMessage);
+                
+                // Exhausted Retries: This catch block replaces the old RecoveryCallback
+                // The native RetryException is thrown when max attempts are reached.
+                if (this.recoverer != null) {
+                    try {
+                    	 // Convert JMS payload to Object
+                        Object payload = converter.fromMessage(jmsMessage);
 
-                                        headerMapper.setConnection(((AQjmsSession) session).getDBConnection());
-                                        RetryingChannelPublishingJmsMessageListener.super.setHeaderMapper(headerMapper);
-                                        RetryingChannelPublishingJmsMessageListener.super.onMessage(
-                                                jmsMessage,
-                                                session
-                                        );
-                                    } catch (JMSException e) {
-                                        logger.error(e, "Failed to send message");
-                                        resetMessageIfRequired(jmsMessage);
-                                        throw e;
-                                    } catch (Exception e) {
-                                        resetMessageIfRequired(jmsMessage);
-                                        throw e;
-                                    }
-                                    return null;
-                                }
-                            },
-                            this.recoverer
-                    );
+                        // Map JMS headers to Spring MessageHeaders
+                        MessageHeaders headers = new MessageHeaders(headerMapper.toHeaders(jmsMessage));
+
+                        // Create the ACTUAL Spring Message that ErrorMessagePublisher expects
+                        org.springframework.messaging.Message<?> springMessage = MessageBuilder.createMessage(payload, headers);
+                        
+                    	 // Use a simple anonymous implementation of AttributeAccessor
+                        AttributeAccessor context = new AttributeAccessor() {
+                            private final java.util.Map<String, Object> attrs = new java.util.HashMap<>();
+                            @Override public void setAttribute(String n, Object v) { attrs.put(n, v); }
+                            @Override public Object getAttribute(String n) { return attrs.get(n); }
+                            @Override public Object removeAttribute(String n) { return attrs.remove(n); }
+                            @Override public boolean hasAttribute(String n) { return attrs.containsKey(n); }
+                            @Override public String[] attributeNames() { return attrs.keySet().toArray(new String[0]); }
+                        };
+
+                        // Put the messages in so the recoverer can find them
+                        context.setAttribute(RETRY_CONTEXT_MESSAGE_ATTRIBUTE, springMessage);
+
+                        // Pass the context and the actual exception (e) to the recoverer
+                        this.recoverer.recover(context, e); 
+                    } catch (Exception ex) {
+                        logger.error(ex, "Recovery failed for TxEventQ message");
+                        throw new JMSException("Recovery failed: " + ex.getMessage());
+                    }
+                } else {
+                    logger.error("Retries exhausted and no recoverer configured for message: " + jmsMessage);
+                    throw new JMSException("Retry attempts exhausted");
+                }
+            }
         }
 
         protected void resetMessageIfRequired(Message jmsMessage)

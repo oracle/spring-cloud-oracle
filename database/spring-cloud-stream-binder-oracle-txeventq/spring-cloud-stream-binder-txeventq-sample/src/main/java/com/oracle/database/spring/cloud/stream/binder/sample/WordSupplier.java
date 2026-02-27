@@ -1,3 +1,6 @@
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 package com.oracle.database.spring.cloud.stream.binder.sample;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,14 +18,21 @@ public class WordSupplier implements Supplier<String> {
 
     @Override
     public String get() {
-        int i = idx.getAndAccumulate(words.length, (x, y) -> {
-            if (x < words.length - 1) {
-                return x + 1;
+    	int currentIdx = idx.getAndIncrement();
+
+        // Check if we still have words to send
+        if (currentIdx < words.length) {
+            // If this was the very last word, mark us as done
+            if (currentIdx == words.length - 1) {
+                done.set(true);
             }
-            done.set(true);
-            return 0;
-        });
-        return words[i];
+            return words[currentIdx];
+        }
+
+        done.set(true);
+        
+        // Returning null tells Spring Cloud Stream to skip this poll
+        return null;
     }
 
     public boolean done() {

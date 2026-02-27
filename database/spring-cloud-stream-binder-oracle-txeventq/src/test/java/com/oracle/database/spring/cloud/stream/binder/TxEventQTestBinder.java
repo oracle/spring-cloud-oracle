@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,7 +24,6 @@
 
 package com.oracle.database.spring.cloud.stream.binder;
 
-import com.oracle.database.spring.cloud.stream.binder.JMSMessageChannelBinder;
 import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
 import com.oracle.database.spring.cloud.stream.binder.config.JmsProducerProperties;
 import org.springframework.cloud.stream.binder.AbstractTestBinder;
