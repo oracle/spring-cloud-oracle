@@ -81,7 +81,7 @@
         <dependency>
     		<groupId>com.oracle.database.spring</groupId>
     		<artifactId>oracle-spring-boot-starter-ucp</artifactId>
-    		<version>26.0.0</version>
+    		<version>26.0.1</version>
 		</dependency>
         <dependency>
     		<groupId>com.oracle.database.spring</groupId>
