@@ -75,15 +75,16 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <spring-boot.version>4.0.2</spring-boot.version>
+        <spring-boot.version>4.0.3</spring-boot.version>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
-        <spring-cloud-dependencies.version>2025.1.0</spring-cloud-dependencies.version>
-        <spring-framework.version>7.0.3</spring-framework.version>
+        <spring-cloud-dependencies.version>2025.1.1</spring-cloud-dependencies.version>
+        <spring-framework.version>7.0.5</spring-framework.version>
         <spring-data-oracle-nosql.version>2.2.0</spring-data-oracle-nosql.version>
         <oracle.nosql.driver.version>5.4.19</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.5</jakarta-mail.version>
-        <oci-sdk.version>3.79.0</oci-sdk.version>
-        <jackson.version>2.21.1</jackson.version>
+        <oci-sdk.version>3.81.0</oci-sdk.version>
+        <jackson.version>3.1.0</jackson.version>
+        <jackson2.version>2.21.1</jackson2.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
         <netty.version>4.1.118.Final</netty.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
@@ -163,17 +164,17 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
+                <groupId>tools.jackson.module</groupId>
                 <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${jackson.version}</version>
+                <version>${jackson2.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
+                <groupId>tools.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
@@ -183,7 +184,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <version>${jackson.annotations.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
+                <groupId>tools.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
             </dependency>

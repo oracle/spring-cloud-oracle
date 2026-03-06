@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.2</version>
+    <version>4.0.3</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -72,9 +72,9 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
     <okafka.version>23.7.0.0</okafka.version>
-    <jackson.version>2.21.0</jackson.version>
+    <jackson.version>3.1.0</jackson.version>
     <kafka-clients.version>3.9.1</kafka-clients.version>
-    <oracle.version>23.26.0.0.0</oracle.version>
+    <oracle.version>23.26.1.0.0</oracle.version>
     <osdt.version>21.20.0.0</osdt.version>
     <oracledb-messaging.version>23.8.0.0</oracledb-messaging.version>
     <jta.version>2.0.1</jta.version>
@@ -101,7 +101,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.fasterxml.jackson</groupId>
+        <groupId>tools.jackson</groupId>
         <artifactId>jackson-bom</artifactId>
         <version>${jackson.version}</version>
         <type>pom</type>
@@ -212,7 +212,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
-        <version>4.0.2</version>
+        <version>4.0.3</version>
         <scope>test</scope>
         <exclusions>
           <exclusion>
