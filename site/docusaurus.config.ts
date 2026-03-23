@@ -69,10 +69,10 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
-        // {
-        //   type: 'docsVersionDropdown',
-        //   versions: ['current', '2.0.0' ]
-        // },
+        {
+          type: 'docsVersionDropdown',
+          versions: ['current', '2.0.0' ]
+        },
         {
           href: 'https://github.com/oracle/spring-cloud-oracle',
           label: 'GitHub',

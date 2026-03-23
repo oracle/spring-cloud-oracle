@@ -1,0 +1,8 @@
+{
+  "label": "Spring Cloud Stream Binder for TxEventQ",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Spring Cloud Stream support for Oracle Database Transactional Event Queues."
+  }
+}
