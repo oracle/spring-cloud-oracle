@@ -61,6 +61,7 @@
     <module>oracle-spring-boot-starter-json-collections</module>
     <module>oracle-spring-boot-starter-samples</module>
     <module>oracle-spring-boot-starter-okafka</module>
+    <module>spring-boot-starter-oracle-otel</module>
   </modules>
 
   <properties>
@@ -77,6 +78,7 @@
     <oracle.version>23.26.1.0.0</oracle.version>
     <osdt.version>21.20.0.0</osdt.version>
     <oracledb-messaging.version>23.8.0.0</oracledb-messaging.version>
+    <ojdbc.otel.version>1.0.6</ojdbc.otel.version>
     <jta.version>2.0.1</jta.version>
     <micrometer.version>1.14.2</micrometer.version>
     <micrometer-tracing.version>1.4.1</micrometer-tracing.version>
@@ -143,6 +145,11 @@
         <version>${oracledb-messaging.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle.database.jdbc</groupId>
+        <artifactId>ojdbc-provider-opentelemetry</artifactId>
+        <version>${ojdbc.otel.version}</version>
       </dependency>
       <dependency>
         <groupId>jakarta.transaction</groupId>
