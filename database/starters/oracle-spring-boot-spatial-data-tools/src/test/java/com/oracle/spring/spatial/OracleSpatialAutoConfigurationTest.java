@@ -31,6 +31,11 @@ public class OracleSpatialAutoConfigurationTest {
         assertThat(properties.isEnabled()).isTrue();
         assertThat(properties.getDefaultSrid()).isEqualTo(4326);
         assertThat(properties.getDefaultDistanceUnit()).isEqualTo("M");
+        assertThat(converter.fromGeoJsonSql(":geometry")).isEqualTo("SDO_UTIL.FROM_GEOJSON(:geometry, null, 4326)");
+        assertThat(converter.distanceClause(500)).isEqualTo("distance=500 unit=M");
+        assertThat(sqlBuilder.withinDistancePredicate("geometry", "shape", 500))
+                .contains("SDO_WITHIN_DISTANCE")
+                .contains("distance=500 unit=M");
     }
 
     @TestConfiguration

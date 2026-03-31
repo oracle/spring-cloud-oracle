@@ -83,6 +83,7 @@ public class SpatialSampleApplicationTest {
                 .body(Landmark[].class);
         assertThat(nearResults).isNotNull();
         assertThat(List.of(nearResults)).isNotEmpty();
+        assertThat(nearResults[0].name()).isEqualTo("Ferry Building");
 
         WithinLandmarkRequest withinRequest = new WithinLandmarkRequest(
                 "{\"type\":\"Polygon\",\"coordinates\":[[[-122.53,37.70],[-122.35,37.70],[-122.35,37.83],[-122.53,37.83],[-122.53,37.70]]]}",

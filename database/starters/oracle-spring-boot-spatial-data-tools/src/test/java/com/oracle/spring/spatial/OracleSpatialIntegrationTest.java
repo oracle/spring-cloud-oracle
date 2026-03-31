@@ -91,6 +91,19 @@ public class OracleSpatialIntegrationTest {
         assertThat(nearestName).isEqualTo("Union Square");
     }
 
+    @Test
+    void blankRelateMaskDefaultsToAnyInteract() {
+        String polygon = "{\"type\":\"Polygon\",\"coordinates\":[[[-122.53,37.70],[-122.35,37.70],[-122.35,37.83],[-122.53,37.83],[-122.53,37.70]]]}";
+
+        Long relateCount = jdbcClient.sql("select count(*) from landmarks where "
+                        + sqlBuilder.relatePredicate("geometry", "shape", "   "))
+                .param("shape", polygon)
+                .query(Long.class)
+                .single();
+
+        assertThat(relateCount).isGreaterThanOrEqualTo(2L);
+    }
+
     @SpringBootConfiguration
     @EnableAutoConfiguration
     static class TestApplication {

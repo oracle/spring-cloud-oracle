@@ -4,6 +4,7 @@ package com.oracle.database.spring.spatial;
 
 import java.util.List;
 
+import com.oracle.spring.spatial.OracleSpatialGeoJsonConverter;
 import com.oracle.spring.spatial.OracleSpatialSqlBuilder;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class LandmarkService {
     private final JdbcClient jdbcClient;
+    private final OracleSpatialGeoJsonConverter geoJsonConverter;
     private final OracleSpatialSqlBuilder sqlBuilder;
 
-    public LandmarkService(JdbcClient jdbcClient, OracleSpatialSqlBuilder sqlBuilder) {
+    public LandmarkService(JdbcClient jdbcClient,
+                           OracleSpatialGeoJsonConverter geoJsonConverter,
+                           OracleSpatialSqlBuilder sqlBuilder) {
         this.jdbcClient = jdbcClient;
+        this.geoJsonConverter = geoJsonConverter;
         this.sqlBuilder = sqlBuilder;
     }
 
@@ -45,14 +50,16 @@ public class LandmarkService {
     public List<Landmark> findNear(String geometry, Integer distance, Integer limit) {
         int effectiveDistance = distance == null ? 2000 : distance;
         int effectiveLimit = limit == null ? 3 : limit;
+        String distanceProjection = "SDO_GEOM.SDO_DISTANCE(geometry, "
+                + sqlBuilder.geometryFromGeoJson("refGeometry")
+                + ", 0.005, 'unit=" + geoJsonConverter.defaultDistanceUnit() + "') distance";
         return jdbcClient.sql("select id, name, category, "
                         + sqlBuilder.geometryToGeoJson("geometry") + " as geometry, "
-                        + sqlBuilder.nearestNeighborDistanceProjection("distance")
+                        + distanceProjection
                         + " from landmarks where "
-                        + sqlBuilder.withinDistancePredicate("geometry", "geometry", effectiveDistance)
-                        + " and " + sqlBuilder.nearestNeighborPredicate("geometry", "geometry", effectiveLimit)
+                        + sqlBuilder.withinDistancePredicate("geometry", "refGeometry", effectiveDistance)
                         + " order by distance fetch first " + effectiveLimit + " rows only")
-                .param("geometry", geometry)
+                .param("refGeometry", geometry)
                 .query((rs, rowNum) -> new Landmark(
                         rs.getLong("id"),
                         rs.getString("name"),
