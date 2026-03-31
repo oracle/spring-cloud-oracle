@@ -55,10 +55,12 @@
   <modules>
     <module>oracle-spring-boot-json-relational-duality-views</module>
     <module>oracle-spring-boot-json-data-tools</module>
+    <module>oracle-spring-boot-spatial-data-tools</module>
     <module>oracle-spring-boot-starter-ucp</module>
     <module>oracle-spring-boot-starter-wallet</module>
     <module>oracle-spring-boot-starter-aqjms</module>
     <module>oracle-spring-boot-starter-json-collections</module>
+    <module>oracle-spring-boot-starter-spatial</module>
     <module>oracle-spring-boot-starter-samples</module>
     <module>oracle-spring-boot-starter-okafka</module>
   </modules>

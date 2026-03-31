@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSourceImpl
