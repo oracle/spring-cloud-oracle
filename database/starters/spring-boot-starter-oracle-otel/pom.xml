@@ -16,7 +16,7 @@
     <version>26.1.0</version>
 
     <name>Oracle Spring Boot Starter - Oracle OpenTelemetry</name>
-    <description>Spring Boot starter module scaffold for Oracle OTel integration</description>
+    <description>Spring Boot starter module OpenTelemetry and Oracle AI Database instrumentation</description>
     <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/spring-boot-starter-oracle-otel</url>
 
     <organization>

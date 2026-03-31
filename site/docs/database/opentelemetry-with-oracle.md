@@ -1,11 +1,11 @@
 ---
-title: Oracle OTel
+title: OpenTelemetry with Oracle AI Database
 sidebar_position: 6
 ---
 
-# Oracle OTel
+# OpenTelemetry with Oracle AI Database
 
-The Oracle OTel starter provides a focused dependency entry point for instrumenting Oracle JDBC activity in Spring Boot applications with OpenTelemetry.
+The `spring-boot-starter-oracle-otel` starter provides a tools instrumenting Oracle JDBC activity in Spring Boot applications with OpenTelemetry.
 
 Use it when you want traces to flow from an incoming Spring Boot HTTP request into Oracle Database JDBC operations so those spans can be exported to an OpenTelemetry backend such as Grafana LGTM or Zipkin-compatible tooling.
 
