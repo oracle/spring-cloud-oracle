@@ -16,7 +16,7 @@ The sample application test uses Testcontainers, and creates a temporary Oracle 
 To run the test application, run the following command:
 
 ```shell
-mvn test -Dtest=SpatialSampleApplicationTest
+mvn -pl oracle-spring-boot-starter-samples/oracle-spring-boot-sample-spatial -am test -Dtest=SpatialSampleApplicationTest
 ```
 
 ## Configure your project to use Oracle Spatial

@@ -9,31 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.oracle.OracleContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = OracleSpatialIntegrationTest.TestApplication.class)
-@Testcontainers
-@Sql("/spatial-init.sql")
+@Sql(scripts = "/spatial-init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class OracleSpatialIntegrationTest {
-    @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.0-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.0-full-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");
 
+    static {
+        oracleContainer.start();
+    }
+
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", oracleContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", oracleContainer::getUsername);
+        registry.add("spring.datasource.username", () -> "system");
         registry.add("spring.datasource.password", oracleContainer::getPassword);
         registry.add("spring.datasource.driver-class-name", () -> "oracle.jdbc.OracleDriver");
         registry.add("spring.datasource.type", () -> "oracle.ucp.jdbc.PoolDataSourceImpl");
@@ -85,7 +84,7 @@ public class OracleSpatialIntegrationTest {
 
         String nearestName = jdbcClient.sql("select name from landmarks where "
                         + sqlBuilder.nearestNeighborPredicate("geometry", "shape", 1)
-                        + " order by " + sqlBuilder.nearestNeighborDistance("geometry", "shape", "distance"))
+                        + " order by " + sqlBuilder.nearestNeighborDistanceExpression())
                 .param("shape", point)
                 .query(String.class)
                 .single();
@@ -94,7 +93,6 @@ public class OracleSpatialIntegrationTest {
 
     @SpringBootConfiguration
     @EnableAutoConfiguration
-    @Import(OracleSpatialAutoConfiguration.class)
     static class TestApplication {
     }
 }

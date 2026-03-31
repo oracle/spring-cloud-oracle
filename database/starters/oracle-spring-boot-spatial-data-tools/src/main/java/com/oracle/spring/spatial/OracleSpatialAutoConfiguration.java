@@ -11,9 +11,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-@AutoConfiguration
+@AutoConfiguration(after = DataSourceAutoConfiguration.class)
 @ConditionalOnClass(OracleConnection.class)
 @ConditionalOnBean(DataSource.class)
 @ConditionalOnProperty(prefix = OracleSpatialProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)

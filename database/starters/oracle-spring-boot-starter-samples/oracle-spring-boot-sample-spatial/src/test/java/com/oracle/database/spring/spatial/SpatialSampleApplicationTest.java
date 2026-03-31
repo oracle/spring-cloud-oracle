@@ -2,6 +2,7 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.spatial;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 
@@ -11,19 +12,19 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.web.client.RestClient;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.testcontainers.oracle.OracleContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql("/init.sql")
 public class SpatialSampleApplicationTest {
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.0-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.0-full-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");
@@ -31,7 +32,7 @@ public class SpatialSampleApplicationTest {
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
         registry.add("JDBC_URL", oracleContainer::getJdbcUrl);
-        registry.add("USERNAME", oracleContainer::getUsername);
+        registry.add("USERNAME", () -> "system");
         registry.add("PASSWORD", oracleContainer::getPassword);
     }
 
@@ -39,6 +40,7 @@ public class SpatialSampleApplicationTest {
     int port;
 
     @Test
+    @Sql("/init.sql")
     void spatialSampleApp() {
         RestClient restClient = RestClient.builder()
                 .baseUrl("http://localhost:" + port)
@@ -67,12 +69,16 @@ public class SpatialSampleApplicationTest {
         assertThat(fetched).isNotNull();
         assertThat(fetched.category()).isEqualTo("STADIUM");
 
+        String nearGeometry = "{\"type\":\"Point\",\"coordinates\":[-122.3933,37.7955]}";
+        URI nearUri = UriComponentsBuilder.fromPath("/landmarks/near")
+                .queryParam("geometry", nearGeometry)
+                .queryParam("distance", 5000)
+                .queryParam("limit", 2)
+                .build()
+                .encode()
+                .toUri();
         Landmark[] nearResults = restClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/landmarks/near")
-                        .queryParam("geometry", "{\"type\":\"Point\",\"coordinates\":[-122.3933,37.7955]}")
-                        .queryParam("distance", 5000)
-                        .queryParam("limit", 2)
-                        .build())
+                .uri(nearUri)
                 .retrieve()
                 .body(Landmark[].class);
         assertThat(nearResults).isNotNull();

@@ -46,8 +46,12 @@ public class OracleSpatialSqlBuilder {
                 + ", 'sdo_num_res=" + numResults + "', 1) = 'TRUE'";
     }
 
-    public String nearestNeighborDistance(String geometryColumn, String geoJsonBindName, String alias) {
+    public String nearestNeighborDistanceProjection(String alias) {
         return "SDO_NN_DISTANCE(1) AS " + alias;
+    }
+
+    public String nearestNeighborDistanceExpression() {
+        return "SDO_NN_DISTANCE(1)";
     }
 
     private String normalize(String value) {

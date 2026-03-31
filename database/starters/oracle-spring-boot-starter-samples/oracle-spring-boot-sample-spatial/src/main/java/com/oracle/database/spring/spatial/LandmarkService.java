@@ -47,7 +47,7 @@ public class LandmarkService {
         int effectiveLimit = limit == null ? 3 : limit;
         return jdbcClient.sql("select id, name, category, "
                         + sqlBuilder.geometryToGeoJson("geometry") + " as geometry, "
-                        + sqlBuilder.nearestNeighborDistance("geometry", "geometry", "distance")
+                        + sqlBuilder.nearestNeighborDistanceProjection("distance")
                         + " from landmarks where "
                         + sqlBuilder.withinDistancePredicate("geometry", "geometry", effectiveDistance)
                         + " and " + sqlBuilder.nearestNeighborPredicate("geometry", "geometry", effectiveLimit)
