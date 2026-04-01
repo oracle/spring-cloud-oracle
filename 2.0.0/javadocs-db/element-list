@@ -1,0 +1,5 @@
+com.oracle.spring.aqjms
+com.oracle.spring.json
+com.oracle.spring.json.duality.builder
+com.oracle.spring.json.kafka
+com.oracle.spring.ucp
