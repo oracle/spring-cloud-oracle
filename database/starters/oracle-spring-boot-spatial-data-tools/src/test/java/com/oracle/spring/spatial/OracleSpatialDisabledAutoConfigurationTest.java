@@ -17,15 +17,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 )
 public class OracleSpatialDisabledAutoConfigurationTest {
     @Autowired(required = false)
-    OracleSpatialGeoJsonConverter converter;
-
-    @Autowired(required = false)
-    OracleSpatialSqlBuilder sqlBuilder;
+    OracleSpatialJdbcOperations spatial;
 
     @Test
     void spatialBeansDisabled() {
-        assertThat(converter).isNull();
-        assertThat(sqlBuilder).isNull();
+        assertThat(spatial).isNull();
     }
 
     @SpringBootConfiguration

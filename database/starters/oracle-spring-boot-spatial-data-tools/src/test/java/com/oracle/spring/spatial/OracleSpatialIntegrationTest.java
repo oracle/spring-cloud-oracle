@@ -39,19 +39,17 @@ public class OracleSpatialIntegrationTest {
     }
 
     @Autowired
-    OracleSpatialGeoJsonConverter converter;
-
-    @Autowired
-    OracleSpatialSqlBuilder sqlBuilder;
+    OracleSpatialJdbcOperations spatial;
 
     @Autowired
     JdbcClient jdbcClient;
 
     @Test
     void geoJsonRoundTrip() {
-        String geoJson = jdbcClient.sql("select " + converter.toGeoJsonSql("geometry") + " from landmarks where id = :id")
+        SpatialExpression geometry = spatial.toGeoJson("geometry");
+        String geoJson = jdbcClient.sql("select " + geometry.selection("geometry") + " from landmarks where id = :id")
                 .param("id", 1L)
-                .query(String.class)
+                .query(spatial.geoJsonRowMapper("geometry"))
                 .single();
 
         assertThat(geoJson).contains("\"Point\"");
@@ -62,46 +60,59 @@ public class OracleSpatialIntegrationTest {
     void spatialPredicatesWork() {
         String point = "{\"type\":\"Point\",\"coordinates\":[-122.4194,37.7749]}";
         String polygon = "{\"type\":\"Polygon\",\"coordinates\":[[[-122.53,37.70],[-122.35,37.70],[-122.35,37.83],[-122.53,37.83],[-122.53,37.70]]]}";
+        SpatialGeometry pointGeometry = spatial.geometry(point);
+        SpatialGeometry polygonGeometry = spatial.geometry(polygon);
+        SpatialPredicate filter = spatial.filter("geometry", polygonGeometry);
+        SpatialPredicate relate = spatial.relate("geometry", polygonGeometry, SpatialRelationMask.ANYINTERACT);
+        SpatialPredicate withinDistance = spatial.withinDistance("geometry", pointGeometry, 2000);
+        SpatialPredicate nearestNeighbor = spatial.nearestNeighbor("geometry", pointGeometry, 1);
 
-        Long filterCount = jdbcClient.sql("select count(*) from landmarks where " + sqlBuilder.filterPredicate("geometry", "shape"))
-                .param("shape", polygon)
+        Long filterCount = spatial.bind(
+                        jdbcClient.sql("select count(*) from landmarks where " + filter.clause()),
+                        filter)
                 .query(Long.class)
                 .single();
         assertThat(filterCount).isGreaterThanOrEqualTo(2L);
 
-        Long relateCount = jdbcClient.sql("select count(*) from landmarks where " + sqlBuilder.relatePredicate("geometry", "shape", "ANYINTERACT"))
-                .param("shape", polygon)
+        Long relateCount = spatial.bind(
+                        jdbcClient.sql("select count(*) from landmarks where " + relate.clause()),
+                        relate)
                 .query(Long.class)
                 .single();
         assertThat(relateCount).isGreaterThanOrEqualTo(2L);
 
-        Long withinDistanceCount = jdbcClient.sql("select count(*) from landmarks where "
-                        + sqlBuilder.withinDistancePredicate("geometry", "shape", 2000))
-                .param("shape", point)
+        Long withinDistanceCount = spatial.bind(
+                        jdbcClient.sql("select count(*) from landmarks where " + withinDistance.clause()),
+                        withinDistance)
                 .query(Long.class)
                 .single();
         assertThat(withinDistanceCount).isGreaterThanOrEqualTo(1L);
 
-        String nearestName = jdbcClient.sql("select name from landmarks where "
-                        + sqlBuilder.nearestNeighborPredicate("geometry", "shape", 1)
-                        + " order by " + sqlBuilder.nearestNeighborDistanceExpression())
-                .param("shape", point)
+        String nearestName = spatial.bind(
+                        jdbcClient.sql("select name from landmarks where "
+                                + nearestNeighbor.clause()
+                                + " order by " + spatial.nearestNeighborDistance().expression()),
+                        nearestNeighbor)
                 .query(String.class)
                 .single();
         assertThat(nearestName).isEqualTo("Union Square");
     }
 
     @Test
-    void blankRelateMaskDefaultsToAnyInteract() {
-        String polygon = "{\"type\":\"Polygon\",\"coordinates\":[[[-122.53,37.70],[-122.35,37.70],[-122.35,37.83],[-122.53,37.83],[-122.53,37.70]]]}";
+    void distanceExpressionWorks() {
+        String point = "{\"type\":\"Point\",\"coordinates\":[-122.4194,37.7749]}";
+        SpatialGeometry pointGeometry = spatial.geometry(point);
+        SpatialExpression distance = spatial.distance("geometry", pointGeometry, 0.005);
 
-        Long relateCount = jdbcClient.sql("select count(*) from landmarks where "
-                        + sqlBuilder.relatePredicate("geometry", "shape", "   "))
-                .param("shape", polygon)
-                .query(Long.class)
+        Double nearestDistance = spatial.bind(
+                        jdbcClient.sql("select " + distance.selection("distance")
+                                + " from landmarks where id = :id"),
+                        distance)
+                .param("id", 2L)
+                .query(Double.class)
                 .single();
 
-        assertThat(relateCount).isGreaterThanOrEqualTo(2L);
+        assertThat(nearestDistance).isGreaterThanOrEqualTo(0.0d);
     }
 
     @SpringBootConfiguration

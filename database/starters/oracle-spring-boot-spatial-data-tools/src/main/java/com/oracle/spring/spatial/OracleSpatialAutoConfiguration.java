@@ -22,13 +22,7 @@ import org.springframework.context.annotation.Bean;
 public class OracleSpatialAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
-    OracleSpatialGeoJsonConverter oracleSpatialGeoJsonConverter(OracleSpatialProperties properties) {
-        return new OracleSpatialGeoJsonConverter(properties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    OracleSpatialSqlBuilder oracleSpatialSqlBuilder(OracleSpatialGeoJsonConverter geoJsonConverter) {
-        return new OracleSpatialSqlBuilder(geoJsonConverter);
+    OracleSpatialJdbcOperations oracleSpatialJdbcOperations(OracleSpatialProperties properties) {
+        return new OracleSpatialJdbcOperations(properties);
     }
 }

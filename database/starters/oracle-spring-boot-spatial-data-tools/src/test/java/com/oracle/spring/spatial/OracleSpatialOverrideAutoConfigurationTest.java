@@ -2,6 +2,8 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.spatial;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
@@ -16,32 +18,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = OracleSpatialOverrideAutoConfigurationTest.TestApplication.class)
 public class OracleSpatialOverrideAutoConfigurationTest {
     @Autowired
-    OracleSpatialGeoJsonConverter converter;
-
-    @Autowired
-    OracleSpatialSqlBuilder sqlBuilder;
+    OracleSpatialJdbcOperations spatial;
 
     @Test
     void userBeansTakePrecedence() {
-        assertThat(converter.defaultSrid()).isEqualTo(3857);
-        assertThat(sqlBuilder.geometryToGeoJson("geometry")).isEqualTo("custom");
+        SpatialGeometry geometry = spatial.geometry("{\"type\":\"Point\",\"coordinates\":[-122.3893,37.7786]}");
+
+        assertThat(geometry.srid()).isEqualTo(3857);
+        assertThat(spatial.toGeoJson("geometry").expression()).isEqualTo("custom");
     }
 
     @TestConfiguration
     static class OverrideBeans {
         @Bean
-        OracleSpatialGeoJsonConverter oracleSpatialGeoJsonConverter() {
+        OracleSpatialJdbcOperations oracleSpatialJdbcOperations() {
             OracleSpatialProperties properties = new OracleSpatialProperties();
             properties.setDefaultSrid(3857);
-            return new OracleSpatialGeoJsonConverter(properties);
-        }
-
-        @Bean
-        OracleSpatialSqlBuilder oracleSpatialSqlBuilder() {
-            return new OracleSpatialSqlBuilder(new OracleSpatialGeoJsonConverter(new OracleSpatialProperties())) {
+            return new OracleSpatialJdbcOperations(properties) {
                 @Override
-                public String geometryToGeoJson(String geometryExpression) {
-                    return "custom";
+                public SpatialExpression toGeoJson(String geometryColumn) {
+                    return new SpatialExpression("custom", Map.of());
                 }
             };
         }

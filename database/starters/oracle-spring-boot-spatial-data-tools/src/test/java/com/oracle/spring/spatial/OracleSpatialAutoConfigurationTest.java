@@ -14,24 +14,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = OracleSpatialAutoConfigurationTest.TestApplication.class)
 public class OracleSpatialAutoConfigurationTest {
     @Autowired
-    OracleSpatialGeoJsonConverter converter;
-
-    @Autowired
-    OracleSpatialSqlBuilder sqlBuilder;
+    OracleSpatialJdbcOperations spatial;
 
     @Autowired
     OracleSpatialProperties properties;
 
     @Test
     void spatialBeansConfigured() {
-        assertThat(converter).isNotNull();
-        assertThat(sqlBuilder).isNotNull();
+        SpatialGeometry geometry = spatial.geometry("{\"type\":\"Point\",\"coordinates\":[-122.3933,37.7955]}");
+        SpatialExpression fromGeoJson = spatial.fromGeoJson(geometry);
+        SpatialPredicate withinDistance = spatial.withinDistance("geometry", geometry, 500);
+
+        assertThat(spatial).isNotNull();
         assertThat(properties.isEnabled()).isTrue();
         assertThat(properties.getDefaultSrid()).isEqualTo(4326);
         assertThat(properties.getDefaultDistanceUnit()).isEqualTo("M");
-        assertThat(converter.fromGeoJsonSql(":geometry")).isEqualTo("SDO_UTIL.FROM_GEOJSON(:geometry, null, 4326)");
-        assertThat(converter.distanceClause(500)).isEqualTo("distance=500 unit=M");
-        assertThat(sqlBuilder.withinDistancePredicate("geometry", "shape", 500))
+        assertThat(fromGeoJson.expression()).isEqualTo("SDO_UTIL.FROM_GEOJSON(:spatialGeometry1, null, 4326)");
+        assertThat(withinDistance.clause())
                 .contains("SDO_WITHIN_DISTANCE")
                 .contains("distance=500 unit=M");
     }

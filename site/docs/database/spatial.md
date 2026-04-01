@@ -3,7 +3,7 @@ title: Oracle Spatial
 sidebar_position: 6
 ---
 
-The Oracle Spatial starter adds Spring Boot auto-configuration and helper beans for GeoJSON-first Oracle Spatial development with [`SDO_GEOMETRY`](https://docs.oracle.com/en/database/oracle/oracle-database/23/spatl/sdo_geometry-object-type.html).
+The Oracle Spatial starter adds Spring Boot auto-configuration for GeoJSON-first Oracle Spatial development with [`SDO_GEOMETRY`](https://docs.oracle.com/en/database/oracle/oracle-database/23/spatl/sdo_geometry-object-type.html).
 
 This starter is for geographic and topographic spatial data.
 
@@ -18,18 +18,36 @@ This starter is for geographic and topographic spatial data.
 
 ## Provided Beans
 
-- `OracleSpatialGeoJsonConverter` for [`SDO_UTIL.FROM_GEOJSON`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_util-from_geojson.html) and [`SDO_UTIL.TO_GEOJSON`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_util-to_geojson.html)
-- `OracleSpatialSqlBuilder` for [`SDO_FILTER`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_filter.html), [`SDO_RELATE`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_relate.html), [`SDO_WITHIN_DISTANCE`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_within_distance.html), and [`SDO_NN`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_nn.html)
-- `OracleSpatialProperties` with the prefix `oracle.database.spatial`
+When Oracle JDBC is on the classpath and a `DataSource` is present, the starter auto-configures:
 
-When Oracle JDBC is on the classpath and a `DataSource` is present, the starter auto-configures these beans:
-
-- `OracleSpatialGeoJsonConverter`
-- `OracleSpatialSqlBuilder`
-
-`OracleSpatialProperties` is also available for injection through Spring Boot configuration properties binding.
+- `OracleSpatialJdbcOperations`
+- `OracleSpatialProperties`
 
 If your application provides its own bean of the same type, the starter backs off and uses your custom bean instead.
+
+## What You Inject vs What You Build
+
+The starter injects one main working bean:
+
+- `OracleSpatialJdbcOperations`
+  - the Spring JDBC entry point for spatial work
+  - creates GeoJSON-backed bind values
+  - creates bindable SQL expressions and predicates
+  - provides a `RowMapper<String>` for projected GeoJSON columns
+  - applies spatial bind parameters to `JdbcClient.StatementSpec`
+
+Per query, `OracleSpatialJdbcOperations` creates lightweight value objects:
+
+- `SpatialGeometry`
+  - a GeoJSON payload plus SRID
+- `SpatialExpression`
+  - a SQL expression such as `SDO_UTIL.TO_GEOJSON(...)` or `SDO_GEOM.SDO_DISTANCE(...)`
+- `SpatialPredicate`
+  - a SQL predicate such as `SDO_FILTER(...) = 'TRUE'`
+- `SpatialRelationMask`
+  - enum values for `SDO_RELATE` masks such as `ANYINTERACT`, `INSIDE`, and `CONTAINS`
+
+These are not Spring beans. They are query parts that keep the spatial SQL fragment and its JDBC bind values together.
 
 ## Configuration Properties
 
@@ -47,39 +65,40 @@ oracle:
 These properties affect generated SQL directly:
 
 - `default-srid` is used when GeoJSON is converted to `SDO_GEOMETRY`
-- `default-distance-unit` is used when distance clauses are generated for `SDO_WITHIN_DISTANCE`
+- `default-distance-unit` is used when distance clauses are generated for `SDO_WITHIN_DISTANCE` and `SDO_GEOM.SDO_DISTANCE`
 
 If you are new to SRIDs, Oracle uses the SRID value to identify the geometry's spatial reference system or coordinate system. [Oracle's coordinate system documentation](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/coordinate-systems-spatial-reference-systems.html) and the [`SDO_SRID` section of the `SDO_GEOMETRY` reference](https://docs.oracle.com/en/database/oracle/oracle-database/23/spatl/sdo_geometry-object-type.html) are the best places to start.
 
 ## Using the Starter
 
-Inject the helper beans into a normal Spring service that uses `JdbcClient` or `JdbcTemplate`:
+Inject `OracleSpatialJdbcOperations` into a Spring JDBC service and let it supply the spatial expressions, predicates, and row mapping while your code still owns the full SQL statement:
 
 ```java
 @Service
 class LandmarkService {
     private final JdbcClient jdbcClient;
-    private final OracleSpatialGeoJsonConverter geoJsonConverter;
-    private final OracleSpatialSqlBuilder sqlBuilder;
+    private final OracleSpatialJdbcOperations spatial;
 
-    LandmarkService(JdbcClient jdbcClient,
-                    OracleSpatialGeoJsonConverter geoJsonConverter,
-                    OracleSpatialSqlBuilder sqlBuilder) {
+    LandmarkService(JdbcClient jdbcClient, OracleSpatialJdbcOperations spatial) {
         this.jdbcClient = jdbcClient;
-        this.geoJsonConverter = geoJsonConverter;
-        this.sqlBuilder = sqlBuilder;
+        this.spatial = spatial;
     }
 
     Landmark create(Landmark landmark) {
-        jdbcClient.sql("insert into landmarks (id, name, geometry) values (:id, "
-                        + sqlBuilder.insertGeometryExpression("geometry") + ")")
+        SpatialGeometry geometry = spatial.geometry(landmark.geometry());
+        SpatialExpression insertGeometry = spatial.fromGeoJson(geometry);
+
+        spatial.bind(
+                        jdbcClient.sql("insert into landmarks (id, name, geometry) values (:id, "
+                                + insertGeometry.expression() + ")"),
+                        insertGeometry)
                 .param("id", landmark.id())
-                .param("geometry", landmark.geometry())
                 .update();
 
+        SpatialExpression projectedGeometry = spatial.toGeoJson("geometry");
         return jdbcClient.sql("select id, "
-                        + sqlBuilder.geometryToGeoJson("geometry") + " as geometry "
-                        + "from landmarks where id = :id")
+                        + projectedGeometry.selection("geometry")
+                        + " from landmarks where id = :id")
                 .param("id", landmark.id())
                 .query((rs, rowNum) -> new Landmark(rs.getLong("id"), rs.getString("geometry")))
                 .single();
@@ -90,82 +109,105 @@ class LandmarkService {
 In this pattern:
 
 - the application boundary stays GeoJSON-first
-- the starter generates Oracle Spatial SQL fragments
+- the starter keeps Oracle Spatial SQL fragments attached to their JDBC bind values
+- `JdbcClient` still owns the statement lifecycle
 - schema creation, metadata registration, and spatial index creation remain outside the starter
 
-## `OracleSpatialGeoJsonConverter`
+## `OracleSpatialJdbcOperations`
 
-`OracleSpatialGeoJsonConverter` is the lower-level helper for SQL fragments related to GeoJSON conversion and distance clause generation.
+`OracleSpatialJdbcOperations` is the main API exposed by the starter.
 
-Available capabilities:
+Geometry creation:
 
-- `fromGeoJsonSql(String bindExpression)`
-  - returns `SDO_UTIL.FROM_GEOJSON(...)` using the configured default SRID
-- `fromGeoJsonSql(String bindExpression, int srid)`
-  - same conversion, but with a per-query SRID override
-- `toGeoJsonSql(String geometryExpression)`
-  - returns `SDO_UTIL.TO_GEOJSON(...)` for a column or SQL expression
-- `distanceClause(Number distance)`
-  - returns a distance clause using the configured default distance unit
-- `distanceClause(Number distance, String unit)`
-  - same clause, but with a per-query unit override
-- `defaultSrid()`
-  - returns the configured default SRID
-- `defaultDistanceUnit()`
-  - returns the configured default distance unit
+- `geometry(String geoJson)`
+- `geometry(String geoJson, int srid)`
 
-Typical use cases:
+Expression creation:
 
-- use `fromGeoJsonSql(...)` when building custom SQL not covered by `OracleSpatialSqlBuilder`
-- use `toGeoJsonSql(...)` when projecting `SDO_GEOMETRY` values back to GeoJSON
-- use `distanceClause(...)` when hand-assembling Oracle Spatial predicates
+- `fromGeoJson(SpatialGeometry geometry)`
+  - returns `SDO_UTIL.FROM_GEOJSON(...)`
+- `toGeoJson(String geometryColumn)`
+  - returns `SDO_UTIL.TO_GEOJSON(...)`
+- `nearestNeighborDistance()`
+  - returns `SDO_NN_DISTANCE(1)`
+- `distance(String geometryColumn, SpatialGeometry geometry, Number tolerance)`
+- `distance(String geometryColumn, SpatialGeometry geometry, Number tolerance, String unit)`
+  - return `SDO_GEOM.SDO_DISTANCE(...)`
 
-For background on GeoJSON conversion behavior, see Oracle's documentation for `SDO_UTIL.FROM_GEOJSON` and `SDO_UTIL.TO_GEOJSON`.
+Predicate creation:
 
-## `OracleSpatialSqlBuilder`
+- `filter(String geometryColumn, SpatialGeometry geometry)`
+  - wraps [`SDO_FILTER`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_filter.html)
+- `relate(String geometryColumn, SpatialGeometry geometry, SpatialRelationMask mask)`
+  - wraps [`SDO_RELATE`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_relate.html)
+- `withinDistance(String geometryColumn, SpatialGeometry geometry, Number distance)`
+- `withinDistance(String geometryColumn, SpatialGeometry geometry, Number distance, String unit)`
+  - wrap [`SDO_WITHIN_DISTANCE`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_within_distance.html)
+- `nearestNeighbor(String geometryColumn, SpatialGeometry geometry, int numResults)`
+  - wraps [`SDO_NN`](https://docs.oracle.com/en/database/oracle/oracle-database/26/spatl/sdo_nn.html)
 
-`OracleSpatialSqlBuilder` is the higher-level helper for common Oracle Spatial query fragments.
+Spring JDBC integration:
 
-Available capabilities:
+- `bind(JdbcClient.StatementSpec statement, SpatialJdbcBindable... parts)`
+  - applies bind values from spatial expressions and predicates to a `JdbcClient` statement
+- `geoJsonRowMapper(String columnLabel)`
+  - returns a `RowMapper<String>` for GeoJSON projections
 
-- `geometryFromGeoJson(String bindName)`
-- `geometryFromGeoJson(String bindName, int srid)`
-- `geometryToGeoJson(String geometryExpression)`
-- `insertGeometryExpression(String geoJsonBindName)`
-- `insertGeometryExpression(String geoJsonBindName, int srid)`
-- `filterPredicate(String geometryColumn, String geoJsonBindName)`
-- `filterPredicate(String geometryColumn, String geoJsonBindName, int srid)`
-- `relatePredicate(String geometryColumn, String geoJsonBindName, String mask)`
-- `relatePredicate(String geometryColumn, String geoJsonBindName, String mask, int srid)`
-- `withinDistancePredicate(String geometryColumn, String geoJsonBindName, Number distance)`
-- `withinDistancePredicate(String geometryColumn, String geoJsonBindName, Number distance, String unit)`
-- `nearestNeighborPredicate(String geometryColumn, String geoJsonBindName, int numResults)`
-- `nearestNeighborDistanceProjection(String alias)`
-- `nearestNeighborDistanceExpression()`
+## Query Patterns
 
-Method guidance:
+Insert GeoJSON as `SDO_GEOMETRY`:
 
-- `geometryFromGeoJson(...)`
-  - use when you need a named bind such as `:geometry` converted into `SDO_GEOMETRY`
-- `geometryToGeoJson(...)`
-  - use in `SELECT` projections to turn a geometry column back into GeoJSON
-- `insertGeometryExpression(...)`
-  - use in `INSERT` and `UPDATE` statements
-- `filterPredicate(...)`
-  - use for a fast primary filter
-- `relatePredicate(...)`
-  - use for exact relationship masks such as `ANYINTERACT` or `INSIDE`
-  - blank masks normalize to `ANYINTERACT`
-- `withinDistancePredicate(...)`
-  - use for radius-based filtering
-- `nearestNeighborPredicate(...)`
-  - use for nearest-neighbor queries
-- `nearestNeighborDistanceProjection(...)`
-  - use in a `SELECT` list when you also need the Oracle nearest-neighbor distance value
-- `nearestNeighborDistanceExpression()`
-  - use in `ORDER BY`
+```java
+SpatialGeometry geometry = spatial.geometry(geoJson);
+SpatialExpression insertGeometry = spatial.fromGeoJson(geometry);
 
-Note that `nearestNeighborPredicate(...)` and the related distance helpers currently assume Oracle operator id `1`. If you need more advanced SQL with multiple `SDO_NN` operators in a single statement, build that query manually.
+spatial.bind(
+                jdbcClient.sql("insert into landmarks (geometry) values (" + insertGeometry.expression() + ")"),
+                insertGeometry)
+        .update();
+```
+
+Project `SDO_GEOMETRY` back to GeoJSON:
+
+```java
+SpatialExpression projectedGeometry = spatial.toGeoJson("geometry");
+
+String geoJson = jdbcClient.sql("select " + projectedGeometry.selection("geometry") + " from landmarks where id = :id")
+        .param("id", id)
+        .query(spatial.geoJsonRowMapper("geometry"))
+        .single();
+```
+
+Apply a filter plus exact relationship check:
+
+```java
+SpatialGeometry searchGeometry = spatial.geometry(polygonGeoJson);
+SpatialPredicate filter = spatial.filter("geometry", searchGeometry);
+SpatialPredicate relate = spatial.relate("geometry", searchGeometry, SpatialRelationMask.ANYINTERACT);
+
+spatial.bind(
+                jdbcClient.sql("select id from landmarks where "
+                        + filter.clause() + " and " + relate.clause()),
+                filter, relate)
+        .query(Long.class)
+        .list();
+```
+
+Find nearby rows and order by distance:
+
+```java
+SpatialGeometry referenceGeometry = spatial.geometry(pointGeoJson);
+SpatialPredicate within = spatial.withinDistance("geometry", referenceGeometry, 2000);
+SpatialExpression distance = spatial.distance("geometry", referenceGeometry, 0.005);
+
+spatial.bind(
+                jdbcClient.sql("select id, " + distance.selection("distance")
+                        + " from landmarks where " + within.clause()
+                        + " order by distance fetch first 3 rows only"),
+                within, distance)
+        .query((rs, rowNum) -> rs.getLong("id"))
+        .list();
+```
 
 ## Usage Notes
 
@@ -174,6 +216,7 @@ Note that `nearestNeighborPredicate(...)` and the related distance helpers curre
 - Use `SDO_WITHIN_DISTANCE` for radius filtering and `SDO_NN` for nearest-neighbor searches.
 - Do not combine `SDO_NN` and `SDO_WITHIN_DISTANCE` in the same `WHERE` clause.
 - Use `SDO_WITHIN_DISTANCE` ordered by `SDO_GEOM.SDO_DISTANCE` when you need both a distance bound and a result count.
+- `nearestNeighbor(...)` and `nearestNeighborDistance()` currently assume Oracle operator id `1`. If you need more advanced SQL with multiple `SDO_NN` operators in a single statement, build that query manually.
 
 ## Further Reading
 
