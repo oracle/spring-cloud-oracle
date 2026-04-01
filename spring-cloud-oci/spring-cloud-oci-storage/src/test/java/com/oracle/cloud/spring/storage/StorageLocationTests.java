@@ -50,18 +50,18 @@ class StorageLocationTests {
     @Test
     void testResolveBucketName() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            StorageLocation.resolveBucketName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace");
+            StorageLocation.resolveBucketName("https://example.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace");
         });
         assertTrue(exception.getMessage().contains(StorageLocation.ERROR_INVALID_BUCKET));
-        String bucketName = StorageLocation.resolveBucketName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket/o/myobject");
+        String bucketName = StorageLocation.resolveBucketName("https://example.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket/o/myobject");
         assertThat(bucketName).isEqualTo("mybucket");
     }
 
     @Test
     void testResolveObjectName() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> StorageLocation.resolveObjectName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> StorageLocation.resolveObjectName("https://example.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket"));
         assertTrue(exception.getMessage().contains(StorageLocation.ERROR_OBJECT_REQUIRED));
-        String objectName = StorageLocation.resolveObjectName("https://maacloud.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket/o/myobject");
+        String objectName = StorageLocation.resolveObjectName("https://example.objectstorage.us-chicago-1.oci.customer-oci.com/n/namespace/b/mybucket/o/myobject");
         assertThat(objectName).isEqualTo("myobject");
     }
 
