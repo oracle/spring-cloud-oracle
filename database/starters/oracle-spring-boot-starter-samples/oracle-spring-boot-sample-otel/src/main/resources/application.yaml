@@ -1,0 +1,44 @@
+
+# Tracing Configuration
+management:
+
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  tracing:
+    export:
+      otlp:
+        enabled: true
+    sampling:
+      # Send 100% of spans
+      probability: 1
+  otlp:
+    metrics:
+      export:
+        enabled: false
+  logging:
+    export:
+      otlp:
+        enabled: false
+
+spring:
+  jmx:
+    enabled: true
+  application:
+    name: OJDBC Tracing
+  datasource:
+    username: testuser
+    password: testpwd
+    # Docker compose Oracle Free container
+    url: jdbc:oracle:thin:@localhost:1522/freepdb1?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider
+    # Set these to use UCP over Hikari.
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSourceImpl
+    oracleucp:
+      initial-pool-size: 1
+      min-pool-size: 1
+      max-pool-size: 30
+      connection-pool-name: UCPSampleApplication
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
