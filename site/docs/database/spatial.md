@@ -89,18 +89,24 @@ class LandmarkService {
         SpatialExpression insertGeometry = spatial.fromGeoJson(geometry);
 
         spatial.bind(
-                        jdbcClient.sql("insert into landmarks (id, name, geometry) values (:id, "
+                        jdbcClient.sql("insert into landmarks (id, name, category, geometry) values (:id, :name, :category, "
                                 + insertGeometry.expression() + ")"),
                         insertGeometry)
                 .param("id", landmark.id())
+                .param("name", landmark.name())
+                .param("category", landmark.category())
                 .update();
 
         SpatialExpression projectedGeometry = spatial.toGeoJson("geometry");
-        return jdbcClient.sql("select id, "
+        return jdbcClient.sql("select id, name, category, "
                         + projectedGeometry.selection("geometry")
                         + " from landmarks where id = :id")
                 .param("id", landmark.id())
-                .query((rs, rowNum) -> new Landmark(rs.getLong("id"), rs.getString("geometry")))
+                .query((rs, rowNum) -> new Landmark(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getString("geometry")))
                 .single();
     }
 }

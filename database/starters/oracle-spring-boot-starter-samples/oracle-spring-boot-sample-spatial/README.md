@@ -8,7 +8,7 @@ The sample includes:
 
 - A `Landmark` REST API for insert and query flows
 - SQL initialization for the spatial table, metadata, and index
-- Spatial queries for nearest-neighbor, within-distance, and polygon search
+- Spatial queries for within-distance, distance-ordered proximity search, and polygon search
 - A Spring Boot integration test that runs against Oracle Free with Testcontainers
 
 The sample keeps spatial schema setup in SQL initialization scripts. In a production application, table DDL, `USER_SDO_GEOM_METADATA`, and spatial index creation should typically live in your migration tooling.
@@ -20,7 +20,11 @@ The sample application test uses Testcontainers, and creates a temporary Oracle 
 To run the test application, run the following command:
 
 ```shell
-mvn -pl oracle-spring-boot-starter-samples/oracle-spring-boot-sample-spatial -am test -Dtest=SpatialSampleApplicationTest
+mvn -f database/starters/pom.xml \
+  -pl oracle-spring-boot-starter-samples/oracle-spring-boot-sample-spatial -am \
+  -Dtest=SpatialSampleApplicationTest \
+  -Dsurefire.failIfNoSpecifiedTests=false \
+  test
 ```
 
 ## Sample API Notes
