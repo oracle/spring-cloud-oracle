@@ -118,6 +118,7 @@ In this pattern:
 - the starter keeps Oracle Spatial SQL fragments attached to their JDBC bind values
 - `JdbcClient` still owns the statement lifecycle
 - schema creation, metadata registration, and spatial index creation remain outside the starter
+- generated bind names such as `spatialGeometry1` are internal implementation details and may increment over time, so callers should not depend on specific parameter names in logs
 
 ## `OracleSpatialJdbcOperations`
 

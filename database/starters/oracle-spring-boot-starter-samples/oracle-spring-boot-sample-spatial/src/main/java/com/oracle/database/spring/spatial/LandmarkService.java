@@ -2,6 +2,7 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.spatial;
 
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.List;
 
@@ -94,6 +95,17 @@ public class LandmarkService {
         if (mask == null || mask.isBlank()) {
             return SpatialRelationMask.ANYINTERACT;
         }
-        return SpatialRelationMask.valueOf(mask.trim().toUpperCase(Locale.ROOT));
+        try {
+            return SpatialRelationMask.valueOf(mask.trim().toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException exception) {
+            throw new InvalidSpatialMaskException(mask, supportedMasks());
+        }
+    }
+
+    private String supportedMasks() {
+        return Arrays.stream(SpatialRelationMask.values())
+                .map(Enum::name)
+                .toList()
+                .toString();
     }
 }

@@ -10,14 +10,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testcontainers.oracle.OracleContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -91,5 +94,32 @@ public class SpatialSampleApplicationTest {
         assertThat(List.of(withinResults))
                 .extracting(Landmark::name)
                 .contains("Ferry Building", "Union Square", "Oracle Park");
+    }
+
+    @Test
+    @Sql("/init.sql")
+    void invalidWithinMaskReturnsBadRequest() {
+        RestClient restClient = RestClient.builder()
+                .baseUrl("http://localhost:" + port)
+                .build();
+
+        WithinLandmarkRequest invalidRequest = new WithinLandmarkRequest(
+                "{\"type\":\"Polygon\",\"coordinates\":[[[-122.53,37.70],[-122.35,37.70],[-122.35,37.83],[-122.53,37.83],[-122.53,37.70]]]}",
+                "INTERSECTS"
+        );
+
+        assertThatThrownBy(() -> restClient.post()
+                .uri("/landmarks/within")
+                .body(invalidRequest)
+                .retrieve()
+                .body(String.class))
+                .isInstanceOf(RestClientResponseException.class)
+                .satisfies(exception -> {
+                    RestClientResponseException responseException = (RestClientResponseException) exception;
+                    assertThat(responseException.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+                    assertThat(responseException.getResponseBodyAsString())
+                            .contains("Unsupported spatial relation mask 'INTERSECTS'")
+                            .contains("ANYINTERACT");
+                });
     }
 }
