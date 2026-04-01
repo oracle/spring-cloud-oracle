@@ -172,7 +172,8 @@ Note that `nearestNeighborPredicate(...)` and the related distance helpers curre
 - Manage spatial table DDL, `USER_SDO_GEOM_METADATA`, and spatial index creation in your migrations or setup SQL rather than expecting starter beans to create them.
 - Use `SDO_FILTER` as a primary filter and `SDO_RELATE` for exact mask-based checks.
 - Use `SDO_WITHIN_DISTANCE` for radius filtering and `SDO_NN` for nearest-neighbor searches.
-- Avoid combining `SDO_NN` and `SDO_WITHIN_DISTANCE` in a simple `WHERE` clause unless you are intentionally building an advanced Oracle Spatial query pattern.
+- Do not combine `SDO_NN` and `SDO_WITHIN_DISTANCE` in the same `WHERE` clause.
+- Use `SDO_WITHIN_DISTANCE` ordered by `SDO_GEOM.SDO_DISTANCE` when you need both a distance bound and a result count.
 
 ## Further Reading
 
