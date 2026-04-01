@@ -30,7 +30,7 @@ public class OracleSpatialConditionalAutoConfigurationTest {
     void backsOffWhenOracleJdbcClassesAreMissing() {
         contextRunner
                 .withUserConfiguration(TestDataSourceConfiguration.class)
-                .withClassLoader(new FilteredClassLoader("oracle.jdbc.OracleConnection"))
+                .withClassLoader(new FilteredClassLoader(oracle.jdbc.OracleConnection.class))
                 .run(context -> {
                     assertThat(context).hasSingleBean(DataSource.class);
                     assertThat(context).doesNotHaveBean(OracleSpatialGeoJsonConverter.class);

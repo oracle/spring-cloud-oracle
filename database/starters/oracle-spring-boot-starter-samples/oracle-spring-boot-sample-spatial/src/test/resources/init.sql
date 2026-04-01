@@ -21,10 +21,10 @@ on landmarks (geometry)
 indextype is mdsys.spatial_index_v2;
 
 insert into landmarks (id, name, category, geometry)
-values (1, 'Ferry Building', 'MARKET', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.3933,37.7955]}'));
+values (1, 'Ferry Building', 'MARKET', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.3933,37.7955]}', null, 4326));
 
 insert into landmarks (id, name, category, geometry)
-values (2, 'Union Square', 'PLAZA', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.4074,37.7879]}'));
+values (2, 'Union Square', 'PLAZA', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.4074,37.7879]}', null, 4326));
 
 insert into landmarks (id, name, category, geometry)
-values (3, 'Golden Gate Park', 'PARK', sdo_util.from_geojson('{"type":"Polygon","coordinates":[[[-122.511,37.771],[-122.454,37.771],[-122.454,37.768],[-122.511,37.768],[-122.511,37.771]]]}'));
+values (3, 'Golden Gate Park', 'PARK', sdo_util.from_geojson('{"type":"Polygon","coordinates":[[[-122.511,37.771],[-122.454,37.771],[-122.454,37.768],[-122.511,37.768],[-122.511,37.771]]]}', null, 4326));

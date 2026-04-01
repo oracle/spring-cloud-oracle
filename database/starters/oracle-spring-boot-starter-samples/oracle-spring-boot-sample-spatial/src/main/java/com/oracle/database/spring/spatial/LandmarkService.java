@@ -50,6 +50,7 @@ public class LandmarkService {
     public List<Landmark> findNear(String geometry, Integer distance, Integer limit) {
         int effectiveDistance = distance == null ? 2000 : distance;
         int effectiveLimit = limit == null ? 3 : limit;
+        // Use a small tolerance when ordering seeded WGS84 sample data by metric distance.
         String distanceProjection = "SDO_GEOM.SDO_DISTANCE(geometry, "
                 + sqlBuilder.geometryFromGeoJson("refGeometry")
                 + ", 0.005, 'unit=" + geoJsonConverter.defaultDistanceUnit() + "') distance";
@@ -72,9 +73,9 @@ public class LandmarkService {
     public List<Landmark> findWithin(String geometry, String mask) {
         return jdbcClient.sql("select id, name, category, "
                         + sqlBuilder.geometryToGeoJson("geometry") + " as geometry from landmarks where "
-                        + sqlBuilder.filterPredicate("geometry", "geometry")
-                        + " and " + sqlBuilder.relatePredicate("geometry", "geometry", mask))
-                .param("geometry", geometry)
+                        + sqlBuilder.filterPredicate("geometry", "refGeometry")
+                        + " and " + sqlBuilder.relatePredicate("geometry", "refGeometry", mask))
+                .param("refGeometry", geometry)
                 .query((rs, rowNum) -> new Landmark(
                         rs.getLong("id"),
                         rs.getString("name"),

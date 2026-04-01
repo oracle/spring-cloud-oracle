@@ -21,6 +21,14 @@ Applications remain responsible for creating spatial tables, populating `USER_SD
 </dependency>
 ```
 
+## Configuration Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `oracle.database.spatial.enabled` | `boolean` | `true` | Enables or disables the spatial auto-configuration |
+| `oracle.database.spatial.default-srid` | `int` | `4326` | SRID embedded in generated `SDO_UTIL.FROM_GEOJSON` calls; must be positive |
+| `oracle.database.spatial.default-distance-unit` | `String` | `M` | Distance unit token appended to generated distance clauses; Oracle-supported values include `M`, `KM`, and `UNIT=MILE` |
+
 ## Example
 
 Inject the helper beans into a normal Spring JDBC service:
@@ -44,4 +52,5 @@ class LandmarkService {
 - Use `SDO_RELATE` when you need exact relationship masks such as `ANYINTERACT` or `INSIDE`.
 - Use `SDO_WITHIN_DISTANCE` for radius-based filtering.
 - Use `SDO_NN` for nearest-neighbor searches.
-- Avoid combining `SDO_NN` and `SDO_WITHIN_DISTANCE` in the same simple `WHERE` clause unless you are intentionally building a more advanced Oracle Spatial query pattern.
+- Do not combine `SDO_NN` and `SDO_WITHIN_DISTANCE` in the same `WHERE` clause.
+- Use `SDO_WITHIN_DISTANCE` ordered by `SDO_GEOM.SDO_DISTANCE` when you need both a distance bound and a result count.

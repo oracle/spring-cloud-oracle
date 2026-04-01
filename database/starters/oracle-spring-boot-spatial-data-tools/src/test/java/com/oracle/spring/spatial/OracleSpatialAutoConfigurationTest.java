@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.boot.test.context.TestConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,26 +34,6 @@ public class OracleSpatialAutoConfigurationTest {
         assertThat(sqlBuilder.withinDistancePredicate("geometry", "shape", 500))
                 .contains("SDO_WITHIN_DISTANCE")
                 .contains("distance=500 unit=M");
-    }
-
-    @TestConfiguration
-    static class OverrideBeans {
-        @Bean
-        OracleSpatialGeoJsonConverter oracleSpatialGeoJsonConverter() {
-            OracleSpatialProperties properties = new OracleSpatialProperties();
-            properties.setDefaultSrid(3857);
-            return new OracleSpatialGeoJsonConverter(properties);
-        }
-
-        @Bean
-        OracleSpatialSqlBuilder oracleSpatialSqlBuilder() {
-            return new OracleSpatialSqlBuilder(new OracleSpatialGeoJsonConverter(new OracleSpatialProperties())) {
-                @Override
-                public String geometryToGeoJson(String geometryExpression) {
-                    return "custom";
-                }
-            };
-        }
     }
 
     @SpringBootConfiguration
