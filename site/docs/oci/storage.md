@@ -70,13 +70,15 @@ try (InputStream inputStream = myObjectResource.getInputStream()) {
 Object Storage resources also implement Spring's `WritableResource`, so they can be used for write operations as well.
 
 ```java
-@Value("https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
+@Value("https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
 private WritableResource myWritableObjectResource;
 ```
 
+You can also resolve a writable object resource programmatically from the application context.
+
 ```java
 WritableResource writableResource = (WritableResource) applicationContext.getResource(
-        "https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}");
+        "https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}");
 
 try (OutputStream outputStream = writableResource.getOutputStream()) {
     outputStream.write("Hello Object Storage".getBytes(StandardCharsets.UTF_8));

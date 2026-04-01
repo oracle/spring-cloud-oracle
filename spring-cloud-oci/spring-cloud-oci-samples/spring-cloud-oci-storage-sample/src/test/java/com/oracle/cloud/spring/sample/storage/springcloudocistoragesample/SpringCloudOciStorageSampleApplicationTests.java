@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnabledIfEnvironmentVariable(named = "OCI_BUCKET", matches = ".+")
 @EnabledIfEnvironmentVariable(named = "OCI_OBJECT", matches = ".+")
 @EnabledIfEnvironmentVariable(named = "OCI_COMPARTMENT", matches = ".+")
+@EnabledIfEnvironmentVariable(named = "OCI_REGION", matches = ".+")
 class SpringCloudOciStorageSampleApplicationTests {
 
     static final String testBucket = System.getenv("OCI_BUCKET");

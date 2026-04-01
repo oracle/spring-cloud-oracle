@@ -24,10 +24,11 @@ public class SpringCloudOciStorageSampleApplication {
     @Bean
     @Qualifier("sampleObjectResource")
     Resource sampleObjectResource(ResourceLoader resourceLoader,
+                                  @Value("${OCI_REGION:${spring.cloud.oci.region.static}}") String region,
                                   @Value("${OCI_NAMESPACE}") String namespace,
                                   @Value("${OCI_BUCKET}") String bucket,
                                   @Value("${OCI_OBJECT}") String objectName) {
-        return resourceLoader.getResource(storageLocation(namespace, bucket, objectName));
+        return resourceLoader.getResource(storageLocation(region, namespace, bucket, objectName));
     }
 
     @Bean
@@ -40,8 +41,8 @@ public class SpringCloudOciStorageSampleApplication {
         throw new IllegalStateException("OCI storage resource does not implement WritableResource");
     }
 
-    private static String storageLocation(String namespace, String bucket, String objectName) {
-        return "https://objectstorage.us-chicago-1.oraclecloud.com/n/%s/b/%s/o/%s"
-                .formatted(namespace, bucket, objectName);
+    private static String storageLocation(String region, String namespace, String bucket, String objectName) {
+        return "https://objectstorage.%s.oraclecloud.com/n/%s/b/%s/o/%s"
+                .formatted(region, namespace, bucket, objectName);
     }
 }
