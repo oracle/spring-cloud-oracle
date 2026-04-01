@@ -4,6 +4,7 @@ package com.oracle.database.spring.spatial;
 
 import java.util.List;
 
+//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// uncomment and udpate the following line, and the matching import statment above
+// if you are calling this from a web application and need CORS support
+//@CrossOrigin(origins = "http://host:port")
 @RestController
 public class LandmarkController {
     private final LandmarkService landmarkService;

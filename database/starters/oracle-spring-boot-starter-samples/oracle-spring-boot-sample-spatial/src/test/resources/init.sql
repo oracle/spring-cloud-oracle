@@ -28,3 +28,15 @@ values (2, 'Union Square', 'PLAZA', sdo_util.from_geojson('{"type":"Point","coor
 
 insert into landmarks (id, name, category, geometry)
 values (3, 'Golden Gate Park', 'PARK', sdo_util.from_geojson('{"type":"Polygon","coordinates":[[[-122.511,37.771],[-122.454,37.771],[-122.454,37.768],[-122.511,37.768],[-122.511,37.771]]]}', null, 4326));
+
+insert into landmarks (id, name, category, geometry)
+values (4, 'Oracle Park', 'STADIUM', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.3893,37.7786]}', null, 4326));
+
+insert into landmarks (id, name, category, geometry)
+values (5, 'Salesforce Tower', 'SKYSCRAPER', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.3969,37.7897]}', null, 4326));
+
+insert into landmarks (id, name, category, geometry)
+values (6, 'Transamerica Pyramid', 'SKYSCRAPER', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.4039,37.7952]}', null, 4326));
+
+insert into landmarks (id, name, category, geometry)
+values (7, 'Coit Tower', 'TOWER', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.4058,37.8024]}', null, 4326));
