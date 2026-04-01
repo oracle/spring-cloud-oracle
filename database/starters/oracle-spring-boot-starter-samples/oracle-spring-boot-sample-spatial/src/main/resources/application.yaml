@@ -1,8 +1,5 @@
 spring:
   datasource:
-    username: ${USERNAME}
-    password: ${PASSWORD}
-    url: ${JDBC_URL}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSourceImpl
     oracleucp:

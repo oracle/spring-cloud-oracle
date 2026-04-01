@@ -8,9 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -24,17 +23,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SpatialSampleApplicationTest {
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.0-full-faststart")
+    @ServiceConnection
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.1-full-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");
-
-    @DynamicPropertySource
-    static void properties(DynamicPropertyRegistry registry) {
-        registry.add("JDBC_URL", oracleContainer::getJdbcUrl);
-        registry.add("USERNAME", () -> "system");
-        registry.add("PASSWORD", oracleContainer::getPassword);
-    }
 
     @LocalServerPort
     int port;

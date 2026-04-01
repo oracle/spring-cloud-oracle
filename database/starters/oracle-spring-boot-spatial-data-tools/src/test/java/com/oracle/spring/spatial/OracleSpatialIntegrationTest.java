@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = OracleSpatialIntegrationTest.TestApplication.class)
 @Sql(scripts = "/spatial-init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class OracleSpatialIntegrationTest {
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.0-full-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.1-full-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");
