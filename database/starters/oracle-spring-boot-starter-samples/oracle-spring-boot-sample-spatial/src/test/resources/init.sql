@@ -1,9 +1,13 @@
-create table landmarks (
+create table if not exists landmarks (
     id number primary key,
     name varchar2(200) not null,
     category varchar2(100) not null,
     geometry mdsys.sdo_geometry not null
 );
+
+delete from user_sdo_geom_metadata
+where table_name = 'LANDMARKS'
+  and column_name = 'GEOMETRY';
 
 insert into user_sdo_geom_metadata (table_name, column_name, diminfo, srid)
 values (
@@ -16,9 +20,11 @@ values (
     4326
 );
 
-create index landmarks_spatial_idx
+create index if not exists landmarks_spatial_idx
 on landmarks (geometry)
 indextype is mdsys.spatial_index_v2;
+
+delete from landmarks;
 
 insert into landmarks (id, name, category, geometry)
 values (1, 'Ferry Building', 'MARKET', sdo_util.from_geojson('{"type":"Point","coordinates":[-122.3933,37.7955]}', null, 4326));
