@@ -9,34 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.oracle.OracleContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Testcontainers
 @SpringBootTest(classes = OracleSpatialIntegrationTest.TestApplication.class)
 @Sql(scripts = "/spatial-init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 public class OracleSpatialIntegrationTest {
+    @Container
+    @ServiceConnection
     static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.1-full-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");
-
-    static {
-        oracleContainer.start();
-    }
-
-    @DynamicPropertySource
-    static void properties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", oracleContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", () -> "system");
-        registry.add("spring.datasource.password", oracleContainer::getPassword);
-        registry.add("spring.datasource.driver-class-name", () -> "oracle.jdbc.OracleDriver");
-        registry.add("spring.datasource.type", () -> "oracle.ucp.jdbc.PoolDataSourceImpl");
-    }
 
     @Autowired
     OracleSpatialJdbcOperations spatial;
