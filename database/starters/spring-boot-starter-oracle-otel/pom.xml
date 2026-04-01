@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2024, Oracle and/or its affiliates. -->
+<!-- Copyright (c) 2026, Oracle and/or its affiliates. -->
 <!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,13 +12,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>oracle-spring-boot-starter-samples</artifactId>
+    <artifactId>spring-boot-starter-oracle-otel</artifactId>
     <version>26.1.0</version>
-    <packaging>pom</packaging>
 
-    <name>Oracle Spring Boot Starter - Samples</name>
-    <description>Oracle Spring Boot Starter Sample Parent Module</description>
-    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/samples</url>
+    <name>Oracle Spring Boot Starter - Oracle OpenTelemetry</name>
+    <description>Spring Boot starter module OpenTelemetry and Oracle AI Database instrumentation</description>
+    <url>https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/spring-boot-starter-oracle-otel</url>
 
     <organization>
         <name>Oracle America, Inc.</name>
@@ -48,29 +47,27 @@
         <developerConnection>scm:git:git@github.com:oracle/spring-cloud-oracle.git</developerConnection>
     </scm>
 
-    <modules>
-        <module>oracle-spring-boot-sample-ucp-jpa</module>
-        <module>oracle-spring-boot-sample-json-duality</module>
-        <module>oracle-spring-boot-sample-json-events</module>
-        <module>oracle-spring-boot-sample-okafka</module>
-        <module>oracle-spring-boot-sample-spatial</module>
-        <module>oracle-spring-boot-sample-otel</module>
-        <module>oracle-spring-boot-sample-wallet</module>
-        <module>oracle-spring-boot-sample-txeventqjms</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <!-- Skip deploy of sample code-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+        <!-- OJDBC Tracing provider -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc-provider-opentelemetry</artifactId>
+        </dependency>
+        <!-- Observability / Tracing is implemented in Actuator. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-opentelemetry</artifactId>
+        </dependency>
+
+    </dependencies>
 </project>
