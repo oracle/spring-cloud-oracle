@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -11,11 +11,8 @@ import com.oracle.bmc.objectstorage.requests.CreateBucketRequest;
 import com.oracle.bmc.objectstorage.requests.DeleteBucketRequest;
 import com.oracle.bmc.objectstorage.requests.DeleteObjectRequest;
 import com.oracle.bmc.objectstorage.requests.GetNamespaceRequest;
-import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.CreateBucketResponse;
 import com.oracle.bmc.objectstorage.responses.GetNamespaceResponse;
-import com.oracle.bmc.objectstorage.transfer.UploadConfiguration;
-import com.oracle.bmc.objectstorage.transfer.UploadManager;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
@@ -31,6 +28,7 @@ public class StorageImpl implements Storage {
     private final StorageObjectConverter storageObjectConverter;
     private final StorageContentTypeResolver contentTypeResolver;
     private final String defaultCompartmentOCID;
+    private final StorageObjectUploader objectUploader;
     static final String ERROR_OSCLIENT_REQUIRED = "ObjectStorageClient is required";
     static final String ERROR_STORAGE_OBJECT_CONVERTER_REQUIRED = "storageObjectConverter is required";
     static final String ERROR_CONTENT_TYPE_RESOLVER_REQUIRED = "contentTypeResolver is required";
@@ -43,6 +41,16 @@ public class StorageImpl implements Storage {
             StorageObjectConverter storageObjectConverter,
             StorageContentTypeResolver contentTypeResolver,
             String defaultCompartmentOCID) {
+        this(osClient, storageObjectConverter, contentTypeResolver, defaultCompartmentOCID,
+                new UploadManagerStorageObjectUploader());
+    }
+
+    StorageImpl(
+            ObjectStorageClient osClient,
+            StorageObjectConverter storageObjectConverter,
+            StorageContentTypeResolver contentTypeResolver,
+            String defaultCompartmentOCID,
+            StorageObjectUploader objectUploader) {
         Assert.notNull(osClient, ERROR_OSCLIENT_REQUIRED);
         Assert.notNull(storageObjectConverter, "storageObjectConverter is required");
         Assert.notNull(contentTypeResolver, "contentTypeResolver is required");
@@ -51,6 +59,7 @@ public class StorageImpl implements Storage {
         this.storageObjectConverter = storageObjectConverter;
         this.contentTypeResolver = contentTypeResolver;
         this.defaultCompartmentOCID = defaultCompartmentOCID;
+        this.objectUploader = objectUploader;
     }
 
     /**
@@ -65,7 +74,7 @@ public class StorageImpl implements Storage {
         Assert.notNull(bucketName, ERROR_BUCKET_NAME_REQUIRED);
         Assert.notNull(key, ERROR_KEY_REQUIRED);
 
-        return new OracleStorageResource(bucketName, key, osClient);
+        return new OracleStorageResource(bucketName, key, osClient, contentTypeResolver, objectUploader);
     }
 
     /**
@@ -94,30 +103,9 @@ public class StorageImpl implements Storage {
         Assert.notNull(key, ERROR_KEY_REQUIRED);
         Assert.notNull(inputStream, "inputStream is required");
 
-        UploadConfiguration uploadConfiguration =
-                UploadConfiguration.builder()
-                        .allowMultipartUploads(true)
-                        .allowParallelUploads(true)
-                        .build();
-        UploadManager uploadManager = new UploadManager(osClient, uploadConfiguration);
-
-        PutObjectRequest.Builder builder = PutObjectRequest.builder()
-                .bucketName(bucketName)
-                .namespaceName(getNamespaceName())
-                .objectName(key);
-
-        if (objectMetadata != null) {
-            objectMetadata.apply(builder);
-        }
-
-        builder.contentType(resolveContentType(key, objectMetadata));
-        PutObjectRequest putObjectRequest = builder.build();
-
-        UploadManager.UploadRequest uploadRequest = UploadManager.UploadRequest.builder(inputStream, inputStream.available()).build(putObjectRequest);
-        UploadManager.UploadResponse uploadResponse = uploadManager.upload(uploadRequest);
-        System.out.println(uploadResponse);
-
-        return null;
+        OracleStorageResource resource =
+                new OracleStorageResource(bucketName, key, osClient, contentTypeResolver, objectUploader);
+        return resource.upload(inputStream, withResolvedContentType(key, objectMetadata));
     }
 
     /**
@@ -254,9 +242,20 @@ public class StorageImpl implements Storage {
         }
 
         if (contentTypeResolver != null && (metadata == null || metadata.getContentType() == null)) {
-            contentTypeResolver.resolveContentType(objectName);
+            return contentTypeResolver.resolveContentType(objectName);
         }
 
         return null;
+    }
+
+    private StorageObjectMetadata withResolvedContentType(String objectName, @Nullable StorageObjectMetadata metadata) {
+        String contentType = resolveContentType(objectName, metadata);
+        if (contentType == null || (metadata != null && contentType.equals(metadata.getContentType()))) {
+            return metadata;
+        }
+
+        StorageObjectMetadata resolvedMetadata = metadata != null ? metadata : StorageObjectMetadata.builder().build();
+        resolvedMetadata.setContentType(contentType);
+        return resolvedMetadata;
     }
 }

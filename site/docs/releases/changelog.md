@@ -9,7 +9,13 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 ### Next, TBD
 
-TBD
+#### Spring Cloud OCI
+
+- OCI Object Storage `WritableResource` support:
+  - The OCI Object Storage Spring `Resource` now also implements `WritableResource`, allowing object uploads through `getOutputStream()`
+  - The Object Storage sample now demonstrates Spring `Resource`, `WritableResource`, and direct `Storage` API round trips for objects and bucket lifecycle operations
+  - The Object Storage documentation now includes `WritableResource` usage in addition to the existing `Resource` examples
+
 
 ### 2.0.0, March TBD
 
