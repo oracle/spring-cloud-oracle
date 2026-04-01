@@ -50,13 +50,13 @@ public void createBucketAndUploadFile() {
 Object Storage objects can be accessed using Spring's resource abstraction.
 
 ```java
-@Value("https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
+@Value("https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
 private Resource myObjectResource;
 ```
 
 ```java
 Resource objectResource = applicationContext.getResource(
-        "https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}");
+        "https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}");
 ```
 
 The resulting `Resource` can be read like other Spring resources.
