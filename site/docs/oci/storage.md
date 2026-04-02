@@ -50,15 +50,42 @@ public void createBucketAndUploadFile() {
 Object Storage objects can be accessed using Spring's resource abstraction.
 
 ```java
-@Value("https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
+@Value("https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
 private Resource myObjectResource;
 ```
 
 ```java
-SpringApplication.run(...).getResource("Object Storage URL");
+Resource objectResource = applicationContext.getResource(
+        "https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}");
 ```
 
-The resulting `Resource` can be read like other Spring resources. This resource support is currently read-only.
+The resulting `Resource` can be read like other Spring resources.
+
+```java
+try (InputStream inputStream = myObjectResource.getInputStream()) {
+    String content = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+}
+```
+
+Object Storage resources also implement Spring's `WritableResource`, so they can be used for write operations as well.
+
+```java
+@Value("https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
+private WritableResource myWritableObjectResource;
+```
+
+You can also resolve a writable object resource programmatically from the application context.
+
+```java
+WritableResource writableResource = (WritableResource) applicationContext.getResource(
+        "https://objectstorage.${OCI_REGION}.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}");
+
+try (OutputStream outputStream = writableResource.getOutputStream()) {
+    outputStream.write("Hello Object Storage".getBytes(StandardCharsets.UTF_8));
+}
+```
+
+Data written through `WritableResource#getOutputStream()` is uploaded to OCI Object Storage when the stream is closed.
 
 ## Configuration
 
@@ -66,6 +93,6 @@ The resulting `Resource` can be read like other Spring resources. This resource 
 | --- | --- | --- | --- |
 | `spring.cloud.oci.storage.enabled` | Enables the OCI Object Storage APIs | No | `true` |
 
-## Sample
+## Learn By Example
 
 See [`spring-cloud-oci-storage-sample`](https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples/spring-cloud-oci-storage-sample).

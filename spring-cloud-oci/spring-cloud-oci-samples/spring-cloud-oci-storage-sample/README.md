@@ -49,6 +49,9 @@ git clone https://github.com/oracle/spring-cloud-oci.git spring-cloud-oci
 ```
 spring.cloud.oci.region.static = US_ASHBURN_1
 spring.cloud.oci.compartment.static = <COMPARTMENT_OCID>
+OCI_NAMESPACE = <NAMESPACE>
+OCI_BUCKET = <BUCKET_NAME>
+OCI_OBJECT = <OBJECT_NAME>
 ```
 1. Start the application using the following command from sample root directory.
 ```
@@ -60,6 +63,11 @@ Note: Default service port is `8080`. You can change this with the  `server.port
 ## Sample Application API Reference
 
 Launch the Swagger UI (http://localhost:8080/swagger-ui/index.html) to view all available APIs and their payload samples.
+
+The sample now demonstrates both Spring `Resource` and `WritableResource` usage for OCI Object Storage:
+
+* `GET /demoapp/api/object/resource` reads the configured object through a `Resource`
+* `POST /demoapp/api/object/resource` writes plain text to the configured object through a `WritableResource`
 
 ![Swagger UI](./images/swagger-ui.png)
 

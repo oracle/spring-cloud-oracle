@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -10,9 +10,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.WritableResource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("demoapp/api/object")
@@ -32,14 +34,30 @@ public class ObjectController {
     Storage storage;
 
     @Autowired
-    ResourceLoader loader;
+    @Qualifier("sampleObjectResource")
+    Resource sampleObjectResource;
 
-    @Value("https://objectstorage.us-chicago-1.oraclecloud.com/n/${OCI_NAMESPACE}/b/${OCI_BUCKET}/o/${OCI_OBJECT}")
-    Resource myObject;
+    @Autowired
+    @Qualifier("sampleWritableObjectResource")
+    WritableResource sampleWritableObjectResource;
 
     @GetMapping("/")
     String hello() {
         return "Hello World ";
+    }
+
+    @GetMapping("/resource")
+    String readWithResource() throws IOException {
+        try (var inputStream = sampleObjectResource.getInputStream()) {
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    @PostMapping("/resource")
+    void writeWithWritableResource(@RequestBody String content) throws IOException {
+        try (OutputStream outputStream = sampleWritableObjectResource.getOutputStream()) {
+            outputStream.write(content.getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     @PostMapping("/{bucketName}")

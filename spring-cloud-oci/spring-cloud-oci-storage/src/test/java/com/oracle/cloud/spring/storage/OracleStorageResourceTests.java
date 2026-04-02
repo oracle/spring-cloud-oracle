@@ -1,44 +1,73 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package com.oracle.cloud.spring.storage;
 
-import com.oracle.bmc.objectstorage.ObjectStorageClient;
-import com.oracle.bmc.objectstorage.responses.GetNamespaceResponse;
-import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.springframework.core.io.WritableResource;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.mockito.Mockito.*;
-
-public class OracleStorageResourceTests {
-    final ObjectStorageClient osClient = mock(ObjectStorageClient.class);
-    final OracleStorageResource oracleStorageResource = new OracleStorageResource("testBucket", "testObject", osClient);
+class OracleStorageResourceTests {
 
     @Test
-    public void testCreate() {
-        try (MockedStatic mock = mockStatic(StorageLocation.class)) {
-            OracleStorageResource.create("https://objectstorage.us-chicago-1.oraclecloud.com/n/namespace/b/mybucket/o/myobject", osClient);
+    void testCreate() {
+        StorageTestSupport.FakeObjectStorageClient osClient = StorageTestSupport.newObjectStorageClient();
+        assertNotNull(OracleStorageResource.create(
+                "https://objectstorage.us-chicago-1.oraclecloud.com/n/namespace/b/mybucket/o/myobject", osClient));
+        assertNull(OracleStorageResource.create("classpath:test.txt", osClient));
+    }
+
+    @Test
+    void testGetInputStream() throws Exception {
+        StorageTestSupport.FakeObjectStorageClient osClient = StorageTestSupport.newObjectStorageClient();
+        osClient.objectContent = "test-content".getBytes(StandardCharsets.UTF_8);
+
+        OracleStorageResource oracleStorageResource = new OracleStorageResource("testBucket", "testObject", osClient);
+        try (InputStream inputStream = oracleStorageResource.getInputStream()) {
+            assertEquals("test-content", new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
         }
+        assertEquals("testBucket", osClient.lastGetObjectRequest.getBucketName());
+        assertEquals("testObject", osClient.lastGetObjectRequest.getObjectName());
     }
 
     @Test
-    public void testGetInputStream() throws Exception {
-        when(osClient.getNamespace(any())).thenReturn(mock(GetNamespaceResponse.class));
-        GetObjectResponse mockResponse = mock(GetObjectResponse.class);
-        when(osClient.getObject(any())).thenReturn(mockResponse);
-        when(mockResponse.getInputStream()).thenReturn(mock(InputStream.class));
-        assertNotNull(oracleStorageResource.getInputStream());
-    }
-
-    @Test
-    public void testGetDescription() {
+    void testGetDescription() {
+        OracleStorageResource oracleStorageResource =
+                new OracleStorageResource("testBucket", "testObject", StorageTestSupport.newObjectStorageClient());
         assertNotNull(oracleStorageResource.getDescription());
+    }
+
+    @Test
+    void testWritableResourceUploadsOnClose() throws Exception {
+        StorageTestSupport.FakeObjectStorageClient osClient = StorageTestSupport.newObjectStorageClient();
+        StorageTestSupport.RecordingContentTypeResolver contentTypeResolver =
+                new StorageTestSupport.RecordingContentTypeResolver("text/plain");
+        StorageTestSupport.RecordingStorageObjectUploader objectUploader =
+                new StorageTestSupport.RecordingStorageObjectUploader();
+        OracleStorageResource oracleStorageResource =
+                new OracleStorageResource("testBucket", "testObject", osClient, contentTypeResolver, objectUploader);
+
+        assertInstanceOf(WritableResource.class, oracleStorageResource);
+        assertTrue(oracleStorageResource.isWritable());
+
+        try (OutputStream outputStream = oracleStorageResource.getOutputStream()) {
+            outputStream.write("sample".getBytes(StandardCharsets.UTF_8));
+        }
+
+        assertEquals(1, objectUploader.uploadCount);
+        assertEquals("sample", new String(objectUploader.lastContent, StandardCharsets.UTF_8));
+        assertEquals("text/plain", objectUploader.lastRequest.getContentType());
+        assertEquals("testObject", contentTypeResolver.lastObjectName);
     }
 }

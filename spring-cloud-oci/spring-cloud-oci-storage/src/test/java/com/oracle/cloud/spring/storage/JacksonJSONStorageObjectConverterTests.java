@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import static org.mockito.Mockito.mock;
 
 class JacksonJSONStorageObjectConverterTests {
 
@@ -35,7 +33,7 @@ class JacksonJSONStorageObjectConverterTests {
         assertEquals(expectedValue, actualValue);
 
         assertThrows(StorageException.class, () -> {
-            new JacksonJSONStorageObjectConverter(new ObjectMapper()).write(mock(Object.class));
+            new JacksonJSONStorageObjectConverter(new ObjectMapper()).write(new SelfReferencingPerson());
         });
     }
 
@@ -60,5 +58,12 @@ class Person {
 
     public void setName(String name) {
         this.name = name;
+    }
+}
+
+class SelfReferencingPerson {
+
+    public SelfReferencingPerson getSelf() {
+        return this;
     }
 }
