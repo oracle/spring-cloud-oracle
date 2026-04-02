@@ -93,7 +93,7 @@ import static org.awaitility.Awaitility.await;
 
 
 @SuppressWarnings("unchecked")
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 public class TEQPartitionIT extends
         PartitionCapableBinderTests<TxEventQTestBinder, ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>> {
 

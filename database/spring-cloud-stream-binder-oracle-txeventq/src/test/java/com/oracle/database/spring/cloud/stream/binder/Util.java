@@ -37,7 +37,7 @@ import org.testcontainers.utility.MountableFile;
 public class Util {
 	@SuppressWarnings("resource")
     public static OracleContainer oracleContainer() {
-        return new OracleContainer("gvenzl/oracle-free:23.26.0-slim-faststart")
+        return new OracleContainer("gvenzl/oracle-free:23.26.1-slim-faststart")
                 .withStartupTimeout(Duration.ofMinutes(2)) // Needed for M1 Mac
                 .withUsername("testuser")
                 .withPassword("testpwd");
