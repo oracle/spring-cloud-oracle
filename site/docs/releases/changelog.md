@@ -7,7 +7,11 @@ sidebar_position: 1
 
 List of upcoming and historic changes to Spring Cloud Oracle.
 
-### 2.0.1, TBD
+### Upcoming Version
+
+Changes TBD.
+
+### 2.0.1, April 14th 2026
 
 #### Database Starters
 
@@ -30,7 +34,6 @@ List of upcoming and historic changes to Spring Cloud Oracle.
   - The OCI Object Storage Spring `Resource` now also implements `WritableResource`, allowing object uploads through `getOutputStream()`
   - The Object Storage sample now demonstrates Spring `Resource`, `WritableResource`, and direct `Storage` API round trips for objects and bucket lifecycle operations
   - The Object Storage documentation now includes `WritableResource` usage in addition to the existing `Resource` examples
-
 
 ### 2.0.0, March 31st
 

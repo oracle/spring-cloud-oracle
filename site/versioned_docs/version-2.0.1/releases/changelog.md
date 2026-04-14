@@ -7,7 +7,7 @@ sidebar_position: 1
 
 List of upcoming and historic changes to Spring Cloud Oracle.
 
-### 2.0.1, TBD
+### 2.0.1, April 14th 2026
 
 #### Database Starters
 
@@ -32,7 +32,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
   - The Object Storage documentation now includes `WritableResource` usage in addition to the existing `Resource` examples
 
 
-### 2.0.0, March 31st
+### 2.0.0, March 31st 2026
 
 The 2.0.0 adds support for Spring Boot 4 and Spring Framework 7, and includes numerous third party dependency updates. 
 
