@@ -83,7 +83,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <oracle.nosql.driver.version>5.4.19</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.5</jakarta-mail.version>
         <oci-sdk.version>3.81.0</oci-sdk.version>
-        <jackson.version>3.1.0</jackson.version>
+        <jackson.version>3.1.1</jackson.version>
         <jackson2.version>2.21.1</jackson2.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
         <netty.version>4.1.118.Final</netty.version>
