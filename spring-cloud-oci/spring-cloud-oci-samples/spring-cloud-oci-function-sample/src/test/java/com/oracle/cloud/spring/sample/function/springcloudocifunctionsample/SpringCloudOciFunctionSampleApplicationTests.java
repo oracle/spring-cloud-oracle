@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * Environment variables needed to run this tests are :
  * all variables in application-test.properties files,
  * functionOcid,
- * endpoint,
  * request
  */
 @SpringBootTest
@@ -41,21 +40,18 @@ class SpringCloudOciFunctionSampleApplicationTests extends SpringCloudSampleAppl
 	@Value("${functionOcid}")
 	String functionOcid;
 
-	@Value("${endpoint}")
-	String endpoint;
-
 	@Value("${request}")
 	String request;
 
 	@Test
 	void testAsyncFunctionInvoke() throws Exception {
-		InvokeFunctionResponse invokeFunctionResponse = function.invokeFunction(functionOcid, endpoint, InvokeFunctionRequest.FnInvokeType.Detached, new ByteArrayInputStream(request.getBytes()));
+		InvokeFunctionResponse invokeFunctionResponse = function.invokeFunction(functionOcid, InvokeFunctionRequest.FnInvokeType.Detached, new ByteArrayInputStream(request.getBytes()));
 		assertNotNull(invokeFunctionResponse.getOpcRequestId());
 	}
 
 	@Test
 	void testSyncFunctionInvoke() throws Exception {
-		InvokeFunctionResponse invokeFunctionResponse = function.invokeFunction(functionOcid, endpoint, InvokeFunctionRequest.FnInvokeType.Sync, new ByteArrayInputStream(request.getBytes()));
+		InvokeFunctionResponse invokeFunctionResponse = function.invokeFunction(functionOcid, InvokeFunctionRequest.FnInvokeType.Sync, new ByteArrayInputStream(request.getBytes()));
 		InputStream inputStream = invokeFunctionResponse.getInputStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		String temp = "";

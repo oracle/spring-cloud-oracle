@@ -24,8 +24,8 @@ Configure `spring.datasource` in `application.yaml` and add Spring Data JDBC or 
 spring:
   datasource:
     url: jdbc:oracle:thin:@//myhost:1521/pdb1
-    username: username
-    password: password
+    username: ${USERNAME}
+    password: ${PASSWORD}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSourceImpl
     oracleucp: # Any UCP specific connection parameters defined here

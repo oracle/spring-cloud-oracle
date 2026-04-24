@@ -25,7 +25,18 @@ public interface Function {
     /**
      * Invoke an OCI Function
      * @param functionOcid OCID of the Function
-     * @param endpoint Function endpoint
+     * @param mode Function invocation mode. Allowed values are as per {@link InvokeFunctionRequest.FnInvokeType}
+     * @param request Request body as String
+     * @return InvokeFunctionResponse
+     *
+     */
+    InvokeFunctionResponse invokeFunction(String functionOcid, InvokeFunctionRequest.FnInvokeType mode, InputStream request) throws Exception;
+
+    /**
+     * Invoke an OCI Function.
+     * The endpoint parameter is ignored and the invoke endpoint is resolved from OCI for the supplied function OCID.
+     * @param functionOcid OCID of the Function
+     * @param endpoint Ignored. The invoke endpoint is resolved from OCI metadata.
      * @param mode Function invocation mode. Allowed values are as per {@link InvokeFunctionRequest.FnInvokeType}
      * @param request Request body as String
      * @return InvokeFunctionResponse

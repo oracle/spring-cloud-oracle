@@ -56,7 +56,7 @@ Using the base URL, the following APIs can be invoked:
 
 |API | Method | URI | Request Params|
 |:-------|:--------|:------|:-------|
-| Invoke a Function | POST | /invoke | functionOcid - OCID of the function </br> endpoint - Function endpoint </br> mode - Function invocation mode. Allowed values are sync, detached </br> request - Request body|
+| Invoke a Function | POST | /invoke | functionOcid - OCID of the function </br> mode - Function invocation mode. Allowed values are sync, detached </br> request - Request body|
 
 ## References
 * [OCI Functions](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm)
