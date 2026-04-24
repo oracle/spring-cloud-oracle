@@ -13,7 +13,9 @@ import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
 
 /**
  * Interface for embedding text with OCI GenAI Service.
+ * @deprecated in favor of Spring AI. This API will be replaced by Spring AI integration.
  */
+@Deprecated(since = "2.0.1", forRemoval = false)
 public interface EmbeddingModel {
     /**
      * Embeds a list of text inputs.

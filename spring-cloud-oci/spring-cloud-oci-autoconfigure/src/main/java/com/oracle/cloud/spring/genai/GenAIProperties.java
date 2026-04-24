@@ -10,7 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * Autoconfiguration properties for OCI GenAI
  * @see GenAIAutoConfiguration
+ * @deprecated in favor of Spring AI. These properties will be replaced by Spring AI integration.
  */
+@Deprecated(since = "2.0.1", forRemoval = false)
 @ConfigurationProperties(prefix = GenAIProperties.PREFIX)
 public class GenAIProperties {
     public static final String PREFIX = "spring.cloud.oci.genai";
