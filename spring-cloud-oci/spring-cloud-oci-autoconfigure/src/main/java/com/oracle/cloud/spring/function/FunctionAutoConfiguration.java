@@ -6,6 +6,8 @@
 package com.oracle.cloud.spring.function;
 
 import com.oracle.bmc.auth.RegionProvider;
+import com.oracle.bmc.functions.FunctionsManagement;
+import com.oracle.bmc.functions.FunctionsManagementClient;
 import com.oracle.bmc.functions.FunctionsInvoke;
 import com.oracle.bmc.functions.FunctionsInvokeClient;
 import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
@@ -36,8 +38,12 @@ public class FunctionAutoConfiguration {
     @Bean
     @RefreshScope
     @ConditionalOnMissingBean(Function.class)
-    Function getFunctionImpl(FunctionsInvoke functionsInvokeClient) {
-        return new FunctionImpl(functionsInvokeClient);
+    Function getFunctionImpl(FunctionsInvoke functionsInvokeClient,
+                             FunctionsManagement functionsManagementClient,
+                             @Qualifier(regionProviderQualifier) RegionProvider regionProvider,
+                             @Qualifier(credentialsProviderQualifier) CredentialsProvider cp) {
+        return new FunctionImpl(functionsInvokeClient, functionsManagementClient,
+                () -> buildFunctionsInvokeClient(regionProvider, cp));
     }
 
     @Bean
@@ -45,9 +51,27 @@ public class FunctionAutoConfiguration {
     @ConditionalOnMissingBean
     FunctionsInvoke functionsInvokeClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
                                           @Qualifier(credentialsProviderQualifier) CredentialsProvider cp) {
+        return buildFunctionsInvokeClient(regionProvider, cp);
+    }
+
+    @Bean
+    @RefreshScope
+    @ConditionalOnMissingBean
+    FunctionsManagement functionsManagementClient(@Qualifier(regionProviderQualifier) RegionProvider regionProvider,
+                                                  @Qualifier(credentialsProviderQualifier) CredentialsProvider cp) {
+        FunctionsManagement functionsManagementClient = FunctionsManagementClient.builder()
+                .build(cp.getAuthenticationDetailsProvider());
+
+        if (regionProvider.getRegion() != null) functionsManagementClient.setRegion(regionProvider.getRegion());
+        return functionsManagementClient;
+    }
+
+    private FunctionsInvoke buildFunctionsInvokeClient(RegionProvider regionProvider, CredentialsProvider cp) {
         FunctionsInvoke functionsInvokeClient = FunctionsInvokeClient.builder().build(cp.getAuthenticationDetailsProvider());
 
-        if (regionProvider.getRegion() != null) functionsInvokeClient.setRegion(regionProvider.getRegion());
+        if (regionProvider.getRegion() != null) {
+            functionsInvokeClient.setRegion(regionProvider.getRegion());
+        }
         return functionsInvokeClient;
     }
 

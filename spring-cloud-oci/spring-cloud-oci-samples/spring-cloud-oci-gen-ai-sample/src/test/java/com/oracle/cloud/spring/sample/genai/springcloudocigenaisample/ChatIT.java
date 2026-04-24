@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChatIT {
     public void chat(ChatModel chatModel) {
-        ChatResponse r1 = chatModel.chat("Show me an example of a JUnit 5 test.");
+        ChatResponse r1 = chatModel.chat("Show me an example of a JUnit 5 test named sampleTest.");
         String text1 = chatModel.extractText(r1);
-        assertThat(text1).contains("@Test");
-        ChatResponse r2 = chatModel.chat("Add a test to the previous example named 'sampleTest'");
+        assertThat(text1).contains("@Test").contains("sampleTest");
+        ChatResponse r2 = chatModel.chat("Explain what the @Test annotation does in JUnit 5.");
         String text2 = chatModel.extractText(r2);
-        assertThat(text2).contains("sampleTest");
+        assertThat(text2).containsIgnoringCase("test");
     }
 }

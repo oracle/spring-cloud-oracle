@@ -32,7 +32,6 @@ public class FunctionController {
     Function function;
     @PostMapping(value = "/invoke")
     ResponseEntity<?> invoke(@Parameter(required = true, example = "functionOcid") @RequestParam String functionOcid,
-                             @Parameter(required = true, example = "endpoint") @RequestParam String endpoint,
                              @Parameter(required = true, example = "mode") @RequestParam String mode,
                              @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody String requestBody) {
         String response = "";
@@ -40,7 +39,7 @@ public class FunctionController {
         try {
             InvokeFunctionRequest.FnInvokeType fnInvokeMode = InvokeFunctionRequest.FnInvokeType.create(mode);
             InvokeFunctionResponse invokeFunctionResponse = function.invokeFunction(functionOcid,
-                    endpoint, fnInvokeMode, new ByteArrayInputStream(requestBody.getBytes(StandardCharsets.UTF_8)));
+                    fnInvokeMode, new ByteArrayInputStream(requestBody.getBytes(StandardCharsets.UTF_8)));
 
             if(fnInvokeMode == InvokeFunctionRequest.FnInvokeType.Detached){
                 return ResponseEntity.ok().body("Invoked function " + functionOcid +

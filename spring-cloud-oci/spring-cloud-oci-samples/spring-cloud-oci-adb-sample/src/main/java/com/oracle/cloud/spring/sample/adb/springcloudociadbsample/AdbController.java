@@ -11,6 +11,7 @@ import com.oracle.bmc.database.responses.StopAutonomousDatabaseResponse;
 import com.oracle.cloud.spring.adb.AutonomousDb;
 import com.oracle.cloud.spring.adb.AutonomousDbDetails;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,24 +38,24 @@ public class AdbController {
 
     @PostMapping
     ResponseEntity<?> createAutonomousDatabase(
-        @Parameter(required = true, example = "databaseName") @RequestParam String databaseName,
-        @Parameter(required = true, example = "compartmentId") @RequestParam String compartmentId,
-        @Parameter(required = true, example = "adminPassword") @RequestParam String adminPassword,
-        @Parameter(required = true, example = "displayName") @RequestParam String displayName,
-        @Parameter(required = true, example = "200") @RequestParam Integer dataStorageSizeInGBs,
-        @Parameter(required = true, example = "2.0") @RequestParam Float computeCount
+        @Parameter(required = true) @RequestBody CreateAutonomousDatabaseRequest request
     ) {
         CreateAutonomousDatabaseResponse response = autonomousDatabase.createAutonomousDatabase(
-            databaseName, compartmentId, adminPassword, displayName, dataStorageSizeInGBs, computeCount);
+            request.getDatabaseName(),
+            request.getCompartmentId(),
+            request.getAdminPassword(),
+            request.getDisplayName(),
+            request.getDataStorageSizeInGBs(),
+            request.getComputeCount());
         var adb = response.getAutonomousDatabase();
-    var result = Map.of(
-        "opcRequestId", response.getOpcRequestId(),
-        "autonomousDatabaseOcid", adb.getId(),
-        "displayName", adb.getDisplayName(),
-        "lifecycleState", adb.getLifecycleState().getValue()
-    );
+        var result = Map.of(
+            "opcRequestId", response.getOpcRequestId(),
+            "autonomousDatabaseOcid", adb.getId(),
+            "displayName", adb.getDisplayName(),
+            "lifecycleState", adb.getLifecycleState().getValue()
+        );
 
-    return ResponseEntity.accepted().body(result);
+        return ResponseEntity.accepted().body(result);
     }
 
     @GetMapping
@@ -62,12 +64,13 @@ public class AdbController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping(value = "/wallet")
+    @PostMapping(value = "/wallet")
     ResponseEntity<?> getAutonomousDatabaseWallet(
-        @Parameter(required = true, example = "databaseId") @RequestParam String databaseId,
-        @Parameter(required = true, example = "password") @RequestParam String password
+        @Parameter(required = true) @RequestBody GenerateAutonomousDatabaseWalletRequest request
     ) {
-        GenerateAutonomousDatabaseWalletResponse response = autonomousDatabase.generateAutonomousDatabaseWallet(databaseId, password);
+        GenerateAutonomousDatabaseWalletResponse response = autonomousDatabase.generateAutonomousDatabaseWallet(
+            request.getDatabaseId(),
+            request.getPassword());
         InputStreamResource isr = new InputStreamResource(response.getInputStream());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentLength(response.getContentLength());
@@ -104,6 +107,98 @@ public class AdbController {
             "lifecycleState", adb.getLifecycleState().getValue()
         );
         return ResponseEntity.accepted().body(result);
+    }
+
+    static class CreateAutonomousDatabaseRequest {
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "databaseName")
+        private String databaseName;
+
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "compartmentId")
+        private String compartmentId;
+
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "adminPassword", format = "password", accessMode = Schema.AccessMode.WRITE_ONLY)
+        private String adminPassword;
+
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "displayName")
+        private String displayName;
+
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "200")
+        private Integer dataStorageSizeInGBs;
+
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "2.0")
+        private Float computeCount;
+
+        public String getDatabaseName() {
+            return databaseName;
+        }
+
+        public void setDatabaseName(String databaseName) {
+            this.databaseName = databaseName;
+        }
+
+        public String getCompartmentId() {
+            return compartmentId;
+        }
+
+        public void setCompartmentId(String compartmentId) {
+            this.compartmentId = compartmentId;
+        }
+
+        public String getAdminPassword() {
+            return adminPassword;
+        }
+
+        public void setAdminPassword(String adminPassword) {
+            this.adminPassword = adminPassword;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public Integer getDataStorageSizeInGBs() {
+            return dataStorageSizeInGBs;
+        }
+
+        public void setDataStorageSizeInGBs(Integer dataStorageSizeInGBs) {
+            this.dataStorageSizeInGBs = dataStorageSizeInGBs;
+        }
+
+        public Float getComputeCount() {
+            return computeCount;
+        }
+
+        public void setComputeCount(Float computeCount) {
+            this.computeCount = computeCount;
+        }
+    }
+
+    static class GenerateAutonomousDatabaseWalletRequest {
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "databaseId")
+        private String databaseId;
+
+        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "password", format = "password", accessMode = Schema.AccessMode.WRITE_ONLY)
+        private String password;
+
+        public String getDatabaseId() {
+            return databaseId;
+        }
+
+        public void setDatabaseId(String databaseId) {
+            this.databaseId = databaseId;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
     }
 
 }

@@ -17,7 +17,9 @@ import com.oracle.bmc.generativeaiinference.responses.ChatResponse;
 
 /**
  * OCI GenAI chat interface.
+ * @deprecated in favor of Spring AI. This API will be replaced by Spring AI integration.
  */
+@Deprecated(since = "2.0.1", forRemoval = false)
 public interface ChatModel {
     /**
      * Chat using OCI GenAI.

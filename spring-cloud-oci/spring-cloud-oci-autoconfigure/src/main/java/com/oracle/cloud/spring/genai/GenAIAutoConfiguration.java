@@ -34,7 +34,9 @@ import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfi
  *
  * @see ChatModel
  * @see EmbeddingModel
+ * @deprecated in favor of Spring AI. This auto-configuration will be replaced by Spring AI integration.
  */
+@Deprecated(since = "2.0.1", forRemoval = false)
 @AutoConfiguration
 @ConditionalOnClass({ChatModel.class})
 @EnableConfigurationProperties(GenAIProperties.class)

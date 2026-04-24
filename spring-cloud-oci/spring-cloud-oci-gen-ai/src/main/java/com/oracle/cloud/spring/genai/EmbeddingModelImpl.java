@@ -18,7 +18,9 @@ import org.springframework.util.Assert;
 
 /**
  * Implementation for OCI GenAI EmbedingModel
+ * @deprecated in favor of Spring AI. This implementation will be replaced by Spring AI integration.
  */
+@Deprecated(since = "2.0.1", forRemoval = false)
 public class EmbeddingModelImpl implements EmbeddingModel {
 
     /**

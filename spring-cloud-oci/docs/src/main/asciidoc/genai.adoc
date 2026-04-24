@@ -27,8 +27,11 @@ dependencies {
 
 === Using Generative AI Chat
 
+NOTE: The OCI GenAI `ChatModel` and `EmbeddingModel` APIs are deprecated and will be replaced by Spring AI integration.
+
 The starter configures and registers a `ChatModel` bean in the Spring application context.
 The `ChatModel` bean (https://oracle.github.io/spring-cloud-oci/{project-version}/javadocs/com/oracle/cloud/spring/genai/package-summary.html[Javadoc]) can be used to interact with OCI Generative AI Chat Models.
+`ChatModel` requests are stateless. If your application needs multi-turn conversations, store prior turns per user and include the required context in each prompt.
 
 [source,java]
 ----

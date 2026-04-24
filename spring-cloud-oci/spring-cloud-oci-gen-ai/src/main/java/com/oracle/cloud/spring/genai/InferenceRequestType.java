@@ -7,7 +7,9 @@ package com.oracle.cloud.spring.genai;
 
 /**
  * Supported OCI Inference model request types.
+ * @deprecated in favor of Spring AI. This enum will be replaced by Spring AI integration.
  */
+@Deprecated(since = "2.0.1", forRemoval = false)
 public enum InferenceRequestType {
     COHERE("COHERE"),
     LLAMA("LLAMA");
