@@ -7,9 +7,13 @@ sidebar_position: 1
 
 List of upcoming and historic changes to Spring Cloud Oracle.
 
-### Upcoming Version
+### 2.0.2, TBD
 
-Changes TBD.
+#### Spring Cloud OCI
+
+- OCI Functions invocation now resolves the function invoke endpoint from OCI metadata using the function OCID, so callers no longer need to supply an endpoint separately
+- OCI GenAI module deprecated in favor of Spring AI
+- OCI GenAI documentation now clarifies that `ChatModel` requests are stateless and that multi-turn context must be supplied by the application
 
 ### 2.0.1, April 14th 2026
 
