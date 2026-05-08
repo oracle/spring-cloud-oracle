@@ -78,7 +78,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-boot.version>4.0.5</spring-boot.version>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2025.1.1</spring-cloud-dependencies.version>
-        <spring-framework.version>7.0.6</spring-framework.version>
+        <spring-framework.version>7.0.7</spring-framework.version>
         <spring-data-oracle-nosql.version>2.2.0</spring-data-oracle-nosql.version>
         <oracle.nosql.driver.version>5.4.19</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.5</jakarta-mail.version>
