@@ -1,80 +1,101 @@
 # Spring Cloud Oracle
 
-Many Oracle customers make extensive use of Spring in their environments. They use Oracle Database and Oracle Cloud Infrastructure (OCI) services. Oracle Database is available in OCI, Azure, GCP and AWS, making it a true multi-cloud database, or available on-premises, including in containers and Kubernetes. Oracle is trusted by many of the world’s top businesses, governments and other organizations to protect their most sensitive data.
+Spring Cloud Oracle brings Oracle AI Database, Oracle AI Database-native messaging, and Oracle Cloud Infrastructure (OCI) into the Spring application model. It provides Spring Boot starters, auto-configuration, templates, integrations, and sample applications for teams building data-intensive and cloud-connected services with Oracle technologies.
 
-*Spring Cloud Oracle* provides tools and services to integrate Oracle Cloud Infrastructure and Software with the Spring ecosystem in an idiomatic and flexible manner It is designed to simplify microservices development that uses Oracle Database, middleware, and messaging on Oracle and non-Oracle clouds as well as on-premises.
+## Current Releases
 
-Spring Cloud Oracle (OCI) 1.4.5 is the most recent release which brings together in one place Spring Boot Starters, autoconfiguration and sample code for Oracle Database and OCI services.
+| Project | Current release | What it provides |
+| --- | --- | --- |
+| [Spring Cloud OCI](./spring-cloud-oci/README.md) | v2.0.1 | Spring Boot integrations for OCI services such as Vault, Object Storage, Streaming, Functions, Queues, Notifications, Email Delivery, Autonomous Database, and Generative AI |
+| [Oracle AI Database Spring Boot Starters](./database/starters/README.md) | v26.1.1 | Starters and auto-configuration for Oracle AI Database connectivity, UCP, Wallet, AQ/JMS, OKafka, JSON, spatial, and OpenTelemetry workloads |
+| [Spring Cloud Stream Binder for Oracle TxEventQ](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | v0.18.0 | A Spring Cloud Stream binder for Oracle AI Database Transactional Event Queues |
 
-Spring Cloud Oracle goes beyond simply wrapping the OCI APIs in starters and adds idiomatic ways to integrate with Spring including for example the ability to use OCI Vault as a Spring Property Source and OCI Object Storage as a Spring Resource provider. We also provide Spring CLI integration with a project catalog to help you create Spring Boot projects using Oracle.
+[Spring AI Oracle](./spring-ai-oracle/README.md) is in development and is not released yet.
 
-The following sub-projects are included in Spring Cloud Oracle:
+## Why Spring Cloud Oracle?
 
-| Project                                                                                                                   | Description                                                            |
-|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| [Spring Cloud OCI v2.0.0](./spring-cloud-oci/README.md)                                                                   | Use OCI services with well-known Spring idioms and APIs                |
-| [Oracle Database Spring Boot Starters v26.1.0](./database/starters/README.md)                                             | Integrate Oracle Database with Spring Boot                             |
-| [Spring Cloud Stream Binder for Oracle TxEventQ v0.17.0](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | Build highly scalable event-driven microservices with Oracle TxEventQ. |
+Spring teams using Oracle technologies often need more than raw client libraries. They need integrations that fit Spring Boot configuration, auto-configuration, resource handling, observability, and messaging conventions.
 
-## Some key features
+Spring Cloud Oracle focuses on that integration layer:
 
-- Compatible with Spring Boot
-  - The release 1.x branch tracks Spring Boot 3
-  - The main branch tracks Spring Boot 4 under the currently unreleased 2.0 tag line.
-- Support for several common OCI services including Object Storage, Functions, Logging, Notifications, Queues, Streaming, Email Delivery, Vault, Autonomous Database and Generative AI (for embeddings and inferencing)
-- Improved autoconfiguration for Spring Boot Starters for Oracle Database, and support for Oracle Database 23ai
-- Implementation of the Spring Cloud Stream API for Oracle Database Transactional Event Queues
-- OCI service components are built on top of OCI SDK for Java and a core module provides OCI configuration and authentication support
+- Oracle AI Database starters for connection pooling, Wallet support, AQ/JMS, OKafka, JSON Collections, JSON Relational Duality Views, spatial data, and OpenTelemetry
+- A Spring Cloud Stream binder for Oracle AI Database Transactional Event Queues (TxEventQ)
+- OCI integrations exposed through Spring-friendly APIs such as property sources, resources, templates, and auto-configured clients
+- Sample applications that show dependencies, configuration, and usage patterns in context
+
+## Compatibility
+
+- The 1.x release line tracks Spring Boot 3.
+- The 2.x release line tracks Spring Boot 4 and Spring Framework 7.
 
 ## Documentation
 
-We encourage you to learn more in the  Spring Cloud Oracle documentation:
+Start with the current Docusaurus documentation:
 
-| Version                   | Reference Docs                                                                                 | API Docs                                                                               | Database API Docs                                                                              |
+- [Spring Cloud Oracle reference documentation](https://oracle.github.io/spring-cloud-oracle/site/docs/intro)
+- [Changelog](./site/docs/releases/changelog.md)
+
+Current API documentation:
+
+| Release                   | Reference Docs                                                                 | OCI API Docs                                                                           | Database API Docs                                                                              |
+|---------------------------|--------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| Spring Cloud Oracle 2.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.1/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.1/javadocs-db/index.html) |
+| Spring Cloud Oracle 2.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.0/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.0/javadocs-db/index.html) |
+
+<details>
+<summary>Archived 1.x documentation</summary>
+
+| Release                   | Reference Docs                                                                                 | API Docs                                                                               | Database API Docs                                                                              |
 |---------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Spring Cloud Oracle 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.1.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.2.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.3.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.4.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.4.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.4.2 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/javadocs/index.html)     |                                                                                                |
-| Spring Cloud Oracle 1.4.3 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs-db/index.html) |
-| Spring Cloud Oracle 1.4.4 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs-db/index.html) |
 | Spring Cloud Oracle 1.4.5 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.5/javadocs-db/index.html) |
-| Spring Cloud Oracle 2.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro)]                | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.0/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.0/javadocs-db/index.html) |
-| Spring Cloud Oracle 2.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro)]                | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.1/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.1/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.4 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.4/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.3 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/reference/html/index.html) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.3/javadocs-db/index.html) |
+| Spring Cloud Oracle 1.4.2 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.2/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.4.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.1/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.4.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.4.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.3.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.3.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.2.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.2.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.1.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.1.0/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.1/javadocs/index.html)     |                                                                                                |
+| Spring Cloud Oracle 1.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/reference/html/index.html) | [API Docs](https://oracle.github.io/spring-cloud-oracle/1.0.0/javadocs/index.html)     |                                                                                                |
 
-Additionally, you can explore sample applications for each module in the [OCI starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples) and the [Database starters samples directory](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-samples).
+</details>
+
+## Samples
+
+The repository includes sample applications for each major project area:
+
+- [Spring Cloud OCI samples](https://github.com/oracle/spring-cloud-oracle/tree/main/spring-cloud-oci/spring-cloud-oci-samples)
+- [Oracle AI Database starter samples](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-samples)
+- [TxEventQ binder sample](https://github.com/oracle/spring-cloud-oracle/tree/main/database/spring-cloud-stream-binder-oracle-txeventq/spring-cloud-stream-binder-txeventq-sample)
 
 ## Roadmap
 
-Spring Cloud Oracle has a strong and constantly evolving roadmap as we work to provide comprehensive up-to-date coverage. Right now, we are working on the following updates:
+Planned and in-progress work includes:
 
-- OpenRewrite recipes to ease migration from HikariCP to Oracle Universal Connection Pool
-- Further simplification of running Spring Boot applications as OCI Functions, including as native images using GraalVM Native Image compilation
-- Further improvement of the idiomatically of OCI Service modules and the expansion of adoption of the Spring Template pattern
-- Additional Spring CLI project templates and example applications, particularly in the Spring AI space, focusing on retrieval augmented generation and agentic use cases
-- Deeper integration of Oracle Database with Spring, including features like Spring Kafka for Oracle Database Transactional Event Queues.
+- OpenRewrite recipes to help migrate from HikariCP to Oracle Universal Connection Pool
+- Further simplification for running Spring Boot applications as OCI Functions, including native images with GraalVM Native Image
+- More idiomatic OCI service modules and broader use of Spring template patterns
+- Additional Spring CLI project templates and sample applications, especially around Spring AI, retrieval augmented generation, and agentic workflows
+- Deeper Oracle AI Database integration for Spring applications, including Spring Kafka support for Transactional Event Queues
 
-We’d love to hear from you! Please let us know about your experiences using Spring Cloud Oracle, and what else you would like to see supported by opening an issue in our GitHub repository.
+Please open an issue in this repository to share feedback, report bugs, or suggest additional integrations.
 
-## More great stuff to check out
+## Related Resources
 
-If you are building Spring Boot applications with Oracle Database, you should also check out [Oracle Backend Microservices and AI](https://bit.ly/OracleAI-microservices) which simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications on any cloud or on your own infrastructure.
+If you are building Spring Boot applications with Oracle AI Database, [Oracle Backend Microservices and AI](https://bit.ly/OracleAI-microservices) provides patterns for building, testing, and operating microservices platforms on any cloud or in your own infrastructure.
 
-If you'd like to try it out yourself, [CloudBank AI](https://bit.ly/cloudbankAI) is a great way to learn more.  It's a free self-paced hands-on lab that shows you how to build Spring Boot microservices and covers topics like REST, asynchronous services with JMS, storing data in Oracle, service discovery, using Spring Actuator for monitoring, Prometheus, Grafana, Loki, OpenTelemetry and Jaeger, implementing the saga pattern with Long Running Actions, exposing services using APISIX API Gateway and building an AI ChatBot using Ollama.
+[CloudBank AI](https://bit.ly/cloudbankAI) is a free self-paced hands-on lab that covers Spring Boot microservices, REST APIs, asynchronous services with JMS, Oracle AI Database-backed persistence, service discovery, Spring Actuator, Prometheus, Grafana, Loki, OpenTelemetry, Jaeger, long-running actions, APISIX API Gateway, and an AI chatbot built with Ollama.
 
-Don't miss the Oracle AI Microservices Sandbox (in developer preview). The Oracle AI Microservices Sandbox provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Sandbox enables users to enhance existing Large Language Models (LLMs) through RAG. The Oracle AI Microservices Sandbox is available to install in your own environment, which may be a developer's desktop, on-premises data center environment, or a cloud provider. It can be run either on bare-metal, within a container, or in a Kubernetes Cluster. For more information, including more details on Setup and Configuration please visit the [documentation](https://oracle-samples.github.io/oaim-sandbox/).
+The [Oracle AI Microservices Sandbox](https://oracle-samples.github.io/oaim-sandbox/) is a developer-preview environment for exploring generative AI and retrieval augmented generation with Oracle AI Database vector search. It can run on a developer desktop, on-premises, in a container, or in Kubernetes.
 
 ## Contributing
 
-This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+This project welcomes contributions from the community. Before submitting a pull request, please [review the contribution guide](./CONTRIBUTING.md).
 
 ## Security
 
-Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+Please consult the [security guide](./SECURITY.md) for the responsible security vulnerability disclosure process.
 
 ## License
 

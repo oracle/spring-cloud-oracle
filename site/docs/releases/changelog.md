@@ -9,6 +9,10 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 ### 2.0.2, TBD
 
+#### Spring AI Oracle
+
+- Added the initial Spring AI Oracle scaffold with model, auto-configuration, and starter modules prepared for Oracle Cloud Infrastructure Generative AI bindings
+
 #### Spring Cloud OCI
 
 - OCI Functions invocation now resolves the function invoke endpoint from OCI metadata using the function OCID, so callers no longer need to supply an endpoint separately

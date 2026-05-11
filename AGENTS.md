@@ -1,3 +1,8 @@
+## Docs
+- Use "Oracle AI Database" to refere to Oracle Database
+- Docusaurus website source is in the ./site folder
+- Code changes must have an accompanying docs change
+- Feature or bug fixes must have a line in the [changelog](./site/docs/releases/changelog.md)
 
 ## Projects
 - database/starters: spring boot starters for Oracle AI Database
