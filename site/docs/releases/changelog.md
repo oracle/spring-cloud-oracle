@@ -11,7 +11,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Database Starters
 
-- Upgraded Spring Boot to 4.0.6 and Kafka Clients to 3.9.2 to pick up security fixes for CVE-2026-40973, CVE-2026-40976, CVE-2026-33558, and CVE-2026-35554
+- Upgraded Spring Boot to 4.0.6
 
 #### Spring Cloud Stream Binder for TxEventQ
 
