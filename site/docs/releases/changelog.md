@@ -11,7 +11,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Spring AI Oracle
 
-- Added the initial Spring AI Oracle scaffold with model, auto-configuration, and starter modules prepared for Oracle Cloud Infrastructure Generative AI bindings
+- Added Spring AI Oracle with model, auto-configuration, and starter modules prepared for Oracle Cloud Infrastructure Generative AI bindings
 
 #### Spring Cloud OCI
 
