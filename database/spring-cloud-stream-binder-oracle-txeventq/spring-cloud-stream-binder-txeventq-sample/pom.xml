@@ -43,10 +43,22 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <txeventq.streambinder.version>0.18.0</txeventq.streambinder.version>
-        <spring.boot.version>4.0.5</spring.boot.version>
-        <testcontainers.version>2.0.4</testcontainers.version>
+        <spring.boot.version>4.0.6</spring.boot.version>
+        <testcontainers.version>2.0.5</testcontainers.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -68,11 +80,11 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-		<dependency>
-    		<groupId>org.springframework</groupId>
-    		<artifactId>spring-jms</artifactId>
-    		<version>7.0.6</version> <!-- Matches your spring-core version -->
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>7.0.7</version> <!-- Matches your spring-core version -->
+        </dependency>
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>

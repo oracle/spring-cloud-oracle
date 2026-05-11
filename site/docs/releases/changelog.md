@@ -9,12 +9,22 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 ### 2.0.2, TBD
 
+#### Database Starters
+
+- Upgraded Spring Boot to 4.0.6 and Kafka Clients to 3.9.2 to pick up security fixes for CVE-2026-40973, CVE-2026-40976, CVE-2026-33558, and CVE-2026-35554
+
+#### Spring Cloud Stream Binder for TxEventQ
+
+- Upgraded Spring Boot to 4.0.6, imported the Spring Boot dependency BOM to keep transitive Spring Boot artifacts on the patched version, and refreshed related Spring Framework, Testcontainers, Jackson, and SLF4J patch versions
+
 #### Spring AI Oracle
 
 - Added the initial Spring AI Oracle scaffold with model, auto-configuration, and starter modules prepared for Oracle Cloud Infrastructure Generative AI bindings
+- Refreshed the OCI SDK patch version used by Spring AI Oracle modules
 
 #### Spring Cloud OCI
 
+- Upgraded Spring Boot to 4.0.6 and refreshed related Spring Framework, Netty, Jackson, OCI SDK, NoSQL driver, and Springdoc patch versions
 - OCI Functions invocation now resolves the function invoke endpoint from OCI metadata using the function OCID, so callers no longer need to supply an endpoint separately
 - OCI GenAI module deprecated in favor of Spring AI
 - OCI GenAI documentation now clarifies that `ChatModel` requests are stateless and that multi-turn context must be supplied by the application

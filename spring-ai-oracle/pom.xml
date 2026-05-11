@@ -66,7 +66,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring-boot.version>4.1.0-RC1</spring-boot.version>
-        <oci-sdk.version>3.81.0</oci-sdk.version>
+        <oci-sdk.version>3.81.3</oci-sdk.version>
     </properties>
 
     <dependencyManagement>
