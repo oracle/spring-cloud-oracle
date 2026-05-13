@@ -86,6 +86,77 @@ class AnswerService {
 }
 ```
 
+## Conversation Memory
+
+Spring AI Oracle follows Spring AI chat memory conventions. The chat model is stateless and does not store conversation history; `MessageChatMemoryAdvisor` loads prior turns from `ChatMemory` and adds them to the prompt as typed Spring AI messages before the request reaches OCI Generative AI.
+
+The starter includes Spring AI chat memory auto-configuration. Applications can use the default in-memory implementation for simple cases or provide their own `ChatMemory` or `ChatMemoryRepository` bean.
+
+```java
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.model.ChatModel;
+
+class ConversationalAnswers {
+
+    private final ChatClient chatClient;
+
+    ConversationalAnswers(ChatModel chatModel, ChatMemory chatMemory) {
+        this.chatClient = ChatClient.builder(chatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .build();
+    }
+
+    String answer(String conversationId, String question) {
+        return chatClient.prompt()
+                .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, conversationId))
+                .user(question)
+                .call()
+                .content();
+    }
+}
+```
+
+Direct `ChatModel` callers manage memory explicitly by retrieving messages from `ChatMemory` and passing them in a `Prompt`.
+
+## Tool Calling
+
+Spring AI Oracle supports Spring AI tool calling for OCI `GENERIC` and `COHERE_V2` chat API formats. Register tools with the standard Spring AI `ChatClient` APIs; the model sends tool definitions to OCI Generative AI, executes returned tool calls through Spring AI's `ToolCallingManager`, and returns the final model response.
+
+```java
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.tool.annotation.Tool;
+
+class WeatherTools {
+
+    @Tool(description = "Get the current weather for a city")
+    String weather(String city) {
+        return "72F and clear in " + city;
+    }
+}
+
+class ToolCallingAnswers {
+
+    private final ChatClient chatClient;
+
+    ToolCallingAnswers(ChatClient.Builder chatClientBuilder, WeatherTools weatherTools) {
+        this.chatClient = chatClientBuilder
+                .defaultTools(weatherTools)
+                .build();
+    }
+
+    String answer(String question) {
+        return chatClient.prompt()
+                .user(question)
+                .call()
+                .content();
+    }
+}
+```
+
+Legacy `COHERE` chat requests continue to support text chat, but tool calling requires `GENERIC` or `COHERE_V2`. Use a `COHERE_V2` model such as Cohere Command A, or set `spring.ai.oci.genai.chat.api-format=GENERIC` for model families that use the generic OCI chat request shape.
+
 ## Configuration
 
 | Name | Description | Required | Default |
@@ -126,4 +197,4 @@ If the application provides its own OCI `BasicAuthenticationDetailsProvider` or 
 
 ## Current Scope
 
-The Spring AI Oracle chat provider supports synchronous text chat. Streaming, tool calling, structured output, multimodal chat, and rerank are planned as separate provider additions.
+The Spring AI Oracle chat provider supports synchronous text chat and tool calling for `GENERIC` and `COHERE_V2` chat formats. Streaming, structured output, multimodal chat, and rerank are planned as separate provider additions.

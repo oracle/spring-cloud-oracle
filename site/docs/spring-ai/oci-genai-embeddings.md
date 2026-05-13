@@ -87,7 +87,7 @@ Runtime options can override configured defaults for a single request.
 import java.util.List;
 
 import com.oracle.spring.ai.oracle.OracleGenAiEmbeddingOptions;
-import com.oracle.spring.ai.oracle.OracleGenAiEmbeddingTruncate;
+import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;

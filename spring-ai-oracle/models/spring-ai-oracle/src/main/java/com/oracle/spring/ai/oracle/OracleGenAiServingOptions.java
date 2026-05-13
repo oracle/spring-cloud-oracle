@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import com.oracle.bmc.generativeaiinference.model.DedicatedServingMode;
 import com.oracle.bmc.generativeaiinference.model.OnDemandServingMode;
 import com.oracle.bmc.generativeaiinference.model.ServingMode;
+import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 

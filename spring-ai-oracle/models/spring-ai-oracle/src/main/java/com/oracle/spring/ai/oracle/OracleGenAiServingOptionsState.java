@@ -5,6 +5,8 @@
 
 package com.oracle.spring.ai.oracle;
 
+import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
+
 final class OracleGenAiServingOptionsState {
 
     private String compartmentId;

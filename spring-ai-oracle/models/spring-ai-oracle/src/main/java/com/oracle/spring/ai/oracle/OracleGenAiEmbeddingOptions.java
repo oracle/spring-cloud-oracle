@@ -5,6 +5,8 @@
 
 package com.oracle.spring.ai.oracle;
 
+import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
+import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
 import org.springframework.ai.embedding.DefaultEmbeddingOptions;
 import org.springframework.ai.embedding.EmbeddingOptions;
 

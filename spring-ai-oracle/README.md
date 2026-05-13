@@ -100,6 +100,33 @@ class GenAiService {
 }
 ```
 
+Spring AI Oracle follows Spring AI chat memory conventions. The `ChatModel` is stateless and consumes the message history supplied in each `Prompt`. For `ChatClient` use, configure Spring AI's `MessageChatMemoryAdvisor` with a `ChatMemory` bean and pass `ChatMemory.CONVERSATION_ID` on each conversational request:
+
+```java
+ChatClient chatClient = ChatClient.builder(chatModel)
+        .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+        .build();
+
+return chatClient.prompt()
+        .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, conversationId))
+        .user(prompt)
+        .call()
+        .content();
+```
+
+Spring AI Oracle supports Spring AI tool calling for OCI `GENERIC` and `COHERE_V2` chat API formats. Register tools with the standard Spring AI `ChatClient` APIs; legacy `COHERE` models continue to support text chat but reject tool definitions, assistant tool calls, and tool response messages.
+
+```java
+ChatClient chatClient = ChatClient.builder(chatModel)
+        .defaultTools(weatherTools)
+        .build();
+
+return chatClient.prompt()
+        .user("Do I need an umbrella in Seattle?")
+        .call()
+        .content();
+```
+
 Use the standard Spring AI `EmbeddingModel` API for text embeddings:
 
 ```java

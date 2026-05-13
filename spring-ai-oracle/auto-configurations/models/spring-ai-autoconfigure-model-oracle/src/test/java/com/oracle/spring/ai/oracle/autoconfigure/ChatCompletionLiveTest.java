@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.generativeai.model.ModelCapability;
 import com.oracle.bmc.generativeai.model.ModelSummary;
-import com.oracle.spring.ai.oracle.OracleGenAiChatApiFormat;
+import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.OracleGenAiChatModel;
 import com.oracle.spring.ai.oracle.OracleGenAiChatOptions;
 import org.junit.jupiter.api.DynamicTest;
@@ -61,7 +61,7 @@ class ChatCompletionLiveTest {
     }
 
     private static void callOciGenerativeAiWithConfigFileAuthentication(String compartmentId, String model,
-            OracleGenAiChatApiFormat apiFormat) {
+            GenAiApiFormat apiFormat) {
         new ApplicationContextRunner()
                 .withConfiguration(AutoConfigurations.of(GenAiAutoConfiguration.class))
                 .withPropertyValues(propertyValues(compartmentId, model, apiFormat))
@@ -87,7 +87,7 @@ class ChatCompletionLiveTest {
         return new ChatModelCandidate(provider, modelId, apiFormat(modelId));
     }
 
-    private static OracleGenAiChatApiFormat apiFormat(String modelId) {
+    private static GenAiApiFormat apiFormat(String modelId) {
         return OracleGenAiChatOptions.inferApiFormat(modelId);
     }
 
@@ -98,7 +98,7 @@ class ChatCompletionLiveTest {
     }
 
     private static String[] propertyValues(String compartmentId, String model,
-            OracleGenAiChatApiFormat apiFormat) {
+            GenAiApiFormat apiFormat) {
         List<String> properties = new ArrayList<>();
         properties.add(PropertyNames.CHAT_MODEL_PROPERTY + "=" + PropertyNames.MODEL_VALUE);
         properties.add(COMPARTMENT_ID_PROPERTY + "=" + compartmentId);
@@ -110,7 +110,7 @@ class ChatCompletionLiveTest {
         return properties.toArray(String[]::new);
     }
 
-    private record ChatModelCandidate(String provider, String modelId, OracleGenAiChatApiFormat apiFormat)
+    private record ChatModelCandidate(String provider, String modelId, GenAiApiFormat apiFormat)
             implements TestSupport.ModelCandidate {
     }
 }

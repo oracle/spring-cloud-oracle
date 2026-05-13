@@ -5,21 +5,38 @@
 
 package com.oracle.spring.ai.oracle;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
+import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
 import org.springframework.ai.chat.prompt.DefaultChatOptions;
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
+import org.springframework.ai.tool.ToolCallback;
 
 /**
  * OCI Generative AI chat options.
  */
-public class OracleGenAiChatOptions extends DefaultChatOptions implements OracleGenAiServingOptions {
+public class OracleGenAiChatOptions extends DefaultChatOptions
+        implements OracleGenAiServingOptions, ToolCallingChatOptions {
 
     private final OracleGenAiServingOptionsState servingOptions = new OracleGenAiServingOptionsState();
 
-    private OracleGenAiChatApiFormat apiFormat;
+    private List<ToolCallback> toolCallbacks = Collections.emptyList();
 
-    public static OracleGenAiChatApiFormat inferApiFormat(String model) {
-        return OracleGenAiChatApiFormat.infer(model);
+    private Set<String> toolNames = Collections.emptySet();
+
+    private Map<String, Object> toolContext = Collections.emptyMap();
+
+    private Boolean internalToolExecutionEnabled;
+
+    private GenAiApiFormat apiFormat;
+
+    public static GenAiApiFormat inferApiFormat(String model) {
+        return GenAiApiFormat.infer(model);
     }
 
     public static Builder builder() {
@@ -39,6 +56,12 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
         result.setTemperature(options.getTemperature());
         result.setTopK(options.getTopK());
         result.setTopP(options.getTopP());
+        if (options instanceof ToolCallingChatOptions toolCallingOptions) {
+            result.setToolCallbacks(toolCallingOptions.getToolCallbacks());
+            result.setToolNames(toolCallingOptions.getToolNames());
+            result.setToolContext(toolCallingOptions.getToolContext());
+            result.setInternalToolExecutionEnabled(toolCallingOptions.getInternalToolExecutionEnabled());
+        }
         if (options instanceof OracleGenAiChatOptions oracleOptions) {
             oracleOptions.copyServingOptionsTo(result);
             result.setApiFormat(oracleOptions.getApiFormat());
@@ -76,12 +99,52 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
         servingOptions.setEndpointId(endpointId);
     }
 
-    public OracleGenAiChatApiFormat getApiFormat() {
+    public GenAiApiFormat getApiFormat() {
         return apiFormat;
     }
 
-    public void setApiFormat(OracleGenAiChatApiFormat apiFormat) {
+    public void setApiFormat(GenAiApiFormat apiFormat) {
         this.apiFormat = apiFormat;
+    }
+
+    @Override
+    public List<ToolCallback> getToolCallbacks() {
+        return toolCallbacks;
+    }
+
+    @Override
+    public void setToolCallbacks(List<ToolCallback> toolCallbacks) {
+        this.toolCallbacks = toolCallbacks != null ? toolCallbacks : Collections.emptyList();
+    }
+
+    @Override
+    public Set<String> getToolNames() {
+        return toolNames;
+    }
+
+    @Override
+    public void setToolNames(Set<String> toolNames) {
+        this.toolNames = toolNames != null ? toolNames : Collections.emptySet();
+    }
+
+    @Override
+    public Map<String, Object> getToolContext() {
+        return toolContext;
+    }
+
+    @Override
+    public void setToolContext(Map<String, Object> toolContext) {
+        this.toolContext = toolContext != null ? toolContext : Collections.emptyMap();
+    }
+
+    @Override
+    public Boolean getInternalToolExecutionEnabled() {
+        return internalToolExecutionEnabled;
+    }
+
+    @Override
+    public void setInternalToolExecutionEnabled(Boolean internalToolExecutionEnabled) {
+        this.internalToolExecutionEnabled = internalToolExecutionEnabled;
     }
 
     @Override
@@ -96,6 +159,14 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
             return merged;
         }
         copyStandardOptionOverrides(runtimeOptions, merged);
+        if (runtimeOptions instanceof ToolCallingChatOptions toolCallingRuntimeOptions) {
+            merged.setToolCallbacks(mergeToolCallbacks(merged.getToolCallbacks(),
+                    toolCallingRuntimeOptions.getToolCallbacks()));
+            merged.setToolNames(mergeToolNames(merged.getToolNames(), toolCallingRuntimeOptions.getToolNames()));
+            merged.setToolContext(mergeToolContext(merged.getToolContext(), toolCallingRuntimeOptions.getToolContext()));
+            OracleGenAiServingOptions.mergeOption(toolCallingRuntimeOptions.getInternalToolExecutionEnabled(),
+                    merged::setInternalToolExecutionEnabled);
+        }
         if (runtimeOptions instanceof OracleGenAiChatOptions oracleRuntimeOptions) {
             oracleRuntimeOptions.mergeServingOptionsTo(merged);
             OracleGenAiServingOptions.mergeOption(oracleRuntimeOptions.getApiFormat(), merged::setApiFormat);
@@ -113,6 +184,31 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
         OracleGenAiServingOptions.mergeOption(source.getTemperature(), target::setTemperature);
         OracleGenAiServingOptions.mergeOption(source.getTopK(), target::setTopK);
         OracleGenAiServingOptions.mergeOption(source.getTopP(), target::setTopP);
+    }
+
+    private static List<ToolCallback> mergeToolCallbacks(List<ToolCallback> defaults, List<ToolCallback> runtime) {
+        if (runtime != null && !runtime.isEmpty()) {
+            return runtime;
+        }
+        return defaults != null ? defaults : Collections.emptyList();
+    }
+
+    private static Set<String> mergeToolNames(Set<String> defaults, Set<String> runtime) {
+        if (runtime != null && !runtime.isEmpty()) {
+            return runtime;
+        }
+        return defaults != null ? defaults : Collections.emptySet();
+    }
+
+    private static Map<String, Object> mergeToolContext(Map<String, Object> defaults, Map<String, Object> runtime) {
+        Map<String, Object> merged = new LinkedHashMap<>();
+        if (defaults != null) {
+            merged.putAll(defaults);
+        }
+        if (runtime != null) {
+            merged.putAll(runtime);
+        }
+        return merged;
     }
 
     public static final class Builder {
@@ -138,7 +234,7 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
             return this;
         }
 
-        public Builder apiFormat(OracleGenAiChatApiFormat apiFormat) {
+        public Builder apiFormat(GenAiApiFormat apiFormat) {
             options.setApiFormat(apiFormat);
             return this;
         }
@@ -175,6 +271,26 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
 
         public Builder stopSequences(List<String> stopSequences) {
             options.setStopSequences(stopSequences);
+            return this;
+        }
+
+        public Builder toolCallbacks(List<ToolCallback> toolCallbacks) {
+            options.setToolCallbacks(toolCallbacks);
+            return this;
+        }
+
+        public Builder toolNames(Set<String> toolNames) {
+            options.setToolNames(toolNames);
+            return this;
+        }
+
+        public Builder toolContext(Map<String, Object> toolContext) {
+            options.setToolContext(toolContext);
+            return this;
+        }
+
+        public Builder internalToolExecutionEnabled(Boolean internalToolExecutionEnabled) {
+            options.setInternalToolExecutionEnabled(internalToolExecutionEnabled);
             return this;
         }
 

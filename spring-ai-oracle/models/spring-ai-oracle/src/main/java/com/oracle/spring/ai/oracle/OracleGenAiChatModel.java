@@ -5,56 +5,28 @@
 
 package com.oracle.spring.ai.oracle;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.bmc.generativeaiinference.model.BaseChatRequest;
-import com.oracle.bmc.generativeaiinference.model.BaseChatResponse;
-import com.oracle.bmc.generativeaiinference.model.ChatChoice;
-import com.oracle.bmc.generativeaiinference.model.ChatContent;
-import com.oracle.bmc.generativeaiinference.model.ChatDetails;
-import com.oracle.bmc.generativeaiinference.model.ChatResult;
-import com.oracle.bmc.generativeaiinference.model.CohereAssistantMessageV2;
-import com.oracle.bmc.generativeaiinference.model.CohereChatBotMessage;
-import com.oracle.bmc.generativeaiinference.model.CohereChatRequest;
-import com.oracle.bmc.generativeaiinference.model.CohereChatRequestV2;
-import com.oracle.bmc.generativeaiinference.model.CohereChatResponse;
-import com.oracle.bmc.generativeaiinference.model.CohereChatResponseV2;
-import com.oracle.bmc.generativeaiinference.model.CohereContentV2;
-import com.oracle.bmc.generativeaiinference.model.CohereMessage;
-import com.oracle.bmc.generativeaiinference.model.CohereMessageV2;
-import com.oracle.bmc.generativeaiinference.model.CohereSystemMessageV2;
-import com.oracle.bmc.generativeaiinference.model.CohereTextContentV2;
-import com.oracle.bmc.generativeaiinference.model.CohereUserMessage;
-import com.oracle.bmc.generativeaiinference.model.CohereUserMessageV2;
-import com.oracle.bmc.generativeaiinference.model.GenericChatRequest;
-import com.oracle.bmc.generativeaiinference.model.GenericChatResponse;
-import com.oracle.bmc.generativeaiinference.model.TextContent;
-import com.oracle.bmc.generativeaiinference.model.Usage;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
-import org.jspecify.annotations.NonNull;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.MessageType;
-import org.springframework.ai.chat.messages.ToolResponseMessage;
-import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
-import org.springframework.ai.chat.metadata.ChatResponseMetadata;
-import org.springframework.ai.chat.metadata.DefaultUsage;
+import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
+import com.oracle.spring.ai.oracle.converter.ChatRequestConverter;
+import com.oracle.spring.ai.oracle.converter.ChatResponseConverter;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.content.MediaContent;
+import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
+import org.springframework.ai.model.tool.ToolCallingManager;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolExecutionResult;
 import org.springframework.ai.retry.RetryUtils;
+import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.core.retry.RetryTemplate;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 /**
@@ -62,11 +34,21 @@ import reactor.core.publisher.Flux;
  */
 public class OracleGenAiChatModel implements ChatModel {
 
+    private static final ToolCallingManager DEFAULT_TOOL_CALLING_MANAGER = ToolCallingManager.builder().build();
+
     private final GenerativeAiInference client;
 
     private final OracleGenAiChatOptions defaultOptions;
 
+    private final ToolCallingManager toolCallingManager;
+
+    private final ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate;
+
     private final RetryTemplate retryTemplate;
+
+    private final ChatRequestConverter requestConverter = new ChatRequestConverter();
+
+    private final ChatResponseConverter responseConverter = new ChatResponseConverter();
 
     public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions) {
         this(client, defaultOptions, RetryUtils.DEFAULT_RETRY_TEMPLATE);
@@ -74,22 +56,33 @@ public class OracleGenAiChatModel implements ChatModel {
 
     public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions,
             RetryTemplate retryTemplate) {
+        this(client, defaultOptions, DEFAULT_TOOL_CALLING_MANAGER, retryTemplate);
+    }
+
+    public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions,
+            ToolCallingManager toolCallingManager, RetryTemplate retryTemplate) {
+        this(client, defaultOptions, toolCallingManager, new DefaultToolExecutionEligibilityPredicate(), retryTemplate);
+    }
+
+    public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions,
+            ToolCallingManager toolCallingManager, ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate,
+            RetryTemplate retryTemplate) {
         Assert.notNull(client, "client must not be null");
         Assert.notNull(defaultOptions, "defaultOptions must not be null");
+        Assert.notNull(toolCallingManager, "toolCallingManager must not be null");
+        Assert.notNull(toolExecutionEligibilityPredicate, "toolExecutionEligibilityPredicate must not be null");
         Assert.notNull(retryTemplate, "retryTemplate must not be null");
         this.client = client;
         this.defaultOptions = defaultOptions.copy();
+        this.toolCallingManager = toolCallingManager;
+        this.toolExecutionEligibilityPredicate = toolExecutionEligibilityPredicate;
         this.retryTemplate = retryTemplate;
     }
 
     @Override
     public ChatResponse call(Prompt prompt) {
         Assert.notNull(prompt, "prompt must not be null");
-        OracleGenAiChatOptions options = defaultOptions.merge(prompt.getOptions());
-        ChatRequest request = toChatRequest(prompt, options);
-        com.oracle.bmc.generativeaiinference.responses.ChatResponse response =
-                RetryUtils.execute(retryTemplate, () -> client.chat(request));
-        return toChatResponse(response);
+        return internalCall(toRequestPrompt(prompt));
     }
 
     @Override
@@ -104,237 +97,45 @@ public class OracleGenAiChatModel implements ChatModel {
 
     ChatRequest toChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
         options.validate();
-        ChatDetails chatDetails = ChatDetails.builder()
-                .compartmentId(options.getCompartmentId())
-                .servingMode(options.toServingMode())
-                .chatRequest(toBaseChatRequest(prompt, options))
-                .build();
-        return ChatRequest.builder().chatDetails(chatDetails).build();
+        return requestConverter.toChatRequest(options, toBaseChatRequest(prompt, options));
     }
 
     BaseChatRequest toBaseChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        OracleGenAiChatApiFormat apiFormat = resolveApiFormat(options);
-        return switch (apiFormat) {
-            case GENERIC -> toGenericChatRequest(prompt, options);
-            case COHERE_V2 -> toCohereChatRequestV2(prompt, options);
-            case COHERE -> toCohereChatRequest(prompt, options);
-        };
+        GenAiApiFormat apiFormat = requestConverter.resolveApiFormat(options);
+        List<ToolDefinition> toolDefinitions = resolveToolDefinitions(options, apiFormat);
+        return requestConverter.toBaseChatRequest(prompt, options, apiFormat, toolDefinitions);
     }
 
-    private BaseChatRequest toGenericChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        return GenericChatRequest.builder()
-                .messages(toGenericMessages(prompt))
-                .temperature(options.getTemperature())
-                .topP(options.getTopP())
-                .topK(options.getTopK())
-                .maxTokens(options.getMaxTokens())
-                .frequencyPenalty(options.getFrequencyPenalty())
-                .presencePenalty(options.getPresencePenalty())
-                .stop(options.getStopSequences())
-                .build();
-    }
-
-    private BaseChatRequest toCohereChatRequestV2(Prompt prompt, OracleGenAiChatOptions options) {
-        return CohereChatRequestV2.builder()
-                .messages(toCohereV2Messages(prompt))
-                .temperature(options.getTemperature())
-                .topP(options.getTopP())
-                .topK(options.getTopK())
-                .maxTokens(options.getMaxTokens())
-                .frequencyPenalty(options.getFrequencyPenalty())
-                .presencePenalty(options.getPresencePenalty())
-                .stopSequences(options.getStopSequences())
-                .build();
-    }
-
-    private BaseChatRequest toCohereChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        List<Message> instructions = prompt.getInstructions();
-        if (instructions.isEmpty()) {
-            throw new IllegalArgumentException("Prompt must contain at least one message.");
-        }
-        List<CohereMessage> history = new ArrayList<>();
-        StringJoiner systemMessages = new StringJoiner("\n");
-        String userMessage = null;
-        for (Message message : instructions) {
-            assertSupportedMessage(message);
-            if (message.getMessageType() == MessageType.SYSTEM) {
-                systemMessages.add(message.getText());
+    private ChatResponse internalCall(Prompt prompt) {
+        OracleGenAiChatOptions options = (OracleGenAiChatOptions) prompt.getOptions();
+        ChatRequest request = toChatRequest(prompt, options);
+        com.oracle.bmc.generativeaiinference.responses.ChatResponse response =
+                RetryUtils.execute(retryTemplate, () -> client.chat(request));
+        ChatResponse chatResponse = responseConverter.toChatResponse(response);
+        if (toolExecutionEligibilityPredicate.isToolExecutionRequired(options, chatResponse)) {
+            ToolExecutionResult toolExecutionResult = toolCallingManager.executeToolCalls(prompt, chatResponse);
+            if (toolExecutionResult.returnDirect()) {
+                return ChatResponse.builder()
+                        .from(chatResponse)
+                        .generations(ToolExecutionResult.buildGenerations(toolExecutionResult))
+                        .build();
             }
-            else if (message.getMessageType() == MessageType.ASSISTANT) {
-                history.add(CohereChatBotMessage.builder().message(message.getText()).build());
-            }
-            else if (message.getMessageType() == MessageType.USER) {
-                if (userMessage != null) {
-                    history.add(CohereUserMessage.builder().message(userMessage).build());
-                }
-                userMessage = message.getText();
-            }
+            return internalCall(new Prompt(toolExecutionResult.conversationHistory(), options));
         }
-        if (!StringUtils.hasText(userMessage)) {
-            throw new IllegalArgumentException("Legacy Cohere chat requests require a user message.");
-        }
-        CohereChatRequest.Builder builder = CohereChatRequest.builder()
-                .message(userMessage)
-                .temperature(options.getTemperature())
-                .topP(options.getTopP())
-                .topK(options.getTopK())
-                .maxTokens(options.getMaxTokens())
-                .frequencyPenalty(options.getFrequencyPenalty())
-                .presencePenalty(options.getPresencePenalty())
-                .stopSequences(options.getStopSequences());
-        if (!history.isEmpty()) {
-            builder.chatHistory(history);
-        }
-        String preambleOverride = systemMessages.toString();
-        if (StringUtils.hasText(preambleOverride)) {
-            builder.preambleOverride(preambleOverride);
-        }
-        return builder.build();
+        return chatResponse;
     }
 
-    private static List<com.oracle.bmc.generativeaiinference.model.Message> toGenericMessages(Prompt prompt) {
-        List<com.oracle.bmc.generativeaiinference.model.Message> messages = new ArrayList<>();
-        for (Message instruction : prompt.getInstructions()) {
-            assertSupportedMessage(instruction);
-            List<ChatContent> content = Collections.singletonList(TextContent.builder().text(instruction.getText()).build());
-            if (instruction.getMessageType() == MessageType.SYSTEM) {
-                messages.add(com.oracle.bmc.generativeaiinference.model.SystemMessage.builder().content(content).build());
-            }
-            else if (instruction.getMessageType() == MessageType.ASSISTANT) {
-                messages.add(com.oracle.bmc.generativeaiinference.model.AssistantMessage.builder().content(content).build());
-            }
-            else if (instruction.getMessageType() == MessageType.USER) {
-                messages.add(com.oracle.bmc.generativeaiinference.model.UserMessage.builder().content(content).build());
-            }
-        }
-        return messages;
+    private Prompt toRequestPrompt(Prompt prompt) {
+        return new Prompt(prompt.getInstructions(), defaultOptions.merge(prompt.getOptions()));
     }
 
-    private static List<CohereMessageV2> toCohereV2Messages(Prompt prompt) {
-        List<CohereMessageV2> messages = new ArrayList<>();
-        for (Message instruction : prompt.getInstructions()) {
-            assertSupportedMessage(instruction);
-            List<CohereContentV2> content =
-                    Collections.singletonList(CohereTextContentV2.builder().text(instruction.getText()).build());
-            if (instruction.getMessageType() == MessageType.SYSTEM) {
-                messages.add(CohereSystemMessageV2.builder().content(content).build());
-            }
-            else if (instruction.getMessageType() == MessageType.ASSISTANT) {
-                messages.add(CohereAssistantMessageV2.builder().content(content).build());
-            }
-            else if (instruction.getMessageType() == MessageType.USER) {
-                messages.add(CohereUserMessageV2.builder().content(content).build());
-            }
+    private List<ToolDefinition> resolveToolDefinitions(OracleGenAiChatOptions options,
+            GenAiApiFormat apiFormat) {
+        if (apiFormat == GenAiApiFormat.COHERE) {
+            return Collections.emptyList();
         }
-        return messages;
+        ToolCallingChatOptions.validateToolCallbacks(options.getToolCallbacks());
+        return toolCallingManager.resolveToolDefinitions(options);
     }
 
-    private ChatResponse toChatResponse(com.oracle.bmc.generativeaiinference.responses.ChatResponse response) {
-        ChatResult chatResult = response.getChatResult();
-        if (chatResult == null || chatResult.getChatResponse() == null) {
-            throw new IllegalStateException("OCI Generative AI chat response did not contain a chat result.");
-        }
-        BaseChatResponse baseChatResponse = chatResult.getChatResponse();
-        ExtractedResponse extracted = extractResponse(baseChatResponse);
-        ChatGenerationMetadata generationMetadata = ChatGenerationMetadata.builder()
-                .finishReason(extracted.finishReason())
-                .build();
-        Generation generation = new Generation(new AssistantMessage(extracted.text()), generationMetadata);
-        ChatResponseMetadata metadata = ChatResponseMetadata.builder()
-                .id(extracted.id())
-                .model(chatResult.getModelId())
-                .usage(toUsage(extracted.usage()))
-                .keyValue("modelVersion", chatResult.getModelVersion())
-                .keyValue("opcRequestId", response.getOpcRequestId())
-                .build();
-        return new ChatResponse(Collections.singletonList(generation), metadata);
-    }
-
-    private static ExtractedResponse extractResponse(BaseChatResponse response) {
-        if (response instanceof GenericChatResponse genericResponse) {
-            ChatChoice choice = last(genericResponse.getChoices(), "generic chat choices");
-            String text = textFromGenericMessage(choice.getMessage());
-            Usage usage = choice.getUsage() != null ? choice.getUsage() : genericResponse.getUsage();
-            return new ExtractedResponse(null, text, choice.getFinishReason(), usage);
-        }
-        if (response instanceof CohereChatResponseV2 cohereV2Response) {
-            return new ExtractedResponse(cohereV2Response.getId(), textFromCohereV2Message(cohereV2Response.getMessage()),
-                    cohereV2Response.getFinishReason() != null ? cohereV2Response.getFinishReason().getValue() : null,
-                    cohereV2Response.getUsage());
-        }
-        if (response instanceof CohereChatResponse cohereResponse) {
-            return new ExtractedResponse(null, cohereResponse.getText(),
-                    cohereResponse.getFinishReason() != null ? cohereResponse.getFinishReason().getValue() : null,
-                    cohereResponse.getUsage());
-        }
-        throw new IllegalStateException("Unsupported OCI Generative AI chat response type: " + response.getClass().getName());
-    }
-
-    private static String textFromGenericMessage(com.oracle.bmc.generativeaiinference.model.Message message) {
-        if (message == null || CollectionUtils.isEmpty(message.getContent())) {
-            return "";
-        }
-        StringBuilder text = new StringBuilder();
-        for (ChatContent content : message.getContent()) {
-            if (content instanceof TextContent textContent) {
-                text.append(textContent.getText());
-            }
-        }
-        return text.toString();
-    }
-
-    private static String textFromCohereV2Message(CohereAssistantMessageV2 message) {
-        if (message == null || CollectionUtils.isEmpty(message.getContent())) {
-            return "";
-        }
-        StringBuilder text = new StringBuilder();
-        for (CohereContentV2 content : message.getContent()) {
-            if (content instanceof CohereTextContentV2 textContent) {
-                text.append(textContent.getText());
-            }
-        }
-        return text.toString();
-    }
-
-    private static DefaultUsage toUsage(Usage usage) {
-        if (usage == null) {
-            return new DefaultUsage(0, 0, 0);
-        }
-        return new DefaultUsage(usage.getPromptTokens(), usage.getCompletionTokens(), usage.getTotalTokens(), usage);
-    }
-
-    private static <T> T last(List<T> values, String description) {
-        if (CollectionUtils.isEmpty(values)) {
-            throw new IllegalStateException("OCI Generative AI response did not contain " + description + ".");
-        }
-        return values.get(values.size() - 1);
-    }
-
-    private static void assertSupportedMessage(Message message) {
-        if (message instanceof ToolResponseMessage || message.getMessageType() == MessageType.TOOL) {
-            throw new UnsupportedOperationException("OCI Generative AI chat tool response messages are not supported yet.");
-        }
-        if (message instanceof AssistantMessage assistantMessage && assistantMessage.hasToolCalls()) {
-            throw new UnsupportedOperationException("OCI Generative AI chat tool calls are not supported yet.");
-        }
-        if (message instanceof MediaContent mediaContent && !CollectionUtils.isEmpty(mediaContent.getMedia())) {
-            throw new UnsupportedOperationException("OCI Generative AI chat media messages are not supported yet.");
-        }
-        if (!StringUtils.hasText(message.getText())) {
-            throw new IllegalArgumentException("Chat message text must not be empty.");
-        }
-    }
-
-    private static OracleGenAiChatApiFormat resolveApiFormat(OracleGenAiChatOptions options) {
-        if (options.getApiFormat() != null) {
-            return options.getApiFormat();
-        }
-        return OracleGenAiChatOptions.inferApiFormat(options.getModel());
-    }
-
-    private record ExtractedResponse(String id, String text, String finishReason, Usage usage) {
-        private ExtractedResponse {
-            text = Objects.requireNonNullElse(text, "");
-        }
-    }
 }
