@@ -4,15 +4,15 @@ Spring AI model bindings for Oracle Cloud Infrastructure Generative AI.
 
 This subproject is intentionally separate from the existing Spring Cloud OCI Maven tree and uses `org.springframework.ai:spring-ai-parent:2.0.0-M6` as its parent.
 
-The first model binding is a chat-only Spring AI `ChatModel` backed by OCI Generative AI Inference.
+The model bindings include Spring AI `ChatModel` and `EmbeddingModel` implementations backed by OCI Generative AI Inference.
 
 ## Modules
 
 | Module | Description |
 |--------|-------------|
-| `models/spring-ai-oracle` | OCI Generative AI `ChatModel` implementation. |
-| `auto-configurations/models/spring-ai-autoconfigure-model-oracle` | Spring Boot auto-configuration for the OCI Generative AI chat model. |
-| `starters/spring-ai-starter-model-oracle` | Spring Boot starter for the OCI Generative AI chat model. |
+| `models/spring-ai-oracle` | OCI Generative AI `ChatModel` and `EmbeddingModel` implementations. |
+| `auto-configurations/models/spring-ai-autoconfigure-model-oracle` | Spring Boot auto-configuration for OCI Generative AI Spring AI models. |
+| `starters/spring-ai-starter-model-oracle` | Spring Boot starter for OCI Generative AI Spring AI models. |
 
 ## Maven
 
@@ -25,23 +25,28 @@ The first model binding is a chat-only Spring AI `ChatModel` backed by OCI Gener
 
 ## Configuration
 
-Select the Oracle chat model provider with Spring AI's model selector:
+Oracle providers follow Spring AI's OCI GenAI model selectors. Chat and embedding default to `oci-genai`; set a selector to `none` to disable that model type.
 
 ```yaml
 spring:
   ai:
     model:
-      chat: oracle
-    oracle:
-      auth:
-        type: FILE
-        config-file: ~/.oci/config
+      chat: oci-genai
+      embedding: oci-genai
+    oci:
+      genai:
+        authentication-type: FILE
+        file: ~/.oci/config
         profile: DEFAULT
-      chat:
-        options:
-          compartment-id: ocid1.compartment.oc1..example
+        chat:
+          compartment: ocid1.compartment.oc1..example
           serving-mode: ON_DEMAND
           model: cohere.command-a-03-2025
+        embedding:
+          compartment: ocid1.compartment.oc1..example
+          serving-mode: ON_DEMAND
+          model: cohere.embed-english-v3.0
+          truncate: END
 ```
 
 Dedicated endpoints use `DEDICATED` serving mode and `endpoint-id`:
@@ -50,11 +55,11 @@ Dedicated endpoints use `DEDICATED` serving mode and `endpoint-id`:
 spring:
   ai:
     model:
-      chat: oracle
-    oracle:
-      chat:
-        options:
-          compartment-id: ocid1.compartment.oc1..example
+      chat: oci-genai
+    oci:
+      genai:
+        chat:
+          compartment: ocid1.compartment.oc1..example
           serving-mode: DEDICATED
           endpoint-id: ocid1.generativeaiendpoint.oc1..example
 ```
@@ -95,12 +100,36 @@ class GenAiService {
 }
 ```
 
+Use the standard Spring AI `EmbeddingModel` API for text embeddings:
+
+```java
+import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.stereotype.Service;
+
+@Service
+class EmbeddingService {
+
+    private final EmbeddingModel embeddingModel;
+
+    EmbeddingService(EmbeddingModel embeddingModel) {
+        this.embeddingModel = embeddingModel;
+    }
+
+    float[] embed(String text) {
+        return embeddingModel.embed(text);
+    }
+}
+```
+
 See the OCI Generative AI model list for current model IDs, regions, and supported serving modes:
 <https://docs.oracle.com/en-us/iaas/Content/generative-ai/models.htm>.
 
+The chat API format is inferred from the model ID unless `spring.ai.oci.genai.chat.api-format` is set explicitly:
+Command A uses `COHERE_V2`, other Cohere chat models use `COHERE`, and non-Cohere model families use `GENERIC`.
+
 ## Live Tests
 
-The live OCI Generative AI test uses config file authentication and is skipped unless a compartment OCID is provided. The test lists active chat-capable models from OCI, keeps the latest current text on-demand model from each provider, maps model IDs to OCI chat API formats, and runs one dynamic test for each selected provider model. Set `OCI_GENAI_MODEL` to run only one specific current model from the live model list.
+The live OCI Generative AI test uses config file authentication and is skipped unless a compartment OCID is provided. The test lists active chat-capable models from OCI, keeps the latest current text on-demand model from each provider, uses the same model ID API-format inference as production, and runs one dynamic test for each selected provider model. Set `OCI_GENAI_MODEL` to run only one specific current model from the live model list.
 
 ```bash
 OCI_COMPARTMENT_ID=ocid1.compartment.oc1..example \
@@ -108,6 +137,8 @@ mvn -f spring-ai-oracle/pom.xml test
 ```
 
 Optional config file authentication overrides use `OCI_CONFIG_FILE`, `OCI_PROFILE`, and `OCI_REGION`.
+
+Set `OCI_GENAI_MODEL` to run one chat model and `OCI_GENAI_EMBEDDING_MODEL` to run one embedding model.
 
 ## License
 

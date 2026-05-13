@@ -7,45 +7,50 @@ package com.oracle.spring.ai.oracle.autoconfigure;
 
 import java.io.IOException;
 
+import com.oracle.bmc.ClientRuntime;
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.bmc.generativeaiinference.GenerativeAiInferenceClient;
-import com.oracle.spring.ai.oracle.OracleGenAiChatModel;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.retry.RetryUtils;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.retry.RetryTemplate;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Import;
 import org.springframework.util.StringUtils;
 
 /**
- * Auto-configuration for OCI Generative AI Spring AI chat model.
+ * Auto-configuration for OCI Generative AI Spring AI models.
  */
 @AutoConfiguration
-@ConditionalOnClass({ OracleGenAiChatModel.class, GenerativeAiInference.class })
-@ConditionalOnProperty(name = "spring.ai.model.chat", havingValue = "oracle")
-@EnableConfigurationProperties({ OracleGenAiChatProperties.class, OracleGenAiAuthenticationProperties.class })
-public class OracleGenAiChatAutoConfiguration {
+@ConditionalOnClass(GenerativeAiInference.class)
+@EnableConfigurationProperties(AuthenticationProperties.class)
+@Import({ ChatConfiguration.class, EmbeddingConfiguration.class })
+public class GenAiAutoConfiguration {
+
+    static final String USER_AGENT = "Oracle-SpringAI";
 
     @Bean
+    @Conditional(GenAiModelSelectedCondition.class)
     @ConditionalOnMissingBean
     public BasicAuthenticationDetailsProvider oracleGenAiAuthenticationDetailsProvider(
-            OracleGenAiAuthenticationProperties properties) throws IOException {
-        return properties.createBasicAuthenticationDetailsProvider();
+            AuthenticationProperties properties) throws IOException {
+        ClientRuntime.setClientUserAgent(USER_AGENT);
+        return AuthenticationProviderFactory.create(properties);
     }
 
     @Bean
+    @Conditional(GenAiModelSelectedCondition.class)
     @ConditionalOnMissingBean
     public GenerativeAiInference oracleGenAiInferenceClient(BasicAuthenticationDetailsProvider authenticationDetailsProvider,
-            OracleGenAiAuthenticationProperties properties) {
+            AuthenticationProperties properties) {
         GenerativeAiInference client = GenerativeAiInferenceClient.builder().build(authenticationDetailsProvider);
-        if (StringUtils.hasText(properties.getRegion())) {
+        if (StringUtils.hasText(properties.getEndpoint())) {
+            client.setEndpoint(properties.getEndpoint());
+        }
+        else if (StringUtils.hasText(properties.getRegion())) {
             client.setRegion(properties.getRegion());
         }
         else if (authenticationDetailsProvider instanceof RegionProvider regionProvider
@@ -53,13 +58,5 @@ public class OracleGenAiChatAutoConfiguration {
             client.setRegion(regionProvider.getRegion());
         }
         return client;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(ChatModel.class)
-    public OracleGenAiChatModel oracleGenAiChatModel(GenerativeAiInference generativeAiInference,
-            OracleGenAiChatProperties properties, ObjectProvider<RetryTemplate> retryTemplate) {
-        return new OracleGenAiChatModel(generativeAiInference, properties.getOptions(),
-                retryTemplate.getIfAvailable(() -> RetryUtils.DEFAULT_RETRY_TEMPLATE));
     }
 }

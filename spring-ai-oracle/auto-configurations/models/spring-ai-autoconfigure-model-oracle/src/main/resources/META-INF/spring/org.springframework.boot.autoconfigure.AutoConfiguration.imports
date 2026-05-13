@@ -1,1 +1,1 @@
-com.oracle.spring.ai.oracle.autoconfigure.OracleGenAiChatAutoConfiguration
+com.oracle.spring.ai.oracle.autoconfigure.GenAiAutoConfiguration

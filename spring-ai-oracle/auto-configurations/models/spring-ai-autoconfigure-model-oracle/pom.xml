@@ -35,6 +35,13 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.oracle.spring.ai</groupId>
+            <artifactId>spring-ai-oracle</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-addons-oke-workload-identity</artifactId>
         </dependency>

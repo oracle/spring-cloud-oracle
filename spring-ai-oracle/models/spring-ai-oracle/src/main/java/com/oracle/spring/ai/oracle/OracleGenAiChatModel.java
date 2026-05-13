@@ -31,13 +31,11 @@ import com.oracle.bmc.generativeaiinference.model.CohereSystemMessageV2;
 import com.oracle.bmc.generativeaiinference.model.CohereTextContentV2;
 import com.oracle.bmc.generativeaiinference.model.CohereUserMessage;
 import com.oracle.bmc.generativeaiinference.model.CohereUserMessageV2;
-import com.oracle.bmc.generativeaiinference.model.DedicatedServingMode;
 import com.oracle.bmc.generativeaiinference.model.GenericChatResponse;
-import com.oracle.bmc.generativeaiinference.model.OnDemandServingMode;
-import com.oracle.bmc.generativeaiinference.model.ServingMode;
 import com.oracle.bmc.generativeaiinference.model.TextContent;
 import com.oracle.bmc.generativeaiinference.model.Usage;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
+import org.jspecify.annotations.NonNull;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.MessageType;
@@ -104,10 +102,10 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     ChatRequest toChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        validateOptions(options);
+        OracleGenAiServingModeSupport.validate(options);
         ChatDetails chatDetails = ChatDetails.builder()
                 .compartmentId(options.getCompartmentId())
-                .servingMode(toServingMode(options))
+                .servingMode(OracleGenAiServingModeSupport.toServingMode(options))
                 .chatRequest(toBaseChatRequest(prompt, options))
                 .build();
         return ChatRequest.builder().chatDetails(chatDetails).build();
@@ -325,37 +323,11 @@ public class OracleGenAiChatModel implements ChatModel {
         }
     }
 
-    private static void validateOptions(OracleGenAiChatOptions options) {
-        Assert.hasText(options.getCompartmentId(), "OCI Generative AI compartmentId must be configured.");
-        if (options.getServingMode() == null) {
-            throw new IllegalArgumentException("OCI Generative AI servingMode must be configured.");
-        }
-        if (options.getServingMode() == OracleGenAiChatOptions.ServingMode.ON_DEMAND
-                && !StringUtils.hasText(options.getModel())) {
-            throw new IllegalArgumentException("OCI Generative AI on-demand serving mode requires options.model.");
-        }
-        if (options.getServingMode() == OracleGenAiChatOptions.ServingMode.DEDICATED
-                && !StringUtils.hasText(options.getEndpointId())) {
-            throw new IllegalArgumentException("OCI Generative AI dedicated serving mode requires options.endpointId.");
-        }
-    }
-
-    private static ServingMode toServingMode(OracleGenAiChatOptions options) {
-        if (options.getServingMode() == OracleGenAiChatOptions.ServingMode.DEDICATED) {
-            return DedicatedServingMode.builder().endpointId(options.getEndpointId()).build();
-        }
-        return OnDemandServingMode.builder().modelId(options.getModel()).build();
-    }
-
     private static OracleGenAiChatOptions.ApiFormat resolveApiFormat(OracleGenAiChatOptions options) {
         if (options.getApiFormat() != null) {
             return options.getApiFormat();
         }
-        String model = options.getModel();
-        if (StringUtils.hasText(model) && model.startsWith("cohere.")) {
-            return OracleGenAiChatOptions.ApiFormat.COHERE_V2;
-        }
-        return OracleGenAiChatOptions.ApiFormat.GENERIC;
+        return OracleGenAiChatOptions.inferApiFormat(options.getModel());
     }
 
     private record ExtractedResponse(String id, String text, String finishReason, Usage usage) {

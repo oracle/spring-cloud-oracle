@@ -12,7 +12,7 @@ import org.springframework.ai.chat.prompt.DefaultChatOptions;
 /**
  * OCI Generative AI chat options.
  */
-public class OracleGenAiChatOptions extends DefaultChatOptions {
+public class OracleGenAiChatOptions extends DefaultChatOptions implements OracleGenAiServingOptions {
 
     private String compartmentId;
 
@@ -31,6 +31,16 @@ public class OracleGenAiChatOptions extends DefaultChatOptions {
         GENERIC,
         COHERE_V2,
         COHERE
+    }
+
+    public static ApiFormat inferApiFormat(String model) {
+        if (model != null && model.startsWith("cohere.command-a")) {
+            return ApiFormat.COHERE_V2;
+        }
+        if (model != null && model.startsWith("cohere.")) {
+            return ApiFormat.COHERE;
+        }
+        return ApiFormat.GENERIC;
     }
 
     public static Builder builder() {
@@ -67,12 +77,30 @@ public class OracleGenAiChatOptions extends DefaultChatOptions {
         this.compartmentId = compartmentId;
     }
 
+    public String getCompartment() {
+        return getCompartmentId();
+    }
+
+    public void setCompartment(String compartment) {
+        setCompartmentId(compartment);
+    }
+
     public ServingMode getServingMode() {
         return servingMode;
     }
 
     public void setServingMode(ServingMode servingMode) {
         this.servingMode = servingMode;
+    }
+
+    @Override
+    public boolean hasServingMode() {
+        return servingMode != null;
+    }
+
+    @Override
+    public boolean isDedicatedServingMode() {
+        return servingMode == ServingMode.DEDICATED;
     }
 
     public String getEndpointId() {
@@ -89,6 +117,14 @@ public class OracleGenAiChatOptions extends DefaultChatOptions {
 
     public void setApiFormat(ApiFormat apiFormat) {
         this.apiFormat = apiFormat;
+    }
+
+    public List<String> getStop() {
+        return getStopSequences();
+    }
+
+    public void setStop(List<String> stop) {
+        setStopSequences(stop);
     }
 
     @Override
