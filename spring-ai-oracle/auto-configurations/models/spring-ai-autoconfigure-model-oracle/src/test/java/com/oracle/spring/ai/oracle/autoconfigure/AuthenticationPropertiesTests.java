@@ -20,21 +20,24 @@ import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.RegionProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.mock.env.MockEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class OracleGenAiAuthenticationPropertiesTests {
+class AuthenticationPropertiesTests {
 
     @TempDir
     Path tempDir;
 
     @Test
     void createsConfigFileProvider() throws Exception {
-        OracleGenAiAuthenticationProperties properties = new OracleGenAiAuthenticationProperties();
+        AuthenticationProperties properties = new AuthenticationProperties();
         properties.setConfigFile(writeConfig("TEST").toString());
         properties.setProfile("TEST");
 
-        BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+        BasicAuthenticationDetailsProvider provider = AuthenticationProviderFactory.create(properties);
 
         assertThat(provider).isInstanceOf(ConfigFileAuthenticationDetailsProvider.class);
         assertThat(provider.getKeyId()).isEqualTo("ocid1.tenancy.oc1..test/ocid1.user.oc1..test/aa:bb:cc");
@@ -44,13 +47,37 @@ class OracleGenAiAuthenticationPropertiesTests {
 
     @Test
     void defaultsToDefaultProfileForConfigFileProvider() throws Exception {
-        OracleGenAiAuthenticationProperties properties = new OracleGenAiAuthenticationProperties();
+        AuthenticationProperties properties = new AuthenticationProperties();
         properties.setConfigFile(writeConfig("DEFAULT").toString());
 
-        BasicAuthenticationDetailsProvider provider = properties.createBasicAuthenticationDetailsProvider();
+        BasicAuthenticationDetailsProvider provider = AuthenticationProviderFactory.create(properties);
 
         assertThat(provider).isInstanceOf(ConfigFileAuthenticationDetailsProvider.class);
         assertThat(provider.getKeyId()).isEqualTo("ocid1.tenancy.oc1..test/ocid1.user.oc1..test/aa:bb:cc");
+    }
+
+    @Test
+    void bindsSpringAiOciGenAiProperties() {
+        MockEnvironment environment = new MockEnvironment()
+                .withProperty(PropertyNames.CONFIG_PREFIX + ".authentication-type", "SESSION_TOKEN")
+                .withProperty(PropertyNames.CONFIG_PREFIX + ".config-file", "/tmp/config")
+                .withProperty(PropertyNames.CONFIG_PREFIX + ".profile", "SESSION")
+                .withProperty(PropertyNames.CONFIG_PREFIX + ".region", "us-chicago-1")
+                .withProperty(PropertyNames.CONFIG_PREFIX + ".endpoint",
+                        "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com");
+
+        AuthenticationProperties properties = Binder.get(environment)
+                .bind(PropertyNames.CONFIG_PREFIX,
+                        Bindable.of(AuthenticationProperties.class))
+                .get();
+
+        assertThat(properties.getAuthenticationType())
+                .isEqualTo(AuthenticationProperties.Type.SESSION_TOKEN);
+        assertThat(properties.getConfigFile()).isEqualTo("/tmp/config");
+        assertThat(properties.getProfile()).isEqualTo("SESSION");
+        assertThat(properties.getRegion()).isEqualTo("us-chicago-1");
+        assertThat(properties.getEndpoint())
+                .isEqualTo("https://inference.generativeai.us-chicago-1.oci.oraclecloud.com");
     }
 
     private Path writeConfig(String profile) throws IOException, GeneralSecurityException {

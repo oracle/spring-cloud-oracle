@@ -7,7 +7,7 @@
 ## Projects
 - database/starters: spring boot starters for Oracle AI Database
 - spring-cloud-oci: spring boot integrations for Oracle Cloud Infrastructure (OCI)
-- spring-ai-oracle: Spring AI integrations with Oracle technology. This is distinct from Spring Cloud OCI (spring-cloud-oci) and must not be made dependent
+- spring-ai-oracle: Spring AI integrations with Oracle technology. This is a stand alone module from Spring Cloud OCI (spring-cloud-oci) and must not be made dependent
 - database/spring-cloud-stream-binder-oracle-txeventq: Spring Cloud Stream Binder for Oracle AI Database TxEventQ
 
 ## Code and dev

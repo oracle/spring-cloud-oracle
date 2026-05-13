@@ -7,23 +7,12 @@ package com.oracle.spring.ai.oracle;
 
 import java.util.List;
 
-import com.oracle.bmc.Region;
-import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.bmc.generativeaiinference.model.BaseChatRequest;
 import com.oracle.bmc.generativeaiinference.model.CohereChatRequest;
 import com.oracle.bmc.generativeaiinference.model.CohereChatRequestV2;
 import com.oracle.bmc.generativeaiinference.model.GenericChatRequest;
-import com.oracle.bmc.generativeaiinference.requests.ApplyGuardrailsRequest;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
-import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
-import com.oracle.bmc.generativeaiinference.requests.GenerateTextRequest;
-import com.oracle.bmc.generativeaiinference.requests.RerankTextRequest;
-import com.oracle.bmc.generativeaiinference.requests.SummarizeTextRequest;
-import com.oracle.bmc.generativeaiinference.responses.ApplyGuardrailsResponse;
-import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
-import com.oracle.bmc.generativeaiinference.responses.GenerateTextResponse;
-import com.oracle.bmc.generativeaiinference.responses.RerankTextResponse;
-import com.oracle.bmc.generativeaiinference.responses.SummarizeTextResponse;
+import com.oracle.spring.ai.oracle.test.NoOpGenerativeAiInference;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -36,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OracleGenAiChatModelTests {
 
-    private static final GenerativeAiInference CLIENT = new NoOpGenerativeAiInference();
+    private static final NoOpGenerativeAiInference CLIENT = new NoOpGenerativeAiInference();
 
     @Test
     void createsGenericRequest() {
@@ -55,7 +44,7 @@ class OracleGenAiChatModelTests {
     @Test
     void createsCohereV2Request() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setApiFormat(OracleGenAiChatOptions.ApiFormat.COHERE_V2);
+        options.setApiFormat(OracleGenAiChatApiFormat.COHERE_V2);
 
         BaseChatRequest request = new OracleGenAiChatModel(CLIENT, options)
                 .toBaseChatRequest(new Prompt(List.of(new SystemMessage("rules"), new UserMessage("hello"))), options);
@@ -65,9 +54,31 @@ class OracleGenAiChatModelTests {
     }
 
     @Test
+    void infersCohereV2RequestForCommandAModels() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setModel("cohere.command-a-03-2025");
+
+        BaseChatRequest request = new OracleGenAiChatModel(CLIENT, options)
+                .toBaseChatRequest(new Prompt("hello"), options);
+
+        assertThat(request).isInstanceOf(CohereChatRequestV2.class);
+    }
+
+    @Test
+    void infersLegacyCohereRequestForCommandRModels() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setModel("cohere.command-r-plus-08-2024");
+
+        BaseChatRequest request = new OracleGenAiChatModel(CLIENT, options)
+                .toBaseChatRequest(new Prompt("hello"), options);
+
+        assertThat(request).isInstanceOf(CohereChatRequest.class);
+    }
+
+    @Test
     void createsLegacyCohereRequest() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setApiFormat(OracleGenAiChatOptions.ApiFormat.COHERE);
+        options.setApiFormat(OracleGenAiChatApiFormat.COHERE);
 
         BaseChatRequest request = new OracleGenAiChatModel(CLIENT, options)
                 .toBaseChatRequest(new Prompt(List.of(
@@ -97,7 +108,7 @@ class OracleGenAiChatModelTests {
     @Test
     void validatesDedicatedEndpointId() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setServingMode(OracleGenAiChatOptions.ServingMode.DEDICATED);
+        options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId(null);
         OracleGenAiChatModel model = new OracleGenAiChatModel(CLIENT, options);
 
@@ -109,7 +120,7 @@ class OracleGenAiChatModelTests {
     @Test
     void createsDedicatedServingMode() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setServingMode(OracleGenAiChatOptions.ServingMode.DEDICATED);
+        options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId("endpoint");
 
         ChatRequest request = new OracleGenAiChatModel(CLIENT, options)
@@ -153,65 +164,4 @@ class OracleGenAiChatModelTests {
                 .build();
     }
 
-    private static final class NoOpGenerativeAiInference implements GenerativeAiInference {
-
-        @Override
-        public void refreshClient() {
-        }
-
-        @Override
-        public void setEndpoint(String endpoint) {
-        }
-
-        @Override
-        public String getEndpoint() {
-            return null;
-        }
-
-        @Override
-        public void setRegion(Region region) {
-        }
-
-        @Override
-        public void setRegion(String regionId) {
-        }
-
-        @Override
-        public void useRealmSpecificEndpointTemplate(boolean realmSpecificEndpointTemplateEnabled) {
-        }
-
-        @Override
-        public ApplyGuardrailsResponse applyGuardrails(ApplyGuardrailsRequest request) {
-            throw new UnsupportedOperationException("No OCI calls are expected in request mapping tests.");
-        }
-
-        @Override
-        public com.oracle.bmc.generativeaiinference.responses.ChatResponse chat(ChatRequest request) {
-            throw new UnsupportedOperationException("No OCI calls are expected in request mapping tests.");
-        }
-
-        @Override
-        public EmbedTextResponse embedText(EmbedTextRequest request) {
-            throw new UnsupportedOperationException("No OCI calls are expected in request mapping tests.");
-        }
-
-        @Override
-        public GenerateTextResponse generateText(GenerateTextRequest request) {
-            throw new UnsupportedOperationException("No OCI calls are expected in request mapping tests.");
-        }
-
-        @Override
-        public RerankTextResponse rerankText(RerankTextRequest request) {
-            throw new UnsupportedOperationException("No OCI calls are expected in request mapping tests.");
-        }
-
-        @Override
-        public SummarizeTextResponse summarizeText(SummarizeTextRequest request) {
-            throw new UnsupportedOperationException("No OCI calls are expected in request mapping tests.");
-        }
-
-        @Override
-        public void close() {
-        }
-    }
 }
