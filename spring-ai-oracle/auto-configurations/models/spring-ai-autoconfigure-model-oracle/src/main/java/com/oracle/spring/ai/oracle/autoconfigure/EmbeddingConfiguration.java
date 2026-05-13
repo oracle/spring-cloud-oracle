@@ -29,7 +29,7 @@ class EmbeddingConfiguration {
     @ConditionalOnMissingBean(EmbeddingModel.class)
     OracleGenAiEmbeddingModel oracleGenAiEmbeddingModel(GenerativeAiInference generativeAiInference,
                                                         EmbeddingProperties properties, ObjectProvider<RetryTemplate> retryTemplate) {
-        return new OracleGenAiEmbeddingModel(generativeAiInference, properties.getOptions(),
+        return new OracleGenAiEmbeddingModel(generativeAiInference, properties,
                 retryTemplate.getIfAvailable(() -> RetryUtils.DEFAULT_RETRY_TEMPLATE));
     }
 }

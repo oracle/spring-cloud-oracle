@@ -60,7 +60,7 @@ class AuthenticationPropertiesTests {
     void bindsSpringAiOciGenAiProperties() {
         MockEnvironment environment = new MockEnvironment()
                 .withProperty(PropertyNames.CONFIG_PREFIX + ".authentication-type", "SESSION_TOKEN")
-                .withProperty(PropertyNames.CONFIG_PREFIX + ".file", "/tmp/config")
+                .withProperty(PropertyNames.CONFIG_PREFIX + ".config-file", "/tmp/config")
                 .withProperty(PropertyNames.CONFIG_PREFIX + ".profile", "SESSION")
                 .withProperty(PropertyNames.CONFIG_PREFIX + ".region", "us-chicago-1")
                 .withProperty(PropertyNames.CONFIG_PREFIX + ".endpoint",
@@ -73,7 +73,7 @@ class AuthenticationPropertiesTests {
 
         assertThat(properties.getAuthenticationType())
                 .isEqualTo(AuthenticationProperties.Type.SESSION_TOKEN);
-        assertThat(properties.getFile()).isEqualTo("/tmp/config");
+        assertThat(properties.getConfigFile()).isEqualTo("/tmp/config");
         assertThat(properties.getProfile()).isEqualTo("SESSION");
         assertThat(properties.getRegion()).isEqualTo("us-chicago-1");
         assertThat(properties.getEndpoint())

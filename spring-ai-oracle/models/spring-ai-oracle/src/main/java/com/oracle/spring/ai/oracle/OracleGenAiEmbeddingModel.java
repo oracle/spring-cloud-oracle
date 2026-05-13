@@ -70,11 +70,11 @@ public class OracleGenAiEmbeddingModel implements EmbeddingModel {
     }
 
     EmbedTextRequest toEmbedTextRequest(List<String> inputs, OracleGenAiEmbeddingOptions options) {
-        OracleGenAiServingModeSupport.validate(options);
+        options.validate();
         validateInputs(inputs);
         EmbedTextDetails details = EmbedTextDetails.builder()
                 .compartmentId(options.getCompartmentId())
-                .servingMode(OracleGenAiServingModeSupport.toServingMode(options))
+                .servingMode(options.toServingMode())
                 .inputs(inputs)
                 .outputDimensions(options.getDimensions())
                 .truncate(toTruncate(options.getTruncate()))
@@ -147,11 +147,11 @@ public class OracleGenAiEmbeddingModel implements EmbeddingModel {
         }
     }
 
-    private static EmbedTextDetails.Truncate toTruncate(OracleGenAiEmbeddingOptions.Truncate truncate) {
-        if (truncate == null || truncate == OracleGenAiEmbeddingOptions.Truncate.NONE) {
+    private static EmbedTextDetails.Truncate toTruncate(OracleGenAiEmbeddingTruncate truncate) {
+        if (truncate == null || truncate == OracleGenAiEmbeddingTruncate.NONE) {
             return EmbedTextDetails.Truncate.None;
         }
-        if (truncate == OracleGenAiEmbeddingOptions.Truncate.START) {
+        if (truncate == OracleGenAiEmbeddingTruncate.START) {
             return EmbedTextDetails.Truncate.Start;
         }
         return EmbedTextDetails.Truncate.End;

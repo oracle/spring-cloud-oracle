@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  */
 class EmbeddingLiveTest {
 
-    private static final String COMPARTMENT_ID_PROPERTY = PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment";
+    private static final String COMPARTMENT_ID_PROPERTY = PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment-id";
 
     private static final String MODEL_PROPERTY = PropertyNames.EMBEDDING_CONFIG_PREFIX + ".model";
 

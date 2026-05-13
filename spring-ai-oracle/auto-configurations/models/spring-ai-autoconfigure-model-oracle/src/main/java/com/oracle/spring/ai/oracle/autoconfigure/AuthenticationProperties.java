@@ -16,7 +16,7 @@ public class AuthenticationProperties {
 
     private String federationEndpoint;
 
-    private String file;
+    private String configFile;
 
     private String profile;
 
@@ -51,14 +51,6 @@ public class AuthenticationProperties {
         this.authenticationType = authenticationType;
     }
 
-    public Type getType() {
-        return getAuthenticationType();
-    }
-
-    public void setType(Type type) {
-        setAuthenticationType(type);
-    }
-
     public String getFederationEndpoint() {
         return federationEndpoint;
     }
@@ -68,19 +60,11 @@ public class AuthenticationProperties {
     }
 
     public String getConfigFile() {
-        return file;
+        return configFile;
     }
 
     public void setConfigFile(String configFile) {
-        this.file = configFile;
-    }
-
-    public String getFile() {
-        return file;
-    }
-
-    public void setFile(String file) {
-        this.file = file;
+        this.configFile = configFile;
     }
 
     public String getProfile() {

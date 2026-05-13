@@ -44,7 +44,7 @@ class OracleGenAiChatModelTests {
     @Test
     void createsCohereV2Request() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setApiFormat(OracleGenAiChatOptions.ApiFormat.COHERE_V2);
+        options.setApiFormat(OracleGenAiChatApiFormat.COHERE_V2);
 
         BaseChatRequest request = new OracleGenAiChatModel(CLIENT, options)
                 .toBaseChatRequest(new Prompt(List.of(new SystemMessage("rules"), new UserMessage("hello"))), options);
@@ -78,7 +78,7 @@ class OracleGenAiChatModelTests {
     @Test
     void createsLegacyCohereRequest() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setApiFormat(OracleGenAiChatOptions.ApiFormat.COHERE);
+        options.setApiFormat(OracleGenAiChatApiFormat.COHERE);
 
         BaseChatRequest request = new OracleGenAiChatModel(CLIENT, options)
                 .toBaseChatRequest(new Prompt(List.of(
@@ -108,7 +108,7 @@ class OracleGenAiChatModelTests {
     @Test
     void validatesDedicatedEndpointId() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setServingMode(OracleGenAiChatOptions.ServingMode.DEDICATED);
+        options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId(null);
         OracleGenAiChatModel model = new OracleGenAiChatModel(CLIENT, options);
 
@@ -120,7 +120,7 @@ class OracleGenAiChatModelTests {
     @Test
     void createsDedicatedServingMode() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setServingMode(OracleGenAiChatOptions.ServingMode.DEDICATED);
+        options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId("endpoint");
 
         ChatRequest request = new OracleGenAiChatModel(CLIENT, options)

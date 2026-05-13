@@ -37,7 +37,7 @@ final class TestSupport {
 
     static final String REGION_ENV = "OCI_REGION";
 
-    private static final String CONFIG_FILE_PROPERTY = PropertyNames.CONFIG_PREFIX + ".file";
+    private static final String CONFIG_FILE_PROPERTY = PropertyNames.CONFIG_PREFIX + ".config-file";
 
     private static final String PROFILE_PROPERTY = PropertyNames.CONFIG_PREFIX + ".profile";
 
@@ -55,7 +55,7 @@ final class TestSupport {
     static AuthenticationProperties authenticationProperties() {
         AuthenticationProperties properties = new AuthenticationProperties();
         properties.setAuthenticationType(AuthenticationProperties.Type.FILE);
-        properties.setFile(setting(CONFIG_FILE_ENV));
+        properties.setConfigFile(setting(CONFIG_FILE_ENV));
         properties.setProfile(setting(PROFILE_ENV));
         properties.setRegion(setting(REGION_ENV));
         return properties;

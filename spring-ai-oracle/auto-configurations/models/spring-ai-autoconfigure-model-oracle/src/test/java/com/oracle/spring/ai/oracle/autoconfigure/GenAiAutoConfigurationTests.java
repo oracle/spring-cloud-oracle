@@ -44,7 +44,7 @@ class GenAiAutoConfigurationTests {
             .withUserConfiguration(TestOciBeans.class)
             .withPropertyValues(
                     CHAT_SELECTED,
-                    PropertyNames.CHAT_CONFIG_PREFIX + ".compartment=compartment",
+                    PropertyNames.CHAT_CONFIG_PREFIX + ".compartment-id=compartment",
                     PropertyNames.CHAT_CONFIG_PREFIX + ".model=model");
 
     private final ApplicationContextRunner embeddingContextRunner = new ApplicationContextRunner()
@@ -52,7 +52,7 @@ class GenAiAutoConfigurationTests {
             .withUserConfiguration(TestOciBeans.class)
             .withPropertyValues(
                     EMBEDDING_SELECTED,
-                    PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment=compartment",
+                    PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment-id=compartment",
                     PropertyNames.EMBEDDING_CONFIG_PREFIX + ".model=model");
 
     @Test
@@ -70,7 +70,7 @@ class GenAiAutoConfigurationTests {
                 .withUserConfiguration(TestOciBeans.class)
                 .withPropertyValues(
                         EMBEDDING_DISABLED,
-                        PropertyNames.CHAT_CONFIG_PREFIX + ".compartment=compartment",
+                        PropertyNames.CHAT_CONFIG_PREFIX + ".compartment-id=compartment",
                         PropertyNames.CHAT_CONFIG_PREFIX + ".model=model")
                 .run(context -> {
                     assertThat(context).hasSingleBean(ChatModel.class);
@@ -107,9 +107,9 @@ class GenAiAutoConfigurationTests {
                         PropertyNames.CHAT_CONFIG_PREFIX + ".api-format=COHERE_V2")
                 .run(context -> {
                     ChatProperties properties = context.getBean(ChatProperties.class);
-                    assertThat(properties.getOptions().getTemperature()).isEqualTo(0.4);
-                    assertThat(properties.getOptions().getMaxTokens()).isEqualTo(12);
-                    assertThat(properties.getOptions().getApiFormat().name()).isEqualTo("COHERE_V2");
+                    assertThat(properties.getTemperature()).isEqualTo(0.4);
+                    assertThat(properties.getMaxTokens()).isEqualTo(12);
+                    assertThat(properties.getApiFormat().name()).isEqualTo("COHERE_V2");
                 });
     }
 
@@ -128,7 +128,7 @@ class GenAiAutoConfigurationTests {
                 .withUserConfiguration(TestOciBeans.class)
                 .withPropertyValues(
                         CHAT_DISABLED,
-                        PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment=compartment",
+                        PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment-id=compartment",
                         PropertyNames.EMBEDDING_CONFIG_PREFIX + ".model=model")
                 .run(context -> {
                     assertThat(context).hasSingleBean(EmbeddingModel.class);
@@ -166,10 +166,10 @@ class GenAiAutoConfigurationTests {
                         PropertyNames.EMBEDDING_CONFIG_PREFIX + ".endpoint-id=endpoint")
                 .run(context -> {
                     EmbeddingProperties properties = context.getBean(EmbeddingProperties.class);
-                    assertThat(properties.getOptions().getDimensions()).isEqualTo(512);
-                    assertThat(properties.getOptions().getTruncate().name()).isEqualTo("START");
-                    assertThat(properties.getOptions().getServingMode().name()).isEqualTo("DEDICATED");
-                    assertThat(properties.getOptions().getEndpointId()).isEqualTo("endpoint");
+                    assertThat(properties.getDimensions()).isEqualTo(512);
+                    assertThat(properties.getTruncate().name()).isEqualTo("START");
+                    assertThat(properties.getServingMode().name()).isEqualTo("DEDICATED");
+                    assertThat(properties.getEndpointId()).isEqualTo("endpoint");
                 });
     }
 
@@ -180,10 +180,10 @@ class GenAiAutoConfigurationTests {
                 .withUserConfiguration(TestOciBeans.class)
                 .withPropertyValues(
                         CHAT_SELECTED,
-                        PropertyNames.CHAT_CONFIG_PREFIX + ".compartment=compartment",
+                        PropertyNames.CHAT_CONFIG_PREFIX + ".compartment-id=compartment",
                         PropertyNames.CHAT_CONFIG_PREFIX + ".model=chat-model",
                         EMBEDDING_SELECTED,
-                        PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment=compartment",
+                        PropertyNames.EMBEDDING_CONFIG_PREFIX + ".compartment-id=compartment",
                         PropertyNames.EMBEDDING_CONFIG_PREFIX + ".model=embedding-model")
                 .run(context -> {
                     assertThat(context).hasSingleBean(ChatModel.class);

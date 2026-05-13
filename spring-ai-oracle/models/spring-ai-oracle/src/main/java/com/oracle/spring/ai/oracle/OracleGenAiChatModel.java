@@ -31,6 +31,7 @@ import com.oracle.bmc.generativeaiinference.model.CohereSystemMessageV2;
 import com.oracle.bmc.generativeaiinference.model.CohereTextContentV2;
 import com.oracle.bmc.generativeaiinference.model.CohereUserMessage;
 import com.oracle.bmc.generativeaiinference.model.CohereUserMessageV2;
+import com.oracle.bmc.generativeaiinference.model.GenericChatRequest;
 import com.oracle.bmc.generativeaiinference.model.GenericChatResponse;
 import com.oracle.bmc.generativeaiinference.model.TextContent;
 import com.oracle.bmc.generativeaiinference.model.Usage;
@@ -102,17 +103,17 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     ChatRequest toChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        OracleGenAiServingModeSupport.validate(options);
+        options.validate();
         ChatDetails chatDetails = ChatDetails.builder()
                 .compartmentId(options.getCompartmentId())
-                .servingMode(OracleGenAiServingModeSupport.toServingMode(options))
+                .servingMode(options.toServingMode())
                 .chatRequest(toBaseChatRequest(prompt, options))
                 .build();
         return ChatRequest.builder().chatDetails(chatDetails).build();
     }
 
     BaseChatRequest toBaseChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        OracleGenAiChatOptions.ApiFormat apiFormat = resolveApiFormat(options);
+        OracleGenAiChatApiFormat apiFormat = resolveApiFormat(options);
         return switch (apiFormat) {
             case GENERIC -> toGenericChatRequest(prompt, options);
             case COHERE_V2 -> toCohereChatRequestV2(prompt, options);
@@ -121,7 +122,8 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     private BaseChatRequest toGenericChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        return GenericChatRequestBuilder.from(prompt)
+        return GenericChatRequest.builder()
+                .messages(toGenericMessages(prompt))
                 .temperature(options.getTemperature())
                 .topP(options.getTopP())
                 .topK(options.getTopK())
@@ -323,7 +325,7 @@ public class OracleGenAiChatModel implements ChatModel {
         }
     }
 
-    private static OracleGenAiChatOptions.ApiFormat resolveApiFormat(OracleGenAiChatOptions options) {
+    private static OracleGenAiChatApiFormat resolveApiFormat(OracleGenAiChatOptions options) {
         if (options.getApiFormat() != null) {
             return options.getApiFormat();
         }
@@ -333,73 +335,6 @@ public class OracleGenAiChatModel implements ChatModel {
     private record ExtractedResponse(String id, String text, String finishReason, Usage usage) {
         private ExtractedResponse {
             text = Objects.requireNonNullElse(text, "");
-        }
-    }
-
-    private static final class GenericChatRequestBuilder {
-        private final List<com.oracle.bmc.generativeaiinference.model.Message> messages;
-        private Double temperature;
-        private Double topP;
-        private Integer topK;
-        private Integer maxTokens;
-        private Double frequencyPenalty;
-        private Double presencePenalty;
-        private List<String> stop;
-
-        private GenericChatRequestBuilder(List<com.oracle.bmc.generativeaiinference.model.Message> messages) {
-            this.messages = messages;
-        }
-
-        static GenericChatRequestBuilder from(Prompt prompt) {
-            return new GenericChatRequestBuilder(toGenericMessages(prompt));
-        }
-
-        GenericChatRequestBuilder temperature(Double temperature) {
-            this.temperature = temperature;
-            return this;
-        }
-
-        GenericChatRequestBuilder topP(Double topP) {
-            this.topP = topP;
-            return this;
-        }
-
-        GenericChatRequestBuilder topK(Integer topK) {
-            this.topK = topK;
-            return this;
-        }
-
-        GenericChatRequestBuilder maxTokens(Integer maxTokens) {
-            this.maxTokens = maxTokens;
-            return this;
-        }
-
-        GenericChatRequestBuilder frequencyPenalty(Double frequencyPenalty) {
-            this.frequencyPenalty = frequencyPenalty;
-            return this;
-        }
-
-        GenericChatRequestBuilder presencePenalty(Double presencePenalty) {
-            this.presencePenalty = presencePenalty;
-            return this;
-        }
-
-        GenericChatRequestBuilder stop(List<String> stop) {
-            this.stop = stop;
-            return this;
-        }
-
-        BaseChatRequest build() {
-            return com.oracle.bmc.generativeaiinference.model.GenericChatRequest.builder()
-                    .messages(messages)
-                    .temperature(temperature)
-                    .topP(topP)
-                    .topK(topK)
-                    .maxTokens(maxTokens)
-                    .frequencyPenalty(frequencyPenalty)
-                    .presencePenalty(presencePenalty)
-                    .stop(stop)
-                    .build();
         }
     }
 }

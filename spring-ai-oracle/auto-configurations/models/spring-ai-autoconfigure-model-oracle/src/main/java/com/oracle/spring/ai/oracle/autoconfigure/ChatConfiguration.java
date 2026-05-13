@@ -29,7 +29,7 @@ class ChatConfiguration {
     @ConditionalOnMissingBean(ChatModel.class)
     OracleGenAiChatModel oracleGenAiChatModel(GenerativeAiInference generativeAiInference,
                                               ChatProperties properties, ObjectProvider<RetryTemplate> retryTemplate) {
-        return new OracleGenAiChatModel(generativeAiInference, properties.getOptions(),
+        return new OracleGenAiChatModel(generativeAiInference, properties,
                 retryTemplate.getIfAvailable(() -> RetryUtils.DEFAULT_RETRY_TEMPLATE));
     }
 }

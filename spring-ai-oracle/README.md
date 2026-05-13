@@ -36,14 +36,14 @@ spring:
     oci:
       genai:
         authentication-type: FILE
-        file: ~/.oci/config
+        config-file: ~/.oci/config
         profile: DEFAULT
         chat:
-          compartment: ocid1.compartment.oc1..example
+          compartment-id: ocid1.compartment.oc1..example
           serving-mode: ON_DEMAND
           model: cohere.command-a-03-2025
         embedding:
-          compartment: ocid1.compartment.oc1..example
+          compartment-id: ocid1.compartment.oc1..example
           serving-mode: ON_DEMAND
           model: cohere.embed-english-v3.0
           truncate: END
@@ -59,7 +59,7 @@ spring:
     oci:
       genai:
         chat:
-          compartment: ocid1.compartment.oc1..example
+          compartment-id: ocid1.compartment.oc1..example
           serving-mode: DEDICATED
           endpoint-id: ocid1.generativeaiendpoint.oc1..example
 ```

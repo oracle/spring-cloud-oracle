@@ -13,24 +13,9 @@ import org.springframework.ai.embedding.EmbeddingOptions;
  */
 public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions implements OracleGenAiServingOptions {
 
-    private String compartmentId;
+    private final OracleGenAiServingOptionsState servingOptions = new OracleGenAiServingOptionsState();
 
-    private ServingMode servingMode = ServingMode.ON_DEMAND;
-
-    private String endpointId;
-
-    private Truncate truncate = Truncate.NONE;
-
-    public enum ServingMode {
-        ON_DEMAND,
-        DEDICATED
-    }
-
-    public enum Truncate {
-        NONE,
-        START,
-        END
-    }
+    private OracleGenAiEmbeddingTruncate truncate = OracleGenAiEmbeddingTruncate.NONE;
 
     public static Builder builder() {
         return new Builder();
@@ -44,61 +29,47 @@ public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions impleme
         result.setModel(options.getModel());
         result.setDimensions(options.getDimensions());
         if (options instanceof OracleGenAiEmbeddingOptions oracleOptions) {
-            result.setCompartmentId(oracleOptions.getCompartmentId());
-            result.setServingMode(oracleOptions.getServingMode());
-            result.setEndpointId(oracleOptions.getEndpointId());
+            oracleOptions.copyServingOptionsTo(result);
             result.setTruncate(oracleOptions.getTruncate());
         }
         return result;
     }
 
+    @Override
     public String getCompartmentId() {
-        return compartmentId;
+        return servingOptions.getCompartmentId();
     }
 
+    @Override
     public void setCompartmentId(String compartmentId) {
-        this.compartmentId = compartmentId;
-    }
-
-    public String getCompartment() {
-        return getCompartmentId();
-    }
-
-    public void setCompartment(String compartment) {
-        setCompartmentId(compartment);
-    }
-
-    public ServingMode getServingMode() {
-        return servingMode;
-    }
-
-    public void setServingMode(ServingMode servingMode) {
-        this.servingMode = servingMode;
+        servingOptions.setCompartmentId(compartmentId);
     }
 
     @Override
-    public boolean hasServingMode() {
-        return servingMode != null;
+    public OracleGenAiServingMode getServingMode() {
+        return servingOptions.getServingMode();
     }
 
     @Override
-    public boolean isDedicatedServingMode() {
-        return servingMode == ServingMode.DEDICATED;
+    public void setServingMode(OracleGenAiServingMode servingMode) {
+        servingOptions.setServingMode(servingMode);
     }
 
+    @Override
     public String getEndpointId() {
-        return endpointId;
+        return servingOptions.getEndpointId();
     }
 
+    @Override
     public void setEndpointId(String endpointId) {
-        this.endpointId = endpointId;
+        servingOptions.setEndpointId(endpointId);
     }
 
-    public Truncate getTruncate() {
+    public OracleGenAiEmbeddingTruncate getTruncate() {
         return truncate;
     }
 
-    public void setTruncate(Truncate truncate) {
+    public void setTruncate(OracleGenAiEmbeddingTruncate truncate) {
         this.truncate = truncate;
     }
 
@@ -112,25 +83,11 @@ public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions impleme
         if (runtimeOptions == null) {
             return merged;
         }
-        if (runtimeOptions.getModel() != null) {
-            merged.setModel(runtimeOptions.getModel());
-        }
-        if (runtimeOptions.getDimensions() != null) {
-            merged.setDimensions(runtimeOptions.getDimensions());
-        }
+        OracleGenAiServingOptions.mergeOption(runtimeOptions.getModel(), merged::setModel);
+        OracleGenAiServingOptions.mergeOption(runtimeOptions.getDimensions(), merged::setDimensions);
         if (runtimeOptions instanceof OracleGenAiEmbeddingOptions oracleRuntimeOptions) {
-            if (oracleRuntimeOptions.getCompartmentId() != null) {
-                merged.setCompartmentId(oracleRuntimeOptions.getCompartmentId());
-            }
-            if (oracleRuntimeOptions.getServingMode() != null) {
-                merged.setServingMode(oracleRuntimeOptions.getServingMode());
-            }
-            if (oracleRuntimeOptions.getEndpointId() != null) {
-                merged.setEndpointId(oracleRuntimeOptions.getEndpointId());
-            }
-            if (oracleRuntimeOptions.getTruncate() != null) {
-                merged.setTruncate(oracleRuntimeOptions.getTruncate());
-            }
+            oracleRuntimeOptions.mergeServingOptionsTo(merged);
+            OracleGenAiServingOptions.mergeOption(oracleRuntimeOptions.getTruncate(), merged::setTruncate);
         }
         return merged;
     }
@@ -153,7 +110,7 @@ public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions impleme
             return this;
         }
 
-        public Builder servingMode(ServingMode servingMode) {
+        public Builder servingMode(OracleGenAiServingMode servingMode) {
             options.setServingMode(servingMode);
             return this;
         }
@@ -163,7 +120,7 @@ public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions impleme
             return this;
         }
 
-        public Builder truncate(Truncate truncate) {
+        public Builder truncate(OracleGenAiEmbeddingTruncate truncate) {
             options.setTruncate(truncate);
             return this;
         }

@@ -27,7 +27,7 @@ class OracleGenAiEmbeddingModelTests {
     void createsOnDemandRequest() {
         OracleGenAiEmbeddingOptions options = defaultOptions();
         options.setDimensions(512);
-        options.setTruncate(OracleGenAiEmbeddingOptions.Truncate.END);
+        options.setTruncate(OracleGenAiEmbeddingTruncate.END);
 
         EmbedTextRequest request = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options)
                 .toEmbedTextRequest(List.of("first", "second"), options);
@@ -44,7 +44,7 @@ class OracleGenAiEmbeddingModelTests {
     @Test
     void createsDedicatedRequest() {
         OracleGenAiEmbeddingOptions options = defaultOptions();
-        options.setServingMode(OracleGenAiEmbeddingOptions.ServingMode.DEDICATED);
+        options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId("endpoint");
 
         EmbedTextRequest request = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options)
@@ -68,7 +68,7 @@ class OracleGenAiEmbeddingModelTests {
     @Test
     void validatesDedicatedEndpointId() {
         OracleGenAiEmbeddingOptions options = defaultOptions();
-        options.setServingMode(OracleGenAiEmbeddingOptions.ServingMode.DEDICATED);
+        options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId(null);
         OracleGenAiEmbeddingModel model = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options);
 
@@ -96,7 +96,7 @@ class OracleGenAiEmbeddingModelTests {
                 .compartmentId("runtime-compartment")
                 .model("runtime-model")
                 .dimensions(128)
-                .truncate(OracleGenAiEmbeddingOptions.Truncate.START)
+                .truncate(OracleGenAiEmbeddingTruncate.START)
                 .build();
 
         new OracleGenAiEmbeddingModel(client, defaultOptions())

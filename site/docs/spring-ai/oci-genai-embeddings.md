@@ -30,10 +30,10 @@ spring:
     oci:
       genai:
         authentication-type: FILE
-        file: ~/.oci/config
+        config-file: ~/.oci/config
         profile: DEFAULT
         embedding:
-          compartment: ocid1.compartment.oc1..example
+          compartment-id: ocid1.compartment.oc1..example
           serving-mode: ON_DEMAND
           model: cohere.embed-english-v3.0
           truncate: END
@@ -53,7 +53,7 @@ spring:
     oci:
       genai:
         embedding:
-          compartment: ocid1.compartment.oc1..example
+          compartment-id: ocid1.compartment.oc1..example
           serving-mode: DEDICATED
           endpoint-id: ocid1.generativeaiendpoint.oc1..example
 ```
@@ -87,6 +87,7 @@ Runtime options can override configured defaults for a single request.
 import java.util.List;
 
 import com.oracle.spring.ai.oracle.OracleGenAiEmbeddingOptions;
+import com.oracle.spring.ai.oracle.OracleGenAiEmbeddingTruncate;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
@@ -103,7 +104,7 @@ class RuntimeEmbeddingService {
         OracleGenAiEmbeddingOptions options = OracleGenAiEmbeddingOptions.builder()
                 .model("cohere.embed-english-v3.0")
                 .dimensions(512)
-                .truncate(OracleGenAiEmbeddingOptions.Truncate.END)
+                .truncate(OracleGenAiEmbeddingTruncate.END)
                 .build();
 
         return embeddingModel.call(new EmbeddingRequest(texts, options));
@@ -116,7 +117,7 @@ class RuntimeEmbeddingService {
 | Name | Description | Required | Default |
 | --- | --- | --- | --- |
 | `spring.ai.model.embedding` | Selects the Spring AI embedding provider | No | `oci-genai` |
-| `spring.ai.oci.genai.embedding.compartment` | OCI compartment OCID for embedding requests | Yes |  |
+| `spring.ai.oci.genai.embedding.compartment-id` | OCI compartment OCID for embedding requests | Yes |  |
 | `spring.ai.oci.genai.embedding.serving-mode` | `ON_DEMAND` or `DEDICATED` | No | `ON_DEMAND` |
 | `spring.ai.oci.genai.embedding.model` | On-demand model ID | For on-demand |  |
 | `spring.ai.oci.genai.embedding.endpoint-id` | Dedicated endpoint OCID | For dedicated |  |
@@ -131,7 +132,7 @@ OCI authentication is configured under `spring.ai.oci.genai.*`.
 | --- | --- | --- | --- |
 | `spring.ai.oci.genai.authentication-type` | `FILE`, `INSTANCE_PRINCIPAL`, `RESOURCE_PRINCIPAL`, `WORKLOAD_IDENTITY`, `SIMPLE`, or `SESSION_TOKEN` | No | `FILE` |
 | `spring.ai.oci.genai.federation-endpoint` | Federation endpoint for principal-based auth | No |  |
-| `spring.ai.oci.genai.file` | OCI config file path | No |  |
+| `spring.ai.oci.genai.config-file` | OCI config file path | No |  |
 | `spring.ai.oci.genai.profile` | OCI config profile | No | `DEFAULT` |
 | `spring.ai.oci.genai.tenant-id` | Tenancy OCID for simple auth | For simple auth |  |
 | `spring.ai.oci.genai.user-id` | User OCID for simple auth | For simple auth |  |

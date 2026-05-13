@@ -14,33 +14,12 @@ import org.springframework.ai.chat.prompt.DefaultChatOptions;
  */
 public class OracleGenAiChatOptions extends DefaultChatOptions implements OracleGenAiServingOptions {
 
-    private String compartmentId;
+    private final OracleGenAiServingOptionsState servingOptions = new OracleGenAiServingOptionsState();
 
-    private ServingMode servingMode = ServingMode.ON_DEMAND;
+    private OracleGenAiChatApiFormat apiFormat;
 
-    private String endpointId;
-
-    private ApiFormat apiFormat;
-
-    public enum ServingMode {
-        ON_DEMAND,
-        DEDICATED
-    }
-
-    public enum ApiFormat {
-        GENERIC,
-        COHERE_V2,
-        COHERE
-    }
-
-    public static ApiFormat inferApiFormat(String model) {
-        if (model != null && model.startsWith("cohere.command-a")) {
-            return ApiFormat.COHERE_V2;
-        }
-        if (model != null && model.startsWith("cohere.")) {
-            return ApiFormat.COHERE;
-        }
-        return ApiFormat.GENERIC;
+    public static OracleGenAiChatApiFormat inferApiFormat(String model) {
+        return OracleGenAiChatApiFormat.infer(model);
     }
 
     public static Builder builder() {
@@ -61,70 +40,48 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
         result.setTopK(options.getTopK());
         result.setTopP(options.getTopP());
         if (options instanceof OracleGenAiChatOptions oracleOptions) {
-            result.setCompartmentId(oracleOptions.getCompartmentId());
-            result.setServingMode(oracleOptions.getServingMode());
-            result.setEndpointId(oracleOptions.getEndpointId());
+            oracleOptions.copyServingOptionsTo(result);
             result.setApiFormat(oracleOptions.getApiFormat());
         }
         return result;
     }
 
+    @Override
     public String getCompartmentId() {
-        return compartmentId;
+        return servingOptions.getCompartmentId();
     }
 
+    @Override
     public void setCompartmentId(String compartmentId) {
-        this.compartmentId = compartmentId;
-    }
-
-    public String getCompartment() {
-        return getCompartmentId();
-    }
-
-    public void setCompartment(String compartment) {
-        setCompartmentId(compartment);
-    }
-
-    public ServingMode getServingMode() {
-        return servingMode;
-    }
-
-    public void setServingMode(ServingMode servingMode) {
-        this.servingMode = servingMode;
+        servingOptions.setCompartmentId(compartmentId);
     }
 
     @Override
-    public boolean hasServingMode() {
-        return servingMode != null;
+    public OracleGenAiServingMode getServingMode() {
+        return servingOptions.getServingMode();
     }
 
     @Override
-    public boolean isDedicatedServingMode() {
-        return servingMode == ServingMode.DEDICATED;
+    public void setServingMode(OracleGenAiServingMode servingMode) {
+        servingOptions.setServingMode(servingMode);
     }
 
+    @Override
     public String getEndpointId() {
-        return endpointId;
+        return servingOptions.getEndpointId();
     }
 
+    @Override
     public void setEndpointId(String endpointId) {
-        this.endpointId = endpointId;
+        servingOptions.setEndpointId(endpointId);
     }
 
-    public ApiFormat getApiFormat() {
+    public OracleGenAiChatApiFormat getApiFormat() {
         return apiFormat;
     }
 
-    public void setApiFormat(ApiFormat apiFormat) {
+    public void setApiFormat(OracleGenAiChatApiFormat apiFormat) {
         this.apiFormat = apiFormat;
-    }
-
-    public List<String> getStop() {
-        return getStopSequences();
-    }
-
-    public void setStop(List<String> stop) {
-        setStopSequences(stop);
     }
 
     @Override
@@ -140,48 +97,22 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
         }
         copyStandardOptionOverrides(runtimeOptions, merged);
         if (runtimeOptions instanceof OracleGenAiChatOptions oracleRuntimeOptions) {
-            if (oracleRuntimeOptions.getCompartmentId() != null) {
-                merged.setCompartmentId(oracleRuntimeOptions.getCompartmentId());
-            }
-            if (oracleRuntimeOptions.getServingMode() != null) {
-                merged.setServingMode(oracleRuntimeOptions.getServingMode());
-            }
-            if (oracleRuntimeOptions.getEndpointId() != null) {
-                merged.setEndpointId(oracleRuntimeOptions.getEndpointId());
-            }
-            if (oracleRuntimeOptions.getApiFormat() != null) {
-                merged.setApiFormat(oracleRuntimeOptions.getApiFormat());
-            }
+            oracleRuntimeOptions.mergeServingOptionsTo(merged);
+            OracleGenAiServingOptions.mergeOption(oracleRuntimeOptions.getApiFormat(), merged::setApiFormat);
         }
         return merged;
     }
 
     private static void copyStandardOptionOverrides(org.springframework.ai.chat.prompt.ChatOptions source,
             OracleGenAiChatOptions target) {
-        if (source.getModel() != null) {
-            target.setModel(source.getModel());
-        }
-        if (source.getFrequencyPenalty() != null) {
-            target.setFrequencyPenalty(source.getFrequencyPenalty());
-        }
-        if (source.getMaxTokens() != null) {
-            target.setMaxTokens(source.getMaxTokens());
-        }
-        if (source.getPresencePenalty() != null) {
-            target.setPresencePenalty(source.getPresencePenalty());
-        }
-        if (source.getStopSequences() != null) {
-            target.setStopSequences(source.getStopSequences());
-        }
-        if (source.getTemperature() != null) {
-            target.setTemperature(source.getTemperature());
-        }
-        if (source.getTopK() != null) {
-            target.setTopK(source.getTopK());
-        }
-        if (source.getTopP() != null) {
-            target.setTopP(source.getTopP());
-        }
+        OracleGenAiServingOptions.mergeOption(source.getModel(), target::setModel);
+        OracleGenAiServingOptions.mergeOption(source.getFrequencyPenalty(), target::setFrequencyPenalty);
+        OracleGenAiServingOptions.mergeOption(source.getMaxTokens(), target::setMaxTokens);
+        OracleGenAiServingOptions.mergeOption(source.getPresencePenalty(), target::setPresencePenalty);
+        OracleGenAiServingOptions.mergeOption(source.getStopSequences(), target::setStopSequences);
+        OracleGenAiServingOptions.mergeOption(source.getTemperature(), target::setTemperature);
+        OracleGenAiServingOptions.mergeOption(source.getTopK(), target::setTopK);
+        OracleGenAiServingOptions.mergeOption(source.getTopP(), target::setTopP);
     }
 
     public static final class Builder {
@@ -197,7 +128,7 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
             return this;
         }
 
-        public Builder servingMode(ServingMode servingMode) {
+        public Builder servingMode(OracleGenAiServingMode servingMode) {
             options.setServingMode(servingMode);
             return this;
         }
@@ -207,7 +138,7 @@ public class OracleGenAiChatOptions extends DefaultChatOptions implements Oracle
             return this;
         }
 
-        public Builder apiFormat(ApiFormat apiFormat) {
+        public Builder apiFormat(OracleGenAiChatApiFormat apiFormat) {
             options.setApiFormat(apiFormat);
             return this;
         }

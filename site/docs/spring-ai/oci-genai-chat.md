@@ -30,10 +30,10 @@ spring:
     oci:
       genai:
         authentication-type: FILE
-        file: ~/.oci/config
+        config-file: ~/.oci/config
         profile: DEFAULT
         chat:
-          compartment: ocid1.compartment.oc1..example
+          compartment-id: ocid1.compartment.oc1..example
           serving-mode: ON_DEMAND
           model: cohere.command-a-03-2025
           temperature: 0.2
@@ -54,7 +54,7 @@ spring:
     oci:
       genai:
         chat:
-          compartment: ocid1.compartment.oc1..example
+          compartment-id: ocid1.compartment.oc1..example
           serving-mode: DEDICATED
           endpoint-id: ocid1.generativeaiendpoint.oc1..example
 ```
@@ -91,7 +91,7 @@ class AnswerService {
 | Name | Description | Required | Default |
 | --- | --- | --- | --- |
 | `spring.ai.model.chat` | Selects the Spring AI chat provider | No | `oci-genai` |
-| `spring.ai.oci.genai.chat.compartment` | OCI compartment OCID for chat requests | Yes |  |
+| `spring.ai.oci.genai.chat.compartment-id` | OCI compartment OCID for chat requests | Yes |  |
 | `spring.ai.oci.genai.chat.serving-mode` | `ON_DEMAND` or `DEDICATED` | No | `ON_DEMAND` |
 | `spring.ai.oci.genai.chat.model` | On-demand model ID | For on-demand |  |
 | `spring.ai.oci.genai.chat.endpoint-id` | Dedicated endpoint OCID | For dedicated |  |
@@ -102,7 +102,7 @@ class AnswerService {
 | `spring.ai.oci.genai.chat.max-tokens` | Maximum output tokens | No |  |
 | `spring.ai.oci.genai.chat.frequency-penalty` | Repetition penalty | No |  |
 | `spring.ai.oci.genai.chat.presence-penalty` | Presence penalty | No |  |
-| `spring.ai.oci.genai.chat.stop` | Stop sequences | No |  |
+| `spring.ai.oci.genai.chat.stop-sequences` | Stop sequences | No |  |
 
 ## Authentication
 
@@ -112,7 +112,7 @@ OCI authentication is configured under `spring.ai.oci.genai.*`.
 | --- | --- | --- | --- |
 | `spring.ai.oci.genai.authentication-type` | `FILE`, `INSTANCE_PRINCIPAL`, `RESOURCE_PRINCIPAL`, `WORKLOAD_IDENTITY`, `SIMPLE`, or `SESSION_TOKEN` | No | `FILE` |
 | `spring.ai.oci.genai.federation-endpoint` | Federation endpoint for principal-based auth | No |  |
-| `spring.ai.oci.genai.file` | OCI config file path | No |  |
+| `spring.ai.oci.genai.config-file` | OCI config file path | No |  |
 | `spring.ai.oci.genai.profile` | OCI config profile | No | `DEFAULT` |
 | `spring.ai.oci.genai.tenant-id` | Tenancy OCID for simple auth | For simple auth |  |
 | `spring.ai.oci.genai.user-id` | User OCID for simple auth | For simple auth |  |
