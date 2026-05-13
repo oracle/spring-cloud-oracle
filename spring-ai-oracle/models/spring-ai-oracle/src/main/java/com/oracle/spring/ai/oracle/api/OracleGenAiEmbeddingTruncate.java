@@ -3,12 +3,13 @@
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
-package com.oracle.spring.ai.oracle;
+package com.oracle.spring.ai.oracle.api;
 
 /**
- * OCI Generative AI serving mode.
+ * OCI Generative AI embedding input truncation mode.
  */
-public enum OracleGenAiServingMode {
-    ON_DEMAND,
-    DEDICATED
+public enum OracleGenAiEmbeddingTruncate {
+    NONE,
+    START,
+    END
 }

@@ -16,6 +16,7 @@ import com.oracle.bmc.generativeaiinference.model.EmbedTextResult;
 import com.oracle.bmc.generativeaiinference.model.Usage;
 import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
+import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
 import org.springframework.ai.chat.metadata.DefaultUsage;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.Embedding;

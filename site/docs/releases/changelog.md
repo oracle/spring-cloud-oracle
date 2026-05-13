@@ -20,15 +20,6 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Spring AI Oracle
 
 - Added Spring AI Oracle with model, auto-configuration, and starter modules prepared for Oracle Cloud Infrastructure Generative AI bindings
-- Added OCI Generative AI embedding model support through Spring AI `EmbeddingModel`, including auto-configuration, documentation, and optional live OCI validation
-- Combined OCI Generative AI chat and embedding auto-configuration so both providers share one authentication provider and `GenerativeAiInference` client setup
-- Consolidated shared no-op OCI Generative AI test fixtures across Spring AI Oracle model and auto-configuration tests
-- Aligned Spring AI Oracle provider selectors and configuration properties with Spring AI OCI GenAI conventions (`oci-genai`, `spring.ai.oci.genai.*`, `spring.ai.oci.genai.chat.*`, and `spring.ai.oci.genai.embedding.*`)
-- Fixed Spring AI Oracle auto-configuration tests to use centralized property-name constants after the Spring AI OCI GenAI prefix alignment
-- Centralized Spring AI Oracle OCI serving-mode validation, chat API-format inference, and authentication provider creation to reduce chat and embedding drift
-- Moved Spring AI Oracle serving mode, chat API format, and embedding truncation enums to reusable top-level API types
-- Updated Spring AI Oracle chat API-format inference so Cohere Command A uses `COHERE_V2` while Cohere Command R/R+ and older Cohere chat models use the legacy `COHERE` request format
-- Simplified Spring AI Oracle option binding and configuration metadata generation, using canonical `compartment-id`, `config-file`, and `stop-sequences` properties
 
 #### Spring Cloud OCI
 

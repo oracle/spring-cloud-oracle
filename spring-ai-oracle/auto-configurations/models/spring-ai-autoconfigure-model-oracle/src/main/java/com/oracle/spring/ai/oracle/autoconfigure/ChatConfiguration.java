@@ -8,6 +8,7 @@ package com.oracle.spring.ai.oracle.autoconfigure;
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.spring.ai.oracle.OracleGenAiChatModel;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.retry.RetryUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -28,8 +29,11 @@ class ChatConfiguration {
     @Bean
     @ConditionalOnMissingBean(ChatModel.class)
     OracleGenAiChatModel oracleGenAiChatModel(GenerativeAiInference generativeAiInference,
-                                              ChatProperties properties, ObjectProvider<RetryTemplate> retryTemplate) {
+                                              ChatProperties properties,
+                                              ObjectProvider<ToolCallingManager> toolCallingManager,
+                                              ObjectProvider<RetryTemplate> retryTemplate) {
         return new OracleGenAiChatModel(generativeAiInference, properties,
+                toolCallingManager.getIfAvailable(() -> ToolCallingManager.builder().build()),
                 retryTemplate.getIfAvailable(() -> RetryUtils.DEFAULT_RETRY_TEMPLATE));
     }
 }

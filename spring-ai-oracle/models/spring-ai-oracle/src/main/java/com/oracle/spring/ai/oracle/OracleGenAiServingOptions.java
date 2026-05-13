@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import com.oracle.bmc.generativeaiinference.model.DedicatedServingMode;
 import com.oracle.bmc.generativeaiinference.model.OnDemandServingMode;
 import com.oracle.bmc.generativeaiinference.model.ServingMode;
+import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -29,23 +30,15 @@ interface OracleGenAiServingOptions {
 
     void setServingMode(OracleGenAiServingMode servingMode);
 
-    default boolean hasServingMode() {
-        return getServingMode() != null;
-    }
-
-    default boolean isDedicatedServingMode() {
-        return getServingMode() == OracleGenAiServingMode.DEDICATED;
-    }
-
     default void validate() {
         Assert.hasText(getCompartmentId(), "OCI Generative AI compartmentId must be configured.");
-        if (!hasServingMode()) {
+        if (getServingMode() == null) {
             throw new IllegalArgumentException("OCI Generative AI servingMode must be configured.");
         }
-        if (!isDedicatedServingMode() && !StringUtils.hasText(getModel())) {
+        if (getServingMode() != OracleGenAiServingMode.DEDICATED && !StringUtils.hasText(getModel())) {
             throw new IllegalArgumentException("OCI Generative AI on-demand serving mode requires options.model.");
         }
-        if (isDedicatedServingMode() && !StringUtils.hasText(getEndpointId())) {
+        if (getServingMode() == OracleGenAiServingMode.DEDICATED && !StringUtils.hasText(getEndpointId())) {
             throw new IllegalArgumentException("OCI Generative AI dedicated serving mode requires options.endpointId.");
         }
     }
@@ -63,7 +56,7 @@ interface OracleGenAiServingOptions {
     }
 
     default ServingMode toServingMode() {
-        if (isDedicatedServingMode()) {
+        if (getServingMode() == OracleGenAiServingMode.DEDICATED) {
             return DedicatedServingMode.builder().endpointId(getEndpointId()).build();
         }
         return OnDemandServingMode.builder().modelId(getModel()).build();

@@ -100,6 +100,33 @@ class GenAiService {
 }
 ```
 
+Spring AI Oracle follows Spring AI chat memory conventions. The `ChatModel` is stateless and consumes the message history supplied in each `Prompt`. For `ChatClient` use, configure Spring AI's `MessageChatMemoryAdvisor` with a `ChatMemory` bean and pass `ChatMemory.CONVERSATION_ID` on each conversational request:
+
+```java
+ChatClient chatClient = ChatClient.builder(chatModel)
+        .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+        .build();
+
+return chatClient.prompt()
+        .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, conversationId))
+        .user(prompt)
+        .call()
+        .content();
+```
+
+Spring AI Oracle supports Spring AI tool calling for OCI `GENERIC` and `COHERE_V2` chat API formats. Register tools with the standard Spring AI `ChatClient` APIs; legacy `COHERE` models continue to support text chat but reject tool definitions, assistant tool calls, and tool response messages.
+
+```java
+ChatClient chatClient = ChatClient.builder(chatModel)
+        .defaultTools(weatherTools)
+        .build();
+
+return chatClient.prompt()
+        .user("Do I need an umbrella in Seattle?")
+        .call()
+        .content();
+```
+
 Use the standard Spring AI `EmbeddingModel` API for text embeddings:
 
 ```java
@@ -129,7 +156,7 @@ Command A uses `COHERE_V2`, other Cohere chat models use `COHERE`, and non-Coher
 
 ## Live Tests
 
-The live OCI Generative AI test uses config file authentication and is skipped unless a compartment OCID is provided. The test lists active chat-capable models from OCI, keeps the latest current text on-demand model from each provider, uses the same model ID API-format inference as production, and runs one dynamic test for each selected provider model. Set `OCI_GENAI_MODEL` to run only one specific current model from the live model list.
+The live OCI Generative AI tests use config file authentication and are skipped unless a compartment OCID is provided. The tests list active model catalog entries from OCI, keep the latest current text on-demand model from each provider, use the same model ID API-format inference as production, and run bounded dynamic tests for each selected provider model. Tool-calling coverage runs against selected `GENERIC` and `COHERE_V2` chat models. Set `OCI_GENAI_MODEL` to run only one specific current chat model from the live model list.
 
 ```bash
 OCI_COMPARTMENT_ID=ocid1.compartment.oc1..example \

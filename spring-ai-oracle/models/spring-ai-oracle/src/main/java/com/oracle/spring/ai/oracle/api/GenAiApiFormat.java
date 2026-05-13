@@ -3,17 +3,17 @@
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
-package com.oracle.spring.ai.oracle;
+package com.oracle.spring.ai.oracle.api;
 
 /**
  * OCI Generative AI chat request format.
  */
-public enum OracleGenAiChatApiFormat {
+public enum GenAiApiFormat {
     GENERIC,
     COHERE_V2,
     COHERE;
 
-    public static OracleGenAiChatApiFormat infer(String model) {
+    public static GenAiApiFormat infer(String model) {
         if (model != null && model.startsWith("cohere.command-a")) {
             return COHERE_V2;
         }

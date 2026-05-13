@@ -13,6 +13,8 @@ import com.oracle.bmc.generativeaiinference.model.OnDemandServingMode;
 import com.oracle.bmc.generativeaiinference.model.Usage;
 import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
+import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
+import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
 import com.oracle.spring.ai.oracle.test.NoOpGenerativeAiInference;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.embedding.EmbeddingRequest;
