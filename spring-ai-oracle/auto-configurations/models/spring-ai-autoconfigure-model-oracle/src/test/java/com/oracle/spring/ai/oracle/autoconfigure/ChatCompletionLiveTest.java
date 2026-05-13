@@ -30,6 +30,7 @@ import org.springframework.ai.tool.metadata.ToolMetadata;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
+import static com.oracle.spring.ai.oracle.api.GenAiApiFormat.infer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
@@ -148,7 +149,7 @@ class ChatCompletionLiveTest {
             return null;
         }
         String provider = TestSupport.modelProvider(modelId, model);
-        return new ChatModelCandidate(provider, modelId, apiFormat(modelId));
+        return new ChatModelCandidate(provider, modelId, infer(modelId));
     }
 
     private static ChatModelCandidate toolChatModelCandidate(ModelSummary model) {
@@ -157,10 +158,6 @@ class ChatCompletionLiveTest {
             return null;
         }
         return candidate;
-    }
-
-    private static GenAiApiFormat apiFormat(String modelId) {
-        return OracleGenAiChatOptions.inferApiFormat(modelId);
     }
 
     private static boolean supportsToolCalling(String modelId, GenAiApiFormat apiFormat) {

@@ -15,7 +15,11 @@ import org.springframework.ai.embedding.EmbeddingOptions;
  */
 public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions implements OracleGenAiServingOptions {
 
-    private final OracleGenAiServingOptionsState servingOptions = new OracleGenAiServingOptionsState();
+    private String compartmentId;
+
+    private OracleGenAiServingMode servingMode = OracleGenAiServingMode.ON_DEMAND;
+
+    private String endpointId;
 
     private OracleGenAiEmbeddingTruncate truncate = OracleGenAiEmbeddingTruncate.NONE;
 
@@ -39,32 +43,32 @@ public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions impleme
 
     @Override
     public String getCompartmentId() {
-        return servingOptions.getCompartmentId();
+        return compartmentId;
     }
 
     @Override
     public void setCompartmentId(String compartmentId) {
-        servingOptions.setCompartmentId(compartmentId);
+        this.compartmentId = compartmentId;
     }
 
     @Override
     public OracleGenAiServingMode getServingMode() {
-        return servingOptions.getServingMode();
+        return servingMode;
     }
 
     @Override
     public void setServingMode(OracleGenAiServingMode servingMode) {
-        servingOptions.setServingMode(servingMode);
+        this.servingMode = servingMode;
     }
 
     @Override
     public String getEndpointId() {
-        return servingOptions.getEndpointId();
+        return endpointId;
     }
 
     @Override
     public void setEndpointId(String endpointId) {
-        servingOptions.setEndpointId(endpointId);
+        this.endpointId = endpointId;
     }
 
     public OracleGenAiEmbeddingTruncate getTruncate() {

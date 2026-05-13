@@ -23,7 +23,11 @@ import org.springframework.ai.tool.ToolCallback;
 public class OracleGenAiChatOptions extends DefaultChatOptions
         implements OracleGenAiServingOptions, ToolCallingChatOptions {
 
-    private final OracleGenAiServingOptionsState servingOptions = new OracleGenAiServingOptionsState();
+    private String compartmentId;
+
+    private OracleGenAiServingMode servingMode = OracleGenAiServingMode.ON_DEMAND;
+
+    private String endpointId;
 
     private List<ToolCallback> toolCallbacks = Collections.emptyList();
 
@@ -34,10 +38,6 @@ public class OracleGenAiChatOptions extends DefaultChatOptions
     private Boolean internalToolExecutionEnabled;
 
     private GenAiApiFormat apiFormat;
-
-    public static GenAiApiFormat inferApiFormat(String model) {
-        return GenAiApiFormat.infer(model);
-    }
 
     public static Builder builder() {
         return new Builder();
@@ -71,32 +71,32 @@ public class OracleGenAiChatOptions extends DefaultChatOptions
 
     @Override
     public String getCompartmentId() {
-        return servingOptions.getCompartmentId();
+        return compartmentId;
     }
 
     @Override
     public void setCompartmentId(String compartmentId) {
-        servingOptions.setCompartmentId(compartmentId);
+        this.compartmentId = compartmentId;
     }
 
     @Override
     public OracleGenAiServingMode getServingMode() {
-        return servingOptions.getServingMode();
+        return servingMode;
     }
 
     @Override
     public void setServingMode(OracleGenAiServingMode servingMode) {
-        servingOptions.setServingMode(servingMode);
+        this.servingMode = servingMode;
     }
 
     @Override
     public String getEndpointId() {
-        return servingOptions.getEndpointId();
+        return endpointId;
     }
 
     @Override
     public void setEndpointId(String endpointId) {
-        servingOptions.setEndpointId(endpointId);
+        this.endpointId = endpointId;
     }
 
     public GenAiApiFormat getApiFormat() {

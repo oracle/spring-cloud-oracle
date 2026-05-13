@@ -62,13 +62,6 @@ public final class ChatRequestConverter {
         };
     }
 
-    public GenAiApiFormat resolveApiFormat(OracleGenAiChatOptions options) {
-        if (options.getApiFormat() != null) {
-            return options.getApiFormat();
-        }
-        return OracleGenAiChatOptions.inferApiFormat(options.getModel());
-    }
-
     private BaseChatRequest toGenericChatRequest(Prompt prompt, OracleGenAiChatOptions options,
             List<ToolDefinition> toolDefinitions) {
         return GenericChatRequest.builder()

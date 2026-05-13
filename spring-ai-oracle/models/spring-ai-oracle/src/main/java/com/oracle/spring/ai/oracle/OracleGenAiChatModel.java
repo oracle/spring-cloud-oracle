@@ -29,6 +29,8 @@ import org.springframework.core.retry.RetryTemplate;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 
+import static com.oracle.spring.ai.oracle.api.GenAiApiFormat.infer;
+
 /**
  * Spring AI chat model backed by OCI Generative AI.
  */
@@ -82,7 +84,7 @@ public class OracleGenAiChatModel implements ChatModel {
     @Override
     public ChatResponse call(Prompt prompt) {
         Assert.notNull(prompt, "prompt must not be null");
-        return internalCall(toRequestPrompt(prompt));
+        return internalCall(new Prompt(prompt.getInstructions(), defaultOptions.merge(prompt.getOptions())));
     }
 
     @Override
@@ -101,7 +103,7 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     BaseChatRequest toBaseChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
-        GenAiApiFormat apiFormat = requestConverter.resolveApiFormat(options);
+        GenAiApiFormat apiFormat = options.getApiFormat() != null ? options.getApiFormat() : infer(options.getModel());
         List<ToolDefinition> toolDefinitions = resolveToolDefinitions(options, apiFormat);
         return requestConverter.toBaseChatRequest(prompt, options, apiFormat, toolDefinitions);
     }
@@ -123,10 +125,6 @@ public class OracleGenAiChatModel implements ChatModel {
             return internalCall(new Prompt(toolExecutionResult.conversationHistory(), options));
         }
         return chatResponse;
-    }
-
-    private Prompt toRequestPrompt(Prompt prompt) {
-        return new Prompt(prompt.getInstructions(), defaultOptions.merge(prompt.getOptions()));
     }
 
     private List<ToolDefinition> resolveToolDefinitions(OracleGenAiChatOptions options,

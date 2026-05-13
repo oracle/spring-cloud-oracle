@@ -20,8 +20,6 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Spring AI Oracle
 
 - Added Spring AI Oracle with model, auto-configuration, and starter modules prepared for Oracle Cloud Infrastructure Generative AI bindings
-- Added bounded live OCI Generative AI chat coverage for Spring AI tool calling with tool-capable OCI chat models
-- Added timeouts around live OCI Generative AI catalog discovery and model calls
 
 #### Spring Cloud OCI
 
