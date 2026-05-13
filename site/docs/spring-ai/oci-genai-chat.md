@@ -157,6 +157,8 @@ class ToolCallingAnswers {
 
 Legacy `COHERE` chat requests continue to support text chat, but tool calling requires `GENERIC` or `COHERE_V2`. Use a `COHERE_V2` model such as Cohere Command A, or set `spring.ai.oci.genai.chat.api-format=GENERIC` for model families that use the generic OCI chat request shape.
 
+The live OCI Generative AI chat test suite includes bounded tool-calling coverage for selected `GENERIC` and `COHERE_V2` chat models when `OCI_COMPARTMENT_ID` is set. Legacy `COHERE` models remain covered by text chat only because OCI does not support tool definitions or tool response messages for that chat format.
+
 ## Configuration
 
 | Name | Description | Required | Default |

@@ -5,9 +5,11 @@
 
 package com.oracle.spring.ai.oracle.autoconfigure;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
@@ -21,6 +23,7 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -37,6 +40,8 @@ class EmbeddingLiveTest {
 
     private static final String MODEL_ENV = "OCI_GENAI_EMBEDDING_MODEL";
 
+    private static final Duration LIVE_TEST_TIMEOUT = Duration.ofMinutes(2);
+
     @TestFactory
     Stream<DynamicTest> callsOciGenerativeAiEmbeddingWithConfigFileAuthentication() throws Exception {
         String compartmentId = TestSupport.requiredCompartmentId(
@@ -45,14 +50,24 @@ class EmbeddingLiveTest {
         AuthenticationProperties authProperties = TestSupport.authenticationProperties();
         BasicAuthenticationDetailsProvider authenticationDetailsProvider =
                 AuthenticationProviderFactory.create(authProperties);
-        List<EmbeddingModelCandidate> models = TestSupport.loadSelectedModels(authenticationDetailsProvider,
-                authProperties, compartmentId, ModelCapability.TextEmbeddings, MODEL_ENV,
-                EmbeddingLiveTest::embeddingModelCandidate, "embedding");
+        List<EmbeddingModelCandidate> models = loadSelectedEmbeddingModels(authenticationDetailsProvider,
+                authProperties, compartmentId, EmbeddingLiveTest::embeddingModelCandidate);
         assumeTrue(!models.isEmpty(), "OCI did not return any active embedding models for the configured compartment.");
 
         return models.stream()
                 .map(model -> dynamicTest(model.provider() + " latest embedding model " + model.modelId(),
-                        () -> callOciGenerativeAiEmbeddingWithConfigFileAuthentication(compartmentId, model.modelId())));
+                        () -> assertTimeoutPreemptively(LIVE_TEST_TIMEOUT,
+                                () -> callOciGenerativeAiEmbeddingWithConfigFileAuthentication(
+                                        compartmentId, model.modelId()))));
+    }
+
+    private static List<EmbeddingModelCandidate> loadSelectedEmbeddingModels(
+            BasicAuthenticationDetailsProvider authenticationDetailsProvider,
+            AuthenticationProperties authProperties, String compartmentId,
+            Function<ModelSummary, EmbeddingModelCandidate> candidateFactory) {
+        return assertTimeoutPreemptively(LIVE_TEST_TIMEOUT,
+                () -> TestSupport.loadSelectedModels(authenticationDetailsProvider, authProperties, compartmentId,
+                        ModelCapability.TextEmbeddings, MODEL_ENV, candidateFactory, "embedding"));
     }
 
     private static void callOciGenerativeAiEmbeddingWithConfigFileAuthentication(String compartmentId, String model) {

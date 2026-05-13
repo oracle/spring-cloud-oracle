@@ -156,7 +156,7 @@ Command A uses `COHERE_V2`, other Cohere chat models use `COHERE`, and non-Coher
 
 ## Live Tests
 
-The live OCI Generative AI test uses config file authentication and is skipped unless a compartment OCID is provided. The test lists active chat-capable models from OCI, keeps the latest current text on-demand model from each provider, uses the same model ID API-format inference as production, and runs one dynamic test for each selected provider model. Set `OCI_GENAI_MODEL` to run only one specific current model from the live model list.
+The live OCI Generative AI tests use config file authentication and are skipped unless a compartment OCID is provided. The tests list active model catalog entries from OCI, keep the latest current text on-demand model from each provider, use the same model ID API-format inference as production, and run bounded dynamic tests for each selected provider model. Tool-calling coverage runs against selected `GENERIC` and `COHERE_V2` chat models. Set `OCI_GENAI_MODEL` to run only one specific current chat model from the live model list.
 
 ```bash
 OCI_COMPARTMENT_ID=ocid1.compartment.oc1..example \
