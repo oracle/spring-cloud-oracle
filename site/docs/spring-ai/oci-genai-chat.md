@@ -86,6 +86,21 @@ class AnswerService {
 }
 ```
 
+Use the standard Spring AI streaming APIs when the application should receive incremental chat responses.
+
+```java
+import reactor.core.publisher.Flux;
+
+Flux<String> answerStream(String question) {
+    return chatClient.prompt()
+            .user(question)
+            .stream()
+            .content();
+}
+```
+
+Direct `ChatModel` callers can use `stream(Prompt)` and consume the returned `Flux<ChatResponse>`. Streaming uses OCI Generative AI server-sent events and supports the same text chat request formats as synchronous chat: `GENERIC`, `COHERE_V2`, and legacy `COHERE`.
+
 ## Conversation Memory
 
 Spring AI Oracle follows Spring AI chat memory conventions. The chat model is stateless and does not store conversation history; `MessageChatMemoryAdvisor` loads prior turns from `ChatMemory` and adds them to the prompt as typed Spring AI messages before the request reaches OCI Generative AI.
@@ -124,6 +139,8 @@ Direct `ChatModel` callers manage memory explicitly by retrieving messages from 
 
 Spring AI Oracle supports Spring AI tool calling for OCI `GENERIC` and `COHERE_V2` chat API formats. Register tools with the standard Spring AI `ChatClient` APIs; the model sends tool definitions to OCI Generative AI, executes returned tool calls through Spring AI's `ToolCallingManager`, and returns the final model response.
 
+Synchronous and streaming calls use the same internal tool execution semantics. When a streaming response contains tool calls and internal tool execution is enabled, the provider buffers the tool-call stream and emits only the direct tool result or the final model response after tool execution.
+
 ```java
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.tool.annotation.Tool;
@@ -158,6 +175,8 @@ class ToolCallingAnswers {
 Legacy `COHERE` chat requests continue to support text chat, but tool calling requires `GENERIC` or `COHERE_V2`. Use a `COHERE_V2` model such as Cohere Command A, or set `spring.ai.oci.genai.chat.api-format=GENERIC` for model families that use the generic OCI chat request shape.
 
 The live OCI Generative AI chat test suite includes bounded tool-calling coverage for selected `GENERIC` and `COHERE_V2` chat models when `OCI_COMPARTMENT_ID` is set. Legacy `COHERE` models remain covered by text chat only because OCI does not support tool definitions or tool response messages for that chat format.
+
+Applications can customize tool execution eligibility by providing a `ToolExecutionEligibilityPredicate` bean. Auto-configuration uses that bean when constructing the `OracleGenAiChatModel`; otherwise it uses Spring AI's default predicate.
 
 ## Configuration
 
@@ -199,4 +218,4 @@ If the application provides its own OCI `BasicAuthenticationDetailsProvider` or 
 
 ## Current Scope
 
-The Spring AI Oracle chat provider supports synchronous text chat and tool calling for `GENERIC` and `COHERE_V2` chat formats. Streaming, structured output, multimodal chat, and rerank are planned as separate provider additions.
+The Spring AI Oracle chat provider supports synchronous and streaming text chat. Tool calling is supported for `GENERIC` and `COHERE_V2` chat formats. Structured output, multimodal chat, and rerank are planned as separate provider additions.

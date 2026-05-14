@@ -100,6 +100,17 @@ class GenAiService {
 }
 ```
 
+Use the standard Spring AI streaming APIs for incremental chat responses:
+
+```java
+return chatClient.prompt()
+        .user(prompt)
+        .stream()
+        .content();
+```
+
+Direct `ChatModel` callers can use `stream(Prompt)` and consume the returned `Flux<ChatResponse>`. Streaming uses OCI Generative AI server-sent events and supports the same text chat request formats as synchronous chat: `GENERIC`, `COHERE_V2`, and legacy `COHERE`.
+
 Spring AI Oracle follows Spring AI chat memory conventions. The `ChatModel` is stateless and consumes the message history supplied in each `Prompt`. For `ChatClient` use, configure Spring AI's `MessageChatMemoryAdvisor` with a `ChatMemory` bean and pass `ChatMemory.CONVERSATION_ID` on each conversational request:
 
 ```java
@@ -114,7 +125,7 @@ return chatClient.prompt()
         .content();
 ```
 
-Spring AI Oracle supports Spring AI tool calling for OCI `GENERIC` and `COHERE_V2` chat API formats. Register tools with the standard Spring AI `ChatClient` APIs; legacy `COHERE` models continue to support text chat but reject tool definitions, assistant tool calls, and tool response messages.
+Spring AI Oracle supports Spring AI tool calling for OCI `GENERIC` and `COHERE_V2` chat API formats. Register tools with the standard Spring AI `ChatClient` APIs; synchronous and streaming calls both return the final model response or direct tool result after internal tool execution. Legacy `COHERE` models continue to support text chat but reject tool definitions, assistant tool calls, and tool response messages.
 
 ```java
 ChatClient chatClient = ChatClient.builder(chatModel)

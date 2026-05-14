@@ -27,6 +27,7 @@ import com.oracle.bmc.generativeaiinference.model.CohereToolMessageV2;
 import com.oracle.bmc.generativeaiinference.model.CohereUserMessage;
 import com.oracle.bmc.generativeaiinference.model.CohereUserMessageV2;
 import com.oracle.bmc.generativeaiinference.model.GenericChatRequest;
+import com.oracle.bmc.generativeaiinference.model.StreamOptions;
 import com.oracle.bmc.generativeaiinference.model.TextContent;
 import com.oracle.bmc.generativeaiinference.model.ToolMessage;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
@@ -54,18 +55,20 @@ public final class ChatRequestConverter {
     }
 
     public BaseChatRequest toBaseChatRequest(Prompt prompt, OracleGenAiChatOptions options,
-                                             GenAiApiFormat apiFormat, List<ToolDefinition> toolDefinitions) {
+            GenAiApiFormat apiFormat, List<ToolDefinition> toolDefinitions, boolean stream) {
         return switch (apiFormat) {
-            case GENERIC -> toGenericChatRequest(prompt, options, toolDefinitions);
-            case COHERE_V2 -> toCohereChatRequestV2(prompt, options, toolDefinitions);
-            case COHERE -> toCohereChatRequest(prompt, options);
+            case GENERIC -> toGenericChatRequest(prompt, options, toolDefinitions, stream);
+            case COHERE_V2 -> toCohereChatRequestV2(prompt, options, toolDefinitions, stream);
+            case COHERE -> toCohereChatRequest(prompt, options, stream);
         };
     }
 
     private BaseChatRequest toGenericChatRequest(Prompt prompt, OracleGenAiChatOptions options,
-            List<ToolDefinition> toolDefinitions) {
+            List<ToolDefinition> toolDefinitions, boolean stream) {
         return GenericChatRequest.builder()
                 .messages(toGenericMessages(prompt))
+                .isStream(stream ? true : null)
+                .streamOptions(streamOptions(stream))
                 .temperature(options.getTemperature())
                 .topP(options.getTopP())
                 .topK(options.getTopK())
@@ -78,9 +81,11 @@ public final class ChatRequestConverter {
     }
 
     private BaseChatRequest toCohereChatRequestV2(Prompt prompt, OracleGenAiChatOptions options,
-            List<ToolDefinition> toolDefinitions) {
+            List<ToolDefinition> toolDefinitions, boolean stream) {
         return CohereChatRequestV2.builder()
                 .messages(toCohereV2Messages(prompt))
+                .isStream(stream ? true : null)
+                .streamOptions(streamOptions(stream))
                 .temperature(options.getTemperature())
                 .topP(options.getTopP())
                 .topK(options.getTopK())
@@ -92,7 +97,7 @@ public final class ChatRequestConverter {
                 .build();
     }
 
-    private BaseChatRequest toCohereChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
+    private BaseChatRequest toCohereChatRequest(Prompt prompt, OracleGenAiChatOptions options, boolean stream) {
         assertLegacyCohereOptionsDoNotUseTools(options);
         List<Message> instructions = prompt.getInstructions();
         if (instructions.isEmpty()) {
@@ -125,6 +130,8 @@ public final class ChatRequestConverter {
         }
         CohereChatRequest.Builder builder = CohereChatRequest.builder()
                 .message(userMessage)
+                .isStream(stream ? true : null)
+                .streamOptions(streamOptions(stream))
                 .temperature(options.getTemperature())
                 .topP(options.getTopP())
                 .topK(options.getTopK())
@@ -140,6 +147,13 @@ public final class ChatRequestConverter {
             builder.preambleOverride(preambleOverride);
         }
         return builder.build();
+    }
+
+    private static StreamOptions streamOptions(boolean stream) {
+        if (!stream) {
+            return null;
+        }
+        return StreamOptions.builder().isIncludeUsage(true).build();
     }
 
     private static List<com.oracle.bmc.generativeaiinference.model.Message> toGenericMessages(Prompt prompt) {
