@@ -70,6 +70,8 @@ class ChatCompletionLiveTest {
         return Stream.of(
                 new ChatScenario("chat", ChatCompletionLiveTest::chatModelCandidate,
                         ChatCompletionLiveTest::callOciGenerativeAiWithConfigFileAuthentication),
+                new ChatScenario("streaming chat", ChatCompletionLiveTest::chatModelCandidate,
+                        ChatCompletionLiveTest::streamOciGenerativeAiWithConfigFileAuthentication),
                 new ChatScenario("tool-capable chat", ChatCompletionLiveTest::toolChatModelCandidate,
                         ChatCompletionLiveTest::callOciGenerativeAiWithToolCalling))
                 .flatMap(scenario -> dynamicTests(authenticationDetailsProvider, authProperties,
@@ -90,6 +92,29 @@ class ChatCompletionLiveTest {
 
                     assertThat(response.getResult().getOutput().getText()).isNotBlank();
                     assertThat(response.getMetadata().getModel()).isNotBlank();
+                });
+    }
+
+    private static void streamOciGenerativeAiWithConfigFileAuthentication(String compartmentId, String model,
+            GenAiApiFormat apiFormat) {
+        new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(GenAiAutoConfiguration.class))
+                .withPropertyValues(propertyValues(compartmentId, model, apiFormat))
+                .run(context -> {
+                    assertThat(context).hasSingleBean(ChatModel.class);
+                    assertThat(context).hasSingleBean(OracleGenAiChatModel.class);
+
+                    List<ChatResponse> responses = context.getBean(ChatModel.class)
+                            .stream(new Prompt("Reply with one short sentence containing the word oracle."))
+                            .collectList()
+                            .block(LIVE_TEST_TIMEOUT);
+                    assertThat(responses).isNotEmpty();
+                    assertThat(responses)
+                            .extracting(response -> response.getResult().getOutput().getText())
+                            .anySatisfy(text -> assertThat(text).isNotBlank());
+                    assertThat(responses)
+                            .extracting(response -> response.getMetadata().getModel())
+                            .anySatisfy(modelId -> assertThat(modelId).isNotBlank());
                 });
     }
 

@@ -20,10 +20,15 @@ import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
+import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolCallingManager;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.retry.RetryTemplate;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -110,6 +115,31 @@ class GenAiAutoConfigurationTests {
                     assertThat(properties.getTemperature()).isEqualTo(0.4);
                     assertThat(properties.getMaxTokens()).isEqualTo(12);
                     assertThat(properties.getApiFormat().name()).isEqualTo("COHERE_V2");
+                });
+    }
+
+    @Test
+    void createsChatModelWithDefaultToolExecutionEligibilityPredicate() {
+        chatContextRunner.run(context -> {
+            OracleGenAiChatModel chatModel = context.getBean(OracleGenAiChatModel.class);
+
+            assertThat(ReflectionTestUtils.getField(chatModel, "toolExecutionEligibilityPredicate"))
+                    .isInstanceOf(DefaultToolExecutionEligibilityPredicate.class);
+        });
+    }
+
+    @Test
+    void configuresChatModelExtensionBeans() {
+        chatContextRunner.withUserConfiguration(ChatExtensionBeans.class)
+                .run(context -> {
+                    OracleGenAiChatModel chatModel = context.getBean(OracleGenAiChatModel.class);
+
+                    assertThat(ReflectionTestUtils.getField(chatModel, "toolCallingManager"))
+                            .isSameAs(context.getBean(ToolCallingManager.class));
+                    assertThat(ReflectionTestUtils.getField(chatModel, "toolExecutionEligibilityPredicate"))
+                            .isSameAs(context.getBean(ToolExecutionEligibilityPredicate.class));
+                    assertThat(ReflectionTestUtils.getField(chatModel, "retryTemplate"))
+                            .isSameAs(context.getBean(RetryTemplate.class));
                 });
     }
 
@@ -244,6 +274,25 @@ class GenAiAutoConfigurationTests {
                     return new float[] { 0.1f };
                 }
             };
+        }
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class ChatExtensionBeans {
+
+        @Bean
+        ToolCallingManager toolCallingManager() {
+            return ToolCallingManager.builder().build();
+        }
+
+        @Bean
+        ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate() {
+            return (chatOptions, chatResponse) -> false;
+        }
+
+        @Bean
+        RetryTemplate retryTemplate() {
+            return new RetryTemplate();
         }
     }
 

@@ -5,6 +5,10 @@
 
 package com.oracle.spring.ai.oracle;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import com.oracle.bmc.generativeaiinference.model.BaseChatRequest;
+import com.oracle.bmc.generativeaiinference.model.BaseChatResponse;
 import com.oracle.bmc.generativeaiinference.model.ChatContent;
 import com.oracle.bmc.generativeaiinference.model.ChatResult;
 import com.oracle.bmc.generativeaiinference.model.CohereAssistantMessageV2;
@@ -20,11 +25,11 @@ import com.oracle.bmc.generativeaiinference.model.CohereChatBotMessage;
 import com.oracle.bmc.generativeaiinference.model.CohereChatRequest;
 import com.oracle.bmc.generativeaiinference.model.CohereChatRequestV2;
 import com.oracle.bmc.generativeaiinference.model.CohereContentV2;
+import com.oracle.bmc.generativeaiinference.model.CohereMessage;
+import com.oracle.bmc.generativeaiinference.model.CohereMessageV2;
 import com.oracle.bmc.generativeaiinference.model.CohereToolCallV2;
 import com.oracle.bmc.generativeaiinference.model.CohereToolMessageV2;
 import com.oracle.bmc.generativeaiinference.model.CohereToolV2;
-import com.oracle.bmc.generativeaiinference.model.CohereMessage;
-import com.oracle.bmc.generativeaiinference.model.CohereMessageV2;
 import com.oracle.bmc.generativeaiinference.model.CohereSystemMessageV2;
 import com.oracle.bmc.generativeaiinference.model.CohereTextContentV2;
 import com.oracle.bmc.generativeaiinference.model.CohereUserMessage;
@@ -35,10 +40,11 @@ import com.oracle.bmc.generativeaiinference.model.GenericChatRequest;
 import com.oracle.bmc.generativeaiinference.model.GenericChatResponse;
 import com.oracle.bmc.generativeaiinference.model.TextContent;
 import com.oracle.bmc.generativeaiinference.model.ToolMessage;
-import com.oracle.bmc.generativeaiinference.model.BaseChatResponse;
+import com.oracle.bmc.generativeaiinference.model.Usage;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
 import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
+import com.oracle.spring.ai.oracle.converter.ChatStreamResponseConverter;
 import com.oracle.spring.ai.oracle.test.NoOpGenerativeAiInference;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -47,9 +53,13 @@ import org.springframework.ai.chat.messages.ToolResponseMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.model.tool.ToolCallingManager;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
+import org.springframework.ai.retry.RetryUtils;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.ai.tool.metadata.ToolMetadata;
+import org.springframework.core.retry.RetryTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -219,7 +229,7 @@ class OracleGenAiChatModelTests {
         options.setModel(null);
         OracleGenAiChatModel model = new OracleGenAiChatModel(CLIENT, options);
 
-        assertThatThrownBy(() -> model.toChatRequest(new Prompt("hello"), options))
+        assertThatThrownBy(() -> model.call(new Prompt("hello")))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("options.model");
     }
@@ -231,7 +241,7 @@ class OracleGenAiChatModelTests {
         options.setEndpointId(null);
         OracleGenAiChatModel model = new OracleGenAiChatModel(CLIENT, options);
 
-        assertThatThrownBy(() -> model.toChatRequest(new Prompt("hello"), options))
+        assertThatThrownBy(() -> model.call(new Prompt("hello")))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("options.endpointId");
     }
@@ -241,9 +251,10 @@ class OracleGenAiChatModelTests {
         OracleGenAiChatOptions options = defaultOptions();
         options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId("endpoint");
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(genericTextResponse("hello"));
 
-        ChatRequest request = new OracleGenAiChatModel(CLIENT, options)
-                .toChatRequest(new Prompt("hello"), options);
+        new OracleGenAiChatModel(client, options).call(new Prompt("hello"));
+        ChatRequest request = client.requests().get(0);
 
         assertThat(request.getChatDetails().getServingMode())
                 .isInstanceOf(com.oracle.bmc.generativeaiinference.model.DedicatedServingMode.class);
@@ -271,6 +282,61 @@ class OracleGenAiChatModelTests {
         assertThat(merged.getToolNames()).containsExactly("runtimeName");
         assertThat(merged.getToolContext()).containsEntry("default", "value").containsEntry("runtime", "value");
         assertThat(merged.getInternalToolExecutionEnabled()).isTrue();
+    }
+
+    @Test
+    void builderCreatesModelWithDefaults() {
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(genericTextResponse("hello"));
+
+        ChatResponse response = OracleGenAiChatModel.builder()
+                .client(client)
+                .defaultOptions(defaultOptions())
+                .build()
+                .call(new Prompt("hello"));
+
+        assertThat(response.getResult().getOutput().getText()).isEqualTo("hello");
+    }
+
+    @Test
+    void builderUsesExplicitDependencies() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setToolCallbacks(List.of(tool("weather", false)));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(genericToolCallResponse());
+        ToolCallingManager toolCallingManager = ToolCallingManager.builder().build();
+        ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate = (chatOptions, chatResponse) -> false;
+        RetryTemplate retryTemplate = RetryUtils.DEFAULT_RETRY_TEMPLATE;
+
+        ChatResponse response = OracleGenAiChatModel.builder()
+                .client(client)
+                .defaultOptions(options)
+                .toolCallingManager(toolCallingManager)
+                .toolExecutionEligibilityPredicate(toolExecutionEligibilityPredicate)
+                .retryTemplate(retryTemplate)
+                .build()
+                .call(new Prompt("What is the weather in Seattle?"));
+
+        assertThat(response.getResult().getOutput().getToolCalls()).singleElement();
+        assertThat(client.requests()).hasSize(1);
+    }
+
+    @Test
+    void mutatePreservesConfiguration() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setToolCallbacks(List.of(tool("weather", false)));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(genericToolCallResponse());
+        ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate = (chatOptions, chatResponse) -> false;
+        OracleGenAiChatModel original = OracleGenAiChatModel.builder()
+                .client(client)
+                .defaultOptions(options)
+                .toolExecutionEligibilityPredicate(toolExecutionEligibilityPredicate)
+                .build();
+
+        ChatResponse response = original.mutate()
+                .build()
+                .call(new Prompt("What is the weather in Seattle?"));
+
+        assertThat(response.getResult().getOutput().getToolCalls()).singleElement();
+        assertThat(client.requests()).hasSize(1);
     }
 
     @Test
@@ -405,6 +471,22 @@ class OracleGenAiChatModelTests {
     }
 
     @Test
+    void accumulatesUsageAcrossToolCallingLoop() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setToolCallbacks(List.of(tool("weather", false)));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(
+                genericToolCallResponse(usage(1, 2, 3)),
+                genericTextResponse("The weather is 55 degrees.", usage(4, 5, 9)));
+
+        ChatResponse response = new OracleGenAiChatModel(client, options)
+                .call(new Prompt("What is the weather in Seattle?"));
+
+        assertThat(response.getMetadata().getUsage().getPromptTokens()).isEqualTo(5);
+        assertThat(response.getMetadata().getUsage().getCompletionTokens()).isEqualTo(7);
+        assertThat(response.getMetadata().getUsage().getTotalTokens()).isEqualTo(12);
+    }
+
+    @Test
     void returnsDirectToolResults() {
         OracleGenAiChatOptions options = defaultOptions();
         options.setToolCallbacks(List.of(tool("weather", true)));
@@ -415,6 +497,22 @@ class OracleGenAiChatModelTests {
 
         assertThat(response.getResult().getOutput().getText()).isEqualTo("{\"temp\":55}");
         assertThat(client.requests()).hasSize(1);
+    }
+
+    @Test
+    void returnsDirectToolResultsWithToolCallUsage() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setToolCallbacks(List.of(tool("weather", true)));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(
+                genericToolCallResponse(usage(1, 2, 3)));
+
+        ChatResponse response = new OracleGenAiChatModel(client, options)
+                .call(new Prompt("What is the weather in Seattle?"));
+
+        assertThat(response.getResult().getOutput().getText()).isEqualTo("{\"temp\":55}");
+        assertThat(response.getMetadata().getUsage().getPromptTokens()).isEqualTo(1);
+        assertThat(response.getMetadata().getUsage().getCompletionTokens()).isEqualTo(2);
+        assertThat(response.getMetadata().getUsage().getTotalTokens()).isEqualTo(3);
     }
 
     @Test
@@ -458,6 +556,169 @@ class OracleGenAiChatModelTests {
                 .hasMessageContaining("legacy Cohere");
     }
 
+    @Test
+    void createsStreamingRequestsForAllApiFormats() {
+        assertStreamingRequest(GenAiApiFormat.GENERIC, GenericChatRequest.class);
+        assertStreamingRequest(GenAiApiFormat.COHERE_V2, CohereChatRequestV2.class);
+        assertStreamingRequest(GenAiApiFormat.COHERE, CohereChatRequest.class);
+    }
+
+    @Test
+    void emitsStreamingTextChunksInOrder() {
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(
+                sseStream(genericTextEvent("Hel"), genericTextEvent("lo"))));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, defaultOptions()), "hello");
+
+        assertThat(responses)
+                .extracting(response -> response.getResult().getOutput().getText())
+                .containsExactly("Hel", "lo");
+    }
+
+    @Test
+    void closesStreamingResponseOnComplete() {
+        CloseTrackingInputStream eventStream = sseStream(genericTextEvent("done"));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(eventStream));
+
+        stream(new OracleGenAiChatModel(client, defaultOptions()), "hello");
+
+        assertClosed(eventStream);
+    }
+
+    @Test
+    void closesStreamingResponseOnError() {
+        CloseTrackingInputStream eventStream = sseStream("not-json");
+
+        assertThatThrownBy(() -> new ChatStreamResponseConverter().toChatResponses(streamResponse(eventStream))
+                .collectList()
+                .block(Duration.ofSeconds(5)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Failed to parse OCI Generative AI streaming chat event");
+        assertClosed(eventStream);
+    }
+
+    @Test
+    void closesStreamingResponseOnCancellation() {
+        CloseTrackingInputStream eventStream = sseStream(genericTextEvent("first"), genericTextEvent("second"));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(eventStream));
+
+        new OracleGenAiChatModel(client, defaultOptions()).stream(new Prompt("hello"))
+                .take(1)
+                .collectList()
+                .block(Duration.ofSeconds(5));
+
+        assertClosed(eventStream);
+    }
+
+    @Test
+    void rejectsStreamingResponseWithoutEventStream() {
+        assertThatThrownBy(() -> new ChatStreamResponseConverter()
+                .toChatResponses(com.oracle.bmc.generativeaiinference.responses.ChatResponse.builder().build())
+                .collectList()
+                .block(Duration.ofSeconds(5)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("event stream");
+    }
+
+    @Test
+    void parsesEscapedStreamingText() {
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(
+                sseStream(genericTextEvent("line\\nbreak \\\"quoted\\\""))));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, defaultOptions()), "hello");
+
+        assertThat(responses.get(0).getResult().getOutput().getText()).isEqualTo("line\nbreak \"quoted\"");
+    }
+
+    @Test
+    void parsesMultilineSseDataEvents() {
+        CloseTrackingInputStream eventStream = new CloseTrackingInputStream("""
+                data: {"chatResponse":{"choices":[{"message":{"content":[
+                data: {"text":"hello"}
+                data: ]}}]}}
+
+                """);
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(eventStream));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, defaultOptions()), "hello");
+
+        assertThat(responses.get(0).getResult().getOutput().getText()).isEqualTo("hello");
+    }
+
+    @Test
+    void parsesStreamingUsageOnlyEvents() {
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(sseStream("""
+                {"chatResponse":{"usage":{"promptTokens":2,"completionTokens":3,"totalTokens":5}}}
+                """)));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, defaultOptions()), "hello");
+
+        assertThat(responses.get(0).getMetadata().getUsage().getPromptTokens()).isEqualTo(2);
+        assertThat(responses.get(0).getMetadata().getUsage().getCompletionTokens()).isEqualTo(3);
+        assertThat(responses.get(0).getMetadata().getUsage().getTotalTokens()).isEqualTo(5);
+    }
+
+    @Test
+    void parsesStreamingFinishReasons() {
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(sseStream("""
+                {"chatResponse":{"choices":[{"message":{"content":[{"text":"done"}]},"finishReason":"stop"}]}}
+                """)));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, defaultOptions()), "hello");
+
+        assertThat(responses.get(0).getResult().getMetadata().getFinishReason()).isEqualTo("stop");
+    }
+
+    @Test
+    void executesStreamingToolCallsAndReturnsDirectResult() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setToolCallbacks(List.of(tool("weather", true)));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(
+                streamResponse(sseStream(genericTextEvent("checking"), genericToolCallEvent())));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, options),
+                "What is the weather in Seattle?");
+
+        assertThat(responses)
+                .extracting(response -> response.getResult().getOutput().getText())
+                .containsExactly("{\"temp\":55}");
+        assertThat(client.requests()).hasSize(1);
+    }
+
+    @Test
+    void executesStreamingToolCallsAndStreamsFinalModelResponse() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setToolCallbacks(List.of(tool("weather", false)));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(
+                streamResponse(sseStream(genericTextEvent("checking"), genericToolCallEvent())),
+                streamResponse(sseStream(genericTextEvent("The weather "), genericTextEvent("is 55 degrees."))));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, options),
+                "What is the weather in Seattle?");
+
+        assertThat(responses)
+                .extracting(response -> response.getResult().getOutput().getText())
+                .containsExactly("The weather ", "is 55 degrees.");
+        assertThat(client.requests()).hasSize(2);
+        GenericChatRequest secondRequest = (GenericChatRequest) client.requests().get(1).getChatDetails().getChatRequest();
+        assertThat(secondRequest.getMessages())
+                .anySatisfy(message -> assertThat(message).isInstanceOf(ToolMessage.class));
+    }
+
+    @Test
+    void replaysBufferedStreamingChunksWhenNoToolCallIsRequired() {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setToolCallbacks(List.of(tool("weather", false)));
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(
+                sseStream(genericTextEvent("Hel"), genericTextEvent("lo"))));
+
+        List<ChatResponse> responses = stream(new OracleGenAiChatModel(client, options), "hello");
+
+        assertThat(responses)
+                .extracting(response -> response.getResult().getOutput().getText())
+                .containsExactly("Hel", "lo");
+    }
+
     private static OracleGenAiChatOptions defaultOptions() {
         return OracleGenAiChatOptions.builder()
                 .compartmentId("compartment")
@@ -487,6 +748,43 @@ class OracleGenAiChatModelTests {
                         .responses(List.of(new ToolResponseMessage.ToolResponse("call-1", "weather", "{\"temp\":55}")))
                         .build(),
                 new UserMessage("summarize it")));
+    }
+
+    private static void assertStreamingRequest(GenAiApiFormat apiFormat,
+            Class<? extends BaseChatRequest> requestType) {
+        OracleGenAiChatOptions options = defaultOptions();
+        options.setApiFormat(apiFormat);
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(
+                streamResponse(sseStream(genericTextEvent("hello"))));
+
+        stream(new OracleGenAiChatModel(client, options), "hello");
+
+        BaseChatRequest request = client.requests().get(0).getChatDetails().getChatRequest();
+        assertThat(request).isInstanceOf(requestType);
+        if (request instanceof GenericChatRequest genericRequest) {
+            assertThat(genericRequest.getIsStream()).isTrue();
+            assertThat(genericRequest.getStreamOptions().getIsIncludeUsage()).isTrue();
+        }
+        else if (request instanceof CohereChatRequestV2 cohereV2Request) {
+            assertThat(cohereV2Request.getIsStream()).isTrue();
+            assertThat(cohereV2Request.getStreamOptions().getIsIncludeUsage()).isTrue();
+        }
+        else if (request instanceof CohereChatRequest cohereRequest) {
+            assertThat(cohereRequest.getIsStream()).isTrue();
+            assertThat(cohereRequest.getStreamOptions().getIsIncludeUsage()).isTrue();
+        }
+    }
+
+    private static List<ChatResponse> stream(OracleGenAiChatModel model, String prompt) {
+        return model.stream(new Prompt(prompt)).collectList().block(Duration.ofSeconds(5));
+    }
+
+    private static void assertClosed(CloseTrackingInputStream eventStream) {
+        long deadline = System.nanoTime() + Duration.ofSeconds(1).toNanos();
+        while (!eventStream.closed() && System.nanoTime() < deadline) {
+            Thread.onSpinWait();
+        }
+        assertThat(eventStream.closed()).isTrue();
     }
 
     private static String genericMessageText(com.oracle.bmc.generativeaiinference.model.Message message) {
@@ -527,6 +825,10 @@ class OracleGenAiChatModelTests {
     }
 
     private static com.oracle.bmc.generativeaiinference.responses.ChatResponse genericToolCallResponse() {
+        return genericToolCallResponse(null);
+    }
+
+    private static com.oracle.bmc.generativeaiinference.responses.ChatResponse genericToolCallResponse(Usage usage) {
         com.oracle.bmc.generativeaiinference.model.AssistantMessage assistantMessage =
                 com.oracle.bmc.generativeaiinference.model.AssistantMessage.builder()
                         .toolCalls(List.of(FunctionCall.builder()
@@ -539,11 +841,17 @@ class OracleGenAiChatModelTests {
                 .choices(List.of(com.oracle.bmc.generativeaiinference.model.ChatChoice.builder()
                         .message(assistantMessage)
                         .finishReason("tool_calls")
+                        .usage(usage)
                         .build()))
                 .build());
     }
 
     private static com.oracle.bmc.generativeaiinference.responses.ChatResponse genericTextResponse(String text) {
+        return genericTextResponse(text, null);
+    }
+
+    private static com.oracle.bmc.generativeaiinference.responses.ChatResponse genericTextResponse(String text,
+            Usage usage) {
         com.oracle.bmc.generativeaiinference.model.AssistantMessage assistantMessage =
                 com.oracle.bmc.generativeaiinference.model.AssistantMessage.builder()
                         .content(List.of(TextContent.builder().text(text).build()))
@@ -552,8 +860,17 @@ class OracleGenAiChatModelTests {
                 .choices(List.of(com.oracle.bmc.generativeaiinference.model.ChatChoice.builder()
                         .message(assistantMessage)
                         .finishReason("stop")
+                        .usage(usage)
                         .build()))
                 .build());
+    }
+
+    private static Usage usage(int promptTokens, int completionTokens, int totalTokens) {
+        return Usage.builder()
+                .promptTokens(promptTokens)
+                .completionTokens(completionTokens)
+                .totalTokens(totalTokens)
+                .build();
     }
 
     private static com.oracle.bmc.generativeaiinference.responses.ChatResponse cohereV2ToolCallResponse() {
@@ -579,6 +896,34 @@ class OracleGenAiChatModelTests {
                         .chatResponse(chatResponse)
                         .build())
                 .build();
+    }
+
+    private static com.oracle.bmc.generativeaiinference.responses.ChatResponse streamResponse(
+            CloseTrackingInputStream eventStream) {
+        return com.oracle.bmc.generativeaiinference.responses.ChatResponse.builder()
+                .opcRequestId("opc-request")
+                .eventStream(eventStream)
+                .build();
+    }
+
+    private static CloseTrackingInputStream sseStream(String... events) {
+        StringBuilder stream = new StringBuilder();
+        for (String event : events) {
+            stream.append("data: ").append(event.strip()).append("\n\n");
+        }
+        return new CloseTrackingInputStream(stream.toString());
+    }
+
+    private static String genericTextEvent(String text) {
+        return """
+                {"modelId":"model","chatResponse":{"choices":[{"message":{"content":[{"text":"%s"}]}}]}}
+                """.formatted(text);
+    }
+
+    private static String genericToolCallEvent() {
+        return """
+                {"modelId":"model","chatResponse":{"choices":[{"message":{"toolCalls":[{"id":"call-1","type":"function","name":"weather","arguments":"{\\\"city\\\":\\\"Seattle\\\"}"}]},"finishReason":"tool_calls"}]}}
+                """;
     }
 
     private static String legacyCohereMessageText(CohereMessage message) {
@@ -614,6 +959,25 @@ class OracleGenAiChatModelTests {
 
         private List<ChatRequest> requests() {
             return requests;
+        }
+    }
+
+    private static final class CloseTrackingInputStream extends ByteArrayInputStream {
+
+        private volatile boolean closed;
+
+        private CloseTrackingInputStream(String value) {
+            super(value.getBytes(StandardCharsets.UTF_8));
+        }
+
+        @Override
+        public void close() throws IOException {
+            closed = true;
+            super.close();
+        }
+
+        private boolean closed() {
+            return closed;
         }
     }
 
