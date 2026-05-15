@@ -8,6 +8,7 @@ package com.oracle.spring.ai.oracle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.bmc.generativeaiinference.model.BaseChatRequest;
@@ -16,11 +17,19 @@ import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.converter.ChatRequestConverter;
 import com.oracle.spring.ai.oracle.converter.ChatResponseConverter;
 import com.oracle.spring.ai.oracle.converter.ChatStreamResponseConverter;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.MessageAggregator;
+import org.springframework.ai.chat.observation.ChatModelObservationContext;
+import org.springframework.ai.chat.observation.ChatModelObservationConvention;
+import org.springframework.ai.chat.observation.ChatModelObservationDocumentation;
+import org.springframework.ai.chat.observation.DefaultChatModelObservationConvention;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
@@ -46,6 +55,9 @@ import static com.oracle.spring.ai.oracle.api.GenAiApiFormat.infer;
  */
 public class OracleGenAiChatModel implements ChatModel {
 
+    private static final ChatModelObservationConvention DEFAULT_OBSERVATION_CONVENTION =
+            new DefaultChatModelObservationConvention();
+
     private static final ToolCallingManager DEFAULT_TOOL_CALLING_MANAGER = ToolCallingManager.builder().build();
 
     private static final ToolExecutionEligibilityPredicate DEFAULT_TOOL_EXECUTION_ELIGIBILITY_PREDICATE =
@@ -61,6 +73,10 @@ public class OracleGenAiChatModel implements ChatModel {
 
     private final RetryTemplate retryTemplate;
 
+    private final ObservationRegistry observationRegistry;
+
+    private ChatModelObservationConvention observationConvention = DEFAULT_OBSERVATION_CONVENTION;
+
     private final ChatRequestConverter requestConverter = new ChatRequestConverter();
 
     private final ChatResponseConverter responseConverter = new ChatResponseConverter();
@@ -71,33 +87,19 @@ public class OracleGenAiChatModel implements ChatModel {
         return new Builder();
     }
 
-    public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions) {
-        this(client, defaultOptions, RetryUtils.DEFAULT_RETRY_TEMPLATE);
-    }
-
-    public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions,
-            RetryTemplate retryTemplate) {
-        this(client, defaultOptions, DEFAULT_TOOL_CALLING_MANAGER, retryTemplate);
-    }
-
-    public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions,
-            ToolCallingManager toolCallingManager, RetryTemplate retryTemplate) {
-        this(client, defaultOptions, toolCallingManager, DEFAULT_TOOL_EXECUTION_ELIGIBILITY_PREDICATE, retryTemplate);
-    }
-
-    public OracleGenAiChatModel(GenerativeAiInference client, OracleGenAiChatOptions defaultOptions,
-            ToolCallingManager toolCallingManager, ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate,
-            RetryTemplate retryTemplate) {
-        Assert.notNull(client, "client must not be null");
-        Assert.notNull(defaultOptions, "defaultOptions must not be null");
-        Assert.notNull(toolCallingManager, "toolCallingManager must not be null");
-        Assert.notNull(toolExecutionEligibilityPredicate, "toolExecutionEligibilityPredicate must not be null");
-        Assert.notNull(retryTemplate, "retryTemplate must not be null");
-        this.client = client;
-        this.defaultOptions = defaultOptions.copy();
-        this.toolCallingManager = toolCallingManager;
-        this.toolExecutionEligibilityPredicate = toolExecutionEligibilityPredicate;
-        this.retryTemplate = retryTemplate;
+    private OracleGenAiChatModel(@Nullable GenerativeAiInference client,
+            @Nullable OracleGenAiChatOptions defaultOptions, @Nullable ToolCallingManager toolCallingManager,
+            @Nullable ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate,
+            @Nullable RetryTemplate retryTemplate, @Nullable ObservationRegistry observationRegistry,
+            @Nullable ChatModelObservationConvention observationConvention) {
+        this.client = Objects.requireNonNull(client, "client must not be null");
+        this.defaultOptions = Objects.requireNonNull(defaultOptions, "defaultOptions must not be null").copy();
+        this.toolCallingManager = Objects.requireNonNullElse(toolCallingManager, DEFAULT_TOOL_CALLING_MANAGER);
+        this.toolExecutionEligibilityPredicate = Objects.requireNonNullElse(toolExecutionEligibilityPredicate,
+                DEFAULT_TOOL_EXECUTION_ELIGIBILITY_PREDICATE);
+        this.retryTemplate = Objects.requireNonNullElse(retryTemplate, RetryUtils.DEFAULT_RETRY_TEMPLATE);
+        this.observationRegistry = Objects.requireNonNullElse(observationRegistry, ObservationRegistry.NOOP);
+        this.observationConvention = Objects.requireNonNullElse(observationConvention, DEFAULT_OBSERVATION_CONVENTION);
     }
 
     @Override
@@ -117,13 +119,9 @@ public class OracleGenAiChatModel implements ChatModel {
         return internalStream(new Prompt(prompt.getInstructions(), defaultOptions.merge(prompt.getOptions())), null);
     }
 
-    public Builder mutate() {
-        return builder()
-                .client(client)
-                .defaultOptions(defaultOptions)
-                .toolCallingManager(toolCallingManager)
-                .toolExecutionEligibilityPredicate(toolExecutionEligibilityPredicate)
-                .retryTemplate(retryTemplate);
+    public void setObservationConvention(ChatModelObservationConvention observationConvention) {
+        Assert.notNull(observationConvention, "observationConvention must not be null");
+        this.observationConvention = observationConvention;
     }
 
     BaseChatRequest toBaseChatRequest(Prompt prompt, OracleGenAiChatOptions options) {
@@ -135,9 +133,21 @@ public class OracleGenAiChatModel implements ChatModel {
     private ChatResponse internalCall(Prompt prompt, ChatResponse previousChatResponse) {
         OracleGenAiChatOptions options = (OracleGenAiChatOptions) prompt.getOptions();
         ChatRequest request = toChatRequest(prompt, options, false);
-        com.oracle.bmc.generativeaiinference.responses.ChatResponse response =
-                RetryUtils.execute(retryTemplate, () -> client.chat(request));
-        ChatResponse chatResponse = withCumulativeUsage(responseConverter.toChatResponse(response), previousChatResponse);
+        ChatModelObservationContext observationContext = ChatModelObservationContext.builder()
+                .prompt(prompt)
+                .provider(OracleGenAiModelMetadata.PROVIDER)
+                .build();
+        ChatResponse chatResponse = ChatModelObservationDocumentation.CHAT_MODEL_OPERATION
+                .observation(observationConvention, DEFAULT_OBSERVATION_CONVENTION, () -> observationContext,
+                        observationRegistry)
+                .observe(() -> {
+                    com.oracle.bmc.generativeaiinference.responses.ChatResponse response =
+                            RetryUtils.execute(retryTemplate, () -> client.chat(request));
+                    ChatResponse convertedResponse =
+                            withCumulativeUsage(responseConverter.toChatResponse(response), previousChatResponse);
+                    observationContext.setResponse(convertedResponse);
+                    return convertedResponse;
+                });
         if (toolExecutionEligibilityPredicate.isToolExecutionRequired(options, chatResponse)) {
             ToolExecutionResult toolExecutionResult = toolCallingManager.executeToolCalls(prompt, chatResponse);
             if (toolExecutionResult.returnDirect()) {
@@ -154,14 +164,14 @@ public class OracleGenAiChatModel implements ChatModel {
     private Flux<ChatResponse> internalStream(Prompt prompt, ChatResponse previousChatResponse) {
         OracleGenAiChatOptions options = (OracleGenAiChatOptions) prompt.getOptions();
         ChatRequest request = toChatRequest(prompt, options, true);
-        Flux<ChatResponse> chatResponseFlux = Flux.defer(() -> {
-            com.oracle.bmc.generativeaiinference.responses.ChatResponse response =
-                    RetryUtils.execute(retryTemplate, () -> client.chat(request));
-            return streamResponseConverter.toChatResponses(response);
-        })
+        Flux<ChatResponse> chatResponseFlux = observeStreamingCall(prompt, Flux.defer(() -> {
+                    com.oracle.bmc.generativeaiinference.responses.ChatResponse response =
+                            RetryUtils.execute(retryTemplate, () -> client.chat(request));
+                    return streamResponseConverter.toChatResponses(response);
+                })
                 .map(chatResponse -> withStreamingMetadataDefaults(chatResponse, options))
                 .map(chatResponse -> withCumulativeUsage(chatResponse, previousChatResponse))
-                .subscribeOn(Schedulers.boundedElastic());
+                .subscribeOn(Schedulers.boundedElastic()));
 
         if (!isInternalToolExecutionPossible(options)) {
             return chatResponseFlux;
@@ -200,6 +210,25 @@ public class OracleGenAiChatModel implements ChatModel {
                                             chatResponse);
                                 });
                     }));
+        });
+    }
+
+    private Flux<ChatResponse> observeStreamingCall(Prompt prompt, Flux<ChatResponse> chatResponseFlux) {
+        return Flux.deferContextual(contextView -> {
+            ChatModelObservationContext observationContext = ChatModelObservationContext.builder()
+                    .prompt(prompt)
+                    .provider(OracleGenAiModelMetadata.PROVIDER)
+                    .streaming(true)
+                    .build();
+            Observation observation = ChatModelObservationDocumentation.CHAT_MODEL_OPERATION.observation(
+                    observationConvention, DEFAULT_OBSERVATION_CONVENTION, () -> observationContext,
+                    observationRegistry);
+            observation.parentObservation(contextView.getOrDefault(ObservationThreadLocalAccessor.KEY, null)).start();
+            return new MessageAggregator()
+                    .aggregate(chatResponseFlux, observationContext::setResponse)
+                    .doOnError(observation::error)
+                    .doFinally(signalType -> observation.stop())
+                    .contextWrite(context -> context.put(ObservationThreadLocalAccessor.KEY, observation));
         });
     }
 
@@ -259,16 +288,26 @@ public class OracleGenAiChatModel implements ChatModel {
 
     public static final class Builder {
 
+        @Nullable
         private GenerativeAiInference client;
 
+        @Nullable
         private OracleGenAiChatOptions defaultOptions;
 
-        private ToolCallingManager toolCallingManager = DEFAULT_TOOL_CALLING_MANAGER;
+        @Nullable
+        private ToolCallingManager toolCallingManager;
 
-        private ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate =
-                DEFAULT_TOOL_EXECUTION_ELIGIBILITY_PREDICATE;
+        @Nullable
+        private ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate;
 
-        private RetryTemplate retryTemplate = RetryUtils.DEFAULT_RETRY_TEMPLATE;
+        @Nullable
+        private RetryTemplate retryTemplate;
+
+        @Nullable
+        private ObservationRegistry observationRegistry;
+
+        @Nullable
+        private ChatModelObservationConvention observationConvention;
 
         private Builder() {
         }
@@ -299,9 +338,19 @@ public class OracleGenAiChatModel implements ChatModel {
             return this;
         }
 
+        public Builder observationRegistry(ObservationRegistry observationRegistry) {
+            this.observationRegistry = observationRegistry;
+            return this;
+        }
+
+        public Builder observationConvention(ChatModelObservationConvention observationConvention) {
+            this.observationConvention = observationConvention;
+            return this;
+        }
+
         public OracleGenAiChatModel build() {
             return new OracleGenAiChatModel(client, defaultOptions, toolCallingManager,
-                    toolExecutionEligibilityPredicate, retryTemplate);
+                    toolExecutionEligibilityPredicate, retryTemplate, observationRegistry, observationConvention);
         }
     }
 

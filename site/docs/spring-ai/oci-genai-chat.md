@@ -101,6 +101,12 @@ Flux<String> answerStream(String question) {
 
 Direct `ChatModel` callers can use `stream(Prompt)` and consume the returned `Flux<ChatResponse>`. Streaming uses OCI Generative AI server-sent events and supports the same text chat request formats as synchronous chat: `GENERIC`, `COHERE_V2`, and legacy `COHERE`.
 
+## Observability
+
+Chat calls emit Spring AI model observations when an `ObservationRegistry` is available. Observations use Spring AI's standard chat model convention, include synchronous and streaming requests, and report OCI Generative AI as `oci_genai`.
+
+Direct `OracleGenAiChatModel` construction uses `OracleGenAiChatModel.builder()`, which matches the Spring AI provider convention for optional dependencies such as retry, tool calling, and observation configuration.
+
 ## Conversation Memory
 
 Spring AI Oracle follows Spring AI chat memory conventions. The chat model is stateless and does not store conversation history; `MessageChatMemoryAdvisor` loads prior turns from `ChatMemory` and adds them to the prompt as typed Spring AI messages before the request reaches OCI Generative AI.

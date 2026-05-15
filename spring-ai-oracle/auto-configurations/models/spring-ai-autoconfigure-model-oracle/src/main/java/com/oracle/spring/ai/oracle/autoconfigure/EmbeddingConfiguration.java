@@ -7,8 +7,9 @@ package com.oracle.spring.ai.oracle.autoconfigure;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.spring.ai.oracle.OracleGenAiEmbeddingModel;
+import io.micrometer.observation.ObservationRegistry;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.retry.RetryUtils;
+import org.springframework.ai.embedding.observation.EmbeddingModelObservationConvention;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -28,8 +29,16 @@ class EmbeddingConfiguration {
     @Bean
     @ConditionalOnMissingBean(EmbeddingModel.class)
     OracleGenAiEmbeddingModel oracleGenAiEmbeddingModel(GenerativeAiInference generativeAiInference,
-                                                        EmbeddingProperties properties, ObjectProvider<RetryTemplate> retryTemplate) {
-        return new OracleGenAiEmbeddingModel(generativeAiInference, properties,
-                retryTemplate.getIfAvailable(() -> RetryUtils.DEFAULT_RETRY_TEMPLATE));
+                                                        EmbeddingProperties properties,
+                                                        ObjectProvider<RetryTemplate> retryTemplate,
+                                                        ObjectProvider<ObservationRegistry> observationRegistry,
+                                                        ObjectProvider<EmbeddingModelObservationConvention> observationConvention) {
+        return OracleGenAiEmbeddingModel.builder()
+                .client(generativeAiInference)
+                .defaultOptions(properties)
+                .retryTemplate(retryTemplate.getIfAvailable())
+                .observationRegistry(observationRegistry.getIfAvailable())
+                .observationConvention(observationConvention.getIfAvailable())
+                .build();
     }
 }

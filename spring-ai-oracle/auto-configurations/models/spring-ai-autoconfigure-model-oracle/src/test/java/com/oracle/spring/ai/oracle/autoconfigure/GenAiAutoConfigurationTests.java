@@ -13,13 +13,18 @@ import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.spring.ai.oracle.OracleGenAiChatModel;
 import com.oracle.spring.ai.oracle.OracleGenAiEmbeddingModel;
 import com.oracle.spring.ai.oracle.test.NoOpGenerativeAiInference;
+import io.micrometer.observation.ObservationRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.observation.ChatModelObservationConvention;
+import org.springframework.ai.chat.observation.DefaultChatModelObservationConvention;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
+import org.springframework.ai.embedding.observation.DefaultEmbeddingModelObservationConvention;
+import org.springframework.ai.embedding.observation.EmbeddingModelObservationConvention;
 import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
@@ -140,6 +145,10 @@ class GenAiAutoConfigurationTests {
                             .isSameAs(context.getBean(ToolExecutionEligibilityPredicate.class));
                     assertThat(ReflectionTestUtils.getField(chatModel, "retryTemplate"))
                             .isSameAs(context.getBean(RetryTemplate.class));
+                    assertThat(ReflectionTestUtils.getField(chatModel, "observationRegistry"))
+                            .isSameAs(context.getBean(ObservationRegistry.class));
+                    assertThat(ReflectionTestUtils.getField(chatModel, "observationConvention"))
+                            .isSameAs(context.getBean(ChatModelObservationConvention.class));
                 });
     }
 
@@ -200,6 +209,21 @@ class GenAiAutoConfigurationTests {
                     assertThat(properties.getTruncate().name()).isEqualTo("START");
                     assertThat(properties.getServingMode().name()).isEqualTo("DEDICATED");
                     assertThat(properties.getEndpointId()).isEqualTo("endpoint");
+                });
+    }
+
+    @Test
+    void configuresEmbeddingModelExtensionBeans() {
+        embeddingContextRunner.withUserConfiguration(EmbeddingExtensionBeans.class)
+                .run(context -> {
+                    OracleGenAiEmbeddingModel embeddingModel = context.getBean(OracleGenAiEmbeddingModel.class);
+
+                    assertThat(ReflectionTestUtils.getField(embeddingModel, "retryTemplate"))
+                            .isSameAs(context.getBean(RetryTemplate.class));
+                    assertThat(ReflectionTestUtils.getField(embeddingModel, "observationRegistry"))
+                            .isSameAs(context.getBean(ObservationRegistry.class));
+                    assertThat(ReflectionTestUtils.getField(embeddingModel, "observationConvention"))
+                            .isSameAs(context.getBean(EmbeddingModelObservationConvention.class));
                 });
     }
 
@@ -293,6 +317,35 @@ class GenAiAutoConfigurationTests {
         @Bean
         RetryTemplate retryTemplate() {
             return new RetryTemplate();
+        }
+
+        @Bean
+        ObservationRegistry observationRegistry() {
+            return ObservationRegistry.create();
+        }
+
+        @Bean
+        ChatModelObservationConvention chatModelObservationConvention() {
+            return new DefaultChatModelObservationConvention();
+        }
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    static class EmbeddingExtensionBeans {
+
+        @Bean
+        RetryTemplate retryTemplate() {
+            return new RetryTemplate();
+        }
+
+        @Bean
+        ObservationRegistry observationRegistry() {
+            return ObservationRegistry.create();
+        }
+
+        @Bean
+        EmbeddingModelObservationConvention embeddingModelObservationConvention() {
+            return new DefaultEmbeddingModelObservationConvention();
         }
     }
 

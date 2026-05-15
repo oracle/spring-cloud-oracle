@@ -7,11 +7,11 @@ package com.oracle.spring.ai.oracle.autoconfigure;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.spring.ai.oracle.OracleGenAiChatModel;
+import io.micrometer.observation.ObservationRegistry;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
+import org.springframework.ai.chat.observation.ChatModelObservationConvention;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
-import org.springframework.ai.retry.RetryUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -34,14 +34,17 @@ class ChatConfiguration {
                                               ChatProperties properties,
                                               ObjectProvider<ToolCallingManager> toolCallingManager,
                                               ObjectProvider<ToolExecutionEligibilityPredicate> toolExecutionEligibilityPredicate,
-                                              ObjectProvider<RetryTemplate> retryTemplate) {
+                                              ObjectProvider<RetryTemplate> retryTemplate,
+                                              ObjectProvider<ObservationRegistry> observationRegistry,
+                                              ObjectProvider<ChatModelObservationConvention> observationConvention) {
         return OracleGenAiChatModel.builder()
                 .client(generativeAiInference)
                 .defaultOptions(properties)
-                .toolCallingManager(toolCallingManager.getIfAvailable(() -> ToolCallingManager.builder().build()))
-                .toolExecutionEligibilityPredicate(toolExecutionEligibilityPredicate
-                        .getIfAvailable(DefaultToolExecutionEligibilityPredicate::new))
-                .retryTemplate(retryTemplate.getIfAvailable(() -> RetryUtils.DEFAULT_RETRY_TEMPLATE))
+                .toolCallingManager(toolCallingManager.getIfAvailable())
+                .toolExecutionEligibilityPredicate(toolExecutionEligibilityPredicate.getIfAvailable())
+                .retryTemplate(retryTemplate.getIfAvailable())
+                .observationRegistry(observationRegistry.getIfAvailable())
+                .observationConvention(observationConvention.getIfAvailable())
                 .build();
     }
 }

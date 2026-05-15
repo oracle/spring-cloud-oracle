@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.bmc.generativeaiinference.model.EmbedTextDetails;
@@ -17,6 +18,8 @@ import com.oracle.bmc.generativeaiinference.model.Usage;
 import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
 import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
+import io.micrometer.observation.ObservationRegistry;
+import org.jspecify.annotations.Nullable;
 import org.springframework.ai.chat.metadata.DefaultUsage;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.Embedding;
@@ -24,6 +27,10 @@ import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
 import org.springframework.ai.embedding.EmbeddingResponseMetadata;
+import org.springframework.ai.embedding.observation.DefaultEmbeddingModelObservationConvention;
+import org.springframework.ai.embedding.observation.EmbeddingModelObservationContext;
+import org.springframework.ai.embedding.observation.EmbeddingModelObservationConvention;
+import org.springframework.ai.embedding.observation.EmbeddingModelObservationDocumentation;
 import org.springframework.ai.retry.RetryUtils;
 import org.springframework.core.retry.RetryTemplate;
 import org.springframework.util.Assert;
@@ -35,39 +42,64 @@ import org.springframework.util.StringUtils;
  */
 public class OracleGenAiEmbeddingModel implements EmbeddingModel {
 
+    private static final EmbeddingModelObservationConvention DEFAULT_OBSERVATION_CONVENTION =
+            new DefaultEmbeddingModelObservationConvention();
+
     private final GenerativeAiInference client;
 
     private final OracleGenAiEmbeddingOptions defaultOptions;
 
     private final RetryTemplate retryTemplate;
 
-    public OracleGenAiEmbeddingModel(GenerativeAiInference client, OracleGenAiEmbeddingOptions defaultOptions) {
-        this(client, defaultOptions, RetryUtils.DEFAULT_RETRY_TEMPLATE);
+    private final ObservationRegistry observationRegistry;
+
+    private EmbeddingModelObservationConvention observationConvention = DEFAULT_OBSERVATION_CONVENTION;
+
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public OracleGenAiEmbeddingModel(GenerativeAiInference client, OracleGenAiEmbeddingOptions defaultOptions,
-            RetryTemplate retryTemplate) {
-        Assert.notNull(client, "client must not be null");
-        Assert.notNull(defaultOptions, "defaultOptions must not be null");
-        Assert.notNull(retryTemplate, "retryTemplate must not be null");
-        this.client = client;
-        this.defaultOptions = defaultOptions.copy();
-        this.retryTemplate = retryTemplate;
+    private OracleGenAiEmbeddingModel(@Nullable GenerativeAiInference client,
+            @Nullable OracleGenAiEmbeddingOptions defaultOptions, @Nullable RetryTemplate retryTemplate,
+            @Nullable ObservationRegistry observationRegistry,
+            @Nullable EmbeddingModelObservationConvention observationConvention) {
+        this.client = Objects.requireNonNull(client, "client must not be null");
+        this.defaultOptions = Objects.requireNonNull(defaultOptions, "defaultOptions must not be null").copy();
+        this.retryTemplate = Objects.requireNonNullElse(retryTemplate, RetryUtils.DEFAULT_RETRY_TEMPLATE);
+        this.observationRegistry = Objects.requireNonNullElse(observationRegistry, ObservationRegistry.NOOP);
+        this.observationConvention = Objects.requireNonNullElse(observationConvention, DEFAULT_OBSERVATION_CONVENTION);
     }
 
     @Override
     public EmbeddingResponse call(EmbeddingRequest request) {
         Assert.notNull(request, "request must not be null");
         OracleGenAiEmbeddingOptions options = defaultOptions.merge(request.getOptions());
-        EmbedTextRequest ociRequest = toEmbedTextRequest(request.getInstructions(), options);
-        EmbedTextResponse response = RetryUtils.execute(retryTemplate, () -> client.embedText(ociRequest));
-        return toEmbeddingResponse(response);
+        EmbeddingRequest embeddingRequest = new EmbeddingRequest(request.getInstructions(), options);
+        EmbedTextRequest ociRequest = toEmbedTextRequest(embeddingRequest.getInstructions(), options);
+        EmbeddingModelObservationContext observationContext = EmbeddingModelObservationContext.builder()
+                .embeddingRequest(embeddingRequest)
+                .provider(OracleGenAiModelMetadata.PROVIDER)
+                .build();
+        return EmbeddingModelObservationDocumentation.EMBEDDING_MODEL_OPERATION
+                .observation(observationConvention, DEFAULT_OBSERVATION_CONVENTION, () -> observationContext,
+                        observationRegistry)
+                .observe(() -> {
+                    EmbedTextResponse response = RetryUtils.execute(retryTemplate, () -> client.embedText(ociRequest));
+                    EmbeddingResponse embeddingResponse = toEmbeddingResponse(response);
+                    observationContext.setResponse(embeddingResponse);
+                    return embeddingResponse;
+                });
     }
 
     @Override
     public float[] embed(Document document) {
         Assert.notNull(document, "document must not be null");
         return embed(getEmbeddingContent(document));
+    }
+
+    public void setObservationConvention(EmbeddingModelObservationConvention observationConvention) {
+        Assert.notNull(observationConvention, "observationConvention must not be null");
+        this.observationConvention = observationConvention;
     }
 
     EmbedTextRequest toEmbedTextRequest(List<String> inputs, OracleGenAiEmbeddingOptions options) {
@@ -156,5 +188,56 @@ public class OracleGenAiEmbeddingModel implements EmbeddingModel {
             return EmbedTextDetails.Truncate.Start;
         }
         return EmbedTextDetails.Truncate.End;
+    }
+
+    public static final class Builder {
+
+        @Nullable
+        private GenerativeAiInference client;
+
+        @Nullable
+        private OracleGenAiEmbeddingOptions defaultOptions;
+
+        @Nullable
+        private RetryTemplate retryTemplate;
+
+        @Nullable
+        private ObservationRegistry observationRegistry;
+
+        @Nullable
+        private EmbeddingModelObservationConvention observationConvention;
+
+        private Builder() {
+        }
+
+        public Builder client(GenerativeAiInference client) {
+            this.client = client;
+            return this;
+        }
+
+        public Builder defaultOptions(OracleGenAiEmbeddingOptions defaultOptions) {
+            this.defaultOptions = defaultOptions;
+            return this;
+        }
+
+        public Builder retryTemplate(RetryTemplate retryTemplate) {
+            this.retryTemplate = retryTemplate;
+            return this;
+        }
+
+        public Builder observationRegistry(ObservationRegistry observationRegistry) {
+            this.observationRegistry = observationRegistry;
+            return this;
+        }
+
+        public Builder observationConvention(EmbeddingModelObservationConvention observationConvention) {
+            this.observationConvention = observationConvention;
+            return this;
+        }
+
+        public OracleGenAiEmbeddingModel build() {
+            return new OracleGenAiEmbeddingModel(client, defaultOptions, retryTemplate, observationRegistry,
+                    observationConvention);
+        }
     }
 }

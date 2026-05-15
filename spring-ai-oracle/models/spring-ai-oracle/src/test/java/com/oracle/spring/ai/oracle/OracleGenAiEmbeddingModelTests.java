@@ -5,6 +5,7 @@
 
 package com.oracle.spring.ai.oracle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.oracle.bmc.generativeaiinference.model.EmbedTextDetails;
@@ -16,9 +17,17 @@ import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
 import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
 import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
 import com.oracle.spring.ai.oracle.test.NoOpGenerativeAiInference;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationHandler;
+import io.micrometer.observation.ObservationRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
+import org.springframework.ai.embedding.observation.DefaultEmbeddingModelObservationConvention;
+import org.springframework.ai.embedding.observation.EmbeddingModelObservationContext;
+import org.springframework.ai.embedding.observation.EmbeddingModelObservationConvention;
+import org.springframework.ai.retry.RetryUtils;
+import org.springframework.core.retry.RetryTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,7 +40,7 @@ class OracleGenAiEmbeddingModelTests {
         options.setDimensions(512);
         options.setTruncate(OracleGenAiEmbeddingTruncate.END);
 
-        EmbedTextRequest request = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options)
+        EmbedTextRequest request = model(new NoOpGenerativeAiInference(), options)
                 .toEmbedTextRequest(List.of("first", "second"), options);
 
         EmbedTextDetails details = request.getEmbedTextDetails();
@@ -49,7 +58,7 @@ class OracleGenAiEmbeddingModelTests {
         options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId("endpoint");
 
-        EmbedTextRequest request = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options)
+        EmbedTextRequest request = model(new NoOpGenerativeAiInference(), options)
                 .toEmbedTextRequest(List.of("text"), options);
 
         assertThat(request.getEmbedTextDetails().getServingMode())
@@ -60,7 +69,7 @@ class OracleGenAiEmbeddingModelTests {
     void validatesOnDemandModelId() {
         OracleGenAiEmbeddingOptions options = defaultOptions();
         options.setModel(null);
-        OracleGenAiEmbeddingModel model = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options);
+        OracleGenAiEmbeddingModel model = model(new NoOpGenerativeAiInference(), options);
 
         assertThatThrownBy(() -> model.toEmbedTextRequest(List.of("text"), options))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -72,7 +81,7 @@ class OracleGenAiEmbeddingModelTests {
         OracleGenAiEmbeddingOptions options = defaultOptions();
         options.setServingMode(OracleGenAiServingMode.DEDICATED);
         options.setEndpointId(null);
-        OracleGenAiEmbeddingModel model = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options);
+        OracleGenAiEmbeddingModel model = model(new NoOpGenerativeAiInference(), options);
 
         assertThatThrownBy(() -> model.toEmbedTextRequest(List.of("text"), options))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -83,7 +92,7 @@ class OracleGenAiEmbeddingModelTests {
     void validatesCompartmentId() {
         OracleGenAiEmbeddingOptions options = defaultOptions();
         options.setCompartmentId(null);
-        OracleGenAiEmbeddingModel model = new OracleGenAiEmbeddingModel(new NoOpGenerativeAiInference(), options);
+        OracleGenAiEmbeddingModel model = model(new NoOpGenerativeAiInference(), options);
 
         assertThatThrownBy(() -> model.toEmbedTextRequest(List.of("text"), options))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -101,7 +110,7 @@ class OracleGenAiEmbeddingModelTests {
                 .truncate(OracleGenAiEmbeddingTruncate.START)
                 .build();
 
-        new OracleGenAiEmbeddingModel(client, defaultOptions())
+        model(client, defaultOptions())
                 .call(new EmbeddingRequest(List.of("text"), runtimeOptions));
 
         EmbedTextDetails details = client.request.getEmbedTextDetails();
@@ -116,7 +125,7 @@ class OracleGenAiEmbeddingModelTests {
         CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(responseWithEmbeddings(
                 List.of(List.of(0.1f, 0.2f), List.of(0.3f, 0.4f))));
 
-        EmbeddingResponse response = new OracleGenAiEmbeddingModel(client, defaultOptions())
+        EmbeddingResponse response = model(client, defaultOptions())
                 .call(new EmbeddingRequest(List.of("first", "second"), null));
 
         assertThat(response.getResults()).hasSize(2);
@@ -133,10 +142,66 @@ class OracleGenAiEmbeddingModelTests {
     }
 
     @Test
+    void builderCreatesModelWithDefaults() {
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(responseWithEmbeddings(
+                List.of(List.of(0.1f))));
+
+        EmbeddingResponse response = OracleGenAiEmbeddingModel.builder()
+                .client(client)
+                .defaultOptions(defaultOptions())
+                .build()
+                .call(new EmbeddingRequest(List.of("text"), null));
+
+        assertThat(response.getResults()).singleElement();
+        assertThat(client.request.getEmbedTextDetails().getInputs()).containsExactly("text");
+    }
+
+    @Test
+    void observesEmbeddingCall() {
+        CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(responseWithEmbeddings(
+                List.of(List.of(0.1f))));
+        RecordingObservationHandler handler = new RecordingObservationHandler(EmbeddingModelObservationContext.class);
+        ObservationRegistry observationRegistry = ObservationRegistry.create();
+        observationRegistry.observationConfig().observationHandler(handler);
+
+        EmbeddingResponse response = model(client, defaultOptions(),
+                RetryUtils.DEFAULT_RETRY_TEMPLATE, observationRegistry,
+                new DefaultEmbeddingModelObservationConvention())
+                .call(new EmbeddingRequest(List.of("text"), null));
+
+        assertThat(response.getResults()).singleElement();
+        assertThat(handler.stoppedContexts())
+                .singleElement()
+                .isInstanceOfSatisfying(EmbeddingModelObservationContext.class, context -> {
+                    assertThat(context.getOperationMetadata().provider()).isEqualTo("oci_genai");
+                    assertThat(context.getRequest().getInstructions()).containsExactly("text");
+                    assertThat(context.getResponse()).isSameAs(response);
+                });
+    }
+
+    @Test
+    void observesEmbeddingCallErrors() {
+        RuntimeException failure = new IllegalStateException("embedding failed");
+        RecordingObservationHandler handler = new RecordingObservationHandler(EmbeddingModelObservationContext.class);
+        ObservationRegistry observationRegistry = ObservationRegistry.create();
+        observationRegistry.observationConfig().observationHandler(handler);
+        OracleGenAiEmbeddingModel model = model(new FailingGenerativeAiInference(failure),
+                defaultOptions(), RetryUtils.DEFAULT_RETRY_TEMPLATE, observationRegistry,
+                new DefaultEmbeddingModelObservationConvention());
+
+        assertThatThrownBy(() -> model.call(new EmbeddingRequest(List.of("text"), null))).isSameAs(failure);
+
+        assertThat(handler.errorContexts())
+                .singleElement()
+                .isInstanceOfSatisfying(EmbeddingModelObservationContext.class, context ->
+                        assertThat(context.getError()).isSameAs(failure));
+    }
+
+    @Test
     void rejectsMissingEmbeddingResult() {
         CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(EmbedTextResponse.builder().build());
 
-        assertThatThrownBy(() -> new OracleGenAiEmbeddingModel(client, defaultOptions())
+        assertThatThrownBy(() -> model(client, defaultOptions())
                 .call(new EmbeddingRequest(List.of("text"), null)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("embedding result");
@@ -148,7 +213,7 @@ class OracleGenAiEmbeddingModelTests {
                 .embedTextResult(EmbedTextResult.builder().build())
                 .build());
 
-        assertThatThrownBy(() -> new OracleGenAiEmbeddingModel(client, defaultOptions())
+        assertThatThrownBy(() -> model(client, defaultOptions())
                 .call(new EmbeddingRequest(List.of("text"), null)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("embeddings");
@@ -159,10 +224,30 @@ class OracleGenAiEmbeddingModelTests {
         CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(responseWithEmbeddings(
                 List.of(java.util.Arrays.asList(0.1f, null))));
 
-        assertThatThrownBy(() -> new OracleGenAiEmbeddingModel(client, defaultOptions())
+        assertThatThrownBy(() -> model(client, defaultOptions())
                 .call(new EmbeddingRequest(List.of("text"), null)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("embedding 0, vector position 1");
+    }
+
+    private static OracleGenAiEmbeddingModel model(NoOpGenerativeAiInference client,
+            OracleGenAiEmbeddingOptions defaultOptions) {
+        return OracleGenAiEmbeddingModel.builder()
+                .client(client)
+                .defaultOptions(defaultOptions)
+                .build();
+    }
+
+    private static OracleGenAiEmbeddingModel model(NoOpGenerativeAiInference client,
+            OracleGenAiEmbeddingOptions defaultOptions, RetryTemplate retryTemplate,
+            ObservationRegistry observationRegistry, EmbeddingModelObservationConvention observationConvention) {
+        return OracleGenAiEmbeddingModel.builder()
+                .client(client)
+                .defaultOptions(defaultOptions)
+                .retryTemplate(retryTemplate)
+                .observationRegistry(observationRegistry)
+                .observationConvention(observationConvention)
+                .build();
     }
 
     private static OracleGenAiEmbeddingOptions defaultOptions() {
@@ -190,6 +275,20 @@ class OracleGenAiEmbeddingModelTests {
                 .build();
     }
 
+    private static final class FailingGenerativeAiInference extends NoOpGenerativeAiInference {
+
+        private final RuntimeException failure;
+
+        private FailingGenerativeAiInference(RuntimeException failure) {
+            this.failure = failure;
+        }
+
+        @Override
+        public EmbedTextResponse embedText(EmbedTextRequest request) {
+            throw failure;
+        }
+    }
+
     private static final class CapturingGenerativeAiInference extends NoOpGenerativeAiInference {
 
         private final EmbedTextResponse response;
@@ -204,6 +303,42 @@ class OracleGenAiEmbeddingModelTests {
         public EmbedTextResponse embedText(EmbedTextRequest request) {
             this.request = request;
             return response;
+        }
+    }
+
+    private static final class RecordingObservationHandler implements ObservationHandler<Observation.Context> {
+
+        private final Class<? extends Observation.Context> contextType;
+
+        private final List<Observation.Context> stoppedContexts = new ArrayList<>();
+
+        private final List<Observation.Context> errorContexts = new ArrayList<>();
+
+        private RecordingObservationHandler(Class<? extends Observation.Context> contextType) {
+            this.contextType = contextType;
+        }
+
+        @Override
+        public void onError(Observation.Context context) {
+            errorContexts.add(context);
+        }
+
+        @Override
+        public void onStop(Observation.Context context) {
+            stoppedContexts.add(context);
+        }
+
+        @Override
+        public boolean supportsContext(Observation.Context context) {
+            return contextType.isInstance(context);
+        }
+
+        private List<Observation.Context> stoppedContexts() {
+            return stoppedContexts;
+        }
+
+        private List<Observation.Context> errorContexts() {
+            return errorContexts;
         }
     }
 }

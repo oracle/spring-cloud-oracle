@@ -112,6 +112,12 @@ class RuntimeEmbeddingService {
 }
 ```
 
+## Observability
+
+Embedding calls emit Spring AI model observations when an `ObservationRegistry` is available. Observations use Spring AI's standard embedding model convention and report OCI Generative AI as `oci_genai`.
+
+Direct `OracleGenAiEmbeddingModel` construction uses `OracleGenAiEmbeddingModel.builder()`, which matches the Spring AI provider convention for optional retry and observation configuration.
+
 ## Configuration
 
 | Name | Description | Required | Default |
