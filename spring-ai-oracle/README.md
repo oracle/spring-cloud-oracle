@@ -138,6 +138,12 @@ return chatClient.prompt()
         .content();
 ```
 
+## Observability
+
+Spring AI Oracle emits Spring AI model observations for chat and embedding calls when an `ObservationRegistry` is available. The observations use Spring AI's standard chat and embedding observation conventions and report OCI Generative AI as `oci_genai`.
+
+Direct chat and embedding model construction uses `OracleGenAiChatModel.builder()` and `OracleGenAiEmbeddingModel.builder()`. Auto-configuration uses those builders and supplies Spring beans for optional retry, tool calling, and observation dependencies when available.
+
 Use the standard Spring AI `EmbeddingModel` API for text embeddings:
 
 ```java
