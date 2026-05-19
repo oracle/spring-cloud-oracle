@@ -1,31 +1,23 @@
-# This workflow builds the ./database/starters and ./spring-cloud-oci projects with `mvn install`.
+# This workflow builds the ./spring-cloud-oci project with `mvn install`.
 
-name: Run the tests for Spring Cloud Oracle
+name: Run the tests for Spring Cloud OCI
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - ".github/workflows/springCloudOciTest.yml"
+      - "spring-cloud-oci/**"
   pull_request:
     branches: [ main ]
+    paths:
+      - ".github/workflows/springCloudOciTest.yml"
+      - "spring-cloud-oci/**"
 
 permissions:
   contents: read
 
 jobs:
-  database-starters:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
-      - name: Setup Java 21
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
-          cache: 'maven'
-      - name: Run Maven Build and Test
-        working-directory: ./database/starters
-        run: |
-          mvn clean install
   spring-cloud-oci:
     runs-on: ubuntu-latest
     steps:
