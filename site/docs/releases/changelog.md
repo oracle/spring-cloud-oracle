@@ -12,6 +12,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Database Starters
 
 - Upgraded Spring Boot to 4.0.6
+- Scoped the GitHub Actions test workflow to Database Starters changes
 
 #### Spring Cloud Stream Binder for TxEventQ
 
@@ -20,10 +21,12 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Spring AI Oracle
 
 - Added Spring AI Oracle with model, auto-configuration, and starter modules prepared for Oracle Cloud Infrastructure Generative AI bindings
+- Added Spring AI Oracle to the GitHub Actions test workflows and scoped the workflow to Spring AI Oracle changes
 
 #### Spring Cloud OCI
 
 - Upgraded Spring Boot to 4.0.6 and refreshed related Spring Framework, Netty, Jackson, OCI SDK, NoSQL driver, and Springdoc patch versions
+- Scoped the GitHub Actions test workflow to Spring Cloud OCI changes
 - OCI Functions invocation now resolves the function invoke endpoint from OCI metadata using the function OCID, so callers no longer need to supply an endpoint separately
 - OCI GenAI module deprecated in favor of Spring AI
 - OCI GenAI documentation now clarifies that `ChatModel` requests are stateless and that multi-turn context must be supplied by the application
