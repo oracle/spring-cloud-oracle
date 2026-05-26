@@ -1,0 +1,8 @@
+{
+  "label": "Spring AI Oracle",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Spring AI model integrations for Oracle Cloud Infrastructure Generative AI."
+  }
+}
