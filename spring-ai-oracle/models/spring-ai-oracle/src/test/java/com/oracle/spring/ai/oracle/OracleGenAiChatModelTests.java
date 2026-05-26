@@ -58,7 +58,7 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.observation.ChatModelObservationContext;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityChecker;
 import org.springframework.ai.retry.RetryUtils;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
@@ -307,7 +307,7 @@ class OracleGenAiChatModelTests {
         options.setToolCallbacks(List.of(tool("weather", false)));
         CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(genericToolCallResponse());
         ToolCallingManager toolCallingManager = ToolCallingManager.builder().build();
-        ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate = (chatOptions, chatResponse) -> false;
+        ToolExecutionEligibilityChecker toolExecutionEligibilityChecker = chatResponse -> false;
         RetryTemplate retryTemplate = RetryUtils.DEFAULT_RETRY_TEMPLATE;
         ObservationRegistry observationRegistry = ObservationRegistry.create();
 
@@ -315,7 +315,7 @@ class OracleGenAiChatModelTests {
                 .client(client)
                 .defaultOptions(options)
                 .toolCallingManager(toolCallingManager)
-                .toolExecutionEligibilityPredicate(toolExecutionEligibilityPredicate)
+                .toolExecutionEligibilityChecker(toolExecutionEligibilityChecker)
                 .retryTemplate(retryTemplate)
                 .observationRegistry(observationRegistry)
                 .build()

@@ -13,15 +13,29 @@ import java.util.Set;
 
 import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
-import org.springframework.ai.chat.prompt.DefaultChatOptions;
 import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.ai.tool.ToolCallback;
 
 /**
  * OCI Generative AI chat options.
  */
-public class OracleGenAiChatOptions extends DefaultChatOptions
-        implements OracleGenAiServingOptions, ToolCallingChatOptions {
+public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCallingChatOptions {
+
+    private String model;
+
+    private Double frequencyPenalty;
+
+    private Integer maxTokens;
+
+    private Double presencePenalty;
+
+    private List<String> stopSequences;
+
+    private Double temperature;
+
+    private Integer topK;
+
+    private Double topP;
 
     private String compartmentId;
 
@@ -70,6 +84,78 @@ public class OracleGenAiChatOptions extends DefaultChatOptions
     }
 
     @Override
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    @Override
+    public Double getFrequencyPenalty() {
+        return frequencyPenalty;
+    }
+
+    public void setFrequencyPenalty(Double frequencyPenalty) {
+        this.frequencyPenalty = frequencyPenalty;
+    }
+
+    @Override
+    public Integer getMaxTokens() {
+        return maxTokens;
+    }
+
+    public void setMaxTokens(Integer maxTokens) {
+        this.maxTokens = maxTokens;
+    }
+
+    @Override
+    public Double getPresencePenalty() {
+        return presencePenalty;
+    }
+
+    public void setPresencePenalty(Double presencePenalty) {
+        this.presencePenalty = presencePenalty;
+    }
+
+    @Override
+    public List<String> getStopSequences() {
+        return stopSequences;
+    }
+
+    public void setStopSequences(List<String> stopSequences) {
+        this.stopSequences = stopSequences;
+    }
+
+    @Override
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
+    }
+
+    @Override
+    public Integer getTopK() {
+        return topK;
+    }
+
+    public void setTopK(Integer topK) {
+        this.topK = topK;
+    }
+
+    @Override
+    public Double getTopP() {
+        return topP;
+    }
+
+    public void setTopP(Double topP) {
+        this.topP = topP;
+    }
+
+    @Override
     public String getCompartmentId() {
         return compartmentId;
     }
@@ -112,7 +198,6 @@ public class OracleGenAiChatOptions extends DefaultChatOptions
         return toolCallbacks;
     }
 
-    @Override
     public void setToolCallbacks(List<ToolCallback> toolCallbacks) {
         this.toolCallbacks = toolCallbacks != null ? toolCallbacks : Collections.emptyList();
     }
@@ -122,7 +207,6 @@ public class OracleGenAiChatOptions extends DefaultChatOptions
         return toolNames;
     }
 
-    @Override
     public void setToolNames(Set<String> toolNames) {
         this.toolNames = toolNames != null ? toolNames : Collections.emptySet();
     }
@@ -132,7 +216,6 @@ public class OracleGenAiChatOptions extends DefaultChatOptions
         return toolContext;
     }
 
-    @Override
     public void setToolContext(Map<String, Object> toolContext) {
         this.toolContext = toolContext != null ? toolContext : Collections.emptyMap();
     }
@@ -142,7 +225,6 @@ public class OracleGenAiChatOptions extends DefaultChatOptions
         return internalToolExecutionEnabled;
     }
 
-    @Override
     public void setInternalToolExecutionEnabled(Boolean internalToolExecutionEnabled) {
         this.internalToolExecutionEnabled = internalToolExecutionEnabled;
     }

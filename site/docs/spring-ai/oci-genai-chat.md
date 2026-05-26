@@ -182,9 +182,11 @@ Legacy `COHERE` chat requests continue to support text chat, but tool calling re
 
 The live OCI Generative AI chat test suite includes bounded tool-calling coverage for selected `GENERIC` and `COHERE_V2` chat models when `OCI_COMPARTMENT_ID` is set. Legacy `COHERE` models remain covered by text chat only because OCI does not support tool definitions or tool response messages for that chat format.
 
-Applications can customize tool execution eligibility by providing a `ToolExecutionEligibilityPredicate` bean. Auto-configuration uses that bean when constructing the `OracleGenAiChatModel`; otherwise it uses Spring AI's default predicate.
+Applications can customize tool execution eligibility by providing a `ToolExecutionEligibilityChecker` bean. Auto-configuration uses that bean when constructing the `OracleGenAiChatModel`; otherwise it treats chat responses with tool calls as eligible for Spring AI's internal tool execution.
 
 ## Configuration
+
+Chat option properties are Spring Boot bindable and can also be supplied per request through Spring AI `Prompt` options. Runtime `Prompt` options override the configured defaults when both are present.
 
 | Name | Description | Required | Default |
 | --- | --- | --- | --- |
