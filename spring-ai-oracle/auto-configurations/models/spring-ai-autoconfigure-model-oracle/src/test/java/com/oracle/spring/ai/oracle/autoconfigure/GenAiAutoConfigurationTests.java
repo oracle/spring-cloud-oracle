@@ -5,10 +5,10 @@
 
 package com.oracle.spring.ai.oracle.autoconfigure;
 
-import java.io.InputStream;
 import java.util.List;
 
 import com.oracle.bmc.auth.BasicAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.SimpleAuthenticationDetailsProvider;
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
 import com.oracle.spring.ai.oracle.OracleGenAiChatModel;
 import com.oracle.spring.ai.oracle.OracleGenAiEmbeddingModel;
@@ -25,9 +25,8 @@ import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
 import org.springframework.ai.embedding.observation.DefaultEmbeddingModelObservationConvention;
 import org.springframework.ai.embedding.observation.EmbeddingModelObservationConvention;
-import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
 import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityChecker;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
@@ -124,12 +123,12 @@ class GenAiAutoConfigurationTests {
     }
 
     @Test
-    void createsChatModelWithDefaultToolExecutionEligibilityPredicate() {
+    void createsChatModelWithDefaultToolExecutionEligibilityChecker() {
         chatContextRunner.run(context -> {
             OracleGenAiChatModel chatModel = context.getBean(OracleGenAiChatModel.class);
 
-            assertThat(ReflectionTestUtils.getField(chatModel, "toolExecutionEligibilityPredicate"))
-                    .isInstanceOf(DefaultToolExecutionEligibilityPredicate.class);
+            assertThat(ReflectionTestUtils.getField(chatModel, "toolExecutionEligibilityChecker"))
+                    .isInstanceOf(ToolExecutionEligibilityChecker.class);
         });
     }
 
@@ -141,8 +140,8 @@ class GenAiAutoConfigurationTests {
 
                     assertThat(ReflectionTestUtils.getField(chatModel, "toolCallingManager"))
                             .isSameAs(context.getBean(ToolCallingManager.class));
-                    assertThat(ReflectionTestUtils.getField(chatModel, "toolExecutionEligibilityPredicate"))
-                            .isSameAs(context.getBean(ToolExecutionEligibilityPredicate.class));
+                    assertThat(ReflectionTestUtils.getField(chatModel, "toolExecutionEligibilityChecker"))
+                            .isSameAs(context.getBean(ToolExecutionEligibilityChecker.class));
                     assertThat(ReflectionTestUtils.getField(chatModel, "retryTemplate"))
                             .isSameAs(context.getBean(RetryTemplate.class));
                     assertThat(ReflectionTestUtils.getField(chatModel, "observationRegistry"))
@@ -258,7 +257,7 @@ class GenAiAutoConfigurationTests {
     static class TestOciBeans {
 
         private final BasicAuthenticationDetailsProvider authenticationDetailsProvider =
-                new TestAuthenticationDetailsProvider();
+                SimpleAuthenticationDetailsProvider.builder().build();
 
         private final GenerativeAiInference generativeAiInference = new NoOpGenerativeAiInference();
 
@@ -310,8 +309,8 @@ class GenAiAutoConfigurationTests {
         }
 
         @Bean
-        ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate() {
-            return (chatOptions, chatResponse) -> false;
+        ToolExecutionEligibilityChecker toolExecutionEligibilityChecker() {
+            return chatResponse -> false;
         }
 
         @Bean
@@ -346,29 +345,6 @@ class GenAiAutoConfigurationTests {
         @Bean
         EmbeddingModelObservationConvention embeddingModelObservationConvention() {
             return new DefaultEmbeddingModelObservationConvention();
-        }
-    }
-
-    private static final class TestAuthenticationDetailsProvider implements BasicAuthenticationDetailsProvider {
-
-        @Override
-        public String getKeyId() {
-            return null;
-        }
-
-        @Override
-        public InputStream getPrivateKey() {
-            return null;
-        }
-
-        @Override
-        public String getPassPhrase() {
-            return null;
-        }
-
-        @Override
-        public char[] getPassphraseCharacters() {
-            return new char[0];
         }
     }
 

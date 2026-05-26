@@ -32,10 +32,9 @@ import org.springframework.ai.chat.observation.ChatModelObservationDocumentation
 import org.springframework.ai.chat.observation.DefaultChatModelObservationConvention;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
 import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityChecker;
 import org.springframework.ai.model.tool.ToolExecutionResult;
 import org.springframework.ai.model.tool.internal.ToolCallReactiveContextHolder;
 import org.springframework.ai.retry.RetryUtils;
@@ -60,8 +59,8 @@ public class OracleGenAiChatModel implements ChatModel {
 
     private static final ToolCallingManager DEFAULT_TOOL_CALLING_MANAGER = ToolCallingManager.builder().build();
 
-    private static final ToolExecutionEligibilityPredicate DEFAULT_TOOL_EXECUTION_ELIGIBILITY_PREDICATE =
-            new DefaultToolExecutionEligibilityPredicate();
+    private static final ToolExecutionEligibilityChecker DEFAULT_TOOL_EXECUTION_ELIGIBILITY_CHECKER =
+            ChatResponse::hasToolCalls;
 
     private final GenerativeAiInference client;
 
@@ -69,7 +68,7 @@ public class OracleGenAiChatModel implements ChatModel {
 
     private final ToolCallingManager toolCallingManager;
 
-    private final ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate;
+    private final ToolExecutionEligibilityChecker toolExecutionEligibilityChecker;
 
     private final RetryTemplate retryTemplate;
 
@@ -89,14 +88,14 @@ public class OracleGenAiChatModel implements ChatModel {
 
     private OracleGenAiChatModel(@Nullable GenerativeAiInference client,
             @Nullable OracleGenAiChatOptions defaultOptions, @Nullable ToolCallingManager toolCallingManager,
-            @Nullable ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate,
+            @Nullable ToolExecutionEligibilityChecker toolExecutionEligibilityChecker,
             @Nullable RetryTemplate retryTemplate, @Nullable ObservationRegistry observationRegistry,
             @Nullable ChatModelObservationConvention observationConvention) {
         this.client = Objects.requireNonNull(client, "client must not be null");
         this.defaultOptions = Objects.requireNonNull(defaultOptions, "defaultOptions must not be null").copy();
         this.toolCallingManager = Objects.requireNonNullElse(toolCallingManager, DEFAULT_TOOL_CALLING_MANAGER);
-        this.toolExecutionEligibilityPredicate = Objects.requireNonNullElse(toolExecutionEligibilityPredicate,
-                DEFAULT_TOOL_EXECUTION_ELIGIBILITY_PREDICATE);
+        this.toolExecutionEligibilityChecker = Objects.requireNonNullElse(toolExecutionEligibilityChecker,
+                DEFAULT_TOOL_EXECUTION_ELIGIBILITY_CHECKER);
         this.retryTemplate = Objects.requireNonNullElse(retryTemplate, RetryUtils.DEFAULT_RETRY_TEMPLATE);
         this.observationRegistry = Objects.requireNonNullElse(observationRegistry, ObservationRegistry.NOOP);
         this.observationConvention = Objects.requireNonNullElse(observationConvention, DEFAULT_OBSERVATION_CONVENTION);
@@ -148,7 +147,7 @@ public class OracleGenAiChatModel implements ChatModel {
                     observationContext.setResponse(convertedResponse);
                     return convertedResponse;
                 });
-        if (toolExecutionEligibilityPredicate.isToolExecutionRequired(options, chatResponse)) {
+        if (toolExecutionEligibilityChecker.isToolExecutionRequired(options, chatResponse)) {
             ToolExecutionResult toolExecutionResult = toolCallingManager.executeToolCalls(prompt, chatResponse);
             if (toolExecutionResult.returnDirect()) {
                 return ChatResponse.builder()
@@ -186,7 +185,7 @@ public class OracleGenAiChatModel implements ChatModel {
                     .thenMany(Flux.defer(() -> {
                         ChatResponse chatResponse = aggregatedChatResponse[0];
                         if (chatResponse == null
-                                || !toolExecutionEligibilityPredicate.isToolExecutionRequired(options, chatResponse)) {
+                                || !toolExecutionEligibilityChecker.isToolExecutionRequired(options, chatResponse)) {
                             return Flux.fromIterable(streamedChatResponses);
                         }
                         return Mono.fromCallable(() -> {
@@ -298,7 +297,7 @@ public class OracleGenAiChatModel implements ChatModel {
         private ToolCallingManager toolCallingManager;
 
         @Nullable
-        private ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate;
+        private ToolExecutionEligibilityChecker toolExecutionEligibilityChecker;
 
         @Nullable
         private RetryTemplate retryTemplate;
@@ -327,9 +326,9 @@ public class OracleGenAiChatModel implements ChatModel {
             return this;
         }
 
-        public Builder toolExecutionEligibilityPredicate(
-                ToolExecutionEligibilityPredicate toolExecutionEligibilityPredicate) {
-            this.toolExecutionEligibilityPredicate = toolExecutionEligibilityPredicate;
+        public Builder toolExecutionEligibilityChecker(
+                ToolExecutionEligibilityChecker toolExecutionEligibilityChecker) {
+            this.toolExecutionEligibilityChecker = toolExecutionEligibilityChecker;
             return this;
         }
 
@@ -350,7 +349,7 @@ public class OracleGenAiChatModel implements ChatModel {
 
         public OracleGenAiChatModel build() {
             return new OracleGenAiChatModel(client, defaultOptions, toolCallingManager,
-                    toolExecutionEligibilityPredicate, retryTemplate, observationRegistry, observationConvention);
+                    toolExecutionEligibilityChecker, retryTemplate, observationRegistry, observationConvention);
         }
     }
 

@@ -11,7 +11,7 @@ import io.micrometer.observation.ObservationRegistry;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.observation.ChatModelObservationConvention;
 import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityChecker;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -33,7 +33,7 @@ class ChatConfiguration {
     OracleGenAiChatModel oracleGenAiChatModel(GenerativeAiInference generativeAiInference,
                                               ChatProperties properties,
                                               ObjectProvider<ToolCallingManager> toolCallingManager,
-                                              ObjectProvider<ToolExecutionEligibilityPredicate> toolExecutionEligibilityPredicate,
+                                              ObjectProvider<ToolExecutionEligibilityChecker> toolExecutionEligibilityChecker,
                                               ObjectProvider<RetryTemplate> retryTemplate,
                                               ObjectProvider<ObservationRegistry> observationRegistry,
                                               ObjectProvider<ChatModelObservationConvention> observationConvention) {
@@ -41,7 +41,7 @@ class ChatConfiguration {
                 .client(generativeAiInference)
                 .defaultOptions(properties)
                 .toolCallingManager(toolCallingManager.getIfAvailable())
-                .toolExecutionEligibilityPredicate(toolExecutionEligibilityPredicate.getIfAvailable())
+                .toolExecutionEligibilityChecker(toolExecutionEligibilityChecker.getIfAvailable())
                 .retryTemplate(retryTemplate.getIfAvailable())
                 .observationRegistry(observationRegistry.getIfAvailable())
                 .observationConvention(observationConvention.getIfAvailable())
