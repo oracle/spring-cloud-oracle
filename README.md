@@ -4,11 +4,11 @@ Spring Cloud Oracle brings Oracle AI Database, Oracle AI Database-native messagi
 
 ## Current Releases
 
-| Project | Current release | What it provides |
-| --- | --- | --- |
-| [Spring Cloud OCI](./spring-cloud-oci/README.md) | v2.0.1 | Spring Boot integrations for OCI services such as Vault, Object Storage, Streaming, Functions, Queues, Notifications, Email Delivery, Autonomous Database, and Generative AI |
-| [Oracle AI Database Spring Boot Starters](./database/starters/README.md) | v26.1.1 | Starters and auto-configuration for Oracle AI Database connectivity, UCP, Wallet, AQ/JMS, OKafka, JSON, spatial, and OpenTelemetry workloads |
-| [Spring Cloud Stream Binder for Oracle TxEventQ](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | v0.18.0 | A Spring Cloud Stream binder for Oracle AI Database Transactional Event Queues |
+| Project                                                                                                           | Current release | What it provides                                                                                                                                                             |
+|-------------------------------------------------------------------------------------------------------------------|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Spring Cloud OCI](./spring-cloud-oci/README.md)                                                                  | v2.0.2          | Spring Boot integrations for OCI services such as Vault, Object Storage, Streaming, Functions, Queues, Notifications, Email Delivery, Autonomous Database, and Generative AI |
+| [Oracle AI Database Spring Boot Starters](./database/starters/README.md)                                          | v26.2.0         | Starters and auto-configuration for Oracle AI Database connectivity, UCP, Wallet, AQ/JMS, OKafka, JSON, spatial, and OpenTelemetry workloads                                 |
+| [Spring Cloud Stream Binder for Oracle TxEventQ](./database/spring-cloud-stream-binder-oracle-txeventq/README.md) | v0.19.0         | A Spring Cloud Stream binder for Oracle AI Database Transactional Event Queues                                                                                               |
 
 [Spring AI Oracle](./spring-ai-oracle/README.md) is in development and is not released yet.
 
@@ -39,6 +39,7 @@ Current API documentation:
 
 | Release                   | Reference Docs                                                                 | OCI API Docs                                                                           | Database API Docs                                                                              |
 |---------------------------|--------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| Spring Cloud Oracle 2.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.2/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.2/javadocs-db/index.html) |
 | Spring Cloud Oracle 2.0.1 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.1/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.1/javadocs-db/index.html) |
 | Spring Cloud Oracle 2.0.0 | [Reference Docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro) | [OCI API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.0/javadocs/index.html) | [Database API Docs](https://oracle.github.io/spring-cloud-oracle/2.0.0/javadocs-db/index.html) |
 

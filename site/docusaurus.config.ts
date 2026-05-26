@@ -75,7 +75,7 @@ const config: Config = {
         },
         {
           type: 'docsVersionDropdown',
-          versions: ['current', '2.0.1', '2.0.0' ]
+          versions: ['current', '2.0.2', '2.0.1', '2.0.0' ]
         },
         {
           href: 'https://github.com/oracle/spring-cloud-oracle',
