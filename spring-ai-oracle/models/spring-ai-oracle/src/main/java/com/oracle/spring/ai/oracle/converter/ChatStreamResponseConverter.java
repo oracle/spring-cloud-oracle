@@ -22,7 +22,7 @@ import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.DefaultUsage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.model.ModelOptionsUtils;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import reactor.core.Disposable;
@@ -35,6 +35,8 @@ import reactor.core.publisher.FluxSink;
 public final class ChatStreamResponseConverter {
 
     private static final String DONE = "[DONE]";
+
+    private static final JsonHelper JSON = new JsonHelper();
 
     public Flux<ChatResponse> toChatResponses(
             com.oracle.bmc.generativeaiinference.responses.ChatResponse response) {
@@ -142,7 +144,7 @@ public final class ChatStreamResponseConverter {
 
     private static Map<String, Object> parseEvent(String data) {
         try {
-            return ModelOptionsUtils.jsonToMap(data);
+            return JSON.fromJsonToMap(data);
         }
         catch (RuntimeException ex) {
             throw new IllegalArgumentException("Failed to parse OCI Generative AI streaming chat event.", ex);
@@ -241,7 +243,7 @@ public final class ChatStreamResponseConverter {
         if (value instanceof String stringValue) {
             return stringValue;
         }
-        return ModelOptionsUtils.toJsonString(value);
+        return JSON.toJson(value);
     }
 
     private static DefaultUsage toUsage(Map<String, Object> usage) {

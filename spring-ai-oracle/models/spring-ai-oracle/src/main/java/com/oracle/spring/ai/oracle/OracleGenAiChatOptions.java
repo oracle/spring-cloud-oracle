@@ -13,6 +13,7 @@ import java.util.Set;
 
 import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.ai.tool.ToolCallback;
 
@@ -57,7 +58,7 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         return new Builder();
     }
 
-    public static OracleGenAiChatOptions fromOptions(org.springframework.ai.chat.prompt.ChatOptions options) {
+    public static OracleGenAiChatOptions fromOptions(ChatOptions options) {
         OracleGenAiChatOptions result = new OracleGenAiChatOptions();
         if (options == null) {
             return result;
@@ -231,11 +232,16 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T extends org.springframework.ai.chat.prompt.ChatOptions> T copy() {
+    public <T extends ChatOptions> T copy() {
         return (T) fromOptions(this);
     }
 
-    OracleGenAiChatOptions merge(org.springframework.ai.chat.prompt.ChatOptions runtimeOptions) {
+    @Override
+    public Builder mutate() {
+        return new Builder(this);
+    }
+
+    OracleGenAiChatOptions merge(ChatOptions runtimeOptions) {
         OracleGenAiChatOptions merged = copy();
         if (runtimeOptions == null) {
             return merged;
@@ -256,8 +262,7 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         return merged;
     }
 
-    private static void copyStandardOptionOverrides(org.springframework.ai.chat.prompt.ChatOptions source,
-            OracleGenAiChatOptions target) {
+    private static void copyStandardOptionOverrides(ChatOptions source, OracleGenAiChatOptions target) {
         OracleGenAiServingOptions.mergeOption(source.getModel(), target::setModel);
         OracleGenAiServingOptions.mergeOption(source.getFrequencyPenalty(), target::setFrequencyPenalty);
         OracleGenAiServingOptions.mergeOption(source.getMaxTokens(), target::setMaxTokens);
@@ -293,9 +298,19 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         return merged;
     }
 
-    public static final class Builder {
-        private final OracleGenAiChatOptions options = new OracleGenAiChatOptions();
+    public static final class Builder implements ToolCallingChatOptions.Builder<Builder> {
 
+        private OracleGenAiChatOptions options;
+
+        public Builder() {
+            this(new OracleGenAiChatOptions());
+        }
+
+        private Builder(OracleGenAiChatOptions options) {
+            this.options = options.copy();
+        }
+
+        @Override
         public Builder model(String model) {
             options.setModel(model);
             return this;
@@ -321,61 +336,104 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
             return this;
         }
 
+        @Override
         public Builder temperature(Double temperature) {
             options.setTemperature(temperature);
             return this;
         }
 
+        @Override
         public Builder topP(Double topP) {
             options.setTopP(topP);
             return this;
         }
 
+        @Override
         public Builder topK(Integer topK) {
             options.setTopK(topK);
             return this;
         }
 
+        @Override
         public Builder maxTokens(Integer maxTokens) {
             options.setMaxTokens(maxTokens);
             return this;
         }
 
+        @Override
         public Builder frequencyPenalty(Double frequencyPenalty) {
             options.setFrequencyPenalty(frequencyPenalty);
             return this;
         }
 
+        @Override
         public Builder presencePenalty(Double presencePenalty) {
             options.setPresencePenalty(presencePenalty);
             return this;
         }
 
+        @Override
         public Builder stopSequences(List<String> stopSequences) {
             options.setStopSequences(stopSequences);
             return this;
         }
 
+        @Override
         public Builder toolCallbacks(List<ToolCallback> toolCallbacks) {
             options.setToolCallbacks(toolCallbacks);
             return this;
         }
 
+        @Override
+        public Builder toolCallbacks(ToolCallback... toolCallbacks) {
+            return toolCallbacks(toolCallbacks != null ? List.of(toolCallbacks) : null);
+        }
+
+        @Override
         public Builder toolNames(Set<String> toolNames) {
             options.setToolNames(toolNames);
             return this;
         }
 
+        @Override
+        public Builder toolNames(String... toolNames) {
+            return toolNames(toolNames != null ? Set.of(toolNames) : null);
+        }
+
+        @Override
         public Builder toolContext(Map<String, Object> toolContext) {
             options.setToolContext(toolContext);
             return this;
         }
 
+        @Override
+        public Builder toolContext(String key, Object value) {
+            Map<String, Object> toolContext = new LinkedHashMap<>(options.getToolContext());
+            toolContext.put(key, value);
+            options.setToolContext(toolContext);
+            return this;
+        }
+
+        @Override
         public Builder internalToolExecutionEnabled(Boolean internalToolExecutionEnabled) {
             options.setInternalToolExecutionEnabled(internalToolExecutionEnabled);
             return this;
         }
 
+        @Override
+        public Builder clone() {
+            return new Builder(options);
+        }
+
+        @Override
+        public Builder combineWith(ChatOptions.Builder<?> builder) {
+            if (builder != null) {
+                options = options.merge(builder.build());
+            }
+            return this;
+        }
+
+        @Override
         public OracleGenAiChatOptions build() {
             return options.copy();
         }

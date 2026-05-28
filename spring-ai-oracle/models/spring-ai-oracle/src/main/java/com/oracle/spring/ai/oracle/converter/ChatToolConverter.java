@@ -17,13 +17,14 @@ import com.oracle.bmc.generativeaiinference.model.FunctionCall;
 import com.oracle.bmc.generativeaiinference.model.FunctionDefinition;
 import com.oracle.bmc.generativeaiinference.model.ToolCall;
 import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.model.ModelOptionsUtils;
 import org.springframework.ai.tool.definition.ToolDefinition;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 public final class ChatToolConverter {
+
+    private static final JsonHelper JSON = new JsonHelper();
 
     private ChatToolConverter() {
     }
@@ -135,7 +136,7 @@ public final class ChatToolConverter {
         if (!StringUtils.hasText(json)) {
             return Collections.emptyMap();
         }
-        return JsonParser.fromJson(json, Object.class);
+        return JSON.fromJson(json, Object.class);
     }
 
     private static String cohereV2FunctionName(Object function) {
@@ -160,7 +161,7 @@ public final class ChatToolConverter {
             if (arguments instanceof String text) {
                 return text;
             }
-            return ModelOptionsUtils.toJsonString(arguments);
+            return JSON.toJson(arguments);
         }
         throw new IllegalStateException("OCI Generative AI Cohere V2 tool call did not include function arguments.");
     }

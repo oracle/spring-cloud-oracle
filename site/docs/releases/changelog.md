@@ -7,6 +7,10 @@ sidebar_position: 1
 
 List of upcoming and historic changes to Spring Cloud Oracle.
 
+#### Next, TBD
+
+- TBD
+
 ### 2.0.2, May 26th 2026
 
 #### Database Starters
