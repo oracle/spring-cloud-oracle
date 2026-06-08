@@ -270,7 +270,7 @@ public final class ChatRequestConverter {
     }
 
     private static void assertLegacyCohereOptionsDoNotUseTools(OracleGenAiChatOptions options) {
-        if (!CollectionUtils.isEmpty(options.getToolCallbacks()) || !CollectionUtils.isEmpty(options.getToolNames())) {
+        if (!CollectionUtils.isEmpty(options.getToolCallbacks())) {
             throw ChatToolConverter.legacyCohereToolCallingUnsupported();
         }
     }

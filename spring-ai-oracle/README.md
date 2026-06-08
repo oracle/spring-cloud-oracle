@@ -2,7 +2,7 @@
 
 Spring AI model bindings for Oracle Cloud Infrastructure Generative AI.
 
-This subproject is intentionally separate from the existing Spring Cloud OCI Maven tree and uses `org.springframework.ai:spring-ai-parent:2.0.0-M8` as its parent.
+This subproject is intentionally separate from the existing Spring Cloud OCI Maven tree and uses `org.springframework.ai:spring-ai-parent:2.0.0-RC1` as its parent.
 
 The model bindings include Spring AI `ChatModel` and `EmbeddingModel` implementations backed by OCI Generative AI Inference.
 
