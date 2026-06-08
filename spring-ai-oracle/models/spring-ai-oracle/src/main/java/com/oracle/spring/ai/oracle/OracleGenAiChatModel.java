@@ -108,7 +108,7 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     @Override
-    public ChatOptions getDefaultOptions() {
+    public ChatOptions getOptions() {
         return defaultOptions.copy();
     }
 
@@ -147,7 +147,8 @@ public class OracleGenAiChatModel implements ChatModel {
                     observationContext.setResponse(convertedResponse);
                     return convertedResponse;
                 });
-        if (toolExecutionEligibilityChecker.isToolExecutionRequired(options, chatResponse)) {
+        if (isInternalToolExecutionPossible(options)
+                && toolExecutionEligibilityChecker.isToolCallResponse(chatResponse)) {
             ToolExecutionResult toolExecutionResult = toolCallingManager.executeToolCalls(prompt, chatResponse);
             if (toolExecutionResult.returnDirect()) {
                 return ChatResponse.builder()
@@ -185,7 +186,7 @@ public class OracleGenAiChatModel implements ChatModel {
                     .thenMany(Flux.defer(() -> {
                         ChatResponse chatResponse = aggregatedChatResponse[0];
                         if (chatResponse == null
-                                || !toolExecutionEligibilityChecker.isToolExecutionRequired(options, chatResponse)) {
+                                || !toolExecutionEligibilityChecker.isToolCallResponse(chatResponse)) {
                             return Flux.fromIterable(streamedChatResponses);
                         }
                         return Mono.fromCallable(() -> {
@@ -280,9 +281,7 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     private static boolean isInternalToolExecutionPossible(OracleGenAiChatOptions options) {
-        return ToolCallingChatOptions.isInternalToolExecutionEnabled(options)
-                && (!CollectionUtils.isEmpty(options.getToolCallbacks())
-                || !CollectionUtils.isEmpty(options.getToolNames()));
+        return !CollectionUtils.isEmpty(options.getToolCallbacks());
     }
 
     public static final class Builder {

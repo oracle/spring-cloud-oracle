@@ -159,7 +159,6 @@ class ChatCompletionLiveTest {
                             .call(new Prompt("Call the " + TOOL_NAME + " tool. Do not answer without using it.",
                                     OracleGenAiChatOptions.builder()
                                             .toolCallbacks(List.of(toolInvocationMarker(toolInvoked)))
-                                            .internalToolExecutionEnabled(true)
                                             .build()));
 
                     assertThat(toolInvoked).isTrue();

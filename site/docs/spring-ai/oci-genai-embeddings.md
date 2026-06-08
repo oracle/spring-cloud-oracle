@@ -9,6 +9,8 @@ Spring AI Oracle provides a Spring AI `EmbeddingModel` backed by [OCI Generative
 
 This is the replacement path for new Spring AI applications that want to call OCI Generative AI embedding models through standard Spring AI APIs.
 
+Spring AI Oracle is built against Spring AI `2.0.0-RC1`.
+
 ## Dependency Coordinates
 
 ```xml

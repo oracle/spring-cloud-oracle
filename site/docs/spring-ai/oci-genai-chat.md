@@ -9,6 +9,8 @@ Spring AI Oracle provides a Spring AI `ChatModel` backed by [OCI Generative AI](
 
 This is the replacement path for new Spring AI applications that want to call OCI Generative AI through standard Spring AI `ChatModel` and `ChatClient` APIs.
 
+Spring AI Oracle is built against Spring AI `2.0.0-RC1`.
+
 ## Dependency Coordinates
 
 ```xml

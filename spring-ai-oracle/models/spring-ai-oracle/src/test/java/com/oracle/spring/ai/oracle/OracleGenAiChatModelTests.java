@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
 import com.oracle.bmc.generativeaiinference.model.BaseChatRequest;
 import com.oracle.bmc.generativeaiinference.model.BaseChatResponse;
@@ -270,22 +269,16 @@ class OracleGenAiChatModelTests {
         ToolCallback runtimeTool = tool("time", false);
         OracleGenAiChatOptions defaults = defaultOptions();
         defaults.setToolCallbacks(List.of(defaultTool));
-        defaults.setToolNames(Set.of("defaultName"));
         defaults.setToolContext(Map.of("default", "value"));
-        defaults.setInternalToolExecutionEnabled(false);
         OracleGenAiChatOptions runtime = OracleGenAiChatOptions.builder()
                 .toolCallbacks(List.of(runtimeTool))
-                .toolNames(Set.of("runtimeName"))
                 .toolContext(Map.of("runtime", "value"))
-                .internalToolExecutionEnabled(true)
                 .build();
 
         OracleGenAiChatOptions merged = defaults.merge(runtime);
 
         assertThat(merged.getToolCallbacks()).containsExactly(runtimeTool);
-        assertThat(merged.getToolNames()).containsExactly("runtimeName");
         assertThat(merged.getToolContext()).containsEntry("default", "value").containsEntry("runtime", "value");
-        assertThat(merged.getInternalToolExecutionEnabled()).isTrue();
     }
 
     @Test
@@ -451,7 +444,6 @@ class OracleGenAiChatModelTests {
     @Test
     void extractsGenericToolCallsFromResponse() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setInternalToolExecutionEnabled(false);
         CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(genericToolCallResponse());
 
         ChatResponse response = model(client, options)
@@ -469,7 +461,6 @@ class OracleGenAiChatModelTests {
     @Test
     void extractsCohereV2ToolCallsFromResponse() {
         OracleGenAiChatOptions options = defaultOptions();
-        options.setInternalToolExecutionEnabled(false);
         CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(cohereV2ToolCallResponse());
 
         ChatResponse response = model(client, options)

@@ -7,13 +7,16 @@ package com.oracle.spring.ai.oracle;
 
 import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
 import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
-import org.springframework.ai.embedding.DefaultEmbeddingOptions;
 import org.springframework.ai.embedding.EmbeddingOptions;
 
 /**
  * OCI Generative AI embedding options.
  */
-public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions implements OracleGenAiServingOptions {
+public class OracleGenAiEmbeddingOptions implements EmbeddingOptions, OracleGenAiServingOptions {
+
+    private String model;
+
+    private Integer dimensions;
 
     private String compartmentId;
 
@@ -39,6 +42,24 @@ public class OracleGenAiEmbeddingOptions extends DefaultEmbeddingOptions impleme
             result.setTruncate(oracleOptions.getTruncate());
         }
         return result;
+    }
+
+    @Override
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    @Override
+    public Integer getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(Integer dimensions) {
+        this.dimensions = dimensions;
     }
 
     @Override

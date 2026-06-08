@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
@@ -46,11 +45,7 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
 
     private List<ToolCallback> toolCallbacks = Collections.emptyList();
 
-    private Set<String> toolNames = Collections.emptySet();
-
     private Map<String, Object> toolContext = Collections.emptyMap();
-
-    private Boolean internalToolExecutionEnabled;
 
     private GenAiApiFormat apiFormat;
 
@@ -73,9 +68,7 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         result.setTopP(options.getTopP());
         if (options instanceof ToolCallingChatOptions toolCallingOptions) {
             result.setToolCallbacks(toolCallingOptions.getToolCallbacks());
-            result.setToolNames(toolCallingOptions.getToolNames());
             result.setToolContext(toolCallingOptions.getToolContext());
-            result.setInternalToolExecutionEnabled(toolCallingOptions.getInternalToolExecutionEnabled());
         }
         if (options instanceof OracleGenAiChatOptions oracleOptions) {
             oracleOptions.copyServingOptionsTo(result);
@@ -204,15 +197,6 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
     }
 
     @Override
-    public Set<String> getToolNames() {
-        return toolNames;
-    }
-
-    public void setToolNames(Set<String> toolNames) {
-        this.toolNames = toolNames != null ? toolNames : Collections.emptySet();
-    }
-
-    @Override
     public Map<String, Object> getToolContext() {
         return toolContext;
     }
@@ -221,16 +205,6 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         this.toolContext = toolContext != null ? toolContext : Collections.emptyMap();
     }
 
-    @Override
-    public Boolean getInternalToolExecutionEnabled() {
-        return internalToolExecutionEnabled;
-    }
-
-    public void setInternalToolExecutionEnabled(Boolean internalToolExecutionEnabled) {
-        this.internalToolExecutionEnabled = internalToolExecutionEnabled;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public <T extends ChatOptions> T copy() {
         return (T) fromOptions(this);
@@ -248,12 +222,10 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         }
         copyStandardOptionOverrides(runtimeOptions, merged);
         if (runtimeOptions instanceof ToolCallingChatOptions toolCallingRuntimeOptions) {
-            merged.setToolCallbacks(mergeToolCallbacks(merged.getToolCallbacks(),
-                    toolCallingRuntimeOptions.getToolCallbacks()));
-            merged.setToolNames(mergeToolNames(merged.getToolNames(), toolCallingRuntimeOptions.getToolNames()));
-            merged.setToolContext(mergeToolContext(merged.getToolContext(), toolCallingRuntimeOptions.getToolContext()));
-            OracleGenAiServingOptions.mergeOption(toolCallingRuntimeOptions.getInternalToolExecutionEnabled(),
-                    merged::setInternalToolExecutionEnabled);
+            merged.setToolCallbacks(ToolCallingChatOptions.mergeToolCallbacks(
+                    toolCallingRuntimeOptions.getToolCallbacks(), merged.getToolCallbacks()));
+            merged.setToolContext(ToolCallingChatOptions.mergeToolContext(
+                    toolCallingRuntimeOptions.getToolContext(), merged.getToolContext()));
         }
         if (runtimeOptions instanceof OracleGenAiChatOptions oracleRuntimeOptions) {
             oracleRuntimeOptions.mergeServingOptionsTo(merged);
@@ -271,31 +243,6 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         OracleGenAiServingOptions.mergeOption(source.getTemperature(), target::setTemperature);
         OracleGenAiServingOptions.mergeOption(source.getTopK(), target::setTopK);
         OracleGenAiServingOptions.mergeOption(source.getTopP(), target::setTopP);
-    }
-
-    private static List<ToolCallback> mergeToolCallbacks(List<ToolCallback> defaults, List<ToolCallback> runtime) {
-        if (runtime != null && !runtime.isEmpty()) {
-            return runtime;
-        }
-        return defaults != null ? defaults : Collections.emptyList();
-    }
-
-    private static Set<String> mergeToolNames(Set<String> defaults, Set<String> runtime) {
-        if (runtime != null && !runtime.isEmpty()) {
-            return runtime;
-        }
-        return defaults != null ? defaults : Collections.emptySet();
-    }
-
-    private static Map<String, Object> mergeToolContext(Map<String, Object> defaults, Map<String, Object> runtime) {
-        Map<String, Object> merged = new LinkedHashMap<>();
-        if (defaults != null) {
-            merged.putAll(defaults);
-        }
-        if (runtime != null) {
-            merged.putAll(runtime);
-        }
-        return merged;
     }
 
     public static final class Builder implements ToolCallingChatOptions.Builder<Builder> {
@@ -390,17 +337,6 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
         }
 
         @Override
-        public Builder toolNames(Set<String> toolNames) {
-            options.setToolNames(toolNames);
-            return this;
-        }
-
-        @Override
-        public Builder toolNames(String... toolNames) {
-            return toolNames(toolNames != null ? Set.of(toolNames) : null);
-        }
-
-        @Override
         public Builder toolContext(Map<String, Object> toolContext) {
             options.setToolContext(toolContext);
             return this;
@@ -411,12 +347,6 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
             Map<String, Object> toolContext = new LinkedHashMap<>(options.getToolContext());
             toolContext.put(key, value);
             options.setToolContext(toolContext);
-            return this;
-        }
-
-        @Override
-        public Builder internalToolExecutionEnabled(Boolean internalToolExecutionEnabled) {
-            options.setInternalToolExecutionEnabled(internalToolExecutionEnabled);
             return this;
         }
 
