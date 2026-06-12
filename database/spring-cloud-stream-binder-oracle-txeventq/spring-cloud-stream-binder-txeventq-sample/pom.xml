@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>spring-cloud-stream-binder-txeventq-sample</name>
-    <description>Spring Cloud Stream Binder for Oracle Database Transactional Event Queues Sample Application</description>
+    <description>Spring Cloud Stream Binder for Oracle AI Database Transactional Event Queues Sample Application</description>
 
     <organization>
         <name>Oracle America, Inc.</name>
@@ -42,8 +42,12 @@
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <txeventq.streambinder.version>0.18.0</txeventq.streambinder.version>
-        <spring.boot.version>4.0.6</spring.boot.version>
+        <txeventq.streambinder.version>0.19.0</txeventq.streambinder.version>
+        <spring.boot.version>4.1.0</spring.boot.version>
+        <spring.framework.version>7.0.8</spring.framework.version>
+        <org.springframework.cloud.version>5.0.2</org.springframework.cloud.version>
+        <oracle-spring-boot.version>26.2.0</oracle-spring-boot.version>
+        <aqapi-jakarta.version>23.9.0.0</aqapi-jakarta.version>
         <testcontainers.version>2.0.5</testcontainers.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
     </properties>
@@ -56,6 +60,16 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream</artifactId>
+                <version>${org.springframework.cloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.messaging</groupId>
+                <artifactId>aqapi-jakarta</artifactId>
+                <version>${aqapi-jakarta.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -83,7 +97,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
-            <version>7.0.7</version> <!-- Matches your spring-core version -->
+            <version>${spring.framework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.awaitility</groupId>
@@ -99,12 +113,12 @@
         <dependency>
             <groupId>com.oracle.database.spring</groupId>
             <artifactId>oracle-spring-boot-starter-ucp</artifactId>
-            <version>26.1.1</version>
+            <version>${oracle-spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.spring</groupId>
             <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
-            <version>26.1.1</version>
+            <version>${oracle-spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -131,7 +145,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version> <!-- Recommended version for Java 21 -->
+                <version>3.5.6</version>
                 <configuration>
                     <argLine>-XX:+EnableDynamicAgentLoading</argLine>
                 </configuration>

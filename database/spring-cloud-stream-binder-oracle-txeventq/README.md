@@ -1,8 +1,8 @@
-# [Oracle Database Transactional Event Queues](https://www.oracle.com/database/advanced-queuing/) support for Spring Cloud Stream
+# [Oracle AI Database Transactional Event Queues](https://www.oracle.com/database/advanced-queuing/) support for Spring Cloud Stream
 
 This version of the binder supports Spring Boot 4+/Spring framework 7+.
 
-For more information on queuing within Oracle Database, see the official documentation for [Transactional Event Queues](https://www.oracle.com/database/advanced-queuing/).
+For more information on queuing within Oracle AI Database, see the official documentation for [Transactional Event Queues](https://www.oracle.com/database/advanced-queuing/).
 
 ## Getting started
 
@@ -18,7 +18,7 @@ mvn clean install -DskipTests
 
 ### Running Integration Tests
 
-The integration test suite requires a local docker environment supporting `@TestContainers`, used to create a Oracle Database container for the duration of the tests. 
+The integration test suite requires a local docker environment supporting `@TestContainers`, used to create an Oracle AI Database container for the duration of the tests. 
 
 To run the integration tests use the following command:
 
@@ -31,7 +31,7 @@ To use in an application project, add the following dependencies apart from regu
 <dependency>
 	<groupId>com.oracle.database.spring.cloud-stream-binder</groupId>
 	<artifactId>spring-cloud-stream-binder-oracle-txeventq</artifactId>
-	<version>0.9.0</version>
+	<version>0.19.0</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ For some specific features of the binder, it is required that ojdbc11 and ucp ve
 
 ### Steps to Create an Oracle Wallet
 
-In order to connect to an Oracle database an Oracle Wallet will need to be created and specific properties will need to be set in the properties or yml file for your application. The
+In order to connect to an Oracle AI Database an Oracle Wallet will need to be created and specific properties will need to be set in the properties or yml file for your application. The
 description below will provide information about what is required to create an Oracle Wallet.
 
 Create or modify a tnsnames.ora file. The entry in the file should have the following form.
@@ -84,7 +84,7 @@ The wallet directory that will need to be specified in the connection properties
 -   cwallet.sso
 -   ewallet.p12
 
-### Setup the Application Properties File For Connecting to Oracle Database
+### Setup the Application Properties File For Connecting to Oracle AI Database
 
 In your application.properties file add the following properties to connect to the required database.
 
@@ -202,4 +202,4 @@ spring.cloud.stream.bindings.myproducer-out-0.destination=AADI_TEST
 spring.cloud.stream.bindings.myproducer-out-0.producer.requiredGroups=t1
 ```
 
-Note: If you want partitioning features (deq from a particular shard), please use Oracle database version 23.4
+Note: If you want partitioning features (deq from a particular shard), please use Oracle AI Database version 23.4

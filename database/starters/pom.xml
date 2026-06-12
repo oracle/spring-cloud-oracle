@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2023, 2024, 2025 Oracle and/or its affiliates. -->
+<!-- Copyright (c) 2023, 2026, Oracle and/or its affiliates. -->
 <!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.6</version>
+    <version>4.1.0</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -75,7 +75,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
     <okafka.version>23.7.0.0</okafka.version>
-    <jackson.version>3.1.3</jackson.version>
+    <jackson.version>3.1.4</jackson.version>
     <kafka-clients.version>3.9.2</kafka-clients.version>
     <lz4-java.version>1.8.1</lz4-java.version>
     <protobuf-java.version>3.25.9</protobuf-java.version>
@@ -84,8 +84,8 @@
     <oracledb-messaging.version>23.8.0.0</oracledb-messaging.version>
     <ojdbc.otel.version>1.0.6</ojdbc.otel.version>
     <jta.version>2.0.1</jta.version>
-    <micrometer.version>1.14.14</micrometer.version>
-    <micrometer-tracing.version>1.4.13</micrometer-tracing.version>
+    <micrometer.version>1.17.0</micrometer.version>
+    <micrometer-tracing.version>1.7.0</micrometer-tracing.version>
 
     <jakarta.json-api.version>2.1.3</jakarta.json-api.version>
     <jakarta.json.bind-api.version>3.0.1</jakarta.json.bind-api.version>
@@ -93,10 +93,10 @@
     <parrson.version>1.1.7</parrson.version>
     <yasson.version>3.0.4</yasson.version>
 
-    <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
-    <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
-    <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
+    <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+    <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
+    <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
 
     <!-- Distribution management -->
     <repository.id>artifactory</repository.id>
@@ -235,7 +235,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
         <scope>test</scope>
         <exclusions>
           <exclusion>

@@ -1,6 +1,6 @@
-# Spring Cloud Stream Binder for Oracle Database Transactional Event Queues Sample
+# Spring Cloud Stream Binder for Oracle AI Database Transactional Event Queues Sample
 
-This sample application demonstrates how to use the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues in a simple Spring Boot Application.
+This sample application demonstrates how to use the Spring Cloud Stream Binder for Oracle AI Database Transactional Event Queues in a simple Spring Boot Application.
 
 Spring Cloud Stream exposes a [functional messaging API](https://docs.spring.io/spring-cloud-stream/reference/spring-cloud-stream/producing-and-consuming-messages.html) for producing and consuming messages. In this sample we implement three functional interfaces to produce a series of words, capitalize them, and output them.
 
@@ -14,7 +14,7 @@ Messages from the WordSupplier are piped through the [toUpperCase](src/main/java
 
 ### Running the tests
 
-The tests require a docker runtime environment, and will instantiate a local Oracle Database.
+The tests require a docker runtime environment, and will instantiate a local Oracle AI Database.
 
 To run the tests, use the following command:
 
@@ -22,7 +22,7 @@ To run the tests, use the following command:
 mvn test
 ```
 
-As the test runs, you should see the following output, indicating messages are being processed by the Oracle Database Transactional Event Queues stream binder:
+As the test runs, you should see the following output, indicating messages are being processed by the Oracle AI Database Transactional Event Queues stream binder:
 
 ```
 Consumed: SPRING
