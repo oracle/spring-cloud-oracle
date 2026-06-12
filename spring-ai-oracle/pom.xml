@@ -18,6 +18,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <groupId>com.oracle.spring.ai</groupId>
     <artifactId>spring-ai-oracle-parent</artifactId>
+    <version>2.0.0</version>
     <packaging>pom</packaging>
 
     <name>Spring AI Oracle</name>
@@ -66,6 +67,11 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring-boot.version>4.1.0</spring-boot.version>
         <oci-sdk.version>3.86.1</oci-sdk.version>
+
+        <!-- Distribution management -->
+        <repository.id>artifactory</repository.id>
+        <repository.name>spring-cloud-oci-releases</repository.name>
+        <repository.url>changeme</repository.url>
     </properties>
 
     <dependencyManagement>
@@ -101,5 +107,18 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>${repository.id}</id>
+            <name>${repository.name}</name>
+            <url>${repository.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
