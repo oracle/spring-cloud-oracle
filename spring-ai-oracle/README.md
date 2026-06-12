@@ -184,6 +184,16 @@ Optional config file authentication overrides use `OCI_CONFIG_FILE`, `OCI_PROFIL
 
 Set `OCI_GENAI_MODEL` to run one chat model and `OCI_GENAI_EMBEDDING_MODEL` to run one embedding model.
 
+## Deployment
+
+Use the deploy script from the `spring-ai-oracle` directory to set the Spring AI Oracle reactor version and deploy the parent, model, auto-configuration, and starter artifacts to the target Maven repository.
+
+```bash
+./scripts/deploy -v 2.0.0 -u https://repo.example.com/releases -r spring-cloud-oci-releases
+```
+
+The script skips tests during deployment and prints the `com.oracle.spring.ai` coordinates created for upload.
+
 ## License
 
 Copyright (c) 2026, Oracle and/or its affiliates.
