@@ -8,7 +8,7 @@
     <parent>
         <artifactId>oracle-spring-boot-starter-samples</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>26.2.0</version>
+        <version>26.2.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

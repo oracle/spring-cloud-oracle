@@ -8,12 +8,12 @@
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>26.2.0</version>
+        <version>26.2.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-spatial-data-tools</artifactId>
-    <version>26.2.0</version>
+    <version>26.2.1</version>
 
     <name>Oracle Spring Boot - Spatial Data Tools</name>
     <description>Spring Boot for Oracle Database Spatial Data Tools</description>
