@@ -7,16 +7,19 @@ package com.oracle.spring.ai.oracle.test;
 
 import com.oracle.bmc.Region;
 import com.oracle.bmc.generativeaiinference.GenerativeAiInference;
+import com.oracle.bmc.generativeaiinference.GenerativeAiInferencePaginators;
 import com.oracle.bmc.generativeaiinference.requests.ApplyGuardrailsRequest;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
 import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
 import com.oracle.bmc.generativeaiinference.requests.GenerateTextRequest;
+import com.oracle.bmc.generativeaiinference.requests.ListGuardrailVersionsRequest;
 import com.oracle.bmc.generativeaiinference.requests.RerankTextRequest;
 import com.oracle.bmc.generativeaiinference.requests.SummarizeTextRequest;
 import com.oracle.bmc.generativeaiinference.responses.ApplyGuardrailsResponse;
 import com.oracle.bmc.generativeaiinference.responses.ChatResponse;
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
 import com.oracle.bmc.generativeaiinference.responses.GenerateTextResponse;
+import com.oracle.bmc.generativeaiinference.responses.ListGuardrailVersionsResponse;
 import com.oracle.bmc.generativeaiinference.responses.RerankTextResponse;
 import com.oracle.bmc.generativeaiinference.responses.SummarizeTextResponse;
 
@@ -48,6 +51,11 @@ public class NoOpGenerativeAiInference implements GenerativeAiInference {
     }
 
     @Override
+    public void enableDualStackEndpoints(boolean b) {
+
+    }
+
+    @Override
     public ApplyGuardrailsResponse applyGuardrails(ApplyGuardrailsRequest request) {
         throw unexpectedOciCall();
     }
@@ -68,6 +76,11 @@ public class NoOpGenerativeAiInference implements GenerativeAiInference {
     }
 
     @Override
+    public ListGuardrailVersionsResponse listGuardrailVersions(ListGuardrailVersionsRequest listGuardrailVersionsRequest) {
+        return null;
+    }
+
+    @Override
     public RerankTextResponse rerankText(RerankTextRequest request) {
         throw unexpectedOciCall();
     }
@@ -75,6 +88,11 @@ public class NoOpGenerativeAiInference implements GenerativeAiInference {
     @Override
     public SummarizeTextResponse summarizeText(SummarizeTextRequest request) {
         throw unexpectedOciCall();
+    }
+
+    @Override
+    public GenerativeAiInferencePaginators getPaginators() {
+        return null;
     }
 
     @Override
