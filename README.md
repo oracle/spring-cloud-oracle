@@ -14,7 +14,7 @@ Spring Cloud Oracle brings Oracle AI Database, Oracle AI Database-native messagi
 
 ## Why Spring Cloud Oracle?
 
-Spring teams using Oracle technologies often need more than raw client libraries. They need integrations that fit Spring Boot configuration, auto-configuration, resource handling, observability, and messaging conventions.
+Spring teams using Oracle technologies often need more than raw client libraries. They need integrations that fit Spring Boot configuration, auto-configuration, resource handling, observability, messaging conventions, and more.
 
 Spring Cloud Oracle focuses on that integration layer:
 
