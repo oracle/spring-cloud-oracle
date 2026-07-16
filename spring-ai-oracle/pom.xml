@@ -60,6 +60,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </modules>
 
     <properties>
+        <cyclonedx.version>2.9.2</cyclonedx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
@@ -121,4 +122,24 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </snapshotRepository>
     </distributionManagement>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>${cyclonedx.version}</version>
+                <configuration>
+                    <outputFormat>json</outputFormat>
+                    <outputReactorProjects>true</outputReactorProjects>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-aggregate-bom</id>
+                        <phase>package</phase>
+                        <goals><goal>makeAggregateBom</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

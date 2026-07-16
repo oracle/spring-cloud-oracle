@@ -97,6 +97,7 @@
     <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
     <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
+    <cyclonedx.version>2.9.2</cyclonedx.version>
 
     <!-- Distribution management -->
     <repository.id>artifactory</repository.id>
@@ -275,6 +276,22 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.cyclonedx</groupId>
+        <artifactId>cyclonedx-maven-plugin</artifactId>
+        <version>${cyclonedx.version}</version>
+        <configuration>
+          <outputFormat>json</outputFormat>
+          <outputReactorProjects>true</outputReactorProjects>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-aggregate-bom</id>
+            <phase>package</phase>
+            <goals><goal>makeAggregateBom</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
