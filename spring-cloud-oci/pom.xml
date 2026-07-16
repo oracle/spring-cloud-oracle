@@ -82,7 +82,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-data-oracle-nosql.version>2.3.0</spring-data-oracle-nosql.version>
         <oracle.nosql.driver.version>5.4.22</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.5</jakarta-mail.version>
-        <oci-sdk.version>3.89.1</oci-sdk.version>
+        <oci-sdk.version>3.91.1</oci-sdk.version>
         <jackson.version>3.1.4</jackson.version>
         <jackson2.version>2.21.4</jackson2.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
@@ -97,6 +97,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+        <cyclonedx.version>2.9.2</cyclonedx.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <cc.code-coverage-ratio>0.20</cc.code-coverage-ratio>
         <!--<dependency-check-maven.version>8.4.0</dependency-check-maven.version>
@@ -111,6 +112,11 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.21.5</version>
+            </dependency>
             <dependency>
                 <groupId>com.oracle.oci.sdk</groupId>
                 <artifactId>oci-java-sdk-bom</artifactId>
@@ -285,6 +291,22 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </pluginManagement>
 
 		<plugins>
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>${cyclonedx.version}</version>
+                <configuration>
+                    <outputFormat>json</outputFormat>
+                    <outputReactorProjects>true</outputReactorProjects>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-aggregate-bom</id>
+                        <phase>package</phase>
+                        <goals><goal>makeAggregateBom</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
