@@ -6,9 +6,6 @@
 package com.oracle.cloud.spring.sample.storage.springcloudocistoragesample;
 
 import com.oracle.cloud.spring.storage.Storage;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -27,7 +24,6 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("demoapp/api/object")
-@Tag(name="Storage Object APIs")
 public class ObjectController {
 
     @Autowired
@@ -61,31 +57,26 @@ public class ObjectController {
     }
 
     @PostMapping("/{bucketName}")
-    void storeObject(@Parameter(required = true) @RequestBody Person p,
-                     @Parameter(required = true, example = "new-bucket") @PathVariable String bucketName) throws IOException {
+    void storeObject(@RequestBody Person p,
+                     @PathVariable String bucketName) throws IOException {
         storage.store(bucketName, p.id + ".json", p);
     }
 
     @GetMapping("/{bucketName}/{id}")
-    Person readObject(@Parameter(required = true, example = "123") @PathVariable Long id,
-                      @Parameter(required = true, example = "new-bucket") @PathVariable String bucketName) {
+    Person readObject(@PathVariable Long id,
+                      @PathVariable String bucketName) {
         return storage.read(bucketName, id + ".json", Person.class);
     }
 
     @DeleteMapping("/{bucketName}/{id}")
-    void deleteObject(@Parameter(required = true, example = "new-bucket") @PathVariable String bucketName,
-                      @Parameter(required = true, example = "123") @PathVariable String id) {
+    void deleteObject(@PathVariable String bucketName,
+                      @PathVariable String id) {
         storage.deleteObject(bucketName, id + ".json");
     }
 
     static class Person {
-        @Schema(example = "123")
         private Long id;
-
-        @Schema(example = "hello")
         private String firstName;
-
-        @Schema(example = "world")
         private String lastName;
 
         public Person() {
