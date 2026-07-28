@@ -12,20 +12,24 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Database Starters
 
 - Upgraded Spring Boot to 4.1.0 and refreshed related Jackson, Micrometer, Micrometer Tracing, and Maven plugin versions
+- Refreshed third party dependencies
 
 #### Spring Cloud Stream Binder for TxEventQ
 
 - Upgraded Spring Boot to 4.1.0 and refreshed Spring Cloud Stream, Spring Integration, Spring Framework, Jackson, Oracle JDBC/security/AQ JMS, Oracle Spring Boot starter, and Maven test plugin versions
+- Refreshed third party dependencies
 
 #### Spring AI Oracle
 
 - Initial release of Spring AI Oracle, tracking upstream Spring AI 2.0.0
 - Upgraded Spring AI Oracle to Spring AI 2.0.0 and Spring Boot 4.1.0
+- Refreshed third party dependencies
 
 #### Spring Cloud OCI
 
 - Upgraded Spring Cloud OCI to Spring Boot 4.1.0 and refreshed related Spring Cloud, Spring Framework, Spring Data, Netty, Jackson, OCI SDK, NoSQL driver, and Surefire patch versions
 - Removed the Springdoc OpenAPI WebMVC UI dependency from Spring Cloud OCI and its common samples utilities
+- Refreshed third party dependencies
 
 ### 2.0.2, May 26th 2026
 

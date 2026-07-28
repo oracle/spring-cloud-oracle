@@ -67,23 +67,23 @@
   </modules>
 
   <properties>
-    <java.version>21 </java.version>
+    <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.root>${basedir}</project.root>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.source>${java.version}</maven.compiler.source>
 
-    <okafka.version>23.7.0.0</okafka.version>
-    <jackson.version>3.1.4</jackson.version>
+    <okafka.version>23.26.1.0</okafka.version>
+    <jackson.version>3.2.1</jackson.version>
     <kafka-clients.version>3.9.2</kafka-clients.version>
-    <lz4-java.version>1.8.1</lz4-java.version>
     <protobuf-java.version>3.25.9</protobuf-java.version>
     <oracle.version>23.26.2.0.0</oracle.version>
     <osdt.version>21.20.0.0</osdt.version>
-    <oracledb-messaging.version>23.8.0.0</oracledb-messaging.version>
+    <oracledb-messaging.version>23.9.0.0</oracledb-messaging.version>
     <ojdbc.otel.version>1.0.6</ojdbc.otel.version>
     <jta.version>2.0.1</jta.version>
+    <lz4-java.version>1.11.1</lz4-java.version>
     <micrometer.version>1.17.0</micrometer.version>
     <micrometer-tracing.version>1.7.0</micrometer-tracing.version>
 
@@ -191,7 +191,7 @@
       </dependency>
 
       <dependency>
-        <groupId>org.lz4</groupId>
+        <groupId>at.yawk.lz4</groupId>
         <artifactId>lz4-java</artifactId>
         <version>${lz4-java.version}</version>
       </dependency>

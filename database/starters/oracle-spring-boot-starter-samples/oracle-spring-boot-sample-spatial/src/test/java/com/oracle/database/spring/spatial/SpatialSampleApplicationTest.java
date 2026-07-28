@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class SpatialSampleApplicationTest {
     @Container
     @ServiceConnection
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.1-full-faststart")
+    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.2-full-faststart")
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");
