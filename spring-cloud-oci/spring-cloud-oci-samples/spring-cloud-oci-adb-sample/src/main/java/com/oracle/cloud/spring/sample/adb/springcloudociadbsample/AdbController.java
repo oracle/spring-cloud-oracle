@@ -10,9 +10,6 @@ import com.oracle.bmc.database.responses.StartAutonomousDatabaseResponse;
 import com.oracle.bmc.database.responses.StopAutonomousDatabaseResponse;
 import com.oracle.cloud.spring.adb.AutonomousDb;
 import com.oracle.cloud.spring.adb.AutonomousDbDetails;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.Map;
 
@@ -30,16 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("demoapp/api/adb")
-@Tag(name = "Autonomous Database APIs")
 public class AdbController {
 
     @Autowired
     AutonomousDb autonomousDatabase;
 
     @PostMapping
-    ResponseEntity<?> createAutonomousDatabase(
-        @Parameter(required = true) @RequestBody CreateAutonomousDatabaseRequest request
-    ) {
+    ResponseEntity<?> createAutonomousDatabase(CreateAutonomousDatabaseRequest request) {
         CreateAutonomousDatabaseResponse response = autonomousDatabase.createAutonomousDatabase(
             request.getDatabaseName(),
             request.getCompartmentId(),
@@ -59,15 +53,13 @@ public class AdbController {
     }
 
     @GetMapping
-    ResponseEntity<?> getAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
+    ResponseEntity<?> getAutonomousDatabase(@RequestParam String databaseId) {
         AutonomousDbDetails response = autonomousDatabase.getAutonomousDatabase(databaseId);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping(value = "/wallet")
-    ResponseEntity<?> getAutonomousDatabaseWallet(
-        @Parameter(required = true) @RequestBody GenerateAutonomousDatabaseWalletRequest request
-    ) {
+    ResponseEntity<?> getAutonomousDatabaseWallet(@RequestBody GenerateAutonomousDatabaseWalletRequest request) {
         GenerateAutonomousDatabaseWalletResponse response = autonomousDatabase.generateAutonomousDatabaseWallet(
             request.getDatabaseId(),
             request.getPassword());
@@ -78,13 +70,13 @@ public class AdbController {
     }
 
     @DeleteMapping
-    ResponseEntity<?> deleteAutonomousDatabase(@Parameter(required = true, example ="databaseId") @RequestParam String databaseId) {
+    ResponseEntity<?> deleteAutonomousDatabase(@RequestParam String databaseId) {
         DeleteAutonomousDatabaseResponse response = autonomousDatabase.deleteAutonomousDatabase(databaseId);
         return ResponseEntity.ok().body("opcRequestId for deleting the database : " +response.getOpcRequestId());
     }
 
     @PostMapping("/start")
-    ResponseEntity<?> startAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
+    ResponseEntity<?> startAutonomousDatabase(@RequestParam String databaseId) {
         StartAutonomousDatabaseResponse response = autonomousDatabase.startAutonomousDatabase(databaseId);
         var adb = response.getAutonomousDatabase();
         var result = Map.of(
@@ -97,7 +89,7 @@ public class AdbController {
     }
 
     @PostMapping("/stop")
-    ResponseEntity<?> stopAutonomousDatabase(@Parameter(required = true, example = "databaseId") @RequestParam String databaseId) {
+    ResponseEntity<?> stopAutonomousDatabase(@RequestParam String databaseId) {
         StopAutonomousDatabaseResponse response = autonomousDatabase.stopAutonomousDatabase(databaseId);
         var adb = response.getAutonomousDatabase();
         var result = Map.of(
@@ -110,22 +102,11 @@ public class AdbController {
     }
 
     static class CreateAutonomousDatabaseRequest {
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "databaseName")
         private String databaseName;
-
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "compartmentId")
         private String compartmentId;
-
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "adminPassword", format = "password", accessMode = Schema.AccessMode.WRITE_ONLY)
         private String adminPassword;
-
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "displayName")
         private String displayName;
-
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "200")
         private Integer dataStorageSizeInGBs;
-
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "2.0")
         private Float computeCount;
 
         public String getDatabaseName() {
@@ -178,10 +159,7 @@ public class AdbController {
     }
 
     static class GenerateAutonomousDatabaseWalletRequest {
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "databaseId")
         private String databaseId;
-
-        @Schema(requiredMode = Schema.RequiredMode.REQUIRED, example = "password", format = "password", accessMode = Schema.AccessMode.WRITE_ONLY)
         private String password;
 
         public String getDatabaseId() {

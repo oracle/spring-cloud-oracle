@@ -8,8 +8,6 @@ package com.oracle.cloud.spring.sample.function.springcloudocifunctionsample;
 import com.oracle.bmc.functions.requests.InvokeFunctionRequest;
 import com.oracle.bmc.functions.responses.InvokeFunctionResponse;
 import com.oracle.cloud.spring.function.Function;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +21,6 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("demoapp/api/functions")
-@Tag(name = "Function APIs")
 public class FunctionController {
 
     private static final String CONTENT_TYPE = "content-type";
@@ -31,9 +28,9 @@ public class FunctionController {
     @Autowired
     Function function;
     @PostMapping(value = "/invoke")
-    ResponseEntity<?> invoke(@Parameter(required = true, example = "functionOcid") @RequestParam String functionOcid,
-                             @Parameter(required = true, example = "mode") @RequestParam String mode,
-                             @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody String requestBody) {
+    ResponseEntity<?> invoke(@RequestParam String functionOcid,
+                             @RequestParam String mode,
+                             @RequestBody String requestBody) {
         String response = "";
         String responseContentType = "";
         try {

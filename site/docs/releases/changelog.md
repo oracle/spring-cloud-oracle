@@ -25,6 +25,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Spring Cloud OCI
 
 - Upgraded Spring Cloud OCI to Spring Boot 4.1.0 and refreshed related Spring Cloud, Spring Framework, Spring Data, Netty, Jackson, OCI SDK, NoSQL driver, and Surefire patch versions
+- Removed the Springdoc OpenAPI WebMVC UI dependency from Spring Cloud OCI and its common samples utilities
 
 ### 2.0.2, May 26th 2026
 

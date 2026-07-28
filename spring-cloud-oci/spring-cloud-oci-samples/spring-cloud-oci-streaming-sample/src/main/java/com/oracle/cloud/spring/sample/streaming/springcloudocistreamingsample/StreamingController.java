@@ -18,8 +18,6 @@ import com.oracle.bmc.streaming.responses.DeleteStreamResponse;
 import com.oracle.bmc.streaming.responses.GetMessagesResponse;
 import com.oracle.bmc.streaming.responses.PutMessagesResponse;
 import com.oracle.cloud.spring.streaming.Streaming;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -38,61 +36,58 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/demoapp/api/streaming/")
-@Tag(name = "streaming APIs")
 public class StreamingController {
 
     @Autowired
     Streaming streaming;
 
     @PostMapping(value = "createStreamPool")
-    ResponseEntity<?> createStreamPool(@Parameter(required = true, example = "name") @RequestParam String name,
-                                  @Parameter(required = true, example = "compartmentId") @RequestParam String compartmentId) {
+    ResponseEntity<?> createStreamPool(@RequestParam String name,
+                                  @RequestParam String compartmentId) {
 
         CreateStreamPoolResponse response = streaming.createStreamPool(name, compartmentId);
         return ResponseEntity.ok().body("Stream pool resource OCID : " + response.getStreamPool().getId());
     }
 
     @PostMapping(value = "createStream")
-    ResponseEntity<?> createStream(@Parameter(required = true, example = "name") @RequestParam String name,
-                                  @Parameter(required = true, example = "streamPoolId") @RequestParam String streamPoolId,
-                                  @Parameter(required = true, example = "partitions") @RequestParam Integer partitions,
-                                   @Parameter(required = true, example = "retentionInHours") @RequestParam Integer retentionInHours) {
+    ResponseEntity<?> createStream(@RequestParam String name,
+                                  @RequestParam String streamPoolId,
+                                  @RequestParam Integer partitions,
+                                  @RequestParam Integer retentionInHours) {
 
         CreateStreamResponse response = streaming.createStream(name, streamPoolId, partitions, retentionInHours);
         return ResponseEntity.ok().body("Stream resource OCID : " + response.getStream().getId());
     }
 
     @DeleteMapping(value = "deleteStreamPool")
-    ResponseEntity<?> deleteStreamPool(@Parameter(required = true, example = "streamPoolId")
-                                       @RequestParam String streamPoolId) {
+    ResponseEntity<?> deleteStreamPool(@RequestParam String streamPoolId) {
 
         DeleteStreamPoolResponse response = streaming.deleteStreamPool(streamPoolId);
         return ResponseEntity.ok().body("opc request Id for deleting the streamPool : " + response.getOpcRequestId());
     }
     @DeleteMapping(value = "deleteStream")
-    ResponseEntity<?> deleteStream(@Parameter(required = true, example = "streamId")
-                                       @RequestParam String streamId) {
+    ResponseEntity<?> deleteStream(@RequestParam String streamId) {
 
         DeleteStreamResponse response = streaming.deleteStream(streamId);
         return ResponseEntity.ok().body("opc request Id for deleting the stream : " + response.getOpcRequestId());
     }
 
     @PostMapping(value = "putMessages")
-    ResponseEntity<?> putMessages(@Parameter(required = true, example = "streamId") @RequestParam String streamId,
-                                  @Parameter(example = "key") @RequestParam (required = false) String key,
-                                  @Parameter(example = "value") @RequestParam (required = false) String value) {
+    ResponseEntity<?> putMessages(@RequestParam String streamId,
+                                  @RequestParam (required = false) String key,
+                                  @RequestParam (required = false) String value) {
 
         PutMessagesResponse response = streaming.putMessages(streamId, key.getBytes(), Arrays.asList(value.getBytes()));
         return ResponseEntity.ok().body("opc request Id for posting the messages to streaming : " + response.getOpcRequestId());
     }
 
     @PostMapping(value = "createCursor")
-    ResponseEntity<?> createCursor(@Parameter(required = true, example = "streamId") @RequestParam String streamId,
-                                   @Parameter(example = "offset") @RequestParam (required = false) Long offset,
-                                   @Parameter(example = "time") @RequestParam (required = false) @DateTimeFormat(iso =
+    ResponseEntity<?> createCursor(@RequestParam String streamId,
+                                   @RequestParam (required = false) Long offset,
+                                   @RequestParam (required = false) @DateTimeFormat(iso =
                                            DateTimeFormat.ISO.DATE_TIME) LocalDateTime time,
-                                   @Parameter(example = "type") @RequestParam (required = false) CreateCursorDetails.Type type,
-                                   @Parameter(example = "partition") @RequestParam (required = false) String partition) {
+                                   @RequestParam (required = false) CreateCursorDetails.Type type,
+                                   @RequestParam (required = false) String partition) {
         Date inputDate = null;
         if (time != null) {
             inputDate = Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
@@ -105,14 +100,14 @@ public class StreamingController {
     }
 
     @PostMapping(value = "createGroupCursor")
-    ResponseEntity<?> createGroupCursor(@Parameter(required = true, example = "streamId") @RequestParam String streamId,
-                                        @Parameter(example = "groupName") @RequestParam (required = false) String groupName,
-                                        @Parameter(example = "time") @RequestParam (required = false) @DateTimeFormat(iso =
+    ResponseEntity<?> createGroupCursor(@RequestParam String streamId,
+                                        @RequestParam (required = false) String groupName,
+                                        @RequestParam (required = false) @DateTimeFormat(iso =
                                                 DateTimeFormat.ISO.DATE_TIME) LocalDateTime time,
-                                   @Parameter(example = "type") @RequestParam (required = false) CreateGroupCursorDetails.Type type,
-                                   @Parameter(example = "commitOnGet") @RequestParam (required = false) Boolean commitOnGet,
-                                        @Parameter(example = "instanceName") @RequestParam (required = false) String instanceName,
-                                        @Parameter(example = "timeoutInMs") @RequestParam (required = false) Integer timeoutInMs) {
+                                        @RequestParam (required = false) CreateGroupCursorDetails.Type type,
+                                        @RequestParam (required = false) Boolean commitOnGet,
+                                        @RequestParam (required = false) String instanceName,
+                                        @RequestParam (required = false) Integer timeoutInMs) {
         Date inputDate = null;
         if (time != null) {
             inputDate = Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
@@ -126,8 +121,8 @@ public class StreamingController {
     }
 
     @GetMapping(value = "getMessages")
-    ResponseEntity<?> getMessages(@Parameter(required = true, example = "streamId") @RequestParam String streamId,
-                                  @Parameter(required = true, example = "cursor") @RequestParam String cursor) {
+    ResponseEntity<?> getMessages(@RequestParam String streamId,
+                                  @RequestParam String cursor) {
         GetMessagesResponse response = streaming.getMessages(streamId, cursor);
         List<Message> messages = response.getItems();
         int size = messages.size();

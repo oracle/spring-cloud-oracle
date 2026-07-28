@@ -6,8 +6,6 @@
 package com.oracle.cloud.spring.sample.storage.springcloudocistoragesample;
 
 import com.oracle.cloud.spring.storage.Storage;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,15 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("demoapp/api/bucket")
-@Tag(name = "Storage Bucket APIs")
 public class BucketController {
 
     @Autowired
     Storage storage;
 
     @PostMapping("/")
-    void createBucket(@Parameter(required = true, example = "new-bucket") @RequestParam String bucketName,
-                      @Parameter(required = false) @RequestParam(required = false) String compartmentId) {
+    void createBucket(@RequestParam String bucketName,
+                      @RequestParam(required = false) String compartmentId) {
         if (compartmentId != null) {
             storage.createBucket(bucketName, compartmentId);
         } else {
@@ -35,7 +32,7 @@ public class BucketController {
     }
 
     @DeleteMapping("/{bucketName}")
-    void deleteBucket(@Parameter(required = true, example = "new-bucket") @PathVariable String bucketName) {
+    void deleteBucket(@PathVariable String bucketName) {
         storage.deleteBucket(bucketName);
     }
 }

@@ -7,8 +7,6 @@ package com.oracle.cloud.spring.sample.storage.springcloudocistoragesample;
 
 import com.oracle.cloud.spring.storage.Storage;
 import com.oracle.cloud.spring.storage.StorageObjectMetadata;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -36,7 +34,6 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @RequestMapping("demoapp/api/image")
-@Tag(name = "Image Object APIs")
 public class ImageController {
     private static final Pattern UNSAFE_OBJECT_NAME_CHARACTERS = Pattern.compile("[^A-Za-z0-9._-]");
     private static final Pattern EDGE_SEPARATORS = Pattern.compile("^[._-]+|[._-]+$");
@@ -47,9 +44,9 @@ public class ImageController {
     Storage storage;
 
     @GetMapping("/{bucketName}/{objectName}")
-    ResponseEntity<Resource> download(@Parameter(required = true, example = "new-bucket") @PathVariable String bucketName,
-                                      @Parameter(required = true) @PathVariable String objectName,
-                                      @Parameter(required = false, example = "image/jpeg") @RequestParam(required = false) String mediaType) {
+    ResponseEntity<Resource> download(@PathVariable String bucketName,
+                                      @PathVariable String objectName,
+                                      @RequestParam(required = false) String mediaType) {
         MediaType mt = APPLICATION_OCTET_STREAM;
         if (mediaType != null && MediaType.valueOf(mediaType) != null) {
            mt = MediaType.valueOf(mediaType);
@@ -61,8 +58,8 @@ public class ImageController {
     }
 
     @PostMapping(value = "/{bucketName}", consumes = MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<?> upload(@Parameter(required = true) @RequestPart(required = true, name = "file") MultipartFile multipartFile,
-                             @Parameter(required = true, example = "new-bucket") @PathVariable String bucketName) throws IOException {
+    ResponseEntity<?> upload(MultipartFile multipartFile,
+                             @PathVariable String bucketName) throws IOException {
         String objectName = createStorageObjectName(multipartFile.getOriginalFilename());
         try (InputStream is = multipartFile.getInputStream()) {
             storage.upload(bucketName, objectName, is,
@@ -73,8 +70,8 @@ public class ImageController {
     }
 
     @DeleteMapping("/{bucketName}/{objectName}")
-    void deleteObject(@Parameter(required = true, example = "new-bucket") @PathVariable String bucketName,
-                      @Parameter(required = true) @PathVariable String objectName) {
+    void deleteObject(@PathVariable String bucketName,
+                      @PathVariable String objectName) {
         storage.deleteObject(bucketName, objectName);
     }
 

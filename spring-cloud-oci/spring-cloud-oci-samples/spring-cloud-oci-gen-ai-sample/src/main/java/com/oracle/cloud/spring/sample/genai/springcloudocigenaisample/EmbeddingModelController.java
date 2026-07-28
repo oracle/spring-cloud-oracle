@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -12,8 +12,6 @@ import java.util.Map;
 
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
 import com.oracle.cloud.spring.genai.EmbeddingModel;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/demoapp/api/genai/")
-@Tag(name = "genai chat APIs")
 @ConditionalOnProperty(name = "spring.cloud.oci.genai.embedding.enabled", havingValue = "true", matchIfMissing = true)
 public class EmbeddingModelController {
     private final EmbeddingModel embeddingModel;
@@ -34,7 +31,7 @@ public class EmbeddingModelController {
     }
 
     @PostMapping(value = "embed")
-    ResponseEntity<?> embed(@Parameter(required = true, example = "embedding input") @RequestParam String input) {
+    ResponseEntity<?> embed(@RequestParam String input) {
         EmbedTextResponse embedded = embeddingModel.embed(input);
         return ResponseEntity.ok().body(Map.of(
                 "input", input,
@@ -44,7 +41,7 @@ public class EmbeddingModelController {
     }
 
     @PostMapping(value = "embedAll")
-    ResponseEntity<?> embed(@Parameter(required = true, example = "embedding text") @RequestBody List<String> inputs) {
+    ResponseEntity<?> embed(@RequestBody List<String> inputs) {
         List<EmbedTextResponse> embedded = embeddingModel.embedAll(inputs);
         List<Map<String, Object>> response = embedded.stream()
             .map(r -> {
