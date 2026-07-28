@@ -2,6 +2,7 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.ucp.micrometer;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
@@ -27,6 +28,7 @@ public final class UcpMetrics implements MeterBinder {
 
     private final PoolDataSource poolDataSource;
     private final Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier;
+    private final String poolName;
 
     public UcpMetrics(PoolDataSource poolDataSource) {
         this(poolDataSource, poolDataSource::getStatistics);
@@ -35,6 +37,7 @@ public final class UcpMetrics implements MeterBinder {
     UcpMetrics(PoolDataSource poolDataSource, Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier) {
         this.poolDataSource = poolDataSource;
         this.statisticsSupplier = statisticsSupplier;
+        this.poolName = Objects.requireNonNullElse(poolDataSource.getConnectionPoolName(), "unknown");
     }
 
     @Override
@@ -80,7 +83,7 @@ public final class UcpMetrics implements MeterBinder {
             ToDoubleFunction<UniversalConnectionPoolStatistics> statistic) {
         Gauge.builder(metricName(suffix), this, metrics -> metrics.statistic(statistic))
                 .description(description)
-                .tag(POOL_TAG, poolName())
+                .tag(POOL_TAG, poolName)
                 .strongReference(true)
                 .register(registry);
     }
@@ -89,7 +92,7 @@ public final class UcpMetrics implements MeterBinder {
             ToDoubleFunction<UniversalConnectionPoolStatistics> statistic) {
         TimeGauge.builder(metricName(suffix), this, TimeUnit.MILLISECONDS, metrics -> metrics.statistic(statistic))
                 .description(description)
-                .tag(POOL_TAG, poolName())
+                .tag(POOL_TAG, poolName)
                 .strongReference(true)
                 .register(registry);
     }
@@ -98,7 +101,7 @@ public final class UcpMetrics implements MeterBinder {
             ToDoubleFunction<UniversalConnectionPoolStatistics> statistic) {
         FunctionCounter.builder(metricName(suffix), this, metrics -> metrics.statistic(statistic))
                 .description(description)
-                .tag(POOL_TAG, poolName())
+                .tag(POOL_TAG, poolName)
                 .register(registry);
     }
 
@@ -106,17 +109,12 @@ public final class UcpMetrics implements MeterBinder {
             ToLongFunction<UniversalConnectionPoolStatistics> count, ToDoubleFunction<UniversalConnectionPoolStatistics> totalTime) {
         FunctionTimer.builder(metricName(suffix), this, metrics -> metrics.statistic(count), metrics -> metrics.statistic(totalTime), TimeUnit.MILLISECONDS)
                 .description(description)
-                .tag(POOL_TAG, poolName())
+                .tag(POOL_TAG, poolName)
                 .register(registry);
     }
 
     private String metricName(String suffix) {
         return METRIC_PREFIX + suffix;
-    }
-
-    private String poolName() {
-        String poolName = poolDataSource.getConnectionPoolName();
-        return (poolName == null || poolName.isBlank()) ? "unknown" : poolName;
     }
 
     private boolean supports(ToDoubleFunction<UniversalConnectionPoolStatistics> statistic) {
