@@ -67,6 +67,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring-boot.version>4.1.0</spring-boot.version>
+        <jackson.version>3.1.5</jackson.version>
         <oci-sdk.version>3.89.1</oci-sdk.version>
 
         <!-- Distribution management -->
@@ -89,6 +90,16 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>tools.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>tools.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oracle.oci.sdk</groupId>
