@@ -86,7 +86,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <jackson.version>3.1.4</jackson.version>
         <jackson2.version>2.21.4</jackson2.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
-        <netty.version>4.2.15.Final</netty.version>
+        <netty.version>4.2.16.Final</netty.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.10.1</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
@@ -153,6 +153,13 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-dependencies</artifactId>
                 <version>${spring-cloud-oci-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
