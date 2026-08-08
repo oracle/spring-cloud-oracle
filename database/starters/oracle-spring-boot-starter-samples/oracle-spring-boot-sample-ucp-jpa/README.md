@@ -94,3 +94,7 @@ public class Student {
     private double credits;
     private double gpa;
 ```
+
+## UCP Metrics
+
+UCP Metrics are available on `http://localhost:9002/acuator/metrics`.

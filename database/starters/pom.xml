@@ -63,6 +63,7 @@
     <module>oracle-spring-boot-starter-spatial</module>
     <module>oracle-spring-boot-starter-samples</module>
     <module>oracle-spring-boot-starter-okafka</module>
+    <module>oracle-spring-boot-ucp-micrometer</module>
     <module>spring-boot-starter-oracle-otel</module>
   </modules>
 

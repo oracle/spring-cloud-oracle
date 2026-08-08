@@ -11,6 +11,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Database Starters
 
+- Added the opt-in UCP Micrometer module, exporting UCP pool statistics with `ucp.connections.*` metrics
 - Upgraded Spring Boot to 4.1.0 and refreshed related Jackson, Micrometer, Micrometer Tracing, and Maven plugin versions
 - Refreshed third party dependencies
 
