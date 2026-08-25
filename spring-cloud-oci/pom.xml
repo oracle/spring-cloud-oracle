@@ -75,7 +75,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <spring-boot.version>4.1.0</spring-boot.version>
+        <spring-boot.version>4.1.1</spring-boot.version>
         <spring-cloud-oci-dependencies.version>${project.version}</spring-cloud-oci-dependencies.version>
         <spring-cloud-dependencies.version>2025.1.2</spring-cloud-dependencies.version>
         <spring-framework.version>7.0.8</spring-framework.version>
@@ -86,7 +86,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <jackson.version>3.1.4</jackson.version>
         <jackson2.version>2.21.4</jackson2.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
-        <netty.version>4.2.16.Final</netty.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.10.1</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
@@ -134,11 +133,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <version>${oci-sdk.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-common</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
@@ -153,13 +147,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-dependencies</artifactId>
                 <version>${spring-cloud-oci-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-bom</artifactId>
-                <version>${netty.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
