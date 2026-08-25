@@ -12,23 +12,23 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Database Starters
 
 - Added the opt-in UCP Micrometer module, exporting UCP pool statistics with `ucp.connections.*` metrics
-- Upgraded Spring Boot to 4.1.0 and refreshed related Jackson, Micrometer, Micrometer Tracing, and Maven plugin versions
+- Upgraded Spring Boot to 4.1.1
 - Refreshed third party dependencies
 
 #### Spring Cloud Stream Binder for TxEventQ
 
-- Upgraded Spring Boot to 4.1.0 and refreshed Spring Cloud Stream, Spring Integration, Spring Framework, Jackson, Oracle JDBC/security/AQ JMS, Oracle Spring Boot starter, and Maven test plugin versions
+- Upgraded Spring Boot to 4.1.1 Boot starter, and Maven test plugin versions
 - Refreshed third party dependencies
 
 #### Spring AI Oracle
 
-- Initial release of Spring AI Oracle, tracking upstream Spring AI 2.0.0
-- Upgraded Spring AI Oracle to Spring AI 2.0.0 and Spring Boot 4.1.0
+- Upgraded Spring AI to 2.0.1 and Spring Boot to 4.1.1
+- Initial release of Spring AI Oracle
 - Refreshed third party dependencies
 
 #### Spring Cloud OCI
 
-- Upgraded Spring Cloud OCI to Spring Boot 4.1.0 and refreshed related Spring Cloud, Spring Framework, Spring Data, Netty, Jackson, OCI SDK, NoSQL driver, and Surefire patch versions
+- Upgraded Spring Boot to 4.1.1
 - Removed the Springdoc OpenAPI WebMVC UI dependency from Spring Cloud OCI and its common samples utilities
 - Refreshed third party dependencies
 
