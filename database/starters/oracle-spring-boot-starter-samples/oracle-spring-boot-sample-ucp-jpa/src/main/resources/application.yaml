@@ -18,3 +18,11 @@ spring:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
 server:
   port: 9001
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - metrics
+  server:
+    port: 9002
