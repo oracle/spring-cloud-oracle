@@ -49,7 +49,7 @@
         <oracle.database.security.version>21.21.0.0</oracle.database.security.version>
         <aqapi-jakarta.version>23.9.0.0</aqapi-jakarta.version>
         <org.springframework.cloud.version>5.0.2</org.springframework.cloud.version>
-        <spring.boot.version>4.1.0</spring.boot.version>
+        <spring.boot.version>4.1.1</spring.boot.version>
         <spring.framework.version>7.0.8</spring.framework.version>
         <testcontainers.version>2.0.5</testcontainers.version>
         <jackson.version>3.2.1</jackson.version>
