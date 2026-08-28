@@ -53,7 +53,7 @@ Spring Boot publishes generic `jdbc.connections.*` metrics for UCP when Actuator
 </dependency>
 ```
 
-The module automatically binds every UCP `PoolDataSource` to the available Micrometer registry. Portable pool-state meters are aligned with the Development connection-pool metrics in [OpenTelemetry Semantic Conventions v1.44.0](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/db/database-metrics.md#connection-pools):
+The module automatically binds every UCP `PoolDataSource` to the available Micrometer registry. Portable pool-state meters are aligned with OpenTelemetry database client metric conventions:
 
 | Meter | UCP value | Attributes |
 | --- | --- | --- |
@@ -65,9 +65,7 @@ The module automatically binds every UCP `PoolDataSource` to the available Micro
 
 The pool-name attribute uses a nonblank UCP connection-pool name when configured. Otherwise, it uses the Spring `DataSource` bean name, which keeps auto-configured pools unique within the application. The count, maximum, and minimum meters use the Micrometer `connections` base unit; pending requests use `requests`.
 
-These meters are convention-shaped rather than fully compliant. OpenTelemetry v1.44.0 specifies UpDownCounter instruments, but UCP exposes current snapshots and Micrometer represents portable polled snapshots as gauges. The module does not synthesize state-change deltas.
-
-Oracle UCP statistics that do not have an equivalent portable metric remain vendor extensions with the `pool` tag:
+Additional Oracle UCP statistics are provided under the `ucp.connections` namespace:
 
 | Meter or group | Meaning |
 | --- | --- |
@@ -78,7 +76,5 @@ Oracle UCP statistics that do not have an equivalent portable metric remain vend
 | `ucp.connections.borrowed`, `.returned`, `.creation.attempts` | Cumulative function counters |
 | `ucp.connections.acquire.average`, `.acquire.peak` | Connection-acquire time gauges |
 | `ucp.connections.acquire`, `.acquire.failed`, `.acquire.total`, `.usage` | Function timers backed by cumulative counts and total times |
-
-The module does not emit `db.client.connection.idle.max` because UCP has no maximum-idle-count setting, or `db.client.connection.timeouts` because failed waits are not necessarily timeouts. It also does not emit the `create_time`, `wait_time`, or `use_time` histograms because UCP provides aggregate values rather than individual duration observations. Operation-level metrics such as `db.client.operation.duration` are outside this pool-statistics binder.
 
 Shard-specific statistics are not exported because shard names can produce unbounded metric-tag cardinality.
