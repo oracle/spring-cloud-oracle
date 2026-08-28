@@ -1,10 +1,15 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.sample;
 
 import java.time.Duration;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import io.micrometer.core.instrument.FunctionCounter;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,8 +51,14 @@ public class UCPSampleApplicationTest {
     @Autowired
     StudentController studentController;
 
+    @Autowired
+    MeterRegistry meterRegistry;
+
+    @Autowired
+    DataSource dataSource;
+
     @Test
-    void ucpSampleApp() {
+    void ucpSampleApp() throws Exception {
 
         // Create a new student
         Student student1 = new Student(
@@ -75,5 +86,32 @@ public class UCPSampleApplicationTest {
         studentController.deleteStudent(s1.getId());
         ResponseEntity<Student> re = studentController.getStudent(s1.getId());
         assertThat(re.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(404));
+
+        // Verify UCP metrics are emitted
+        Gauge idleConnections = meterRegistry.get("db.client.connection.count")
+                .tag("db.client.connection.pool.name", "UCPSampleApplication")
+                .tag("db.client.connection.state", "idle")
+                .gauge();
+        Gauge usedConnections = meterRegistry.get("db.client.connection.count")
+                .tag("db.client.connection.pool.name", "UCPSampleApplication")
+                .tag("db.client.connection.state", "used")
+                .gauge();
+        FunctionCounter borrowedConnections = meterRegistry.get("ucp.connections.borrowed")
+                .tag("pool", "UCPSampleApplication")
+                .functionCounter();
+        FunctionCounter returnedConnections = meterRegistry.get("ucp.connections.returned")
+                .tag("pool", "UCPSampleApplication")
+                .functionCounter();
+        Gauge maxConnections = meterRegistry.get("db.client.connection.max")
+                .tag("db.client.connection.pool.name", "UCPSampleApplication")
+                .gauge();
+
+        assertThat(idleConnections.value()).isGreaterThan(0);
+        try (var ignored = dataSource.getConnection()) {
+            assertThat(usedConnections.value()).isGreaterThan(0);
+        }
+        assertThat(borrowedConnections.count()).isGreaterThan(0);
+        assertThat(returnedConnections.count()).isGreaterThan(0);
+        assertThat(maxConnections.value()).isEqualTo(30.0);
     }
 }

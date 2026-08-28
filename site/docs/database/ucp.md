@@ -40,7 +40,7 @@ The `oracleucp` block is optional and can be used to fine-tune the pool configur
 
 ## Micrometer Metrics
 
-Spring Boot publishes generic `jdbc.connections.*` metrics for UCP when Actuator is enabled. To export UCP-specific runtime statistics as well, Spring Boot actuator and the UCP micrometer dependencies to your project:
+Spring Boot publishes generic `jdbc.connections.*` metrics for UCP when Actuator is enabled. To export UCP-specific runtime statistics as well, add the Spring Boot Actuator and UCP Micrometer dependencies to your project:
 
 ```xml
 <dependency>
@@ -53,8 +53,28 @@ Spring Boot publishes generic `jdbc.connections.*` metrics for UCP when Actuator
 </dependency>
 ```
 
-The module automatically binds every UCP `PoolDataSource` to the available Micrometer registry. All meters use a `pool` tag containing the UCP connection-pool name.
+The module automatically binds every UCP `PoolDataSource` to the available Micrometer registry. Portable pool-state meters are aligned with OpenTelemetry database client metric conventions:
 
-The `ucp.connections.*` metrics include current pool state (`active`, `idle`, `pending`, `max`, `min`, `capacity`, and peak values), labeled and abandoned connections, and created, closed, borrowed, returned, and creation-attempt counters. Connection acquire and use statistics are exported as timers: `acquire`, `acquire.failed`, `acquire.total`, and `usage`. The `acquire.average` and `acquire.peak` values are time gauges.
+| Meter | UCP value | Attributes |
+| --- | --- | --- |
+| `db.client.connection.count` | Available connections | `db.client.connection.pool.name`, `db.client.connection.state=idle` |
+| `db.client.connection.count` | Borrowed connections | `db.client.connection.pool.name`, `db.client.connection.state=used` |
+| `db.client.connection.max` | Maximum pool size | `db.client.connection.pool.name` |
+| `db.client.connection.idle.min` | Minimum idle connections, when supported by UCP | `db.client.connection.pool.name` |
+| `db.client.connection.pending_requests` | Pending connection requests | `db.client.connection.pool.name` |
+
+The pool-name attribute uses a nonblank UCP connection-pool name when configured. Otherwise, it uses the Spring `DataSource` bean name, which keeps auto-configured pools unique within the application. The count, maximum, and minimum meters use the Micrometer `connections` base unit; pending requests use `requests`.
+
+Additional Oracle UCP statistics are provided under the `ucp.connections` namespace:
+
+| Meter or group | Meaning |
+| --- | --- |
+| `ucp.connections`, `.min`, `.capacity`, `.peak` | Total connections, minimum pool size, remaining capacity, and peak connections |
+| `ucp.connections.active.average`, `.active.peak` | Average and peak borrowed connections |
+| `ucp.connections.labeled`, `.abandoned` | Labeled connections and abandoned connections reclaimed |
+| `ucp.connections.created`, `.closed` | Current-pool creation and closure values, which may reset when the pool restarts |
+| `ucp.connections.borrowed`, `.returned`, `.creation.attempts` | Cumulative function counters |
+| `ucp.connections.acquire.average`, `.acquire.peak` | Connection-acquire time gauges |
+| `ucp.connections.acquire`, `.acquire.failed`, `.acquire.total`, `.usage` | Function timers backed by cumulative counts and total times |
 
 Shard-specific statistics are not exported because shard names can produce unbounded metric-tag cardinality.
