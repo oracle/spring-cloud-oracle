@@ -15,6 +15,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 - UCP metrics now use Spring Boot's standard `MeterBinder` lifecycle, preventing redundant registry binding
 - UCP metrics now use Spring `DataSource` bean names for unnamed pools, preventing metric-tag collisions
 - UCP connection `created` and `closed` metrics are now gauges, matching their resettable current-pool semantics
+- UCP portable pool-state metrics now align with the Development OpenTelemetry database client connection conventions in v1.44.0, while UCP-specific statistics remain under `ucp.connections.*`
 - The UCP JPA sample now selects Spring Boot's Oracle UCP configuration so its configured pool settings and metric tags are applied
 - Upgraded Spring Boot to 4.1.1
 - Refreshed third party dependencies

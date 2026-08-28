@@ -1,12 +1,12 @@
 # Oracle Spring Boot Sample UCP JPA
 
-This sample application demonstrates how to use the Oracle Spring Boot Starter UCP with Spring Data JPA, connecting your Oracle Database with powerful ORM abstractions that facilitate rapid development.
+This sample application demonstrates how to use the Oracle Spring Boot Starter UCP with Spring Data JPA, connecting to Oracle AI Database with powerful ORM abstractions that facilitate rapid development.
 
-The Oracle Spring Boot Sample UCP JPA package includes a JPA entity, repository, and rest controller to interact with the JPA repository. All necessary configuration and dependencies are bootstrapped, with an end-to-end test demonstrating the functionality of Spring JPA with Oracle Database and UCP.
+The Oracle Spring Boot Sample UCP JPA package includes a JPA entity, repository, and REST controller to interact with the JPA repository. All necessary configuration and dependencies are bootstrapped, with an end-to-end test demonstrating the functionality of Spring JPA with Oracle AI Database and UCP.
 
 ## Run the sample application
 
-The sample application test uses Testcontainers, and creates a temporary Oracle Free container database, and requires a docker runtime environment. The sample application demonstrates the use of Spring Data JPA with the Oracle Spring Boot Starter UCP.
+The sample application test uses Testcontainers to create a temporary Oracle AI Database Free container and requires a Docker runtime environment. The sample application demonstrates the use of Spring Data JPA with the Oracle Spring Boot Starter UCP.
 
 To run the test application, run the following command:
 
@@ -97,4 +97,8 @@ public class Student {
 
 ## UCP Metrics
 
-UCP Metrics are available on `http://localhost:9002/acuator/metrics`. The sample test verifies live UCP meters after database activity.
+The sample exposes the Actuator `metrics` endpoint on the configured management port, `9002`. Keep the `metrics` endpoint exposed in `application.yaml` to use these URLs.
+
+With the application running, [http://localhost:9002/actuator/metrics](http://localhost:9002/actuator/metrics) lists the available meter names. To retrieve the connection-count measurements and their `idle` and `used` state tags, use [http://localhost:9002/actuator/metrics/db.client.connection.count](http://localhost:9002/actuator/metrics/db.client.connection.count).
+
+The sample test verifies live UCP meters after Oracle AI Database activity. Portable pool-state meters use `db.client.connection.pool.name=UCPSampleApplication`; Oracle UCP vendor-extension meters continue to use `pool=UCPSampleApplication`.

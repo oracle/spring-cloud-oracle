@@ -22,6 +22,9 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 class UcpMicrometerAutoConfigurationTests {
 
+    private static final String POOL_NAME_ATTRIBUTE = "db.client.connection.pool.name";
+    private static final String STATE_ATTRIBUTE = "db.client.connection.state";
+
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(UcpMicrometerAutoConfiguration.class));
 
@@ -41,8 +44,15 @@ class UcpMicrometerAutoConfigurationTests {
                     MeterRegistry registry = context.getBean(MeterRegistry.class);
                     context.getBean(MeterBinder.class).bindTo(registry);
 
-                    assertThat(registry.find("ucp.connections.active").tag("pool", "orders").gauge()).isNotNull();
-                    assertThat(registry.find("ucp.connections.active").tag("pool", "billing").gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "orders")
+                            .tag(STATE_ATTRIBUTE, "idle")
+                            .gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "billing")
+                            .tag(STATE_ATTRIBUTE, "idle")
+                            .gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count").meters()).hasSize(4);
                 });
     }
 
@@ -58,8 +68,14 @@ class UcpMicrometerAutoConfigurationTests {
                     MeterRegistry registry = context.getBean(MeterRegistry.class);
                     context.getBean(MeterBinder.class).bindTo(registry);
 
-                    assertThat(registry.find("ucp.connections.active").tag("pool", "ordersDataSource").gauge()).isNotNull();
-                    assertThat(registry.find("ucp.connections.active").tag("pool", "billingDataSource").gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "ordersDataSource")
+                            .tag(STATE_ATTRIBUTE, "used")
+                            .gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "billingDataSource")
+                            .tag(STATE_ATTRIBUTE, "used")
+                            .gauge()).isNotNull();
                 });
     }
 
@@ -73,7 +89,10 @@ class UcpMicrometerAutoConfigurationTests {
                     MeterRegistry registry = context.getBean(MeterRegistry.class);
                     context.getBean(MeterBinder.class).bindTo(registry);
 
-                    assertThat(registry.find("ucp.connections.active").tag("pool", "ordersDataSource").gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "ordersDataSource")
+                            .tag(STATE_ATTRIBUTE, "idle")
+                            .gauge()).isNotNull();
                 });
     }
 
@@ -86,7 +105,7 @@ class UcpMicrometerAutoConfigurationTests {
                 .run(context -> {
                     MeterRegistry registry = context.getBean(MeterRegistry.class);
                     context.getBean(MeterBinder.class).bindTo(registry);
-                    assertThat(registry.find("ucp.connections.active").meter()).isNull();
+                    assertThat(registry.find("db.client.connection.count").meter()).isNull();
                 });
     }
 
@@ -103,8 +122,9 @@ class UcpMicrometerAutoConfigurationTests {
 
                     assertThat(context).hasSingleBean(MeterBinder.class);
                     assertThat(context.containsBean("ucpMeterBinderInitializer")).isFalse();
-                    assertThat(registry.find("ucp.connections.active")
-                            .tag("pool", "orders")
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "orders")
+                            .tag(STATE_ATTRIBUTE, "used")
                             .tag("application", "ucp-test")
                             .gauge()).isNotNull();
                 });
