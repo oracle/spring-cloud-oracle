@@ -58,8 +58,10 @@ public final class UcpMetrics implements MeterBinder {
         registerTimeGauge(registry, ".acquire.average", "Average connection acquire time", UniversalConnectionPoolStatistics::getAverageConnectionWaitTime);
         registerTimeGauge(registry, ".acquire.peak", "Peak connection acquire time", UniversalConnectionPoolStatistics::getPeakConnectionWaitTime);
 
-        registerCounter(registry, ".created", "Connections created", UniversalConnectionPoolStatistics::getConnectionsCreatedCount);
-        registerCounter(registry, ".closed", "Connections closed", UniversalConnectionPoolStatistics::getConnectionsClosedCount);
+        registerGauge(registry, ".created", "Connections created by the current pool instance",
+                UniversalConnectionPoolStatistics::getConnectionsCreatedCount);
+        registerGauge(registry, ".closed", "Connections closed by the current pool instance",
+                UniversalConnectionPoolStatistics::getConnectionsClosedCount);
         registerCounter(registry, ".borrowed", "Connections borrowed", UniversalConnectionPoolStatistics::getCumulativeConnectionBorrowedCount);
         registerCounter(registry, ".returned", "Connections returned", UniversalConnectionPoolStatistics::getCumulativeConnectionReturnedCount);
         if (supports(UniversalConnectionPoolStatistics::getCumulativeConnectionCreationAttempts)) {

@@ -54,7 +54,7 @@ spring:
 
     # Set these to use UCP over Hikari.
     driver-class-name: oracle.jdbc.OracleDriver
-    type: oracle.ucp.jdbc.PoolDataSourceImpl
+    type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
       initial-pool-size: 1
       min-pool-size: 1
@@ -97,4 +97,4 @@ public class Student {
 
 ## UCP Metrics
 
-UCP Metrics are available on `http://localhost:9002/acuator/metrics`.
+UCP Metrics are available on `http://localhost:9002/acuator/metrics`. The sample test verifies live UCP meters after database activity.

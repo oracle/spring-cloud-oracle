@@ -5,6 +5,9 @@ package com.oracle.database.spring.sample;
 import java.time.Duration;
 import java.util.List;
 
+import io.micrometer.core.instrument.FunctionCounter;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,6 +49,9 @@ public class UCPSampleApplicationTest {
     @Autowired
     StudentController studentController;
 
+    @Autowired
+    MeterRegistry meterRegistry;
+
     @Test
     void ucpSampleApp() {
 
@@ -75,5 +81,23 @@ public class UCPSampleApplicationTest {
         studentController.deleteStudent(s1.getId());
         ResponseEntity<Student> re = studentController.getStudent(s1.getId());
         assertThat(re.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(404));
+
+        Gauge activeConnections = meterRegistry.get("ucp.connections.active")
+                .tag("pool", "UCPSampleApplication")
+                .gauge();
+        FunctionCounter borrowedConnections = meterRegistry.get("ucp.connections.borrowed")
+                .tag("pool", "UCPSampleApplication")
+                .functionCounter();
+        FunctionCounter returnedConnections = meterRegistry.get("ucp.connections.returned")
+                .tag("pool", "UCPSampleApplication")
+                .functionCounter();
+        Gauge maxConnections = meterRegistry.get("ucp.connections.max")
+                .tag("pool", "UCPSampleApplication")
+                .gauge();
+
+        assertThat(activeConnections).isNotNull();
+        assertThat(borrowedConnections.count()).isGreaterThan(0);
+        assertThat(returnedConnections.count()).isGreaterThan(0);
+        assertThat(maxConnections.value()).isEqualTo(30.0);
     }
 }
