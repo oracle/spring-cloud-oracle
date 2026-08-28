@@ -87,6 +87,7 @@ public class UCPSampleApplicationTest {
         ResponseEntity<Student> re = studentController.getStudent(s1.getId());
         assertThat(re.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(404));
 
+        // Verify UCP metrics are emitted
         Gauge idleConnections = meterRegistry.get("db.client.connection.count")
                 .tag("db.client.connection.pool.name", "UCPSampleApplication")
                 .tag("db.client.connection.state", "idle")
