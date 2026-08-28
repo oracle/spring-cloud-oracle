@@ -49,7 +49,7 @@ class UcpMetricsTests {
         statistics.set("getCumulativeConnectionUseTime", 760L);
 
         MeterRegistry registry = new SimpleMeterRegistry();
-        new UcpMetrics(poolDataSource, statistics::statistics).bindTo(registry);
+        new UcpMetrics(poolDataSource, statistics::statistics, "orders").bindTo(registry);
 
         assertThat(registry.getMeters()).hasSize(23);
         assertThat(registry.find("ucp.connections.active").tag("pool", "orders").gauge().value()).isEqualTo(7);
@@ -77,9 +77,10 @@ class UcpMetricsTests {
         statistics.unsupported("getCumulativeConnectionCreationAttempts");
 
         MeterRegistry registry = new SimpleMeterRegistry();
-        new UcpMetrics(poolDataSource, statistics::statistics).bindTo(registry);
+        new UcpMetrics(poolDataSource, statistics::statistics, "legacy").bindTo(registry);
 
         assertThat(registry.find("ucp.connections.creation.attempts").tag("pool", "legacy").meter()).isNull();
         assertThat(registry.find("ucp.connections.active").tag("pool", "legacy").gauge().value()).isEqualTo(0);
     }
+
 }

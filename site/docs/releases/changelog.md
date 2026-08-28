@@ -12,6 +12,8 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Database Starters
 
 - Added the opt-in UCP Micrometer module, exporting UCP pool statistics with `ucp.connections.*` metrics
+- UCP metrics now use Spring Boot's standard `MeterBinder` lifecycle, preventing redundant registry binding
+- UCP metrics now use Spring `DataSource` bean names for unnamed pools, preventing metric-tag collisions
 - Upgraded Spring Boot to 4.1.1
 - Refreshed third party dependencies
 

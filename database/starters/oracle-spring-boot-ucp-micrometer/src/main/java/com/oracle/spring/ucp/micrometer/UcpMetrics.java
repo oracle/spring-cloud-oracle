@@ -2,7 +2,6 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.ucp.micrometer;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
@@ -30,14 +29,15 @@ public final class UcpMetrics implements MeterBinder {
     private final Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier;
     private final String poolName;
 
-    public UcpMetrics(PoolDataSource poolDataSource) {
-        this(poolDataSource, poolDataSource::getStatistics);
+    UcpMetrics(PoolDataSource poolDataSource, String dataSourceBeanName) {
+        this(poolDataSource, poolDataSource::getStatistics, dataSourceBeanName);
     }
 
-    UcpMetrics(PoolDataSource poolDataSource, Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier) {
+    UcpMetrics(PoolDataSource poolDataSource, Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier,
+            String dataSourceBeanName) {
         this.poolDataSource = poolDataSource;
         this.statisticsSupplier = statisticsSupplier;
-        this.poolName = Objects.requireNonNullElse(poolDataSource.getConnectionPoolName(), "unknown");
+        this.poolName = poolName(poolDataSource.getConnectionPoolName(), dataSourceBeanName);
     }
 
     @Override
@@ -115,6 +115,13 @@ public final class UcpMetrics implements MeterBinder {
 
     private String metricName(String suffix) {
         return METRIC_PREFIX + suffix;
+    }
+
+    private String poolName(String configuredPoolName, String dataSourceBeanName) {
+        if (configuredPoolName != null && !configuredPoolName.isBlank()) {
+            return configuredPoolName;
+        }
+        return dataSourceBeanName;
     }
 
     private boolean supports(ToDoubleFunction<UniversalConnectionPoolStatistics> statistic) {

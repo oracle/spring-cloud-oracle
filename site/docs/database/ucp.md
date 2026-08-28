@@ -53,7 +53,7 @@ Spring Boot publishes generic `jdbc.connections.*` metrics for UCP when Actuator
 </dependency>
 ```
 
-The module automatically binds every UCP `PoolDataSource` to the available Micrometer registry. All meters use a `pool` tag containing the UCP connection-pool name.
+The module automatically binds every UCP `PoolDataSource` to the available Micrometer registry. All meters use a `pool` tag containing the configured UCP connection-pool name; when that name is missing or blank, the tag falls back to the Spring `DataSource` bean name.
 
 The `ucp.connections.*` metrics include current pool state (`active`, `idle`, `pending`, `max`, `min`, `capacity`, and peak values), labeled and abandoned connections, and created, closed, borrowed, returned, and creation-attempt counters. Connection acquire and use statistics are exported as timers: `acquire`, `acquire.failed`, `acquire.total`, and `usage`. The `acquire.average` and `acquire.peak` values are time gauges.
 
