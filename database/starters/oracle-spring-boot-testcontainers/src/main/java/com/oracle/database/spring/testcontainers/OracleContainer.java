@@ -57,7 +57,7 @@ public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
     private static final String ORACLE_IDENTIFIER_PATTERN = "[A-Z][A-Z0-9_$#]{0,127}";
 
     private String username = DEFAULT_USERNAME;
-    private String password = DEFAULT_PASSWORD;
+    private String appUserPassword = DEFAULT_PASSWORD;
     private String adminPassword = DEFAULT_PASSWORD;
     private List<String> appUserRoles = List.of(DEFAULT_APP_USER_ROLE);
     private boolean appUser = true;
@@ -128,7 +128,7 @@ public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
 
     @Override
     public String getPassword() {
-        return usingSid ? adminPassword : password;
+        return appUser ? appUserPassword : adminPassword;
     }
 
     @Override
@@ -144,13 +144,13 @@ public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
             throw new IllegalArgumentException("SYS connections require SYSDBA privileges");
         }
 
+        usingSid = false;
         appUser = !SYSTEM_USERNAME.equals(normalizedUsername) && !PDBADMIN_USERNAME.equals(normalizedUsername);
         if (appUser && !normalizedUsername.matches(ORACLE_IDENTIFIER_PATTERN)) {
             throw new IllegalArgumentException("Username must be a valid unquoted Oracle AI Database identifier");
         }
 
         this.username = normalizedUsername;
-        this.password = appUser ? password : adminPassword;
         waitingFor(waitForLogMessage(appUser ? APP_USER_READY_LOG : DATABASE_READY_LOG));
         return self();
     }
@@ -159,8 +159,9 @@ public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
     public OracleContainer withPassword(String password) {
         requireNotBlank(password, "Password");
         requireValidPassword(password);
-        this.password = password;
-        if (!appUser) {
+        if (appUser) {
+            this.appUserPassword = password;
+        } else {
             this.adminPassword = password;
         }
         return self();
@@ -176,9 +177,6 @@ public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
         requireNotBlank(adminPassword, "Admin password");
         requireValidPassword(adminPassword);
         this.adminPassword = adminPassword;
-        if (!appUser) {
-            this.password = adminPassword;
-        }
         return self();
     }
 
@@ -230,6 +228,9 @@ public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
      */
     public OracleContainer usingSid() {
         usingSid = true;
+        appUser = false;
+        username = SYSTEM_USERNAME;
+        waitingFor(waitForLogMessage(DATABASE_READY_LOG));
         return self();
     }
 
@@ -296,7 +297,7 @@ public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
     }
 
     private String createAppUserScript() {
-        String escapedPassword = password.replace("'", "''");
+        String escapedPassword = appUserPassword.replace("'", "''");
         String roleGrant = appUserRoles.isEmpty()
                 ? ""
                 : "GRANT %s TO %s;%n".formatted(String.join(", ", appUserRoles), username);

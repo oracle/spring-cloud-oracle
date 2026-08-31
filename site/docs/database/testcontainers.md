@@ -46,6 +46,18 @@ OracleContainer database = new OracleContainer()
 
 Role names are case-insensitive, must be valid unquoted Oracle AI Database identifiers, and are deduplicated. Calling `withAppUserRoles()` without arguments grants only `CREATE SESSION`; initialization scripts that create database objects will then need additional privileges.
 
+### SID Connections
+
+Use `usingSid()` to connect to the `FREE` container database as `SYSTEM`. In SID mode, `withPassword(...)` configures the administrator password used both by the image and the JDBC connection:
+
+```java
+OracleContainer database = new OracleContainer()
+        .usingSid()
+        .withPassword("SidPassword1");
+```
+
+Calling `withUsername(...)` afterward returns the container to the `FREEPDB1` service connection mode. Calling `usingSid()` last selects the `FREE` SID and `SYSTEM` administrator credentials.
+
 ## Testing ORDS
 
 `OrdsContainer` runs the official Oracle REST Data Services image alongside an Oracle AI Database container. Put both containers on a shared network and give the database a network alias that is used in the ORDS connection strings:
@@ -65,5 +77,7 @@ OrdsContainer ords = new OrdsContainer()
 ```
 
 Start the database before ORDS. Any schema passed to `withSchema` must already exist; `OrdsContainer` enables it after ORDS becomes ready. The container exposes mapped HTTP, HTTPS, and MongoDB API ports through `getHttpPort()`, `getHttpsPort()`, and `getMongoDbApiPort()`.
+
+`withSchema(...)` supports passwords containing characters such as `/`, `@`, and spaces. Schema names must be valid unquoted Oracle AI Database identifiers, connect descriptors must be single-line values, and passwords cannot contain double quotes or line breaks.
 
 ORDS installation requires the full Oracle AI Database Free image. Use the `latest` tag, as shown above, rather than the reduced `latest-lite` default.

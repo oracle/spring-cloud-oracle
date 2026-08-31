@@ -9,8 +9,10 @@ import java.util.List;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import org.testcontainers.containers.ContainerLaunchException;
+import org.testcontainers.containers.ExecConfig;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.images.builder.Transferable;
 import org.testcontainers.utility.DockerImageName;
 
 /**
@@ -34,6 +36,10 @@ public class OrdsContainer extends GenericContainer<OrdsContainer> {
     private static final String CONNECTION_STRING_ENV = "CONN_STRING";
     private static final String ORACLE_PASSWORD_ENV = "ORACLE_PWD";
     private static final Duration DEFAULT_STARTUP_TIMEOUT = Duration.ofMinutes(5);
+    private static final String ORACLE_IDENTIFIER_PATTERN = "[A-Za-z][A-Za-z0-9_$#]{0,127}";
+    private static final String SCHEMA_SCRIPT_PREFIX = "/tmp/ords-enable-schema-";
+    private static final int OWNER_READ_WRITE_FILE_MODE = 0600;
+    private static final String ROOT_USER = "0";
 
     private final List<SchemaConfiguration> schemas = new ArrayList<>();
 
@@ -98,10 +104,17 @@ public class OrdsContainer extends GenericContainer<OrdsContainer> {
      * @return this container
      */
     public OrdsContainer withSchema(String username, String password, String connectDescriptor) {
+        username = requireNonBlank(username, "Schema username is required");
+        password = requireNonBlank(password, "Schema password is required");
+        connectDescriptor = requireNonBlank(connectDescriptor, "Schema connect descriptor is required");
+
+        requireUnquotedIdentifier(username);
+        requireValidPassword(password);
+        requireSingleLine(connectDescriptor, "Schema connect descriptor must be a single line");
         schemas.add(new SchemaConfiguration(
-                requireNonBlank(username, "Schema username is required"),
-                requireNonBlank(password, "Schema password is required"),
-                requireNonBlank(connectDescriptor, "Schema connect descriptor is required")));
+                username,
+                password,
+                connectDescriptor));
         return self();
     }
 
@@ -155,29 +168,68 @@ public class OrdsContainer extends GenericContainer<OrdsContainer> {
     }
 
     private void enableSchema(SchemaConfiguration schema) {
-        String command = String.format(
-                "printf 'WHENEVER SQLERROR EXIT SQL.SQLCODE\\nEXECUTE ORDS.ENABLE_SCHEMA;\\nEXIT;\\n' | sql -s %s",
-                shellQuote(schema.username() + "/" + schema.password() + "@" + schema.connectDescriptor()));
+        String scriptPath = SCHEMA_SCRIPT_PREFIX + java.util.UUID.randomUUID() + ".sql";
+        ContainerLaunchException failure = null;
 
         try {
-            execInContainerOrThrow("ORDS schema enablement failed", "bash", "-lc", command);
+            copyFileToContainer(
+                    Transferable.of(createEnableSchemaScript(schema), OWNER_READ_WRITE_FILE_MODE),
+                    scriptPath);
+            execInContainerOrThrow("ORDS schema enablement failed", "sql", "-s", "/nolog", "@" + scriptPath);
         } catch (IOException e) {
-            throw new ContainerLaunchException("Failed to run ORDS schema enablement command", e);
+            failure = new ContainerLaunchException("Failed to run ORDS schema enablement command", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new ContainerLaunchException("Interrupted while enabling ORDS schema", e);
+            failure = new ContainerLaunchException("Interrupted while enabling ORDS schema", e);
+        } catch (ContainerLaunchException e) {
+            failure = e;
+        } catch (RuntimeException e) {
+            failure = new ContainerLaunchException("Failed to prepare ORDS schema enablement", e);
+        }
+
+        ContainerLaunchException cleanupFailure = removeSchemaScript(scriptPath);
+        if (failure != null) {
+            if (cleanupFailure != null) {
+                failure.addSuppressed(cleanupFailure);
+            }
+            throw failure;
+        }
+        if (cleanupFailure != null) {
+            throw cleanupFailure;
+        }
+    }
+
+    private ContainerLaunchException removeSchemaScript(String scriptPath) {
+        try {
+            execInContainerOrThrow(
+                    "Failed to remove temporary ORDS schema credential script",
+                    "rm", "-f", scriptPath);
+            return null;
+        } catch (IOException e) {
+            return new ContainerLaunchException("Failed to remove temporary ORDS schema credential script", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return new ContainerLaunchException(
+                    "Interrupted while removing temporary ORDS schema credential script", e);
+        } catch (ContainerLaunchException e) {
+            return e;
+        } catch (RuntimeException e) {
+            return new ContainerLaunchException("Failed to remove temporary ORDS schema credential script", e);
         }
     }
 
     private void execInContainerOrThrow(String failureMessage, String... command)
             throws IOException, InterruptedException {
-        ExecResult result = execInContainer(command);
+        // Testcontainers copies the 0600 script as root, so the same user must read and remove it.
+        ExecResult result = execInContainer(ExecConfig.builder()
+                .user(ROOT_USER)
+                .command(command)
+                .build());
         if (result.getExitCode() == 0) {
             return;
         }
 
-        throw new ContainerLaunchException(
-                failureMessage + ".\nstdout:\n" + result.getStdout() + "\nstderr:\n" + result.getStderr());
+        throw new ContainerLaunchException(failureMessage + " (exit code " + result.getExitCode() + ")");
     }
 
     private void validateRequiredEnv(String envName) {
@@ -197,8 +249,37 @@ public class OrdsContainer extends GenericContainer<OrdsContainer> {
         return value == null || value.isBlank();
     }
 
-    private static String shellQuote(String value) {
-        return "'" + value.replace("'", "'\"'\"'") + "'";
+    private static void requireUnquotedIdentifier(String username) {
+        if (!username.matches(ORACLE_IDENTIFIER_PATTERN)) {
+            throw new IllegalArgumentException(
+                    "Schema username must be a valid unquoted Oracle AI Database identifier");
+        }
+    }
+
+    private static void requireValidPassword(String password) {
+        if (password.indexOf('"') >= 0 || containsLineBreak(password)) {
+            throw new IllegalArgumentException("Schema password cannot contain double quotes or line breaks");
+        }
+    }
+
+    private static void requireSingleLine(String value, String message) {
+        if (containsLineBreak(value)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    private static boolean containsLineBreak(String value) {
+        return value.indexOf('\n') >= 0 || value.indexOf('\r') >= 0;
+    }
+
+    private static String createEnableSchemaScript(SchemaConfiguration schema) {
+        return """
+                WHENEVER SQLERROR EXIT SQL.SQLCODE
+                SET DEFINE OFF
+                CONNECT %s/\"%s\"@%s
+                EXECUTE ORDS.ENABLE_SCHEMA;
+                EXIT;
+                """.formatted(schema.username(), schema.password(), schema.connectDescriptor());
     }
 
     private record SchemaConfiguration(String username, String password, String connectDescriptor) {

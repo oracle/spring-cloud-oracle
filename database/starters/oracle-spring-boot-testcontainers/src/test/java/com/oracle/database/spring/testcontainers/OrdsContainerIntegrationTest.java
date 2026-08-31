@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -58,7 +59,7 @@ class OrdsContainerIntegrationTest {
     private static final String SCHEMA_CONNECTION = "ordsdb:1521/FREEPDB1";
     private static final String ORDS_INIT_SCRIPT = "/tmp/ords_init.sql";
     private static final String DB_API_ADMIN_USERNAME = "ordsuser";
-    private static final String DB_API_ADMIN_PASSWORD = "ordsuserpwd";
+    private static final String DB_API_ADMIN_PASSWORD = "Ords /@ Password1";
     private static final String MONGO_USERNAME = "mongouser";
     private static final String MONGO_PASSWORD = "mongouserpwd";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -130,6 +131,31 @@ class OrdsContainerIntegrationTest {
         assertFalse(databaseVersion.instanceVersion().isEmpty(), "Expected at least one instance version entry");
         assertNotNull(databaseVersion.instanceVersion().getFirst().banner(),
                 "Expected version banner in ORDS response");
+    }
+
+    @Test
+    void removesTemporarySchemaCredentialScripts() throws IOException, InterruptedException {
+        Container.ExecResult result = ORDS_CONTAINER.execInContainer(
+                "find", "/tmp", "-maxdepth", "1", "-name", "ords-enable-schema-*.sql", "-print");
+
+        assertEquals(0, result.getExitCode(), "Expected temporary-script inspection to succeed");
+        assertTrue(result.getStdout().isBlank(), "Expected temporary schema credential scripts to be removed");
+    }
+
+    @Test
+    void rejectsUnsupportedSchemaConfiguration() {
+        OrdsContainer container = new OrdsContainer();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> container.withSchema("APP", "Password\"1", SCHEMA_CONNECTION));
+        assertThrows(IllegalArgumentException.class,
+                () -> container.withSchema("APP", "Password\n1", SCHEMA_CONNECTION));
+        assertThrows(IllegalArgumentException.class,
+                () -> container.withSchema("APP", "Password\r1", SCHEMA_CONNECTION));
+        assertThrows(IllegalArgumentException.class,
+                () -> container.withSchema("unsupported schema", "Password1", SCHEMA_CONNECTION));
+        assertThrows(IllegalArgumentException.class,
+                () -> container.withSchema("APP", "Password1", SCHEMA_CONNECTION + "\nEXIT;"));
     }
 
     @Test

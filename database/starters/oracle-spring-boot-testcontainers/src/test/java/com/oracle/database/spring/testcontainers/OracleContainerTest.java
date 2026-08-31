@@ -28,6 +28,12 @@ class OracleContainerTest {
                     .withAppUserRoles("connect", "db_developer_role", "CONNECT")
                     .withInitScript("students.sql");
 
+    @Container
+    static final OracleContainer SID_CONTAINER =
+            new OracleContainer()
+                    .usingSid()
+                    .withPassword("SidPassword1");
+
     static OracleDataSource dataSource;
 
     @BeforeAll
@@ -62,5 +68,52 @@ class OracleContainerTest {
         }
 
         assertEquals(Set.of("CONNECT", "DB_DEVELOPER_ROLE"), roles);
+    }
+
+    @Test
+    void connectsToSidWithConfiguredAdministratorCredentials() throws SQLException {
+        OracleDataSource sidDataSource = new OracleDataSource();
+        sidDataSource.setURL(SID_CONTAINER.getJdbcUrl());
+        sidDataSource.setUser(SID_CONTAINER.getUsername());
+        sidDataSource.setPassword(SID_CONTAINER.getPassword());
+
+        try (Connection connection = sidDataSource.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("""
+                     select sys_context('USERENV', 'SESSION_USER') as session_user,
+                            sys_context('USERENV', 'DB_NAME') as db_name
+                     from dual
+                     """)) {
+            assertTrue(resultSet.next(), "Expected SID connection query to return one row");
+            assertEquals("SYSTEM", resultSet.getString("session_user"));
+            assertEquals("FREE", resultSet.getString("db_name"));
+        }
+
+        assertEquals("SYSTEM", SID_CONTAINER.getUsername());
+        assertEquals("SidPassword1", SID_CONTAINER.getPassword());
+        assertTrue(SID_CONTAINER.getJdbcUrl().endsWith(":" + OracleContainer.DEFAULT_SID));
+    }
+
+    @Test
+    void usernameSelectionAfterSidReturnsToApplicationUserMode() {
+        OracleContainer container = new OracleContainer()
+                .usingSid()
+                .withUsername("TEST")
+                .withPassword("AppPassword1");
+
+        assertEquals("TEST", container.getUsername());
+        assertEquals("AppPassword1", container.getPassword());
+    }
+
+    @Test
+    void sidSelectionAfterUsernameUsesAdministratorCredentials() {
+        OracleContainer container = new OracleContainer()
+                .withUsername("TEST")
+                .withPassword("AppPassword1")
+                .withAdminPassword("AdminPassword1")
+                .usingSid();
+
+        assertEquals("SYSTEM", container.getUsername());
+        assertEquals("AdminPassword1", container.getPassword());
     }
 }
