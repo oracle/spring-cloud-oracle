@@ -1,4 +1,4 @@
-// Copyright (c) 2025, Oracle and/or its affiliates.
+// Copyright (c) 2025, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 package com.oracle.spring.json.duality;
@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import com.oracle.database.spring.testcontainers.OracleContainer;
 import com.oracle.spring.json.duality.builder.DualityViewScanner;
 import com.oracle.spring.json.duality.model.book.Book;
 import com.oracle.spring.json.duality.model.book.Loan;
@@ -33,7 +34,6 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.core.io.ClassPathResource;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.oracle.OracleContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,7 +55,7 @@ public class SpringBootDualityTest {
      */
     @Container
     @ServiceConnection
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.2-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer()
             .withStartupTimeout(Duration.ofMinutes(5))
             .withInitScript("products.sql")
             .withUsername("testuser")

@@ -63,6 +63,7 @@
     <module>oracle-spring-boot-starter-spatial</module>
     <module>oracle-spring-boot-starter-samples</module>
     <module>oracle-spring-boot-starter-okafka</module>
+    <module>oracle-spring-boot-testcontainers</module>
     <module>oracle-spring-boot-ucp-micrometer</module>
     <module>spring-boot-starter-oracle-otel</module>
   </modules>
@@ -266,9 +267,9 @@
       </dependency>
 
       <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>testcontainers-oracle-free</artifactId>
-        <version>${testcontainers.version}</version>
+        <groupId>com.oracle.database.spring</groupId>
+        <artifactId>oracle-spring-boot-testcontainers</artifactId>
+        <version>${project.version}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>

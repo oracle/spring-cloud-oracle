@@ -52,6 +52,7 @@
         <spring.boot.version>4.1.1</spring.boot.version>
         <spring.framework.version>7.0.8</spring.framework.version>
         <testcontainers.version>2.0.5</testcontainers.version>
+        <oracle-spring-boot-testcontainers.version>26.2.1</oracle-spring-boot-testcontainers.version>
         <jackson.version>3.2.1</jackson.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
@@ -229,9 +230,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-oracle-free</artifactId>
-            <version>${testcontainers.version}</version>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-testcontainers</artifactId>
+            <version>${oracle-spring-boot-testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

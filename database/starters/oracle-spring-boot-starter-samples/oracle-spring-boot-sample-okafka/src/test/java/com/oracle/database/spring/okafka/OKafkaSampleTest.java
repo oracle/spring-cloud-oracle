@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.okafka;
 
@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+import com.oracle.database.spring.testcontainers.OracleContainer;
 import oracle.jdbc.pool.OracleDataSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.oracle.OracleContainer;
 import org.testcontainers.utility.MountableFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,15 +30,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 public class
 OKafkaSampleTest {
-    // Oracle Database 23ai Free container image
-    private static final String oracleImage = "gvenzl/oracle-free:23.26.2-slim-faststart";
     private static final String testUser = "testuser";
     private static final String testPassword = "Welcome123#";
 
     private static OracleDataSource dataSource;
 
     @Container
-    private static final OracleContainer oracleContainer = new OracleContainer(oracleImage)
+    private static final OracleContainer oracleContainer = new OracleContainer()
             .withStartupTimeout(Duration.ofMinutes(3)) // allow possible slow startup
             .withUsername(testUser)
             .withPassword(testPassword);

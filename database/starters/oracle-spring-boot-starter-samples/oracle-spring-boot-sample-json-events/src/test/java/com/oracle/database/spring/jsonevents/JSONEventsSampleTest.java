@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonevents;
 
@@ -6,6 +6,7 @@ import java.io.File;
 import java.time.Duration;
 import java.util.List;
 
+import com.oracle.database.spring.testcontainers.OracleContainer;
 import com.oracle.database.spring.jsonevents.model.Sensor;
 import com.oracle.database.spring.jsonevents.model.SensorEvent;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,7 +19,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.oracle.OracleContainer;
 import org.testcontainers.utility.MountableFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertTimeout;
 @Sql("/init.sql") // Initialize the app tables
 public class JSONEventsSampleTest {
     /**
-     * The Testcontainers Oracle Free module let's us create an Oracle database container in a junit context.
+     * OracleContainer creates an Oracle AI Database Free container in a JUnit context.
      */
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.2-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer()
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");

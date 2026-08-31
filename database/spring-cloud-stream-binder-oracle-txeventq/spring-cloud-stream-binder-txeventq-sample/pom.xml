@@ -49,6 +49,7 @@
         <oracle-spring-boot.version>26.2.0</oracle-spring-boot.version>
         <aqapi-jakarta.version>23.9.0.0</aqapi-jakarta.version>
         <testcontainers.version>2.0.5</testcontainers.version>
+        <oracle-spring-boot-testcontainers.version>26.2.1</oracle-spring-boot-testcontainers.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
         <jackson.version>3.2.1</jackson.version>
     </properties>
@@ -149,9 +150,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-oracle-free</artifactId>
-            <version>${testcontainers.version}</version>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-testcontainers</artifactId>
+            <version>${oracle-spring-boot-testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
