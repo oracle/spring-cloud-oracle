@@ -4,11 +4,9 @@ package com.oracle.spring.ucp.micrometer;
 
 import javax.sql.DataSource;
 
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 import oracle.ucp.jdbc.PoolDataSource;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -18,21 +16,16 @@ import org.springframework.context.annotation.Bean;
  * Auto-configuration for UCP Micrometer metrics.
  */
 @AutoConfiguration(afterName = "com.oracle.spring.ucp.UCPAutoConfiguration")
-@ConditionalOnClass({ MeterBinder.class, MeterRegistry.class, PoolDataSource.class })
+@ConditionalOnClass({ MeterBinder.class, PoolDataSource.class })
 public class UcpMicrometerAutoConfiguration {
 
     @Bean
-    MeterBinder ucpMeterBinder(ObjectProvider<DataSource> dataSources) {
-        return registry -> dataSources.orderedStream()
-                .filter(PoolDataSource.class::isInstance)
-                .map(PoolDataSource.class::cast)
-                .map(UcpMetrics::new)
-                .forEach(metrics -> metrics.bindTo(registry));
+    MeterBinder ucpMeterBinder(ListableBeanFactory beanFactory) {
+        return registry -> beanFactory.getBeansOfType(DataSource.class).forEach((beanName, dataSource) -> {
+            if (dataSource instanceof PoolDataSource poolDataSource) {
+                new UcpMetrics(poolDataSource, beanName).bindTo(registry);
+            }
+        });
     }
 
-    @Bean
-    SmartInitializingSingleton ucpMeterBinderInitializer(MeterBinder ucpMeterBinder,
-            ObjectProvider<MeterRegistry> meterRegistries) {
-        return () -> meterRegistries.orderedStream().forEach(ucpMeterBinder::bindTo);
-    }
 }

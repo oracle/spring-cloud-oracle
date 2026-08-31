@@ -2,7 +2,6 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.ucp.micrometer;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
@@ -13,6 +12,7 @@ import io.micrometer.core.instrument.FunctionTimer;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.TimeGauge;
+import io.micrometer.core.instrument.binder.BaseUnits;
 import io.micrometer.core.instrument.binder.MeterBinder;
 import oracle.ucp.UniversalConnectionPoolStatistics;
 import oracle.ucp.jdbc.PoolDataSource;
@@ -26,27 +26,63 @@ public final class UcpMetrics implements MeterBinder {
     private static final String METRIC_PREFIX = "ucp.connections";
     private static final String POOL_TAG = "pool";
 
+    private static final String CONNECTION_COUNT = "db.client.connection.count";
+    private static final String CONNECTION_MAX = "db.client.connection.max";
+    private static final String CONNECTION_IDLE_MIN = "db.client.connection.idle.min";
+    private static final String CONNECTION_PENDING_REQUESTS = "db.client.connection.pending_requests";
+    private static final String CONNECTION_POOL_NAME = "db.client.connection.pool.name";
+    private static final String CONNECTION_STATE = "db.client.connection.state";
+    private static final String CONNECTION_STATE_IDLE = "idle";
+    private static final String CONNECTION_STATE_USED = "used";
+    private static final String REQUESTS_BASE_UNIT = "requests";
+
     private final PoolDataSource poolDataSource;
     private final Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier;
+    private final ToDoubleFunction<PoolDataSource> minIdleStatistic;
     private final String poolName;
 
-    public UcpMetrics(PoolDataSource poolDataSource) {
-        this(poolDataSource, poolDataSource::getStatistics);
+    UcpMetrics(PoolDataSource poolDataSource, String dataSourceBeanName) {
+        this(poolDataSource, poolDataSource::getStatistics, dataSourceBeanName);
     }
 
-    UcpMetrics(PoolDataSource poolDataSource, Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier) {
+    UcpMetrics(PoolDataSource poolDataSource, Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier,
+            String dataSourceBeanName) {
+        this(poolDataSource, statisticsSupplier, dataSourceBeanName, UcpMetrics::minIdle);
+    }
+
+    UcpMetrics(PoolDataSource poolDataSource, Supplier<? extends UniversalConnectionPoolStatistics> statisticsSupplier,
+            String dataSourceBeanName, ToDoubleFunction<PoolDataSource> minIdleStatistic) {
         this.poolDataSource = poolDataSource;
         this.statisticsSupplier = statisticsSupplier;
-        this.poolName = Objects.requireNonNullElse(poolDataSource.getConnectionPoolName(), "unknown");
+        this.minIdleStatistic = minIdleStatistic;
+        this.poolName = poolName(poolDataSource.getConnectionPoolName(), dataSourceBeanName);
     }
 
     @Override
     public void bindTo(@NonNull MeterRegistry registry) {
+        registerSemanticGauge(registry, CONNECTION_COUNT,
+                "The number of connections that are currently in state described by the state attribute",
+                BaseUnits.CONNECTIONS,
+                metrics -> metrics.statistic(UniversalConnectionPoolStatistics::getAvailableConnectionsCount),
+                CONNECTION_STATE_IDLE);
+        registerSemanticGauge(registry, CONNECTION_COUNT,
+                "The number of connections that are currently in state described by the state attribute",
+                BaseUnits.CONNECTIONS,
+                metrics -> metrics.statistic(UniversalConnectionPoolStatistics::getBorrowedConnectionsCount),
+                CONNECTION_STATE_USED);
+        registerSemanticGauge(registry, CONNECTION_MAX,
+                "The maximum number of open connections allowed", BaseUnits.CONNECTIONS,
+                metrics -> metrics.poolStatistic(PoolDataSource::getMaxPoolSize), null);
+        if (supportsPoolStatistic(minIdleStatistic)) {
+            registerSemanticGauge(registry, CONNECTION_IDLE_MIN,
+                    "The minimum number of idle open connections allowed", BaseUnits.CONNECTIONS,
+                    metrics -> metrics.poolStatistic(metrics.minIdleStatistic), null);
+        }
+        registerSemanticGauge(registry, CONNECTION_PENDING_REQUESTS,
+                "The number of current pending requests for an open connection", REQUESTS_BASE_UNIT,
+                metrics -> metrics.statistic(UniversalConnectionPoolStatistics::getPendingRequestsCount), null);
+
         registerGauge(registry, "", "Total connections", UniversalConnectionPoolStatistics::getTotalConnectionsCount);
-        registerGauge(registry, ".idle", "Available connections", UniversalConnectionPoolStatistics::getAvailableConnectionsCount);
-        registerGauge(registry, ".active", "Borrowed connections", UniversalConnectionPoolStatistics::getBorrowedConnectionsCount);
-        registerGauge(registry, ".pending", "Pending connection requests", UniversalConnectionPoolStatistics::getPendingRequestsCount);
-        registerGauge(registry, ".max", "Maximum pool size", statistics -> poolDataSource.getMaxPoolSize());
         registerGauge(registry, ".min", "Minimum pool size", statistics -> poolDataSource.getMinPoolSize());
         registerGauge(registry, ".capacity", "Remaining pool capacity", UniversalConnectionPoolStatistics::getRemainingPoolCapacityCount);
         registerGauge(registry, ".peak", "Peak connections", UniversalConnectionPoolStatistics::getPeakConnectionsCount);
@@ -58,8 +94,10 @@ public final class UcpMetrics implements MeterBinder {
         registerTimeGauge(registry, ".acquire.average", "Average connection acquire time", UniversalConnectionPoolStatistics::getAverageConnectionWaitTime);
         registerTimeGauge(registry, ".acquire.peak", "Peak connection acquire time", UniversalConnectionPoolStatistics::getPeakConnectionWaitTime);
 
-        registerCounter(registry, ".created", "Connections created", UniversalConnectionPoolStatistics::getConnectionsCreatedCount);
-        registerCounter(registry, ".closed", "Connections closed", UniversalConnectionPoolStatistics::getConnectionsClosedCount);
+        registerGauge(registry, ".created", "Connections created by the current pool instance",
+                UniversalConnectionPoolStatistics::getConnectionsCreatedCount);
+        registerGauge(registry, ".closed", "Connections closed by the current pool instance",
+                UniversalConnectionPoolStatistics::getConnectionsClosedCount);
         registerCounter(registry, ".borrowed", "Connections borrowed", UniversalConnectionPoolStatistics::getCumulativeConnectionBorrowedCount);
         registerCounter(registry, ".returned", "Connections returned", UniversalConnectionPoolStatistics::getCumulativeConnectionReturnedCount);
         if (supports(UniversalConnectionPoolStatistics::getCumulativeConnectionCreationAttempts)) {
@@ -77,6 +115,19 @@ public final class UcpMetrics implements MeterBinder {
                 UniversalConnectionPoolStatistics::getCumulativeConnectionWaitTime);
         registerTimer(registry, ".usage", "Connection usage time", UniversalConnectionPoolStatistics::getCumulativeConnectionReturnedCount,
                 UniversalConnectionPoolStatistics::getCumulativeConnectionUseTime);
+    }
+
+    private void registerSemanticGauge(MeterRegistry registry, String name, String description, String baseUnit,
+            ToDoubleFunction<UcpMetrics> statistic, String state) {
+        Gauge.Builder<UcpMetrics> builder = Gauge.builder(name, this, statistic)
+                .description(description)
+                .baseUnit(baseUnit)
+                .tag(CONNECTION_POOL_NAME, poolName)
+                .strongReference(true);
+        if (state != null) {
+            builder.tag(CONNECTION_STATE, state);
+        }
+        builder.register(registry);
     }
 
     private void registerGauge(MeterRegistry registry, String suffix, String description,
@@ -117,8 +168,35 @@ public final class UcpMetrics implements MeterBinder {
         return METRIC_PREFIX + suffix;
     }
 
+    private String poolName(String configuredPoolName, String dataSourceBeanName) {
+        if (configuredPoolName != null && !configuredPoolName.isBlank()) {
+            return configuredPoolName;
+        }
+        return dataSourceBeanName;
+    }
+
     private boolean supports(ToDoubleFunction<UniversalConnectionPoolStatistics> statistic) {
         return !Double.isNaN(statistic(statistic));
+    }
+
+    private boolean supportsPoolStatistic(ToDoubleFunction<PoolDataSource> statistic) {
+        return !Double.isNaN(poolStatistic(statistic));
+    }
+
+    private static double minIdle(PoolDataSource poolDataSource) {
+        try {
+            return ((Number) poolDataSource.getClass().getMethod("getMinIdle").invoke(poolDataSource)).doubleValue();
+        } catch (ReflectiveOperationException | LinkageError | RuntimeException ex) {
+            return Double.NaN;
+        }
+    }
+
+    private double poolStatistic(ToDoubleFunction<PoolDataSource> statistic) {
+        try {
+            return statistic.applyAsDouble(poolDataSource);
+        } catch (LinkageError | RuntimeException ex) {
+            return Double.NaN;
+        }
     }
 
     private double statistic(ToDoubleFunction<UniversalConnectionPoolStatistics> statistic) {
