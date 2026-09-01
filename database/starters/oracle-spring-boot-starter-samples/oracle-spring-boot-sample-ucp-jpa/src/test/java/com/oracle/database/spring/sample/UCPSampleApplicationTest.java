@@ -5,8 +5,8 @@ package com.oracle.database.spring.sample;
 import java.time.Duration;
 import java.util.List;
 
+import com.oracle.database.spring.testcontainers.OracleContainer;
 import javax.sql.DataSource;
-
 import io.micrometer.core.instrument.FunctionCounter;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -20,7 +20,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.oracle.OracleContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,10 +29,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UCPSampleApplicationTest {
 
     /**
-     * The Testcontainers Oracle Free module let's us create an Oracle database container in a junit context.
+     * OracleContainer creates an Oracle AI Database Free container in a JUnit context.
      */
     @Container
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.2-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer()
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");

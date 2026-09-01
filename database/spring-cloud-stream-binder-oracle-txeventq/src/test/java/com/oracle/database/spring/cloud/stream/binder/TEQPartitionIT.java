@@ -80,6 +80,7 @@ import com.oracle.database.spring.cloud.stream.binder.utils.ListenerContainerFac
 import com.oracle.database.spring.cloud.stream.binder.utils.MessageRecoverer;
 import com.oracle.database.spring.cloud.stream.binder.utils.RepublishMessageRecoverer;
 import com.oracle.database.spring.cloud.stream.binder.utils.SpecCompliantJmsHeaderMapper;
+import com.oracle.database.spring.testcontainers.OracleContainer;
 
 import jakarta.jms.ConnectionFactory;
 import nativetests.TestObject;
@@ -88,7 +89,6 @@ import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.oracle.OracleContainer;
 import static org.awaitility.Awaitility.await;
 
 

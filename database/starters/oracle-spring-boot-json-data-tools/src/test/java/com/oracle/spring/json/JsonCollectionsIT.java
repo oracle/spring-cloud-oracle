@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.spring.json;
 
@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
+import com.oracle.database.spring.testcontainers.OracleContainer;
 import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
 import com.oracle.spring.json.test.Student;
@@ -22,14 +23,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.oracle.OracleContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = JsonCollectionsAutoConfiguration.class)
 @Testcontainers
 public class JsonCollectionsIT {
-    static OracleContainer oracleContainer = new OracleContainer("gvenzl/oracle-free:23.26.2-slim-faststart")
+    static OracleContainer oracleContainer = new OracleContainer()
             .withStartupTimeout(Duration.ofMinutes(2))
             .withUsername("testuser")
             .withPassword("testpwd");

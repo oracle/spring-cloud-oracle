@@ -11,12 +11,14 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Database Starters
 
+- Added the `oracle-spring-boot-testcontainers` module with `OracleContainer` and `OrdsContainer` definitions for the official Oracle AI Database Free and ORDS images
 - Added the opt-in UCP Micrometer module, exporting UCP pool statistics with `ucp.connections.*` metrics
 - Upgraded Spring Boot to 4.1.1
 - Refreshed third party dependencies
 
 #### Spring Cloud Stream Binder for TxEventQ
 
+- Migrated integration tests and the sample test to the shared `OracleContainer` definition backed by the official Oracle AI Database Free image
 - Upgraded Spring Boot to 4.1.1 Boot starter, and Maven test plugin versions
 - Refreshed third party dependencies
 

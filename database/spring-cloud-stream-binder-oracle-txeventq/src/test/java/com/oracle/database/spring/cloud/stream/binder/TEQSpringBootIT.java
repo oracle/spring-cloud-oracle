@@ -1,8 +1,11 @@
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.database.spring.cloud.stream.binder;
 
 import java.sql.SQLException;
 
 import com.oracle.database.spring.cloud.stream.binder.config.TxEventQJmsConfiguration;
+import com.oracle.database.spring.testcontainers.OracleContainer;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.oracle.OracleContainer;
 
 @Testcontainers(disabledWithoutDocker = true)
 @SpringBootTest(classes = TxEventQJmsConfiguration.class)

@@ -86,8 +86,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-oracle-free</artifactId>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-testcontainers</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
