@@ -14,6 +14,10 @@ The model bindings include Spring AI `ChatModel` and `EmbeddingModel` implementa
 | `auto-configurations/models/spring-ai-autoconfigure-model-oracle` | Spring Boot auto-configuration for OCI Generative AI Spring AI models. |
 | `starters/spring-ai-starter-model-oracle`                         | Spring Boot starter for OCI Generative AI Spring AI models.            |
 
+## Build quality checks
+
+Run the test suite with `make test` and SpotBugs plus FindSecBugs security analysis with `make spotbugs`, which enables the opt-in Maven `spotbugs` profile. Each analyzed Maven module writes an HTML report to `target/site/spotbugs.html` and an XML report to `target/spotbugsXml.xml`. Use `make install` to install artifacts while skipping tests, CycloneDX generation, and SpotBugs. SpotBugs reports existing findings without failing the build.
+
 ## Maven
 
 ```xml

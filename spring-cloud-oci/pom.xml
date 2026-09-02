@@ -96,10 +96,10 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <cyclonedx.version>2.9.2</cyclonedx.version>
+        <spotbugs-maven-plugin.version>4.10.4.0</spotbugs-maven-plugin.version>
+        <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <cc.code-coverage-ratio>0.20</cc.code-coverage-ratio>
-        <!--<dependency-check-maven.version>8.4.0</dependency-check-maven.version>
-        <failBuildOnCVSS.score>8</failBuildOnCVSS.score> -->
 
         <!-- Distribution management -->
         <repository.id>artifactory</repository.id>
@@ -505,26 +505,41 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                     </execution>
                 </executions>
             </plugin>
-            <!-- Plugin for dependency check -->
-            <!--<plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>${dependency-check-maven.version}</version>
-                <configuration>
-                    <failBuildOnCVSS>${failBuildOnCVSS.score}</failBuildOnCVSS>
-                    <skipProvidedScope>true</skipProvidedScope>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin> -->
 		</plugins>
 	</build>
     <profiles>
+        <profile>
+            <id>spotbugs</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
+                        <version>${spotbugs-maven-plugin.version}</version>
+                        <configuration>
+                            <failOnError>false</failOnError>
+                            <htmlOutput>true</htmlOutput>
+                            <plugins>
+                                <plugin>
+                                    <groupId>com.h3xstream.findsecbugs</groupId>
+                                    <artifactId>findsecbugs-plugin</artifactId>
+                                    <version>${findsecbugs-plugin.version}</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>spotbugs-check</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>spring-cloud-oci-ci-it</id>
             <build>

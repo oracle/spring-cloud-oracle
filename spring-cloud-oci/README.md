@@ -85,3 +85,7 @@ make javadocs
 ```
 
 JavaDocs generated at `target/site/`
+
+## Build quality checks
+
+Run the test suite with `make test` and SpotBugs plus FindSecBugs security analysis with `make spotbugs`, which enables the opt-in Maven `spotbugs` profile. Each analyzed Maven module writes an HTML report to `target/site/spotbugs.html` and an XML report to `target/spotbugsXml.xml`. Use `make install` to install artifacts while skipping tests, CycloneDX generation, and SpotBugs. SpotBugs reports existing findings without failing the build.
