@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -42,7 +42,7 @@ public final class OCIObjectMapper {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm a z");
         df.setTimeZone(TimeZone.getTimeZone(DEFAULT_TIME_ZONE));
         objectMapper.setDateFormat(df);
         final FilterProvider filter = new SimpleFilterProvider()

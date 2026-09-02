@@ -42,7 +42,7 @@ Run SpotBugs and FindSecBugs security analysis for all four subprojects. This ex
 make spotbugs
 ```
 
-Each analyzed Maven module writes an HTML report to `target/site/spotbugs.html` and an XML report to `target/spotbugsXml.xml`.
+Each analyzed Maven module writes an HTML report to `target/site/spotbugs.html` and an XML report to `target/spotbugsXml.xml`. The target then combines those XML results into an aggregate HTML report at the root of each independent Maven project: `database/starters/target/site/spotbugs.html`, `database/spring-cloud-stream-binder-oracle-txeventq/target/site/spotbugs.html`, `spring-ai-oracle/target/site/spotbugs.html`, and `spring-cloud-oci/target/site/spotbugs.html`.
 
 Install all four subprojects without tests, CycloneDX generation, or SpotBugs analysis:
 

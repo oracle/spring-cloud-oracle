@@ -109,6 +109,8 @@ Chat calls emit Spring AI model observations when an `ObservationRegistry` is av
 
 Direct `OracleGenAiChatModel` construction uses `OracleGenAiChatModel.builder()`, which matches the Spring AI provider convention for optional dependencies such as retry, tool calling, and observation configuration.
 
+The model takes defensive copies of mutable option collections when options are configured or merged into a request. Callers can therefore reuse their original stop-sequence, tool-callback, and tool-context collections without changing an in-flight chat request.
+
 ## Conversation Memory
 
 Spring AI Oracle follows Spring AI chat memory conventions. The chat model is stateless and does not store conversation history; `MessageChatMemoryAdvisor` loads prior turns from `ChatMemory` and adds them to the prompt as typed Spring AI messages before the request reaches OCI Generative AI.

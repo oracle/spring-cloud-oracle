@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonevents;
 
@@ -8,12 +8,15 @@ import java.util.List;
 import com.oracle.database.spring.jsonevents.model.Sensor;
 import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import oracle.jdbc.OracleTypes;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
+@SuppressFBWarnings(value = {"EI2", "OBL"},
+        justification = "JdbcTemplate owns PreparedStatements returned by its PreparedStatementCreator callback.")
 public class SensorService {
     private static final String insertSensorData = """
             insert into weather_sensor_dv (data) values (?)

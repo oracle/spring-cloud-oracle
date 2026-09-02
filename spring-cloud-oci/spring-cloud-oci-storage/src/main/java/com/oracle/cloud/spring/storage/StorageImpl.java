@@ -13,6 +13,7 @@ import com.oracle.bmc.objectstorage.requests.DeleteObjectRequest;
 import com.oracle.bmc.objectstorage.requests.GetNamespaceRequest;
 import com.oracle.bmc.objectstorage.responses.CreateBucketResponse;
 import com.oracle.bmc.objectstorage.responses.GetNamespaceResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
@@ -23,6 +24,8 @@ import java.io.InputStream;
 /**
  * Default implementation for {@link com.oracle.cloud.spring.storage.Storage}
  */
+@SuppressFBWarnings(value = "EI",
+        justification = "This low-level facade intentionally exposes the configured OCI Object Storage client.")
 public class StorageImpl implements Storage {
     private final ObjectStorageClient osClient;
     private final StorageObjectConverter storageObjectConverter;

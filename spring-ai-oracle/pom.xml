@@ -63,6 +63,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <cyclonedx.version>2.9.2</cyclonedx.version>
         <spotbugs-maven-plugin.version>4.10.4.0</spotbugs-maven-plugin.version>
         <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
+        <spotbugs-annotations.version>4.10.4</spotbugs-annotations.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
@@ -140,6 +141,15 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
             <url>${repository.url}</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>${spotbugs-annotations.version}</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

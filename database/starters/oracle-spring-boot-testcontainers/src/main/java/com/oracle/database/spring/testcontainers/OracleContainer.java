@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.containers.wait.strategy.WaitStrategy;
@@ -26,6 +27,8 @@ import org.testcontainers.utility.DockerImageName;
  *
  * <p>Exposed port: 1521</p>
  */
+@SuppressFBWarnings(value = {"EQ_DOESNT_OVERRIDE_EQUALS", "VA_FORMAT_STRING_USES_NEWLINE"},
+        justification = "Testcontainers use identity equality from GenericContainer, and SQL startup scripts intentionally use text-block newlines.")
 public class OracleContainer extends JdbcDatabaseContainer<OracleContainer> {
 
     /** Official Oracle AI Database Free container image. */

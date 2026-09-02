@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.oracle.cloud.spring.adb;
@@ -20,10 +20,13 @@ import com.oracle.bmc.database.requests.CreateAutonomousDatabaseRequest;
 import com.oracle.bmc.database.requests.DeleteAutonomousDatabaseRequest;
 import com.oracle.bmc.database.requests.StartAutonomousDatabaseRequest;
 import com.oracle.bmc.database.requests.StopAutonomousDatabaseRequest;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Implementation for the OCI Autonomous Database module.
  */
+@SuppressFBWarnings(value = "EI",
+        justification = "The OCI DatabaseClient is intentionally retained and exposed by this low-level API facade.")
 public class AutonomousDbImpl implements AutonomousDb {
 
     final DatabaseClient client;

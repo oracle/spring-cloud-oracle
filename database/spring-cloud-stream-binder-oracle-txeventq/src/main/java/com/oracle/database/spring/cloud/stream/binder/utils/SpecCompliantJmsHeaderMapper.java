@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ import org.springframework.integration.jms.DefaultJmsHeaderMapper;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.util.SerializationUtils;
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "The JMS connection is intentionally retained as message metadata for binder callbacks.")
 public class SpecCompliantJmsHeaderMapper extends DefaultJmsHeaderMapper {
 
     private static final Logger logger = LoggerFactory.getLogger(

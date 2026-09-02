@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonduality;
 
@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import oracle.jdbc.OracleTypes;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Component
+@SuppressFBWarnings(value = {"EI2", "OBL"},
+        justification = "JdbcTemplate owns PreparedStatements returned by its PreparedStatementCreator callback.")
 public class StudentService {
     private static final String queryStudents = """
             select * from students_dv

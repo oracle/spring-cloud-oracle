@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -97,11 +97,11 @@ public class StorageObjectMetadata {
     }
 
     public Map<String, String> getOpcMeta() {
-        return opcMeta;
+        return opcMeta == null ? null : Map.copyOf(opcMeta);
     }
 
     public void setOpcMeta(Map<String, String> opcMeta) {
-        this.opcMeta = opcMeta;
+        this.opcMeta = opcMeta == null ? null : new HashMap<>(opcMeta);
     }
 
     @Nullable

@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -12,6 +12,7 @@ import com.oracle.bmc.functions.requests.InvokeFunctionRequest;
 import com.oracle.bmc.functions.responses.GetFunctionResponse;
 import com.oracle.bmc.functions.responses.InvokeFunctionResponse;
 import com.oracle.bmc.util.StreamUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.InputStream;
 import java.util.function.Supplier;
@@ -19,6 +20,8 @@ import java.util.function.Supplier;
 /**
  * Implementation of the OCI Function module.
  */
+@SuppressFBWarnings(value = "EI",
+        justification = "OCI clients are intentionally retained by this facade and exposed through the public client accessor.")
 public class FunctionImpl implements Function{
 
     private final FunctionsInvoke functionsInvokeClient;

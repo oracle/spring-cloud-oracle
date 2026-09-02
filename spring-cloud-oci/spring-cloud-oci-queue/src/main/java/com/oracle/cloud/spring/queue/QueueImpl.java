@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -32,6 +32,7 @@ import com.oracle.bmc.queue.responses.ListQueuesResponse;
 import com.oracle.bmc.queue.responses.PutMessagesResponse;
 import com.oracle.bmc.queue.responses.UpdateMessagesResponse;
 import com.oracle.bmc.waiter.Waiter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ import java.util.List;
 /**
  * Implementation for the OCI Queue module.
  */
+@SuppressFBWarnings(value = "EI",
+        justification = "OCI clients are intentionally retained by this facade and exposed through the public client accessors.")
 public class QueueImpl implements Queue {
     private final QueueAdminClient queueAdminClient;
     private final QueueClient queueClient;

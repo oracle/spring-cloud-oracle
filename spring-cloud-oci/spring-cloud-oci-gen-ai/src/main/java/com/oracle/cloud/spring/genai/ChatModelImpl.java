@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -21,6 +21,7 @@ import com.oracle.bmc.generativeaiinference.model.TextContent;
 import com.oracle.bmc.generativeaiinference.model.UserMessage;
 import com.oracle.bmc.generativeaiinference.requests.ChatRequest;
 import com.oracle.bmc.generativeaiinference.responses.ChatResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.util.Assert;
 
 /**
@@ -28,6 +29,8 @@ import org.springframework.util.Assert;
  * @deprecated in favor of Spring AI. This implementation will be replaced by Spring AI integration.
  */
 @Deprecated(since = "2.0.1", forRemoval = false)
+@SuppressFBWarnings(value = "EI2",
+        justification = "The OCI client is intentionally retained by this deprecated facade for direct SDK-backed chat operations.")
 public class ChatModelImpl implements ChatModel {
     private final GenerativeAiInference client;
     private final ServingMode servingMode;
@@ -45,6 +48,8 @@ public class ChatModelImpl implements ChatModel {
         return new Builder();
     }
 
+    @SuppressFBWarnings(value = "EI2",
+            justification = "The builder retains SDK client references until the configured model is built.")
     public static class Builder {
         private GenerativeAiInference client;
         private ServingMode servingMode;

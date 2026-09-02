@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -13,6 +13,7 @@ import com.oracle.bmc.generativeaiinference.model.EmbedTextDetails;
 import com.oracle.bmc.generativeaiinference.model.OnDemandServingMode;
 import com.oracle.bmc.generativeaiinference.model.ServingMode;
 import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -41,6 +42,8 @@ import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfi
 @ConditionalOnClass({ChatModel.class})
 @EnableConfigurationProperties(GenAIProperties.class)
 @ConditionalOnProperty(name = "spring.cloud.oci.genai.enabled", havingValue = "true", matchIfMissing = true)
+@SuppressFBWarnings(value = "EI2",
+        justification = "GenAI properties are managed by Spring and intentionally retained by auto-configuration.")
 public class GenAIAutoConfiguration {
     private final GenAIProperties properties;
 

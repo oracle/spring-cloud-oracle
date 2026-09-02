@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.jms.Destination;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -34,6 +35,8 @@ import org.springframework.integration.jms.JmsHeaderMapper;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.MessageChannel;
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "The factory intentionally reuses the injected JmsTemplate for each handler.")
 public class JmsSendingMessageHandlerFactory implements ApplicationContextAware, BeanFactoryAware {
 
     private final JmsTemplate template;

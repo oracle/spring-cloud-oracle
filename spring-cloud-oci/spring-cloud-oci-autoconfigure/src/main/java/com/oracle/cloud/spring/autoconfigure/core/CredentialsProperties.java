@@ -184,14 +184,16 @@ public class CredentialsProperties {
                         .build();
                 break;
             case SIMPLE:
+                String passPhrase = getPassPhrase();
                 SimpleAuthenticationDetailsProvider.SimpleAuthenticationDetailsProviderBuilder builder = SimpleAuthenticationDetailsProvider.builder()
                         .userId(getUserId())
                         .tenantId(getTenantId())
                         .fingerprint(getFingerprint())
                         .privateKeySupplier(new SimplePrivateKeySupplier(getPrivateKey()))
-                        .passPhrase(getPassPhrase());
-                if (getRegion() != null) {
-                    builder.region(Region.valueOf(getRegion()));
+                        .passPhrase(passPhrase);
+                String regionName = getRegion();
+                if (regionName != null) {
+                    builder.region(Region.valueOf(regionName));
                 }
                 authenticationDetailsProvider = builder.build();
                 break;

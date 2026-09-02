@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -22,10 +22,13 @@ import com.oracle.bmc.ons.responses.GetSubscriptionResponse;
 import com.oracle.bmc.ons.responses.ListSubscriptionsResponse;
 import com.oracle.bmc.ons.responses.PublishMessageResponse;
 import com.oracle.cloud.spring.core.util.OCIObjectMapper;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Implementation for the OCI Notification module.
  */
+@SuppressFBWarnings(value = "EI",
+        justification = "OCI clients are intentionally retained by this facade and exposed through the public client accessors.")
 public class NotificationImpl implements Notification {
     private final NotificationDataPlane notificationDataPlane;
     private final NotificationControlPlane notificationControlPlane;

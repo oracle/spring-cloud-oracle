@@ -61,6 +61,7 @@
         <cyclonedx.version>2.9.2</cyclonedx.version>
         <spotbugs-maven-plugin.version>4.10.4.0</spotbugs-maven-plugin.version>
         <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
+        <spotbugs-annotations.version>4.10.4</spotbugs-annotations.version>
 
         <!-- Distribution management -->
         <repository.id>artifactory</repository.id>
@@ -96,6 +97,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>${spotbugs-annotations.version}</version>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>

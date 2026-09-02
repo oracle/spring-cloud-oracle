@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,8 @@ import org.springframework.integration.core.RecoveryCallback;
 import org.springframework.core.retry.RetryTemplate;
 import org.springframework.core.AttributeAccessor;
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "RetryTemplate is an injected Spring strategy intentionally retained by the listener.")
 public class TEQBatchMessageListener extends ChannelPublishingJmsMessageListener {
     private final GatewayDelegate gatewayDelegate = new GatewayDelegate();
 

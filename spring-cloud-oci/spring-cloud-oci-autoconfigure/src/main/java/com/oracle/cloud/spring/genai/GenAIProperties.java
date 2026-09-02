@@ -1,10 +1,11 @@
 /*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package com.oracle.cloud.spring.genai;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -14,6 +15,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Deprecated(since = "2.0.1", forRemoval = false)
 @ConfigurationProperties(prefix = GenAIProperties.PREFIX)
+@SuppressFBWarnings(value = "EI",
+        justification = "Nested mutable objects are Spring configuration properties bound and managed by the application context.")
 public class GenAIProperties {
     public static final String PREFIX = "spring.cloud.oci.genai";
 

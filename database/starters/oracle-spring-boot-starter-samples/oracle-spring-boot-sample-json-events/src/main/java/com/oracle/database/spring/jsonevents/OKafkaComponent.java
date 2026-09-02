@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.jsonevents;
 
@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Component;
  * OKafkaSetup creates the app's OKafka topic, and starts the consumer thread.
  */
 @Component
+@SuppressFBWarnings(value = "EI2",
+        justification = "The OKafka Properties object is application-managed configuration shared with the client.")
 public class OKafkaComponent {
     private final AsyncTaskExecutor asyncTaskExecutor;
     private final SensorConsumer sensorConsumer;

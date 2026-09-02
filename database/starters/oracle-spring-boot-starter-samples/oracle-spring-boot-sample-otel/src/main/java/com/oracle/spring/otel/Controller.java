@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class Controller {
@@ -37,8 +38,9 @@ public class Controller {
                 .param(request.flavor)
                 .update(keyHolder, "id");
 
+        Number id = Objects.requireNonNull(keyHolder.getKey(), "No generated key returned for inserted flavor");
         return jdbcClient.sql("select * from ice_cream_flavors where id = ?")
-                .param(keyHolder.getKey().longValue())
+                .param(id.longValue())
                 .query(IceCreamFlavor.class)
                 .single();
 

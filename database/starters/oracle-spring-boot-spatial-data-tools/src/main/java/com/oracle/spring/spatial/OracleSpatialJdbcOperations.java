@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.util.Assert;
@@ -14,6 +15,8 @@ import org.springframework.util.Assert;
  * Spring JDBC-oriented entry point for working with Oracle Spatial and
  * GeoJSON-backed {@code SDO_GEOMETRY} values.
  */
+@SuppressFBWarnings(value = "EI2",
+        justification = "The operations helper retains the application-managed spatial properties used for query defaults.")
 public class OracleSpatialJdbcOperations {
     private final OracleSpatialProperties properties;
     private final AtomicLong bindSequence = new AtomicLong();

@@ -6,6 +6,7 @@
 package com.oracle.cloud.spring.autoconfigure.core;
 
 import com.oracle.bmc.auth.*;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -21,6 +22,8 @@ import java.io.IOException;
 @AutoConfiguration
 @ConditionalOnClass({AuthenticationDetailsProvider.class})
 @EnableConfigurationProperties(CredentialsProperties.class)
+@SuppressFBWarnings(value = "EI2",
+        justification = "Configuration properties are managed by Spring and intentionally retained by auto-configuration.")
 public class CredentialsProviderAutoConfiguration {
 
     public static final String credentialsProviderQualifier = "credentialsProvider";

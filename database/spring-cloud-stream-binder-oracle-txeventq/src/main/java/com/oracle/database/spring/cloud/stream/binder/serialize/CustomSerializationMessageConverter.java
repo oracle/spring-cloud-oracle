@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
 
 public class CustomSerializationMessageConverter extends SimpleMessageConverter {
-    public String deserializer = null;
+    private String deserializer = null;
 
     private static final Logger logger = LoggerFactory.getLogger(CustomSerializationMessageConverter.class);
 

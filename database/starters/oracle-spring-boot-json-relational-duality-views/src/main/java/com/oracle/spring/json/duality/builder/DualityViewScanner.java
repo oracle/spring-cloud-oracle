@@ -1,4 +1,4 @@
-// Copyright (c) 2025, Oracle and/or its affiliates.
+// Copyright (c) 2025, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 package com.oracle.spring.json.duality.builder;
@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityViewScan;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 @Component
+@SuppressFBWarnings(value = "EI2",
+        justification = "The scanner intentionally retains the application context and scanner supplied by Spring.")
 final public class DualityViewScanner {
     private final DualityViewBuilder dualityViewBuilder;
     private final ApplicationContext applicationContext;

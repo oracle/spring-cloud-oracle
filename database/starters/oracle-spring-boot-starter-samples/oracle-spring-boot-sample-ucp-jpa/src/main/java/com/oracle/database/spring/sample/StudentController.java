@@ -1,10 +1,11 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.sample;
 
 import java.util.List;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/student")
+@SuppressFBWarnings(value = {"SECELEAK", "SECEMA"},
+        justification = "This intentionally minimal sample exposes its single persistence entity to demonstrate Spring Data JPA CRUD.")
 public class StudentController {
     private final StudentRepository studentRepository;
 
@@ -49,4 +52,3 @@ public class StudentController {
         return ResponseEntity.noContent().build();
     }
 }
-

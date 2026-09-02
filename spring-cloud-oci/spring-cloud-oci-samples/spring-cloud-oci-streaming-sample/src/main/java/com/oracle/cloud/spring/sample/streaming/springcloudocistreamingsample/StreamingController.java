@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -126,7 +126,6 @@ public class StreamingController {
         GetMessagesResponse response = streaming.getMessages(streamId, cursor);
         List<Message> messages = response.getItems();
         int size = messages.size();
-        String nextCursor = response.getOpcNextCursor();
         Message lastMessage = size > 0 ? messages.get(size-1) : null;
         String key = lastMessage == null ? null : new String(lastMessage.getKey());
         String value = lastMessage == null ? null : new String(lastMessage.getValue());

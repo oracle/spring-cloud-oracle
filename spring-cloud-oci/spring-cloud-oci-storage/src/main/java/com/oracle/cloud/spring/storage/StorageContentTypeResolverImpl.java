@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -13,9 +13,13 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 import java.util.Properties;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Default implementation of StorageContentTypeResolver.
  */
+@SuppressFBWarnings(value = "EI2",
+        justification = "The configured Properties instance is intentionally retained as application metadata.")
 public class StorageContentTypeResolverImpl implements StorageContentTypeResolver {
     private static final String PROPERTIES_FILE_LOCATION = "/com/oracle/cloud/spring/storage/StorageContentTypeResolver.properties";
 
@@ -63,4 +67,3 @@ public class StorageContentTypeResolverImpl implements StorageContentTypeResolve
         return fileName.contains(".") ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
     }
 }
-

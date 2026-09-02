@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.lang.Nullable;
 
 @ConfigurationProperties(prefix = VaultProperties.PREFIX)
 public class VaultProperties {
@@ -34,12 +35,13 @@ public class VaultProperties {
         this.vaultId = vaultId;
     }
 
+    @Nullable
     public List<VaultPropertySourceProperties> getPropertySources() {
-        return propertySources;
+        return propertySources == null ? null : List.copyOf(propertySources);
     }
 
     public void setPropertySources(List<VaultPropertySourceProperties> propertySources) {
-        this.propertySources = propertySources;
+        this.propertySources = propertySources == null ? null : List.copyOf(propertySources);
     }
 
     public Duration getPropertyRefreshInterval() {
