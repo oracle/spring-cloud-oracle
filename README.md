@@ -28,6 +28,28 @@ Spring Cloud Oracle focuses on that integration layer:
 - The 1.x release line tracks Spring Boot 3.
 - The 2.x release line tracks Spring Boot 4 and Spring Framework 7.
 
+## Build quality checks
+
+Run the test suites for all four subprojects:
+
+```shell
+make test
+```
+
+Run SpotBugs and FindSecBugs security analysis for all four subprojects. This explicitly enables the opt-in Maven `spotbugs` profile:
+
+```shell
+make spotbugs
+```
+
+Each analyzed Maven module writes an HTML report to `target/site/spotbugs.html` and an XML report to `target/spotbugsXml.xml`.
+
+Install all four subprojects without tests, CycloneDX generation, or SpotBugs analysis:
+
+```shell
+make install
+```
+
 ## Documentation
 
 Start with the current Docusaurus documentation:

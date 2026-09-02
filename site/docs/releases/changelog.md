@@ -11,6 +11,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Database Starters
 
+- Added opt-in SpotBugs and FindSecBugs security analysis through the Maven `spotbugs` profile, including HTML reports, and Makefile targets for tests, streamlined installs, and SpotBugs
 - Added the `oracle-spring-boot-testcontainers` module with `OracleContainer` and `OrdsContainer` definitions for the official Oracle AI Database Free and ORDS images
 - Added the opt-in UCP Micrometer module, exporting UCP pool statistics with `ucp.connections.*` metrics
 - Upgraded Spring Boot to 4.1.1
@@ -18,18 +19,21 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Spring Cloud Stream Binder for TxEventQ
 
+- Added opt-in SpotBugs and FindSecBugs security analysis through the Maven `spotbugs` profile, including HTML reports, and Makefile targets for tests, streamlined installs, and SpotBugs
 - Migrated integration tests and the sample test to the shared `OracleContainer` definition backed by the official Oracle AI Database Free image
 - Upgraded Spring Boot to 4.1.1 Boot starter, and Maven test plugin versions
 - Refreshed third party dependencies
 
 #### Spring AI Oracle
 
+- Added opt-in SpotBugs and FindSecBugs security analysis through the Maven `spotbugs` profile, including HTML reports, and Makefile targets for tests, streamlined installs, and SpotBugs
 - Upgraded Spring AI to 2.0.1 and Spring Boot to 4.1.1
 - Initial release of Spring AI Oracle
 - Refreshed third party dependencies
 
 #### Spring Cloud OCI
 
+- Added opt-in SpotBugs and FindSecBugs security analysis through the Maven `spotbugs` profile, including HTML reports, and Makefile targets for tests, streamlined installs, and SpotBugs
 - Upgraded Spring Boot to 4.1.1
 - Removed the Springdoc OpenAPI WebMVC UI dependency from Spring Cloud OCI and its common samples utilities
 - Refreshed third party dependencies

@@ -13,3 +13,7 @@ The following starters are provided:
 | [Oracle Spring Boot Starter JSON Collections](oracle-spring-boot-starter-json-collections)                                               | Autoconfiguration and utilities for JSON with Oracle Database                   |
 | [Oracle Spring Boot Starter Spatial](oracle-spring-boot-starter-spatial)                                                                 | Autoconfiguration and helper utilities for Oracle Spatial with GeoJSON-first APIs |
 | [Oracle Spring Boot Starter for the Kafka Java Client for Oracle Database Transactional Event Queues](oracle-spring-boot-starter-okafka) | Autoconfiguration for Kafka Java Client for Oracle Transactional Event Queues   |
+
+## Build quality checks
+
+Run the test suite with `make test` and SpotBugs plus FindSecBugs security analysis with `make spotbugs`, which enables the opt-in Maven `spotbugs` profile. Each analyzed Maven module writes an HTML report to `target/site/spotbugs.html` and an XML report to `target/spotbugsXml.xml`. Use `make install` to install artifacts while skipping tests, CycloneDX generation, and SpotBugs. SpotBugs reports existing findings without failing the build.
