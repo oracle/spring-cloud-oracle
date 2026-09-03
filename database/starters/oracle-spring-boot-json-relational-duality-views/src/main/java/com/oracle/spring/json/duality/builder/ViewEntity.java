@@ -1,4 +1,4 @@
-// Copyright (c) 2025, Oracle and/or its affiliates.
+// Copyright (c) 2025, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 package com.oracle.spring.json.duality.builder;
@@ -119,7 +119,7 @@ final class ViewEntity {
      */
     private String getStatementPrefix(Table tableAnnotation) {
         String tableName = getTableName(javaType, tableAnnotation);
-        return "%s %s as %s %s{\n".formatted(
+        return "%s %s as %s %s{%n".formatted(
                 rootSnippet.getSnippet(), viewName, tableName, accessMode
         );
     }
@@ -127,9 +127,9 @@ final class ViewEntity {
     private String getNestedEntityPrefix(Table tableAnnotation) {
         String tableName = getTableName(javaType, tableAnnotation);
         if (tableName.equals(viewName)) {
-            return "%s %s{\n".formatted(tableName, accessMode);
+            return "%s %s{%n".formatted(tableName, accessMode);
         }
-        return "%s%s%s %s{\n".formatted(
+        return "%s%s%s %s{%n".formatted(
                 viewName, SEPARATOR, tableName, accessMode
         );
     }

@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -7,6 +7,7 @@ package com.oracle.cloud.spring.storage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.io.InputStream;
 /**
  * Default implementation of {@link StorageObjectConverter}
  */
+@SuppressFBWarnings(value = "EI2",
+        justification = "The application-managed ObjectMapper is intentionally retained for JSON conversion.")
 public class JacksonJSONStorageObjectConverter implements StorageObjectConverter {
     private final ObjectMapper objectMapper;
     static final String ERROR_OBJECTMAPPER_REQUIRED = "objectMapper is required";

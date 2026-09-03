@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import org.testcontainers.containers.ContainerLaunchException;
 import org.testcontainers.containers.ExecConfig;
@@ -22,6 +23,8 @@ import org.testcontainers.utility.DockerImageName;
  * administrator password. Schemas registered with {@link #withSchema(String,
  * String, String)} are REST-enabled after ORDS starts.</p>
  */
+@SuppressFBWarnings(value = {"EQ_DOESNT_OVERRIDE_EQUALS", "VA_FORMAT_STRING_USES_NEWLINE"},
+        justification = "Testcontainers use identity equality from GenericContainer, and SQL startup scripts intentionally use text-block newlines.")
 public class OrdsContainer extends GenericContainer<OrdsContainer> {
 
     /** Official ORDS container image. */

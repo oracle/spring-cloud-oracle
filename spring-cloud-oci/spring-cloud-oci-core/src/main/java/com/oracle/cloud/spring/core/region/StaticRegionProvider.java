@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -12,20 +12,23 @@ import com.oracle.bmc.auth.RegionProvider;
 /**
  * Provider to wrap Region details like name for Region configuration
  */
-public class StaticRegionProvider implements RegionProvider {
+public final class StaticRegionProvider implements RegionProvider {
 
     public static final String INVALID_REGION_MSG = "The region '%s' is not a valid region!";
-    private Region region;
+    private final Region region;
 
     public StaticRegionProvider(String regionName) {
+        Region parsedRegion;
         try {
-            region = Region.valueOf(regionName);
+            parsedRegion = Region.valueOf(regionName);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(INVALID_REGION_MSG.formatted(regionName), e);
         }
+        region = parsedRegion;
     }
 
     public StaticRegionProvider() {
+        this.region = null;
     }
 
     @Override

@@ -41,6 +41,8 @@ The jakarta.json `@JsonbProperty("_id")` annotation is recommended for any root 
 
 The jakarta.json `@JsonbTransient` annotation is recommended to skip specific fields in the generated duality view. This is necessary for cyclic objects.
 
+View identifiers and DDL are generated from the annotated application model during startup. Treat those annotations and the resulting startup DDL as application configuration, and review generated statements before enabling write access in a production schema.
+
 ## Annotate Java Classes or JPA Entities
 
 Any Java class or JPA entity annotated with `@JsonRelationalDualityView` on the Spring Boot classpath scan will have a duality view generated from it's metadata.

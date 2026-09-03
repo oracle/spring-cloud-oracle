@@ -1,4 +1,4 @@
-// Copyright (c) 2025, Oracle and/or its affiliates.
+// Copyright (c) 2025, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 package com.oracle.spring.json.duality.builder;
@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.oracle.spring.json.duality.annotation.JsonRelationalDualityView;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.DisposableBean;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.DisposableBean;
 import static com.oracle.spring.json.duality.builder.Annotations.getAccessModeStr;
 import static com.oracle.spring.json.duality.builder.Annotations.getViewName;
 
+@SuppressFBWarnings(value = {"EI2", "SECSQLIJDBC"},
+        justification = "The builder retains application-managed JDBC dependencies and executes DDL generated only from statically declared entity annotations.")
 public final class DualityViewBuilder implements DisposableBean {
     private static final String PREFIX = "JSON Relational Duality Views: ";
     private static final int TABLE_OR_VIEW_DOES_NOT_EXIST = 942;

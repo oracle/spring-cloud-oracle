@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 package com.oracle.cloud.spring.email;
@@ -14,12 +14,15 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailPreparationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "The configured JavaMail Session is intentionally retained for sending messages.")
 public class EmailDeliveryMailSender implements MailSender {
     protected final Session session;
     private final String smtpHost;
@@ -70,14 +73,17 @@ public class EmailDeliveryMailSender implements MailSender {
         Address from = new InternetAddress(Objects.requireNonNull(simpleMailMessage.getFrom(), "From address is null"));
         message.setFrom(from);
         message.setSubject(simpleMailMessage.getSubject());
-        if (simpleMailMessage.getTo() != null) {
-            message.setRecipients(Message.RecipientType.TO, toAddresses(simpleMailMessage.getTo()));
+        String[] to = simpleMailMessage.getTo();
+        if (to != null) {
+            message.setRecipients(Message.RecipientType.TO, toAddresses(to));
         }
-        if (simpleMailMessage.getCc() != null) {
-            message.setRecipients(Message.RecipientType.CC, toAddresses(simpleMailMessage.getCc()));
+        String[] cc = simpleMailMessage.getCc();
+        if (cc != null) {
+            message.setRecipients(Message.RecipientType.CC, toAddresses(cc));
         }
-        if (simpleMailMessage.getBcc() != null) {
-            message.setRecipients(Message.RecipientType.BCC, toAddresses(simpleMailMessage.getBcc()));
+        String[] bcc = simpleMailMessage.getBcc();
+        if (bcc != null) {
+            message.setRecipients(Message.RecipientType.BCC, toAddresses(bcc));
         }
         if (simpleMailMessage.getReplyTo() != null) {
             message.setReplyTo(toAddresses(new String[]{simpleMailMessage.getReplyTo()}));

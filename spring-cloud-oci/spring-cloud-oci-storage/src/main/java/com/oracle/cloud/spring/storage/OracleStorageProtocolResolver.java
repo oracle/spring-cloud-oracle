@@ -1,11 +1,12 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package com.oracle.cloud.spring.storage;
 
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -22,6 +23,8 @@ import org.springframework.lang.Nullable;
 /**
  * Default implementation of ProtocolResolver to resolve Object URIs starting with specific protocol prefix.
  */
+@SuppressFBWarnings(value = "EI",
+        justification = "The resolver intentionally retains the configured OCI Object Storage client for created resources.")
 public class OracleStorageProtocolResolver implements ProtocolResolver, ResourceLoaderAware, BeanFactoryPostProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OracleStorageProtocolResolver.class);

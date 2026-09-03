@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.oraclespringbootsamplewallet;
 
@@ -14,7 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 @SpringBootApplication
+@SuppressFBWarnings(value = "EI2",
+        justification = "The DataSource is an application-managed Spring dependency used by this sample runner.")
 public class OracleSpringBootSampleWalletApplication {
 
     final DataSource dataSource;
@@ -28,21 +32,22 @@ public class OracleSpringBootSampleWalletApplication {
         return args -> {
             try {
                 System.out.println("Datasource is : " + dataSource.getClass().getName());
-                Connection connection = dataSource.getConnection();
+                try (Connection connection = dataSource.getConnection();
+                     PreparedStatement helloStatement = connection.prepareStatement("SELECT 'Hello World!' FROM dual");
+                     ResultSet helloResultSet = helloStatement.executeQuery()) {
                 System.out.println("Connection is : " + connection);
 
-                PreparedStatement stmt = connection.prepareStatement("SELECT 'Hello World!' FROM dual");
-                ResultSet resultSet = stmt.executeQuery();
-                while (resultSet.next()) {
-                    System.out.println(resultSet.getString(1));
-                }
+                    while (helloResultSet.next()) {
+                        System.out.println(helloResultSet.getString(1));
+                    }
 
-                stmt = connection.prepareStatement("SELECT BANNER_FULL FROM V$VERSION");
-                resultSet = stmt.executeQuery();
-                while (resultSet.next()) {
-                    System.out.println(resultSet.getString(1));
+                    try (PreparedStatement versionStatement = connection.prepareStatement("SELECT BANNER_FULL FROM V$VERSION");
+                         ResultSet versionResultSet = versionStatement.executeQuery()) {
+                        while (versionResultSet.next()) {
+                            System.out.println(versionResultSet.getString(1));
+                        }
+                    }
                 }
-                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -53,4 +58,3 @@ public class OracleSpringBootSampleWalletApplication {
         SpringApplication.run(OracleSpringBootSampleWalletApplication.class, args);
     }
 }
-

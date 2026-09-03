@@ -17,6 +17,7 @@ import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.converter.ChatRequestConverter;
 import com.oracle.spring.ai.oracle.converter.ChatResponseConverter;
 import com.oracle.spring.ai.oracle.converter.ChatStreamResponseConverter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor;
@@ -52,6 +53,8 @@ import static com.oracle.spring.ai.oracle.api.GenAiApiFormat.infer;
 /**
  * Spring AI chat model backed by OCI Generative AI.
  */
+@SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW",
+        justification = "Constructor argument validation is intentional for this private, builder-created model.")
 public class OracleGenAiChatModel implements ChatModel {
 
     private static final ChatModelObservationConvention DEFAULT_OBSERVATION_CONVENTION =
@@ -86,8 +89,8 @@ public class OracleGenAiChatModel implements ChatModel {
         return new Builder();
     }
 
-    private OracleGenAiChatModel(@Nullable GenerativeAiInference client,
-            @Nullable OracleGenAiChatOptions defaultOptions, @Nullable ToolCallingManager toolCallingManager,
+    private OracleGenAiChatModel(GenerativeAiInference client,
+            OracleGenAiChatOptions defaultOptions, @Nullable ToolCallingManager toolCallingManager,
             @Nullable ToolExecutionEligibilityChecker toolExecutionEligibilityChecker,
             @Nullable RetryTemplate retryTemplate, @Nullable ObservationRegistry observationRegistry,
             @Nullable ChatModelObservationConvention observationConvention) {
@@ -130,7 +133,8 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     private ChatResponse internalCall(Prompt prompt, ChatResponse previousChatResponse) {
-        OracleGenAiChatOptions options = (OracleGenAiChatOptions) prompt.getOptions();
+        OracleGenAiChatOptions options = Objects.requireNonNull(
+                (OracleGenAiChatOptions) prompt.getOptions(), "prompt options must not be null");
         ChatRequest request = toChatRequest(prompt, options, false);
         ChatModelObservationContext observationContext = ChatModelObservationContext.builder()
                 .prompt(prompt)
@@ -162,7 +166,8 @@ public class OracleGenAiChatModel implements ChatModel {
     }
 
     private Flux<ChatResponse> internalStream(Prompt prompt, ChatResponse previousChatResponse) {
-        OracleGenAiChatOptions options = (OracleGenAiChatOptions) prompt.getOptions();
+        OracleGenAiChatOptions options = Objects.requireNonNull(
+                (OracleGenAiChatOptions) prompt.getOptions(), "prompt options must not be null");
         ChatRequest request = toChatRequest(prompt, options, true);
         Flux<ChatResponse> chatResponseFlux = observeStreamingCall(prompt, Flux.defer(() -> {
                     com.oracle.bmc.generativeaiinference.responses.ChatResponse response =
@@ -284,6 +289,8 @@ public class OracleGenAiChatModel implements ChatModel {
         return !CollectionUtils.isEmpty(options.getToolCallbacks());
     }
 
+    @SuppressFBWarnings(value = "EI2",
+            justification = "Builder inputs are intentionally retained until the model is built.")
     public static final class Builder {
 
         @Nullable
@@ -347,7 +354,10 @@ public class OracleGenAiChatModel implements ChatModel {
         }
 
         public OracleGenAiChatModel build() {
-            return new OracleGenAiChatModel(client, defaultOptions, toolCallingManager,
+            GenerativeAiInference requiredClient = Objects.requireNonNull(client, "client must not be null");
+            OracleGenAiChatOptions requiredOptions = Objects.requireNonNull(defaultOptions,
+                    "defaultOptions must not be null");
+            return new OracleGenAiChatModel(requiredClient, requiredOptions, toolCallingManager,
                     toolExecutionEligibilityChecker, retryTemplate, observationRegistry, observationConvention);
         }
     }

@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.okafka;
 
@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.oracle.okafka.clients.consumer.KafkaConsumer;
 import org.oracle.okafka.clients.producer.KafkaProducer;
@@ -17,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@SuppressFBWarnings(value = "SECPTI",
+        justification = "producer.stream.file is an operator-supplied application configuration path for sample input.")
 public class OKafkaConfiguration {
     public static final String TOPIC_NAME = "OKAFKA_SAMPLE";
 

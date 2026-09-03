@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Map;
 
 import jakarta.jms.JMSException;
@@ -37,13 +38,15 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
 import org.springframework.messaging.MessageHeaders;
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "JmsTemplate is an application-managed Spring dependency used to republish failed messages.")
 public class RepublishMessageRecoverer implements MessageRecoverer {
 
     public static final String X_EXCEPTION_MESSAGE = "x_exception_message";
     public static final String X_ORIGINAL_QUEUE = "x_original_queue";
     public static final String X_EXCEPTION_STACKTRACE = "x_exception_stacktrace";
 
-    private final Log logger = LogFactory.getLog(getClass());
+    private static final Log logger = LogFactory.getLog(RepublishMessageRecoverer.class);
 
     private final JmsTemplate jmsTemplate;
     private final JmsHeaderMapper mapper;

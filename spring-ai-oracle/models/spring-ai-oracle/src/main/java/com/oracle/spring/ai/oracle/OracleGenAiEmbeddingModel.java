@@ -18,6 +18,7 @@ import com.oracle.bmc.generativeaiinference.model.Usage;
 import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
 import com.oracle.spring.ai.oracle.api.OracleGenAiEmbeddingTruncate;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.micrometer.observation.ObservationRegistry;
 import org.jspecify.annotations.Nullable;
 import org.springframework.ai.chat.metadata.DefaultUsage;
@@ -40,6 +41,8 @@ import org.springframework.util.StringUtils;
 /**
  * Spring AI embedding model backed by OCI Generative AI.
  */
+@SuppressFBWarnings(value = {"EI2", "CT_CONSTRUCTOR_THROW"},
+        justification = "The OCI client is intentionally retained and constructor argument validation is intentional for this private, builder-created model.")
 public class OracleGenAiEmbeddingModel implements EmbeddingModel {
 
     private static final EmbeddingModelObservationConvention DEFAULT_OBSERVATION_CONVENTION =
@@ -59,8 +62,8 @@ public class OracleGenAiEmbeddingModel implements EmbeddingModel {
         return new Builder();
     }
 
-    private OracleGenAiEmbeddingModel(@Nullable GenerativeAiInference client,
-            @Nullable OracleGenAiEmbeddingOptions defaultOptions, @Nullable RetryTemplate retryTemplate,
+    private OracleGenAiEmbeddingModel(GenerativeAiInference client,
+            OracleGenAiEmbeddingOptions defaultOptions, @Nullable RetryTemplate retryTemplate,
             @Nullable ObservationRegistry observationRegistry,
             @Nullable EmbeddingModelObservationConvention observationConvention) {
         this.client = Objects.requireNonNull(client, "client must not be null");
@@ -236,7 +239,10 @@ public class OracleGenAiEmbeddingModel implements EmbeddingModel {
         }
 
         public OracleGenAiEmbeddingModel build() {
-            return new OracleGenAiEmbeddingModel(client, defaultOptions, retryTemplate, observationRegistry,
+            GenerativeAiInference requiredClient = Objects.requireNonNull(client, "client must not be null");
+            OracleGenAiEmbeddingOptions requiredOptions = Objects.requireNonNull(defaultOptions,
+                    "defaultOptions must not be null");
+            return new OracleGenAiEmbeddingModel(requiredClient, requiredOptions, retryTemplate, observationRegistry,
                     observationConvention);
         }
     }

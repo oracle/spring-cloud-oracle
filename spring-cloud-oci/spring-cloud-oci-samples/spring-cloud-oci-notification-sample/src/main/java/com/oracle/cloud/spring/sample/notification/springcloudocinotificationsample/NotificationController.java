@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -7,7 +7,6 @@ package com.oracle.cloud.spring.sample.notification.springcloudocinotificationsa
 
 import com.oracle.bmc.ons.responses.CreateSubscriptionResponse;
 import com.oracle.bmc.ons.responses.CreateTopicResponse;
-import com.oracle.bmc.ons.responses.PublishMessageResponse;
 import com.oracle.cloud.spring.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class NotificationController {
     ResponseEntity<?> publishMessage(@PathVariable String topicId,
                                      @RequestParam String title,
                                      @RequestParam String message) {
-        PublishMessageResponse response = notification.publishMessage(topicId, title, message);
+        notification.publishMessage(topicId, title, message);
         return ResponseEntity.accepted().build();
     }
 

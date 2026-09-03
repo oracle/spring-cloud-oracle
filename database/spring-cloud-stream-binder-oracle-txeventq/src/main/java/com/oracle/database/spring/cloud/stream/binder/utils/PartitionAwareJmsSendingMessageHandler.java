@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2025 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.sql.Connection;
 import java.util.function.Consumer;
 
@@ -47,6 +48,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ErrorMessage;
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "The handler intentionally retains the injected JmsTemplate used for message delivery.")
 public class PartitionAwareJmsSendingMessageHandler
         extends AbstractMessageHandler
         implements Lifecycle {
@@ -63,7 +66,7 @@ public class PartitionAwareJmsSendingMessageHandler
 
     private String serializerClassName = null;
 
-    private int dbversion = 23;
+    private volatile int dbversion = 23;
 
     private static final Logger sendLogger = LoggerFactory.getLogger(PartitionAwareJmsSendingMessageHandler.class);
 

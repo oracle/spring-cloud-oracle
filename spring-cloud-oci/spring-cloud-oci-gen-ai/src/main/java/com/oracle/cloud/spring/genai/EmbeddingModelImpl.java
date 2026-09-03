@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -14,6 +14,7 @@ import com.oracle.bmc.generativeaiinference.model.EmbedTextDetails;
 import com.oracle.bmc.generativeaiinference.model.ServingMode;
 import com.oracle.bmc.generativeaiinference.requests.EmbedTextRequest;
 import com.oracle.bmc.generativeaiinference.responses.EmbedTextResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.util.Assert;
 
 /**
@@ -21,6 +22,8 @@ import org.springframework.util.Assert;
  * @deprecated in favor of Spring AI. This implementation will be replaced by Spring AI integration.
  */
 @Deprecated(since = "2.0.1", forRemoval = false)
+@SuppressFBWarnings(value = "EI2",
+        justification = "The OCI client is intentionally retained by this deprecated facade for direct SDK-backed embedding operations.")
 public class EmbeddingModelImpl implements EmbeddingModel {
 
     /**

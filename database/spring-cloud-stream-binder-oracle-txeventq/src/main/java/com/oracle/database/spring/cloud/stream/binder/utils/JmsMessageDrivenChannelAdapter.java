@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.utils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.integration.context.OrderlyShutdownCapable;
@@ -37,6 +38,8 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.integration.context.IntegrationContextUtils;
 import org.springframework.messaging.MessagingException;
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "The adapter intentionally retains the Spring JMS listener and container supplied by its factory.")
 public class JmsMessageDrivenChannelAdapter extends MessageProducerSupport implements
         OrderlyShutdownCapable {
 

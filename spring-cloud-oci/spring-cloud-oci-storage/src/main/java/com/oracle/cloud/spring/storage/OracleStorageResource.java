@@ -170,8 +170,9 @@ public class OracleStorageResource extends AbstractResource implements WritableR
     }
 
     private long resolveContentLength(long contentLength, @Nullable StorageObjectMetadata objectMetadata) {
-        if (objectMetadata != null && objectMetadata.getContentLength() != null) {
-            return objectMetadata.getContentLength();
+        Long metadataContentLength = objectMetadata == null ? null : objectMetadata.getContentLength();
+        if (metadataContentLength != null) {
+            return metadataContentLength;
         }
         return contentLength;
     }

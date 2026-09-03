@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.oracle.cloud.spring.vault;
 
@@ -25,12 +25,15 @@ import com.oracle.bmc.vault.responses.CreateSecretResponse;
 import com.oracle.bmc.vault.responses.ListSecretsResponse;
 import com.oracle.bmc.vault.responses.ScheduleSecretDeletionResponse;
 import com.oracle.bmc.vault.responses.UpdateSecretResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.util.Assert;
 
 /**
  * Default implementation for Vault interface.
  * @see VaultTemplate
  */
+@SuppressFBWarnings(value = "EI2",
+        justification = "OCI Vault clients are intentionally retained by this template for SDK-backed operations.")
 public class VaultTemplateImpl implements VaultTemplate {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 

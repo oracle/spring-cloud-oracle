@@ -163,7 +163,7 @@ public class TEQBatchMessageListenerContainer extends DefaultMessageListenerCont
                 consumerToUse = createListenerConsumer(sessionToUse);
                 consumerToClose = consumerToUse;
             }
-            List<Message> messages = receiveBatch(consumer, getReceiveTimeout());
+            List<Message> messages = receiveBatch(consumerToUse, getReceiveTimeout());
             if (messages != null) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Received message of type [" + messages.getClass() + "] from consumer [" +

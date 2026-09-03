@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,6 +24,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder.plsql;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -33,11 +34,13 @@ import oracle.ucp.jdbc.PoolDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressFBWarnings(value = {"EI2", "CT_CONSTRUCTOR_THROW"},
+        justification = "The UCP pool is an application-managed dependency used by the binder.")
 public class OracleDBUtils {
 
-    private PoolDataSource pds = null;
-    private int dbversion;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final PoolDataSource pds;
+    private final int dbversion;
+    private static final Logger logger = LoggerFactory.getLogger(OracleDBUtils.class);
 
     private static final String CREATE_KB2_TEQ =
             "BEGIN "
@@ -65,11 +68,11 @@ public class OracleDBUtils {
                     + "END;";
 
     public OracleDBUtils(PoolDataSource pds, int dbversion) {
-        this.pds = pds;
         if (dbversion < 19) {
             logger.error("DB version: {} not supported.", dbversion);
             throw new IllegalArgumentException("The TxEventQ Binder is compatible with database versions >= 19. The current database version is: " + dbversion);
         }
+        this.pds = pds;
         this.dbversion = dbversion;
     }
 

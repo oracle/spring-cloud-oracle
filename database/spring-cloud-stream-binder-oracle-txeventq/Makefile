@@ -15,7 +15,8 @@ test:
 	${mvncmd} test
 
 spotbugs:
-	${mvncmd} package -Pspotbugs -DskipTests -Dcyclonedx.skip=true com.github.spotbugs:spotbugs-maven-plugin:check
+	${mvncmd} package -Pspotbugs -DskipTests -Dcyclonedx.skip=true -Dspotbugs.xmlOutput=true com.github.spotbugs:spotbugs-maven-plugin:4.10.4.0:spotbugs
+	${mvncmd} -Pspotbugs -DskipTests -Dcyclonedx.skip=true -Dspotbugs.htmlOutput=true -DoutputEncoding=UTF-8 com.github.spotbugs:spotbugs-maven-plugin:4.10.4.0:spotbugs-aggregate
 
 install:
 	${mvncmd} install -DskipTests -Dcyclonedx.skip=true -Dspotbugs.skip=true

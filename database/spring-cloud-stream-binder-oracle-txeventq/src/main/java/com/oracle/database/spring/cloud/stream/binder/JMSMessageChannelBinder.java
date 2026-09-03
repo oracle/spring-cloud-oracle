@@ -25,6 +25,7 @@
 
 package com.oracle.database.spring.cloud.stream.binder;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import com.oracle.database.spring.cloud.stream.binder.config.JmsConsumerProperties;
 import com.oracle.database.spring.cloud.stream.binder.config.JmsExtendedBindingProperties;
 import com.oracle.database.spring.cloud.stream.binder.config.JmsProducerProperties;
@@ -54,6 +55,8 @@ import org.springframework.integration.core.RecoveryCallback;
 import org.springframework.core.retry.RetryTemplate;
 
 
+@SuppressFBWarnings(value = "EI2",
+        justification = "The binder retains Spring integration factories and binding properties supplied by the application context.")
 public class JMSMessageChannelBinder
         extends AbstractMessageChannelBinder<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>, ProvisioningProvider<ExtendedConsumerProperties<JmsConsumerProperties>, ExtendedProducerProperties<JmsProducerProperties>>>
         implements

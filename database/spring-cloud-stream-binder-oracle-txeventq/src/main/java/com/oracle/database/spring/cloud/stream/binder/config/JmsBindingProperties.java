@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2024 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -24,8 +24,11 @@
 
 package com.oracle.database.spring.cloud.stream.binder.config;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.cloud.stream.binder.BinderSpecificPropertiesProvider;
 
+@SuppressFBWarnings(value = "EI",
+        justification = "Spring Cloud Stream binding properties are intentionally mutable configuration objects.")
 public class JmsBindingProperties implements BinderSpecificPropertiesProvider {
 
     private JmsConsumerProperties consumer = new JmsConsumerProperties();

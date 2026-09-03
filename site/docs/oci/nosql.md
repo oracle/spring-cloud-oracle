@@ -30,6 +30,8 @@ dependencies {
 
 The starter auto-configures `NosqlDBConfig` so you can use repository-based access.
 
+An OCI region must resolve from `spring.cloud.oci.region.static` or the configured credentials before the NoSQL configuration can be created.
+
 ```yaml
 spring:
   cloud:

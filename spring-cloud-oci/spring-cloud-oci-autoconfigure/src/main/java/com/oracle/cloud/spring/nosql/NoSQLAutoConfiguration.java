@@ -1,11 +1,12 @@
 /*
- ** Copyright (c) 2024, Oracle and/or its affiliates.
+ ** Copyright (c) 2024, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 package com.oracle.cloud.spring.nosql;
 
 import java.io.IOException;
 
+import com.oracle.bmc.Region;
 import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.cloud.spring.autoconfigure.core.CredentialsProperties;
 import com.oracle.nosql.spring.data.config.NosqlDbConfig;
@@ -36,13 +37,16 @@ public class NoSQLAutoConfiguration {
             case RESOURCE_PRINCIPAL -> signatureProvider = SignatureProvider.createWithResourcePrincipal();
             case INSTANCE_PRINCIPAL ->
                     signatureProvider = SignatureProvider.createWithInstancePrincipal();
-            case SIMPLE -> signatureProvider = new SignatureProvider(
+            case SIMPLE -> {
+                String passPhrase = properties.getPassPhrase();
+                signatureProvider = new SignatureProvider(
                     properties.getTenantId(),
                     properties.getUserId(),
                     properties.getFingerprint(),
                     properties.getPrivateKey(),
-                    properties.getPassPhrase() != null ? properties.getPassPhrase().toCharArray() : null
-            );
+                    passPhrase != null ? passPhrase.toCharArray() : null
+                );
+            }
             case SESSION_TOKEN -> {
                 if (properties.hasFile()) {
                     signatureProvider = SignatureProvider.createWithSessionToken(properties.getFile(), profile);
@@ -59,6 +63,10 @@ public class NoSQLAutoConfiguration {
 
             }
         }
-        return new NosqlDbConfig(regionProvider.getRegion().getRegionId(), signatureProvider);
+        Region region = regionProvider.getRegion();
+        if (region == null) {
+            throw new IllegalStateException("OCI region must be configured for Oracle NoSQL Database");
+        }
+        return new NosqlDbConfig(region.getRegionId(), signatureProvider);
     }
 }

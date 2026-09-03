@@ -98,6 +98,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <cyclonedx.version>2.9.2</cyclonedx.version>
         <spotbugs-maven-plugin.version>4.10.4.0</spotbugs-maven-plugin.version>
         <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
+        <spotbugs-annotations.version>4.10.4</spotbugs-annotations.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <cc.code-coverage-ratio>0.20</cc.code-coverage-ratio>
 
@@ -255,6 +256,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>${spotbugs-annotations.version}</version>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

@@ -16,7 +16,6 @@ import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.util.CollectionUtils;
 
 import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfiguration.createRegionProvider;
 import static com.oracle.cloud.spring.vault.VaultAutoConfiguration.createSecretsClient;
@@ -36,10 +35,13 @@ public class VaultPropertySource extends EnumerablePropertySource<VaultPropertyL
         RegionProperties regionProperties = binder.bind(RegionProperties.PREFIX, Bindable.of(RegionProperties.class))
                 .orElse(new RegionProperties());
         VaultProperties vaultProperties = binder.bind(VaultProperties.PREFIX, Bindable.of(VaultProperties.class))
-                .orElse(new VaultProperties());
+                .orElse(null);
+        if (vaultProperties == null) {
+            return;
+        }
 
         final var vaultPropertySourceProperties = vaultProperties.getPropertySources();
-        if(CollectionUtils.isEmpty(vaultPropertySourceProperties)) {
+        if (vaultPropertySourceProperties == null || vaultPropertySourceProperties.isEmpty()) {
             //No need to waste time or possibly fail to create clients when there are no sources to populate.
             return;
         }
@@ -52,7 +54,7 @@ public class VaultPropertySource extends EnumerablePropertySource<VaultPropertyL
 
         // Inject VaultPropertySources into the system property sources
         MutablePropertySources propertySources = environment.getPropertySources();
-        for (VaultPropertySourceProperties properties : vaultProperties.getPropertySources()) {
+        for (VaultPropertySourceProperties properties : vaultPropertySourceProperties) {
             VaultTemplate vaultTemplate = new VaultTemplateImpl(vaultClient, secretsClient, properties.getVaultId(), vaultProperties.getCompartment());
             VaultPropertyLoader vaultPropertyLoader = new VaultPropertyLoader(vaultTemplate, vaultProperties.getPropertyRefreshInterval());
             VaultPropertySource vaultPropertySource = new VaultPropertySource(properties.getVaultId(), vaultPropertyLoader);

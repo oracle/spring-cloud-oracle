@@ -30,6 +30,8 @@ dependencies {
 
 The starter auto-configures a `Storage` bean for bucket and object operations.
 
+`StorageObjectMetadata` takes a defensive copy of its `opcMeta` map when it is set and when it is read, so later changes to a caller-owned map do not alter upload metadata unexpectedly.
+
 ```java
 @Autowired
 private Storage storage;

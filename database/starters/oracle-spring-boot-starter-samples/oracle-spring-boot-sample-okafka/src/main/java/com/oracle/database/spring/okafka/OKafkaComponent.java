@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 package com.oracle.database.spring.okafka;
 
@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 import static com.oracle.database.spring.okafka.OKafkaConfiguration.TOPIC_NAME;
 
 @Component
+@SuppressFBWarnings(value = "EI2",
+        justification = "The Kafka Properties object is application-managed configuration shared with the OKafka clients.")
 public class OKafkaComponent {
     private final AsyncTaskExecutor taskExecutor;
     private final Properties kafkaProperties;

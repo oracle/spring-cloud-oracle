@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -9,6 +9,7 @@ import com.oracle.bmc.auth.RegionProvider;
 import com.oracle.bmc.loggingingestion.Logging;
 import com.oracle.bmc.loggingingestion.LoggingClient;
 import com.oracle.cloud.spring.autoconfigure.core.CredentialsProvider;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -33,6 +34,8 @@ import static com.oracle.cloud.spring.autoconfigure.core.RegionProviderAutoConfi
 @ConditionalOnClass({LogService.class})
 @EnableConfigurationProperties(LoggingProperties.class)
 @ConditionalOnProperty(name = "spring.cloud.oci.logging.enabled", havingValue = "true", matchIfMissing = true)
+@SuppressFBWarnings(value = "EI2",
+        justification = "Logging properties are managed by Spring and intentionally retained by auto-configuration.")
 public class LoggingAutoConfiguration {
 
     private final LoggingProperties properties;

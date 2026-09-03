@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.oracle.spring.ai.oracle.api.GenAiApiFormat;
 import com.oracle.spring.ai.oracle.api.OracleGenAiServingMode;
@@ -115,11 +116,11 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
 
     @Override
     public List<String> getStopSequences() {
-        return stopSequences;
+        return stopSequences == null ? null : List.copyOf(stopSequences);
     }
 
     public void setStopSequences(List<String> stopSequences) {
-        this.stopSequences = stopSequences;
+        this.stopSequences = stopSequences == null ? null : List.copyOf(stopSequences);
     }
 
     @Override
@@ -189,20 +190,22 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
 
     @Override
     public List<ToolCallback> getToolCallbacks() {
-        return toolCallbacks;
+        return List.copyOf(toolCallbacks);
     }
 
     public void setToolCallbacks(List<ToolCallback> toolCallbacks) {
-        this.toolCallbacks = toolCallbacks != null ? toolCallbacks : Collections.emptyList();
+        this.toolCallbacks = toolCallbacks != null ? List.copyOf(toolCallbacks) : Collections.emptyList();
     }
 
     @Override
     public Map<String, Object> getToolContext() {
-        return toolContext;
+        return Collections.unmodifiableMap(new LinkedHashMap<>(toolContext));
     }
 
     public void setToolContext(Map<String, Object> toolContext) {
-        this.toolContext = toolContext != null ? toolContext : Collections.emptyMap();
+        this.toolContext = toolContext != null
+                ? Collections.unmodifiableMap(new LinkedHashMap<>(toolContext))
+                : Collections.emptyMap();
     }
 
     @SuppressWarnings("unchecked")
@@ -344,7 +347,8 @@ public class OracleGenAiChatOptions implements OracleGenAiServingOptions, ToolCa
 
         @Override
         public Builder toolContext(String key, Object value) {
-            Map<String, Object> toolContext = new LinkedHashMap<>(options.getToolContext());
+            Map<String, Object> toolContext = new LinkedHashMap<>(
+                    Objects.requireNonNull(options.getToolContext(), "tool context must not be null"));
             toolContext.put(key, value);
             options.setToolContext(toolContext);
             return this;

@@ -1,5 +1,5 @@
 /*
- ** Copyright (c) 2023, Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
@@ -33,10 +33,13 @@ import com.oracle.bmc.streaming.responses.DeleteStreamPoolResponse;
 import com.oracle.bmc.streaming.responses.DeleteStreamResponse;
 import com.oracle.bmc.streaming.responses.GetMessagesResponse;
 import com.oracle.bmc.streaming.responses.PutMessagesResponse;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Implementation of the OCI streaming module.
  */
+@SuppressFBWarnings(value = "EI",
+        justification = "OCI streaming clients are intentionally retained by this facade and exposed through public client accessors.")
 public class StreamingImpl implements Streaming {
 
     private final Stream stream;
