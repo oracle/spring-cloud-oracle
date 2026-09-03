@@ -37,6 +37,12 @@ test_spring_ai:
 
 spotbugs: spotbugs_starters spotbugs_cloud_oci spotbugs_stream_binder spotbugs_spring_ai
 
+spotbugs_reports: spotbugs
+	cp database/starters/target/site/spotbugs.html spotbugs-database-starters.html
+	cp database/spring-cloud-stream-binder-oracle-txeventq/target/site/spotbugs.html spotbugs-spring-cloud-stream-binder-oracle-txeventq.html
+	cp spring-ai-oracle/target/site/spotbugs.html spotbugs-spring-ai-oracle.html
+	cp spring-cloud-oci/target/site/spotbugs.html spotbugs-spring-cloud-oci.html
+
 spotbugs_starters:
 	$(MAKE) -C database/starters spotbugs
 
@@ -65,5 +71,5 @@ install_spring_ai:
 
 .PHONY: sca_starters sca_cloud_oci sca_stream_binder sca_spring_ai sca \
 	test_starters test_cloud_oci test_stream_binder test_spring_ai test \
-	spotbugs_starters spotbugs_cloud_oci spotbugs_stream_binder spotbugs_spring_ai spotbugs \
+	spotbugs_starters spotbugs_cloud_oci spotbugs_stream_binder spotbugs_spring_ai spotbugs spotbugs_reports \
 	install_starters install_cloud_oci install_stream_binder install_spring_ai install

@@ -9,6 +9,10 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Next, TBD
 
+#### Build
+
+- Added `make spotbugs_reports` to copy the four aggregate SpotBugs HTML reports into the repository root with project-specific filenames
+
 #### Database Starters
 
 - Added opt-in SpotBugs and FindSecBugs security analysis through the Maven `spotbugs` profile, including HTML reports, and Makefile targets for tests, streamlined installs, and SpotBugs

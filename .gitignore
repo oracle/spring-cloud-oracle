@@ -41,6 +41,10 @@ build/
 *.log
 .run
 target/
+/spotbugs-database-starters.html
+/spotbugs-spring-cloud-stream-binder-oracle-txeventq.html
+/spotbugs-spring-ai-oracle.html
+/spotbugs-spring-cloud-oci.html
 Thumbs.db
 run-app.sh
 
