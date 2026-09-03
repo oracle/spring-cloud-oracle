@@ -15,6 +15,8 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Database Starters
 
+- Added `ADBContainer` support for the official Oracle Autonomous AI Database Free container image
+- Added optional ADB application-user provisioning and auto-closeable wallet cleanup to `ADBContainer`
 - Added opt-in SpotBugs and FindSecBugs security analysis through the Maven `spotbugs` profile, including HTML reports, and Makefile targets for tests, streamlined installs, and SpotBugs
 - Added the `oracle-spring-boot-testcontainers` module with `OracleContainer` and `OrdsContainer` definitions for the official Oracle AI Database Free and ORDS images
 - Added the opt-in UCP Micrometer module, exporting UCP pool statistics with `ucp.connections.*` metrics

@@ -7,7 +7,17 @@ sidebar_position: 7
 
 The Testcontainers module provides container definitions for testing applications with the official Oracle AI Database Free and Oracle REST Data Services images.
 
-Database Starters and TxEventQ stream binder integration tests use these shared definitions instead of maintaining separate Oracle AI Database container configurations in each module.
+### Supported Images
+
+| Container definition | Supported image | Default tag | Purpose |
+| --- | --- | --- | --- |
+| `OracleContainer` | `container-registry.oracle.com/database/free` | `latest-lite` | Oracle AI Database Free database tests |
+| `ADBContainer` | `container-registry.oracle.com/database/adb-free` | `latest-26ai` | Oracle Autonomous AI Database Free tests |
+| `OrdsContainer` | `container-registry.oracle.com/database/ords` | `latest` | Oracle REST Data Services tests |
+
+
+The Database Starters modules and TxEventQ stream binder module use these container definitions for local testing.
+
 
 ## Dependency Coordinates
 
@@ -20,6 +30,8 @@ Database Starters and TxEventQ stream binder integration tests use these shared 
 ```
 
 ## Quick Start
+
+See the complete [`OracleContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/database/spring/testcontainers/OracleContainerTest.java) integration test for Oracle AI Database Free usage.
 
 Declare the container as a static JUnit Jupiter field so Testcontainers manages its lifecycle:
 
@@ -58,7 +70,48 @@ OracleContainer database = new OracleContainer()
 
 Calling `withUsername(...)` afterward returns the container to the `FREEPDB1` service connection mode. Calling `usingSid()` last selects the `FREE` SID and `SYSTEM` administrator credentials.
 
+## Testing Autonomous AI Database Free
+
+See the complete [`ADBContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/database/spring/testcontainers/ADBContainerTest.java) integration test, which covers database, ORDS, and MongoDB API connections.
+
+`ADBContainer` starts the official Oracle Autonomous AI Database Free image. It defaults to the multi-architecture `latest-26ai` image, the Autonomous Transaction Processing (ATP) workload, and the `MYATP` database name. Select the `ADW` Lakehouse workload or an alphanumeric database name when needed. Set both mandatory passwords before starting the container.
+
+```java
+ADBContainer database = new ADBContainer()
+        .withDatabaseName("orders2026")
+        .withAdminPassword("SecurePass1234")
+        .withWalletPassword("WalletPassword1")
+        .withWorkloadType(ADBContainer.WorkloadType.ATP);
+```
+
+Administrator passwords must be 12-30 characters and include uppercase, lowercase, and numeric characters; they cannot contain `ADMIN`. Wallet passwords must be at least eight characters and include letters plus a number or special character. Use `withArchiveLog(false)` to disable the image's default archive logging.
+
+Unlike `OracleContainer`, `ADBContainer` does not create an application user unless one is configured. Use `withAppUser(...)` to create one after the database starts; it receives `CREATE SESSION` and any roles supplied with `withAppUserRoles(...)`:
+
+```java
+ADBContainer database = new ADBContainer()
+        .withAdminPassword("SecurePass1234")
+        .withWalletPassword("WalletPassword1")
+        .withAppUser("APP_USER", "AppPassword1")
+        .withAppUserRoles("DWROLE", "SODA_APP");
+```
+
+`ADBContainer` automatically requests the image's required `SYS_ADMIN` capability and `/dev/fuse` device. It exposes TLS on port 1521, mTLS on port 1522, ORDS/APEX/Database Actions over HTTPS on port 8443, and the MongoDB API on port 27017 through `getTlsPort()`, `getMtlsPort()`, `getHttpsPort()`, and `getMongoDbApiPort()`.
+
+The image generates a TLS wallet at `/u01/app/oracle/wallets/tls_wallet`. After startup, use `copyWalletTo(...)` to copy it and update `tnsnames.ora` for Testcontainers' mapped ports. The returned wallet handle exposes its directory through `getDirectory()` and removes the copied wallet files when closed:
+
+```java
+try (ADBContainer.Wallet wallet = database.copyWalletTo(Files.createTempDirectory("adb-free-wallet-"))) {
+    Path walletDirectory = wallet.getDirectory();
+    // Configure JDBC with walletDirectory as oracle.net.tns_admin.
+}
+```
+
+`getMtlsServiceAlias()` and `getTlsServiceAlias()` return the workload-appropriate medium-service aliases. `ADBContainer` is a `GenericContainer` rather than a `JdbcDatabaseContainer` because the client needs that generated wallet and trust configuration.
+
 ## Testing ORDS
+
+See the complete [`OrdsContainerIntegrationTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/database/spring/testcontainers/OrdsContainerIntegrationTest.java) for ORDS HTTP, HTTPS, Database API, and MongoDB API coverage.
 
 `OrdsContainer` runs the official Oracle REST Data Services image alongside an Oracle AI Database container. Put both containers on a shared network and give the database a network alias that is used in the ORDS connection strings:
 
