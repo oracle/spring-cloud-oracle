@@ -98,7 +98,26 @@ ADBContainer database = new ADBContainer()
 
 `ADBContainer` automatically requests the image's required `SYS_ADMIN` capability and `/dev/fuse` device. It exposes TLS on port 1521, mTLS on port 1522, ORDS/APEX/Database Actions over HTTPS on port 8443, and the MongoDB API on port 27017 through `getTlsPort()`, `getMtlsPort()`, `getHttpsPort()`, and `getMongoDbApiPort()`.
 
-The image generates a TLS wallet at `/u01/app/oracle/wallets/tls_wallet`. After startup, use `copyWalletTo(...)` to copy it and update `tnsnames.ora` for Testcontainers' mapped ports. The returned wallet handle exposes its directory through `getDirectory()` and removes the copied wallet files when closed:
+The image generates a TLS wallet at `/u01/app/oracle/wallets/tls_wallet`. `ADBContainer` is a `JdbcDatabaseContainer`: after startup it copies the wallet to a managed temporary directory, updates `tnsnames.ora` for Testcontainers' mapped ports, and uses that directory for `createConnection("")`:
+
+```java
+try (Connection connection = database.createConnection("");
+     Statement statement = connection.createStatement();
+     ResultSet resultSet = statement.executeQuery("SELECT 1 FROM DUAL")) {
+    resultSet.next();
+}
+```
+
+`getJdbcUrl()` returns a JDBC URL using the database's mTLS service alias, while `getUsername()` and `getPassword()` return the configured JDBC credentials. When an application user is configured, it is used by the standard JDBC operations; call `withUsername("ADMIN")` to select the administrator instead. The managed wallet is removed when the container stops.
+
+For a direct `OracleDataSource`, UCP, or other JDBC client, use `getWallet()` after startup to access the managed wallet directory. Do not close this handle; the container owns its lifecycle:
+
+```java
+Path walletDirectory = database.getWallet().getDirectory();
+dataSource.setConnectionProperty("oracle.net.tns_admin", walletDirectory.toString());
+```
+
+When an independent wallet lifecycle is required, use `copyWalletTo(...)` instead. Its returned wallet handle exposes its directory through `getDirectory()` and removes the copied wallet files when closed:
 
 ```java
 try (ADBContainer.Wallet wallet = database.copyWalletTo(Files.createTempDirectory("adb-free-wallet-"))) {
@@ -107,7 +126,7 @@ try (ADBContainer.Wallet wallet = database.copyWalletTo(Files.createTempDirector
 }
 ```
 
-`getMtlsServiceAlias()` and `getTlsServiceAlias()` return the workload-appropriate medium-service aliases. `ADBContainer` is a `GenericContainer` rather than a `JdbcDatabaseContainer` because the client needs that generated wallet and trust configuration.
+`getMtlsServiceAlias()` and `getTlsServiceAlias()` return the workload-appropriate medium-service aliases. The explicit wallet API remains useful when configuring an `OracleDataSource`, UCP, or another JDBC client that needs its own connection properties.
 
 ## Testing ORDS
 
