@@ -15,6 +15,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Database Starters
 
+- Added `TrueCacheContainer`, shared Oracle AI Database Free container mechanics, and managed secret-file support for Oracle True Cache integration tests, including container-readable primary password-file transfer
 - Added `ADBContainer` support for the official Oracle Autonomous AI Database Free container image
 - Added optional ADB application-user provisioning and auto-closeable wallet cleanup to `ADBContainer`
 - Added opt-in SpotBugs and FindSecBugs security analysis through the Maven `spotbugs` profile, including HTML reports, and Makefile targets for tests, streamlined installs, and SpotBugs
