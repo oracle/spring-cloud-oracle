@@ -61,24 +61,22 @@ class ADBContainerTest {
             .withAppUser(MONGO_USERNAME, MONGO_PASSWORD)
             .withAppUserRoles("DWROLE", "SODA_APP");
 
-    private static ADBContainer.Wallet wallet;
+    private static Path managedWalletPath;
 
     @BeforeAll
-    static void startContainer() throws IOException, SQLException {
+    static void startContainer() throws SQLException {
         ADB_CONTAINER.start();
-        wallet = ADB_CONTAINER.copyWalletTo(Files.createTempDirectory("adb-free-wallet-"));
+        managedWalletPath = ADB_CONTAINER.getWallet().getDirectory();
         enableMongoSchema();
     }
 
     @AfterAll
-    static void stopContainer() throws IOException {
+    static void stopContainer() {
         try {
             ADB_CONTAINER.stop();
         } finally {
-            if (wallet != null) {
-                Path walletPath = wallet.getDirectory();
-                wallet.close();
-                assertFalse(Files.exists(walletPath), "Expected copied wallet directory to be removed");
+            if (managedWalletPath != null) {
+                assertFalse(Files.exists(managedWalletPath), "Expected managed wallet directory to be removed");
             }
         }
     }
@@ -86,6 +84,21 @@ class ADBContainerTest {
     @Test
     void connectsOverMutualTls() throws SQLException {
         assertDatabaseConnection(dataSource(ADB_CONTAINER.getMtlsServiceAlias()).getConnection());
+    }
+
+    @Test
+    void createsJdbcConnectionUsingManagedWallet() throws SQLException {
+        assertDatabaseConnection(ADB_CONTAINER.createConnection(""));
+    }
+
+    @Test
+    void supportsStandardJdbcApplicationCredentialConfigurationOrder() {
+        ADBContainer container = new ADBContainer()
+                .withUsername("APP_USER")
+                .withPassword("AppPassword1");
+
+        assertEquals("APP_USER", container.getUsername());
+        assertEquals("AppPassword1", container.getPassword());
     }
 
     @Test
@@ -147,7 +160,7 @@ class ADBContainerTest {
         dataSource.setURL("jdbc:oracle:thin:@" + serviceAlias);
         dataSource.setUser(username);
         dataSource.setPassword(password);
-        dataSource.setConnectionProperty("oracle.net.tns_admin", wallet.getDirectory().toString());
+        dataSource.setConnectionProperty("oracle.net.tns_admin", ADB_CONTAINER.getWallet().getDirectory().toString());
         return dataSource;
     }
 
