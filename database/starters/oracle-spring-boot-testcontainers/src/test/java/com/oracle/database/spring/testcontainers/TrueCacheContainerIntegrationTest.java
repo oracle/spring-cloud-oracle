@@ -38,12 +38,14 @@ class TrueCacheContainerIntegrationTest {
     private static final OracleContainerSecrets SECRETS =
             OracleContainerSecrets.withOraclePassword(OracleContainer.DEFAULT_PASSWORD);
     private static final OracleContainer PRIMARY = new OracleContainer(OracleContainer.IMAGE_NAME + ":latest")
+            .withStartupTimeout(Duration.ofMinutes(5))
             .withNetwork(NETWORK)
             .withNetworkAliases(PRIMARY_ALIAS)
             .withOracleSecrets(SECRETS)
             .withArchiveLog(true)
             .withForceLogging(true);
     private static final TrueCacheContainer CACHE = new TrueCacheContainer()
+            .withStartupTimeout(Duration.ofMinutes(5))
             .withNetwork(NETWORK)
             .withNetworkAliases(CACHE_ALIAS)
             .withOracleSecrets(SECRETS)
