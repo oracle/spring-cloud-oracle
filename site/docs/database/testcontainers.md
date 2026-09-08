@@ -205,6 +205,8 @@ OrdsContainer ords = new OrdsContainer()
 
 Start the database before ORDS. Any schema passed to `withSchema` must already exist; `OrdsContainer` enables it after ORDS becomes ready. The container exposes mapped HTTP, HTTPS, and MongoDB API ports through `getHttpPort()`, `getHttpsPort()`, and `getMongoDbApiPort()`.
 
+`withOraclePassword(...)` configures both `ORACLE_PWD` and `ORACLE_USER_PWD` in the ORDS container. This keeps the wrapper compatible with ORDS image releases that inspect the user-password variable during installation.
+
 `withSchema(...)` supports passwords containing characters such as `/`, `@`, and spaces. Schema names must be valid unquoted Oracle AI Database identifiers, connect descriptors must be single-line values, and passwords cannot contain double quotes or line breaks.
 
 ORDS installation requires the full Oracle AI Database Free image. Use the `latest` tag, as shown above, rather than the reduced `latest-lite` default.

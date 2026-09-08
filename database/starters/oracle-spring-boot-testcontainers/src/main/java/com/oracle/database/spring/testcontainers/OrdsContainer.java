@@ -38,6 +38,7 @@ public class OrdsContainer extends GenericContainer<OrdsContainer> {
 
     private static final String CONNECTION_STRING_ENV = "CONN_STRING";
     private static final String ORACLE_PASSWORD_ENV = "ORACLE_PWD";
+    private static final String ORACLE_USER_PASSWORD_ENV = "ORACLE_USER_PWD";
     private static final Duration DEFAULT_STARTUP_TIMEOUT = Duration.ofMinutes(5);
     private static final String ORACLE_IDENTIFIER_PATTERN = "[A-Za-z][A-Za-z0-9_$#]{0,127}";
     private static final String SCHEMA_SCRIPT_PREFIX = "/tmp/ords-enable-schema-";
@@ -93,9 +94,11 @@ public class OrdsContainer extends GenericContainer<OrdsContainer> {
      * @return this container
      */
     public OrdsContainer withOraclePassword(String oraclePassword) {
-        return withEnv(ORACLE_PASSWORD_ENV, requireNonBlank(
+        oraclePassword = requireNonBlank(
                 oraclePassword,
-                "Oracle password cannot be null or empty"));
+                "Oracle password cannot be null or empty");
+        withEnv(ORACLE_PASSWORD_ENV, oraclePassword);
+        return withEnv(ORACLE_USER_PASSWORD_ENV, oraclePassword);
     }
 
     /**
