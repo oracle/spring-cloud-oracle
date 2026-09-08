@@ -172,11 +172,12 @@ try (Network network = Network.newNetwork();
 
 The True Cache database unique name defaults to `TRUEFREE`, which must differ from the primary database's `FREE`; use `withTrueDatabaseUniqueName(...)` when a test needs another valid Oracle AI Database identifier.
 
-The `TrueCacheContainerIntegrationTest` uses the True Cache image, which is substantially heavier than the unit-test images. The standard Database Starters CI build excludes it, and a path-specific workflow runs it when `TrueCacheContainer.java` changes. To run it locally, invoke it explicitly from `database/starters`:
+The `TrueCacheContainerIntegrationTest` uses the True Cache image, which is substantially heavier than the unit-test images. It is guarded by the `true-cache-integration` JUnit system property. The standard Database Starters CI build leaves the property unset, and a path-specific workflow sets it when `TrueCacheContainer.java` changes. To run it locally, invoke it explicitly from `database/starters`:
 
 ```bash
 mvn -pl oracle-spring-boot-testcontainers -am clean verify \
   -Dtest=TrueCacheContainerIntegrationTest \
+  -Dtrue-cache-integration=true \
   -Dsurefire.failIfNoSpecifiedTests=false
 ```
 

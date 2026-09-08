@@ -31,4 +31,5 @@ jobs:
         run: |
           mvn -pl oracle-spring-boot-testcontainers -am clean verify \
             -Dtest=TrueCacheContainerIntegrationTest \
+            -Dtrue-cache-integration=true \
             -Dsurefire.failIfNoSpecifiedTests=false
