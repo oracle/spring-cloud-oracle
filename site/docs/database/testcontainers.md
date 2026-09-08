@@ -12,6 +12,7 @@ The Testcontainers module provides container definitions for testing application
 | Container definition | Supported image | Default tag | Purpose |
 | --- | --- | --- | --- |
 | `OracleContainer` | `container-registry.oracle.com/database/free` | `latest-lite` | Oracle AI Database Free database tests |
+| `TrueCacheContainer` | `container-registry.oracle.com/database/free` | `latest` | Oracle AI Database Free True Cache tests |
 | `ADBContainer` | `container-registry.oracle.com/database/adb-free` | `latest-26ai` | Oracle Autonomous AI Database Free tests |
 | `OrdsContainer` | `container-registry.oracle.com/database/ords` | `latest` | Oracle REST Data Services tests |
 
@@ -127,6 +128,51 @@ try (ADBContainer.Wallet wallet = database.copyWalletTo(Files.createTempDirector
 ```
 
 `getMtlsServiceAlias()` and `getTlsServiceAlias()` return the workload-appropriate medium-service aliases. The explicit wallet API remains useful when configuring an `OracleDataSource`, UCP, or another JDBC client that needs its own connection properties.
+
+## Testing Oracle True Cache
+
+`OracleContainer` and `TrueCacheContainer` share the listener, JDBC, logging, and credential mechanics for the Oracle AI Database Free image. `TrueCacheContainer` adds the True Cache topology configuration. Start the primary database first, attach both containers to one Testcontainers `Network`, and use a primary network alias in the cache connection descriptor. Do not assign fixed container IP addresses: Testcontainers creates the network subnet and provides alias-based DNS.
+
+The image requires the primary password file as well as the documented secret files. `TrueCacheContainer` copies the caller-owned password file with a container-readable, read-only mode; the local source file is not changed. `OracleContainerSecrets` provides a Docker-API-portable way to seed `/run/secrets`. Keep the shared handle open until both containers have started, then close it after stopping them. The current 26ai Free image also requires `ORACLE_PWD` during its early True Cache DBCA step; `TrueCacheContainer` derives that value from the managed secret rather than requiring a second caller-supplied password.
+
+```java
+try (Network network = Network.newNetwork();
+     OracleContainerSecrets secrets = OracleContainerSecrets.withOraclePassword("TestPassword1")) {
+    OracleContainer primary = new OracleContainer(OracleContainer.IMAGE_NAME + ":latest")
+            .withNetwork(network)
+            .withNetworkAliases("pri-db-free")
+            .withOracleSecrets(secrets)
+            .withArchiveLog(true)
+            .withForceLogging(true);
+    primary.start();
+
+    Path passwordFile = Files.createTempFile("true-cache-primary-", ".pw");
+    try {
+        primary.copyFileFromContainer(TrueCacheContainer.PRIMARY_SOURCE_PASSWORD_FILE,
+                passwordFile.toString());
+
+        TrueCacheContainer cache = new TrueCacheContainer()
+                .withNetwork(network)
+                .withNetworkAliases("tru-cc-free")
+                .withOracleSecrets(secrets)
+                .withPrimaryDatabase("pri-db-free", 1521, "FREE")
+                .withPrimaryDatabasePasswordFile(passwordFile)
+                .withPdbService("FREEPDB1", "sales1", "sales1_tc");
+        cache.start();
+        // Configure the cache application service on the primary, then connect to sales1_tc.
+        cache.stop();
+    } finally {
+        Files.deleteIfExists(passwordFile);
+        primary.stop();
+    }
+}
+```
+
+`withPdbService(...)` adds one `PDB_TC_SVCS` mapping in the documented `PDB:primary-service:true-cache-service` format. It may be called more than once. The corresponding application service must be configured on the primary after the True Cache instance is healthy; service creation is deliberately outside the container wrapper because it changes the caller's primary database state.
+
+The True Cache database unique name defaults to `TRUEFREE`, which must differ from the primary database's `FREE`; use `withTrueDatabaseUniqueName(...)` when a test needs another valid Oracle AI Database identifier.
+
+Use `OracleContainerSecrets.withSecret("oracle_pwd_priv_key", keyBytes)` when the selected image release requires the additional documented private-key secret. Secret names are restricted to safe filenames, content is copied, and supplementary secret bytes are wiped when the handle closes. The image runs as the `oracle` user, so the copied secret files are read-only and readable inside the container.
 
 ## Testing ORDS
 
