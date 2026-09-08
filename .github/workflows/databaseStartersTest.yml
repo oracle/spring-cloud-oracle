@@ -31,4 +31,4 @@ jobs:
       - name: Run Maven Build and Test
         working-directory: ./database/starters
         run: |
-          mvn clean install -Dtest='!TrueCacheContainerIntegrationTest'
+          mvn clean install -Dsurefire.excludes='**/TrueCacheContainerIntegrationTest.java'
