@@ -12,6 +12,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Build
 
 - Added `make spotbugs_reports` to copy the four aggregate SpotBugs HTML reports into the repository root with project-specific filenames
+- Remediated actionable npm vulnerabilities in the documentation site's transitive dependencies
 
 #### Database Starters
 

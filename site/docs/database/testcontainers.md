@@ -172,6 +172,14 @@ try (Network network = Network.newNetwork();
 
 The True Cache database unique name defaults to `TRUEFREE`, which must differ from the primary database's `FREE`; use `withTrueDatabaseUniqueName(...)` when a test needs another valid Oracle AI Database identifier.
 
+The `TrueCacheContainerIntegrationTest` uses the True Cache image, which is substantially heavier than the unit-test images. The standard Database Starters CI build excludes it, and a path-specific workflow runs it when `TrueCacheContainer.java` changes. To run it locally, invoke it explicitly from `database/starters`:
+
+```bash
+mvn -pl oracle-spring-boot-testcontainers -am clean verify \
+  -Dtest=TrueCacheContainerIntegrationTest \
+  -Dsurefire.failIfNoSpecifiedTests=false
+```
+
 Use `OracleContainerSecrets.withSecret("oracle_pwd_priv_key", keyBytes)` when the selected image release requires the additional documented private-key secret. Secret names are restricted to safe filenames, content is copied, and supplementary secret bytes are wiped when the handle closes. The image runs as the `oracle` user, so the copied secret files are read-only and readable inside the container.
 
 ## Testing ORDS
