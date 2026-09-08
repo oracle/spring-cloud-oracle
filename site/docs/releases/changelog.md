@@ -12,9 +12,12 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 #### Build
 
 - Added `make spotbugs_reports` to copy the four aggregate SpotBugs HTML reports into the repository root with project-specific filenames
+- Remediated actionable npm vulnerabilities in the documentation site's transitive dependencies
 
 #### Database Starters
 
+- Configured `ORACLE_USER_PWD` alongside `ORACLE_PWD` in `OrdsContainer` for compatibility with current ORDS image installation
+- Guarded the heavy `TrueCacheContainerIntegrationTest` behind a JUnit system property and run it in CI when `TrueCacheContainer.java` changes
 - Added `TrueCacheContainer`, shared Oracle AI Database Free container mechanics, and managed secret-file support for Oracle True Cache integration tests, including container-readable primary password-file transfer
 - Added `ADBContainer` support for the official Oracle Autonomous AI Database Free container image
 - Added optional ADB application-user provisioning and auto-closeable wallet cleanup to `ADBContainer`

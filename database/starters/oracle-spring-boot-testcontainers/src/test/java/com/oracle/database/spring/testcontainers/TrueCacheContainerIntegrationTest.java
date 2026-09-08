@@ -18,6 +18,7 @@ import java.util.Base64;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -25,6 +26,7 @@ import org.testcontainers.utility.MountableFile;
 
 /** Live integration coverage for the primary-to-True-Cache setup. */
 @Testcontainers(disabledWithoutDocker = true)
+@EnabledIfSystemProperty(named = "true-cache-integration", matches = "true")
 class TrueCacheContainerIntegrationTest {
 
     private static final String PRIMARY_ALIAS = "pri-db-free";
