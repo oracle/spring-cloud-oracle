@@ -83,9 +83,9 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <oracle.nosql.driver.version>5.4.22</oracle.nosql.driver.version>
         <jakarta-mail.version>2.0.5</jakarta-mail.version>
         <oci-sdk.version>3.91.1</oci-sdk.version>
-        <jackson.version>3.1.4</jackson.version>
-        <jackson2.version>2.21.4</jackson2.version>
-        <jackson.annotations.version>2.21</jackson.annotations.version>
+        <jackson.version>3.2.2</jackson.version>
+        <jackson2.version>2.21.6</jackson2.version>
+        <jackson.annotations.version>2.22</jackson.annotations.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.10.1</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
@@ -111,10 +111,11 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <dependencyManagement>
         <dependencies>
+            <!-- OCI SDK and Spring Cloud OCI source APIs still use Jackson 2; Jackson 3 is a separate API. -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.21.5</version>
+                <version>2.21.6</version>
             </dependency>
             <dependency>
                 <groupId>com.oracle.oci.sdk</groupId>
