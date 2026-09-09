@@ -54,7 +54,7 @@
         <testcontainers.version>2.0.5</testcontainers.version>
         <oracle-spring-boot-testcontainers.version>26.2.1</oracle-spring-boot-testcontainers.version>
         <jackson.version>3.2.2</jackson.version>
-        <jackson.annotations.version>2.21</jackson.annotations.version>
+        <jackson.annotations.version>2.22</jackson.annotations.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>

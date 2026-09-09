@@ -70,7 +70,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring-boot.version>4.1.1</spring-boot.version>
-        <jackson.version>3.1.6</jackson.version>
+        <jackson.version>3.2.2</jackson.version>
+        <jackson.annotations.version>2.22</jackson.annotations.version>
         <oci-sdk.version>3.89.1</oci-sdk.version>
 
         <!-- Distribution management -->
@@ -81,11 +82,16 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
 
     <dependencyManagement>
         <dependencies>
-<!--            Remove once transitive dependencies update-->
+            <!-- OCI SDK still uses the Jackson 2 API; Jackson 3 is a separate, non-compatible API. -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>2.21.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.annotations.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
