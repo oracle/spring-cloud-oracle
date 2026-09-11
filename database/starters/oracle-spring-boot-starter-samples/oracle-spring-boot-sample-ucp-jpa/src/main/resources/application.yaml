@@ -1,4 +1,6 @@
 spring:
+  banner:
+    location: banner.txt
   jpa:
     hibernate:
       ddl-auto: none
@@ -11,11 +13,20 @@ spring:
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
-      initial-pool-size: 1
-      min-pool-size: 1
-      max-pool-size: 30
+      # Starts two connections and maintains a 2–10 connection pool for the demo.
+      initial-pool-size: 2
+      min-pool-size: 2
+      max-pool-size: 10
       connection-pool-name: UCPSampleApplication
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      # Closes available idle connections; borrowed connections are unaffected.
+      inactive-connection-timeout: 60
+      # Waits up to two seconds when the pool is exhausted.
+      connection-wait-duration: 2s
+      # Applies a 15-second default statement execution timeout through UCP.
+      query-timeout: 15
+      # Caches up to 10 prepared or callable statements per physical connection.
+      max-statements: 10
 server:
   port: 9001
 management:
@@ -24,5 +35,17 @@ management:
       exposure:
         include:
           - metrics
+  otlp:
+    metrics:
+      export:
+        enabled: false
+  tracing:
+    export:
+      otlp:
+        enabled: false
+  logging:
+    export:
+      otlp:
+        enabled: false
   server:
     port: 9002
