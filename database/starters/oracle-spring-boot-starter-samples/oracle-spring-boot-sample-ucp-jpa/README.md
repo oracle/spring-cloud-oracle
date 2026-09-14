@@ -23,7 +23,7 @@ export ORACLE_PWD="${ORACLE_PWD:-Welcome12345}"
 docker compose up --build -d
 ```
 
-The default administrative password is `Welcome12345`. Change the `ORACLE_PWD` value before starting the services to use a different password. Compose builds and starts the sample application after the database initialization scripts finish. The services expose these host ports:
+The default administrative password is `Welcome12345`. Change the `ORACLE_PWD` value before starting the services to use a different password. Compose builds the sample with Oracle OpenJDK 21 and Maven 3.9.11, then starts it on Oracle OpenJDK 21 after the database initialization scripts finish. The services expose these host ports:
 
 | Service | Port | Purpose |
 | --- | --- | --- |
