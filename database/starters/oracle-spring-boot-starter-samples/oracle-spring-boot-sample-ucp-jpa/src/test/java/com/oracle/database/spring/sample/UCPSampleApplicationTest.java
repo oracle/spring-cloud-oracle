@@ -12,6 +12,7 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
 @SpringBootTest
-@Sql("/init.sql") // Initialize the student table
+@Sql("/sql/init.sql") // Initialize the student table
 public class UCPSampleApplicationTest {
 
     /**
@@ -55,6 +56,9 @@ public class UCPSampleApplicationTest {
 
     @Autowired
     DataSource dataSource;
+
+    @Value("${spring.datasource.oracleucp.max-pool-size}")
+    int maxPoolSize;
 
     @Test
     void ucpSampleApp() throws Exception {
@@ -111,6 +115,6 @@ public class UCPSampleApplicationTest {
         }
         assertThat(borrowedConnections.count()).isGreaterThan(0);
         assertThat(returnedConnections.count()).isGreaterThan(0);
-        assertThat(maxConnections.value()).isEqualTo(30.0);
+        assertThat(maxConnections.value()).isEqualTo((double) maxPoolSize);
     }
 }

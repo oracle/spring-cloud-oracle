@@ -1,0 +1,53 @@
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/.
+
+services:
+  application:
+    container_name: students-app
+    build:
+      context: ../..
+      dockerfile: oracle-spring-boot-starter-samples/oracle-spring-boot-sample-ucp-jpa/Dockerfile
+    ports:
+      - "9001:9001" # Application API
+      - "9002:9002" # Actuator API
+    environment:
+      JDBC_URL: jdbc:oracle:thin:@//oracle-free:1521/FREEPDB1
+      USERNAME: testuser
+      PASSWORD: testpwd
+      OTEL_SERVICE_NAME: oracle-spring-boot-sample-ucp-jpa
+      MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED: "true"
+      MANAGEMENT_OTLP_METRICS_EXPORT_URL: http://grafana-lgtm:4318/v1/metrics
+      MANAGEMENT_OTLP_METRICS_EXPORT_STEP: 5s
+    depends_on:
+      grafana-lgtm:
+        condition: service_started
+      oracle-free:
+        condition: service_healthy
+    restart: on-failure
+
+  grafana-lgtm:
+    container_name: lgtm
+    image: grafana/otel-lgtm:latest
+    ports:
+      - "3000:3000" # Grafana UI
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    volumes:
+      - ./dashboards/dashboards.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/ucp.yaml:ro
+      - ./dashboards/ucp-metrics.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/ucp-metrics.json:ro
+
+  oracle-free:
+    container_name: oracledb
+    image: container-registry.oracle.com/database/free:latest-lite
+    ports:
+      - "1522:1521"
+    environment:
+      ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
+    volumes:
+      - ./src/test/resources:/opt/oracle/scripts/startup:ro
+    healthcheck:
+      test: ["CMD-SHELL", "printf 'WHENEVER SQLERROR EXIT FAILURE\\nSELECT COUNT(*) FROM STUDENT;\\nEXIT;\\n' | sqlplus -L -s testuser/testpwd@//localhost:1521/FREEPDB1 >/dev/null"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s
