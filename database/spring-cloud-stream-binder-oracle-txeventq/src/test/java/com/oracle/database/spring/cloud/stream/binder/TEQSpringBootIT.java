@@ -5,7 +5,7 @@ package com.oracle.database.spring.cloud.stream.binder;
 import java.sql.SQLException;
 
 import com.oracle.database.spring.cloud.stream.binder.config.TxEventQJmsConfiguration;
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.junit.jupiter.api.BeforeAll;

@@ -80,7 +80,7 @@ import com.oracle.database.spring.cloud.stream.binder.utils.ListenerContainerFac
 import com.oracle.database.spring.cloud.stream.binder.utils.MessageRecoverer;
 import com.oracle.database.spring.cloud.stream.binder.utils.RepublishMessageRecoverer;
 import com.oracle.database.spring.cloud.stream.binder.utils.SpecCompliantJmsHeaderMapper;
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 
 import jakarta.jms.ConnectionFactory;
 import nativetests.TestObject;

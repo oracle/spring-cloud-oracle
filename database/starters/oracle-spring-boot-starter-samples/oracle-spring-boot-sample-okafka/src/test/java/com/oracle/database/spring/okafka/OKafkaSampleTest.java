@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import oracle.jdbc.pool.OracleDataSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

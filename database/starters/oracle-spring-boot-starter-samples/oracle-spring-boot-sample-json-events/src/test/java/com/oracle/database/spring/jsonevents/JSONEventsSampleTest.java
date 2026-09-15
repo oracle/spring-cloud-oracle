@@ -6,7 +6,7 @@ import java.io.File;
 import java.time.Duration;
 import java.util.List;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import com.oracle.database.spring.jsonevents.model.Sensor;
 import com.oracle.database.spring.jsonevents.model.SensorEvent;
 import org.junit.jupiter.api.BeforeAll;

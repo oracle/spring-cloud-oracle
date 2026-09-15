@@ -29,7 +29,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.util.UUID;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import oracle.ucp.jdbc.PoolDataSource;
 
 import org.testcontainers.utility.MountableFile;

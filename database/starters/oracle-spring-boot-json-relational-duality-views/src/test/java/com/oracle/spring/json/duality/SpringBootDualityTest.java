@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import com.oracle.spring.json.duality.builder.DualityViewScanner;
 import com.oracle.spring.json.duality.model.book.Book;
 import com.oracle.spring.json.duality.model.book.Loan;

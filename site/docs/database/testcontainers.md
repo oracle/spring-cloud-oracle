@@ -5,7 +5,7 @@ sidebar_position: 7
 
 # Testcontainers
 
-The Testcontainers module provides container definitions for testing applications with the official Oracle AI Database Free and Oracle REST Data Services images.
+The Testcontainers module provides container definitions in the `com.oracle.spring.testcontainers` package for testing applications with the official Oracle AI Database Free and Oracle REST Data Services images.
 
 ### Supported Images
 
@@ -32,7 +32,7 @@ The Database Starters modules and TxEventQ stream binder module use these contai
 
 ## Quick Start
 
-See the complete [`OracleContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/database/spring/testcontainers/OracleContainerTest.java) integration test for Oracle AI Database Free usage.
+See the complete [`OracleContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/spring/testcontainers/OracleContainerTest.java) integration test for Oracle AI Database Free usage.
 
 Declare the container as a static JUnit Jupiter field so Testcontainers manages its lifecycle:
 
@@ -73,7 +73,7 @@ Calling `withUsername(...)` afterward returns the container to the `FREEPDB1` se
 
 ## Testing Autonomous AI Database Free
 
-See the complete [`ADBContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/database/spring/testcontainers/ADBContainerTest.java) integration test, which covers database, ORDS, and MongoDB API connections.
+See the complete [`ADBContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/spring/testcontainers/ADBContainerTest.java) integration test, which covers database, ORDS, and MongoDB API connections.
 
 `ADBContainer` starts the official Oracle Autonomous AI Database Free image. It defaults to the multi-architecture `latest-26ai` image, the Autonomous Transaction Processing (ATP) workload, and the `MYATP` database name. Select the `ADW` Lakehouse workload or an alphanumeric database name when needed. Set both mandatory passwords before starting the container.
 
@@ -185,7 +185,7 @@ Use `OracleContainerSecrets.withSecret("oracle_pwd_priv_key", keyBytes)` when th
 
 ## Testing ORDS
 
-See the complete [`OrdsContainerIntegrationTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/database/spring/testcontainers/OrdsContainerIntegrationTest.java) for ORDS HTTP, HTTPS, Database API, and MongoDB API coverage.
+See the complete [`OrdsContainerIntegrationTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/spring/testcontainers/OrdsContainerIntegrationTest.java) for ORDS HTTP, HTTPS, Database API, and MongoDB API coverage.
 
 `OrdsContainer` runs the official Oracle REST Data Services image alongside an Oracle AI Database container. Put both containers on a shared network and give the database a network alias that is used in the ORDS connection strings:
 
