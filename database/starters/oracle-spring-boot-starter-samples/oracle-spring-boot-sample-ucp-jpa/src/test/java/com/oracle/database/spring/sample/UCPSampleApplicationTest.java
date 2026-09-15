@@ -5,7 +5,7 @@ package com.oracle.database.spring.sample;
 import java.time.Duration;
 import java.util.List;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import javax.sql.DataSource;
 import io.micrometer.core.instrument.FunctionCounter;
 import io.micrometer.core.instrument.Gauge;

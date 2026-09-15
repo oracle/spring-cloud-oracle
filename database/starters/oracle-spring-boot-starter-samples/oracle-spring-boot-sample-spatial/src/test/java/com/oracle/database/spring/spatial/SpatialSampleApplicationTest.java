@@ -6,7 +6,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

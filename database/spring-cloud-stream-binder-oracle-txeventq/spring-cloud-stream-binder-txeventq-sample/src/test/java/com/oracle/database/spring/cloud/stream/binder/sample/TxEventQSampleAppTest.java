@@ -4,7 +4,7 @@ package com.oracle.database.spring.cloud.stream.binder.sample;
 
 import java.time.Duration;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

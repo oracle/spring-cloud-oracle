@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
-import com.oracle.database.spring.testcontainers.OracleContainer;
+import com.oracle.spring.testcontainers.OracleContainer;
 import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
 import com.oracle.spring.json.test.Student;
