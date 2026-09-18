@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import com.oracle.bmc.generativeaiinference.model.BaseChatRequest;
 import com.oracle.bmc.generativeaiinference.model.BaseChatResponse;
@@ -598,7 +601,7 @@ class OracleGenAiChatModelTests {
     }
 
     @Test
-    void observesChatStream() {
+    void observesChatStream() throws InterruptedException {
         CapturingGenerativeAiInference client = new CapturingGenerativeAiInference(streamResponse(
                 sseStream(genericTextEvent("Hel"), genericTextEvent("lo"))));
         RecordingObservationHandler handler = new RecordingObservationHandler(ChatModelObservationContext.class);
@@ -615,6 +618,9 @@ class OracleGenAiChatModelTests {
         assertThat(responses)
                 .extracting(response -> response.getResult().getOutput().getText())
                 .containsExactly("Hel", "lo");
+        assertThat(handler.awaitStoppedContext(Duration.ofSeconds(5)))
+                .as("streaming observation should stop before it is inspected")
+                .isTrue();
         assertThat(handler.stoppedContexts())
                 .singleElement()
                 .isInstanceOfSatisfying(ChatModelObservationContext.class, context -> {
@@ -1046,9 +1052,11 @@ class OracleGenAiChatModelTests {
 
         private final Class<? extends Observation.Context> contextType;
 
-        private final List<Observation.Context> stoppedContexts = new ArrayList<>();
+        private final List<Observation.Context> stoppedContexts = new CopyOnWriteArrayList<>();
 
-        private final List<Observation.Context> errorContexts = new ArrayList<>();
+        private final List<Observation.Context> errorContexts = new CopyOnWriteArrayList<>();
+
+        private final CountDownLatch stopped = new CountDownLatch(1);
 
         private RecordingObservationHandler(Class<? extends Observation.Context> contextType) {
             this.contextType = contextType;
@@ -1062,6 +1070,7 @@ class OracleGenAiChatModelTests {
         @Override
         public void onStop(Observation.Context context) {
             stoppedContexts.add(context);
+            stopped.countDown();
         }
 
         @Override
@@ -1071,6 +1080,10 @@ class OracleGenAiChatModelTests {
 
         private List<Observation.Context> stoppedContexts() {
             return stoppedContexts;
+        }
+
+        private boolean awaitStoppedContext(Duration timeout) throws InterruptedException {
+            return stopped.await(timeout.toMillis(), TimeUnit.MILLISECONDS);
         }
 
         private List<Observation.Context> errorContexts() {
