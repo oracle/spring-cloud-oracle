@@ -1,0 +1,8 @@
+{
+  "label": "Oracle AI Database Starters",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Spring Boot starters for Oracle AI Database connections, messaging, JSON features, and Kafka-compatible TxEventQ access."
+  }
+}

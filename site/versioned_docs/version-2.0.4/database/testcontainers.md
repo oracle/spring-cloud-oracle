@@ -1,0 +1,212 @@
+---
+title: Testcontainers
+sidebar_position: 7
+---
+
+# Testcontainers
+
+The Testcontainers module provides container definitions in the `com.oracle.spring.testcontainers` package for testing applications with the official Oracle AI Database Free and Oracle REST Data Services images.
+
+### Supported Images
+
+| Container definition | Supported image | Default tag | Purpose |
+| --- | --- | --- | --- |
+| `OracleContainer` | `container-registry.oracle.com/database/free` | `latest-lite` | Oracle AI Database Free database tests |
+| `TrueCacheContainer` | `container-registry.oracle.com/database/free` | `latest` | Oracle AI Database Free True Cache tests |
+| `ADBContainer` | `container-registry.oracle.com/database/adb-free` | `latest-26ai` | Oracle Autonomous AI Database Free tests |
+| `OrdsContainer` | `container-registry.oracle.com/database/ords` | `latest` | Oracle REST Data Services tests |
+
+
+The Database Starters modules and TxEventQ stream binder module use these container definitions for local testing.
+
+
+## Dependency Coordinates
+
+```xml
+<dependency>
+  <groupId>com.oracle.database.spring</groupId>
+  <artifactId>oracle-spring-boot-testcontainers</artifactId>
+  <scope>test</scope>
+</dependency>
+```
+
+## Quick Start
+
+See the complete [`OracleContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/spring/testcontainers/OracleContainerTest.java) integration test for Oracle AI Database Free usage.
+
+Declare the container as a static JUnit Jupiter field so Testcontainers manages its lifecycle:
+
+```java
+@Testcontainers
+class DatabaseTest {
+
+    @Container
+    static final OracleContainer database =
+            new OracleContainer().withInitScript("schema.sql");
+}
+```
+
+By default, `OracleContainer` uses `container-registry.oracle.com/database/free:latest-lite`, connects to the `FREEPDB1` service on port 1521, and provisions a `TEST` application user. Initialization scripts run with that application user's credentials, so unqualified objects are created in its schema.
+
+### Application User Roles
+
+The application user receives `CREATE SESSION` and `DB_DEVELOPER_ROLE` by default. Replace the default role with one or more database roles when a test needs a different privilege set:
+
+```java
+OracleContainer database = new OracleContainer()
+        .withAppUserRoles("CONNECT", "RESOURCE");
+```
+
+Role names are case-insensitive, must be valid unquoted Oracle AI Database identifiers, and are deduplicated. Calling `withAppUserRoles()` without arguments grants only `CREATE SESSION`; initialization scripts that create database objects will then need additional privileges.
+
+### SID Connections
+
+Use `usingSid()` to connect to the `FREE` container database as `SYSTEM`. In SID mode, `withPassword(...)` configures the administrator password used both by the image and the JDBC connection:
+
+```java
+OracleContainer database = new OracleContainer()
+        .usingSid()
+        .withPassword("SidPassword1");
+```
+
+Calling `withUsername(...)` afterward returns the container to the `FREEPDB1` service connection mode. Calling `usingSid()` last selects the `FREE` SID and `SYSTEM` administrator credentials.
+
+## Testing Autonomous AI Database Free
+
+See the complete [`ADBContainerTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/spring/testcontainers/ADBContainerTest.java) integration test, which covers database, ORDS, and MongoDB API connections.
+
+`ADBContainer` starts the official Oracle Autonomous AI Database Free image. It defaults to the multi-architecture `latest-26ai` image, the Autonomous Transaction Processing (ATP) workload, and the `MYATP` database name. Select the `ADW` Lakehouse workload or an alphanumeric database name when needed. Set both mandatory passwords before starting the container.
+
+```java
+ADBContainer database = new ADBContainer()
+        .withDatabaseName("orders2026")
+        .withAdminPassword("SecurePass1234")
+        .withWalletPassword("WalletPassword1")
+        .withWorkloadType(ADBContainer.WorkloadType.ATP);
+```
+
+Administrator passwords must be 12-30 characters and include uppercase, lowercase, and numeric characters; they cannot contain `ADMIN`. Wallet passwords must be at least eight characters and include letters plus a number or special character. Use `withArchiveLog(false)` to disable the image's default archive logging.
+
+Unlike `OracleContainer`, `ADBContainer` does not create an application user unless one is configured. Use `withAppUser(...)` to create one after the database starts; it receives `CREATE SESSION` and any roles supplied with `withAppUserRoles(...)`:
+
+```java
+ADBContainer database = new ADBContainer()
+        .withAdminPassword("SecurePass1234")
+        .withWalletPassword("WalletPassword1")
+        .withAppUser("APP_USER", "AppPassword1")
+        .withAppUserRoles("DWROLE", "SODA_APP");
+```
+
+`ADBContainer` automatically requests the image's required `SYS_ADMIN` capability and `/dev/fuse` device. It exposes TLS on port 1521, mTLS on port 1522, ORDS/APEX/Database Actions over HTTPS on port 8443, and the MongoDB API on port 27017 through `getTlsPort()`, `getMtlsPort()`, `getHttpsPort()`, and `getMongoDbApiPort()`.
+
+The image generates a TLS wallet at `/u01/app/oracle/wallets/tls_wallet`. `ADBContainer` is a `JdbcDatabaseContainer`: after startup it copies the wallet to a managed temporary directory, updates `tnsnames.ora` for Testcontainers' mapped ports, and uses that directory for `createConnection("")`:
+
+```java
+try (Connection connection = database.createConnection("");
+     Statement statement = connection.createStatement();
+     ResultSet resultSet = statement.executeQuery("SELECT 1 FROM DUAL")) {
+    resultSet.next();
+}
+```
+
+`getJdbcUrl()` returns a JDBC URL using the database's mTLS service alias, while `getUsername()` and `getPassword()` return the configured JDBC credentials. When an application user is configured, it is used by the standard JDBC operations; call `withUsername("ADMIN")` to select the administrator instead. The managed wallet is removed when the container stops.
+
+For a direct `OracleDataSource`, UCP, or other JDBC client, use `getWallet()` after startup to access the managed wallet directory. Do not close this handle; the container owns its lifecycle:
+
+```java
+Path walletDirectory = database.getWallet().getDirectory();
+dataSource.setConnectionProperty("oracle.net.tns_admin", walletDirectory.toString());
+```
+
+When an independent wallet lifecycle is required, use `copyWalletTo(...)` instead. Its returned wallet handle exposes its directory through `getDirectory()` and removes the copied wallet files when closed:
+
+```java
+try (ADBContainer.Wallet wallet = database.copyWalletTo(Files.createTempDirectory("adb-free-wallet-"))) {
+    Path walletDirectory = wallet.getDirectory();
+    // Configure JDBC with walletDirectory as oracle.net.tns_admin.
+}
+```
+
+`getMtlsServiceAlias()` and `getTlsServiceAlias()` return the workload-appropriate medium-service aliases. The explicit wallet API remains useful when configuring an `OracleDataSource`, UCP, or another JDBC client that needs its own connection properties.
+
+## Testing Oracle True Cache
+
+`OracleContainer` and `TrueCacheContainer` share the listener, JDBC, logging, and credential mechanics for the Oracle AI Database Free image. `TrueCacheContainer` adds the True Cache topology configuration. Start the primary database first, attach both containers to one Testcontainers `Network`, and use a primary network alias in the cache connection descriptor. Do not assign fixed container IP addresses: Testcontainers creates the network subnet and provides alias-based DNS.
+
+The image requires the primary password file as well as the documented secret files. `TrueCacheContainer` copies the caller-owned password file with a container-readable, read-only mode; the local source file is not changed. `OracleContainerSecrets` provides a Docker-API-portable way to seed `/run/secrets`. Keep the shared handle open until both containers have started, then close it after stopping them. The current 26ai Free image also requires `ORACLE_PWD` during its early True Cache DBCA step; `TrueCacheContainer` derives that value from the managed secret rather than requiring a second caller-supplied password.
+
+```java
+try (Network network = Network.newNetwork();
+     OracleContainerSecrets secrets = OracleContainerSecrets.withOraclePassword("TestPassword1")) {
+    OracleContainer primary = new OracleContainer(OracleContainer.IMAGE_NAME + ":latest")
+            .withNetwork(network)
+            .withNetworkAliases("pri-db-free")
+            .withOracleSecrets(secrets)
+            .withArchiveLog(true)
+            .withForceLogging(true);
+    primary.start();
+
+    Path passwordFile = Files.createTempFile("true-cache-primary-", ".pw");
+    try {
+        primary.copyFileFromContainer(TrueCacheContainer.PRIMARY_SOURCE_PASSWORD_FILE,
+                passwordFile.toString());
+
+        TrueCacheContainer cache = new TrueCacheContainer()
+                .withNetwork(network)
+                .withNetworkAliases("tru-cc-free")
+                .withOracleSecrets(secrets)
+                .withPrimaryDatabase("pri-db-free", 1521, "FREE")
+                .withPrimaryDatabasePasswordFile(passwordFile)
+                .withPdbService("FREEPDB1", "sales1", "sales1_tc");
+        cache.start();
+        // Configure the cache application service on the primary, then connect to sales1_tc.
+        cache.stop();
+    } finally {
+        Files.deleteIfExists(passwordFile);
+        primary.stop();
+    }
+}
+```
+
+`withPdbService(...)` adds one `PDB_TC_SVCS` mapping in the documented `PDB:primary-service:true-cache-service` format. It may be called more than once. The corresponding application service must be configured on the primary after the True Cache instance is healthy; service creation is deliberately outside the container wrapper because it changes the caller's primary database state.
+
+The True Cache database unique name defaults to `TRUEFREE`, which must differ from the primary database's `FREE`; use `withTrueDatabaseUniqueName(...)` when a test needs another valid Oracle AI Database identifier.
+
+The `TrueCacheContainerIntegrationTest` uses the True Cache image, which is substantially heavier than the unit-test images. It is guarded by the `true-cache-integration` JUnit system property. The standard Database Starters CI build leaves the property unset, and a path-specific workflow sets it when `TrueCacheContainer.java` changes. To run it locally, invoke it explicitly from `database/starters`:
+
+```bash
+mvn -pl oracle-spring-boot-testcontainers -am clean verify \
+  -Dtest=TrueCacheContainerIntegrationTest \
+  -Dtrue-cache-integration=true \
+  -Dsurefire.failIfNoSpecifiedTests=false
+```
+
+Use `OracleContainerSecrets.withSecret("oracle_pwd_priv_key", keyBytes)` when the selected image release requires the additional documented private-key secret. Secret names are restricted to safe filenames, content is copied, and supplementary secret bytes are wiped when the handle closes. The image runs as the `oracle` user, so the copied secret files are read-only and readable inside the container.
+
+## Testing ORDS
+
+See the complete [`OrdsContainerIntegrationTest`](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-testcontainers/src/test/java/com/oracle/spring/testcontainers/OrdsContainerIntegrationTest.java) for ORDS HTTP, HTTPS, Database API, and MongoDB API coverage.
+
+`OrdsContainer` runs the official Oracle REST Data Services image alongside an Oracle AI Database container. Put both containers on a shared network and give the database a network alias that is used in the ORDS connection strings:
+
+```java
+Network network = Network.newNetwork();
+
+OracleContainer database = new OracleContainer(OracleContainer.IMAGE_NAME + ":latest")
+        .withNetwork(network)
+        .withNetworkAliases("ordsdb");
+
+OrdsContainer ords = new OrdsContainer()
+        .withNetwork(network)
+        .withDatabaseConnectionString("jdbc:oracle:thin:@ordsdb:1521/FREEPDB1")
+        .withOraclePassword(OracleContainer.DEFAULT_PASSWORD)
+        .withSchema("appuser", "appuserpwd", "ordsdb:1521/FREEPDB1");
+```
+
+Start the database before ORDS. Any schema passed to `withSchema` must already exist; `OrdsContainer` enables it after ORDS becomes ready. The container exposes mapped HTTP, HTTPS, and MongoDB API ports through `getHttpPort()`, `getHttpsPort()`, and `getMongoDbApiPort()`.
+
+`withOraclePassword(...)` configures both `ORACLE_PWD` and `ORACLE_USER_PWD` in the ORDS container. This keeps the wrapper compatible with ORDS image releases that inspect the user-password variable during installation.
+
+`withSchema(...)` supports passwords containing characters such as `/`, `@`, and spaces. Schema names must be valid unquoted Oracle AI Database identifiers, connect descriptors must be single-line values, and passwords cannot contain double quotes or line breaks.
+
+ORDS installation requires the full Oracle AI Database Free image. Use the `latest` tag, as shown above, rather than the reduced `latest-lite` default.

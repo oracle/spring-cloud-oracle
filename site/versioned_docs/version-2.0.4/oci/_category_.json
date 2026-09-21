@@ -1,0 +1,8 @@
+{
+  "label": "Oracle Cloud Infrastructure (OCI)",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Authentication, configuration, and Spring Boot integrations for OCI services."
+  }
+}
