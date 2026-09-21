@@ -1,0 +1,8 @@
+{
+  "label": "Releases",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Spring Cloud Oracle releases, changelog, and roadmap."
+  }
+}

@@ -35,6 +35,20 @@ test_stream_binder:
 test_spring_ai:
 	$(MAKE) -C spring-ai-oracle test
 
+javadoc: javadoc_starters javadoc_cloud_oci javadoc_stream_binder javadoc_spring_ai
+
+javadoc_starters:
+	$(MAKE) -C database/starters javadocs
+
+javadoc_cloud_oci:
+	$(MAKE) -C spring-cloud-oci javadocs
+
+javadoc_stream_binder:
+	$(MVN) clean package javadoc:aggregate -f database/spring-cloud-stream-binder-oracle-txeventq/pom.xml -DskipTests=true -e
+
+javadoc_spring_ai:
+	$(MVN) clean package javadoc:aggregate -f spring-ai-oracle/pom.xml -DskipTests=true -e
+
 spotbugs: spotbugs_starters spotbugs_cloud_oci spotbugs_stream_binder spotbugs_spring_ai
 
 spotbugs_reports: spotbugs
@@ -71,5 +85,6 @@ install_spring_ai:
 
 .PHONY: sca_starters sca_cloud_oci sca_stream_binder sca_spring_ai sca \
 	test_starters test_cloud_oci test_stream_binder test_spring_ai test \
+	javadoc_starters javadoc_cloud_oci javadoc_stream_binder javadoc_spring_ai javadoc \
 	spotbugs_starters spotbugs_cloud_oci spotbugs_stream_binder spotbugs_spring_ai spotbugs spotbugs_reports \
 	install_starters install_cloud_oci install_stream_binder install_spring_ai install
