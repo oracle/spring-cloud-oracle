@@ -1,0 +1,4 @@
+com.oracle.spring.ai.oracle
+com.oracle.spring.ai.oracle.api
+com.oracle.spring.ai.oracle.autoconfigure
+com.oracle.spring.ai.oracle.converter
