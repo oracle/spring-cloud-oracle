@@ -21,8 +21,8 @@
     "@mdx-js/react": "^3.1.1",
     "clsx": "^2.1.1",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.10.2",
@@ -34,7 +34,10 @@
     "browserslist": "4.28.9",
     "fast-uri": "3.1.6",
     "http-proxy-middleware": "2.0.10",
-    "joi": "17.13.4",
+    "colord": "2.10.0",
+    "image-size": "2.0.4",
+    "joi": "17.13.6",
+    "js-yaml": "4.3.2",
     "launch-editor": "2.14.1",
     "nanoid": "3.3.18",
     "qs": "6.16.0",
@@ -43,6 +46,7 @@
     "sockjs": {
       "uuid": "14.0.1"
     },
+    "svgo": "3.3.5",
     "webpack-bundle-analyzer": {
       "ws": "7.5.11"
     },
