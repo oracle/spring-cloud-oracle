@@ -78,3 +78,27 @@ Additional Oracle UCP statistics are provided under the `ucp.connections` namesp
 | `ucp.connections.acquire`, `.acquire.failed`, `.acquire.total`, `.usage` | Function timers backed by cumulative counts and total times |
 
 Shard-specific statistics are not exported because shard names can produce unbounded metric-tag cardinality.
+
+## UCP JPA Sample and Grafana Dashboard
+
+The [UCP JPA sample](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters/oracle-spring-boot-starter-samples/oracle-spring-boot-sample-ucp-jpa) combines the UCP starter, Spring Data JPA, Actuator, and the UCP Micrometer integration. Its Docker Compose environment starts Oracle AI Database Free and Grafana LGTM, exports metrics over OTLP, and provisions the [Oracle UCP Metrics Grafana dashboard](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-starter-samples/oracle-spring-boot-sample-ucp-jpa/dashboards/ucp-metrics.json).
+
+After starting the sample, open Grafana at `http://localhost:3000` and select **Dashboards > Oracle AI Database > Oracle UCP Metrics**. The dashboard includes pool state and capacity, utilization and pending requests, borrow and return throughput, acquisition outcomes and latency, connection inventory, and lifecycle signals.
+
+![Oracle UCP Metrics Grafana dashboard](/img/ucp-metrics-grafana-dashboard.png)
+
+## UCP Metric Example
+
+The sample exposes Actuator metrics on port `9002`. Query the portable connection-count meter to see the `idle` and `used` connection states for the configured pool:
+
+```shell
+curl http://localhost:9002/actuator/metrics/db.client.connection.count
+```
+
+The response includes measurements and the tags used to select a specific pool state. For the sample's `UCPSampleApplication` pool, query an idle measurement with:
+
+```shell
+curl 'http://localhost:9002/actuator/metrics/db.client.connection.count?tag=db.client.connection.pool.name:UCPSampleApplication&tag=db.client.connection.state:idle'
+```
+
+This metric reports the current number of available connections. Change the `db.client.connection.state` tag to `used` to inspect borrowed connections. The [sample's UCP metrics test](https://github.com/oracle/spring-cloud-oracle/blob/main/database/starters/oracle-spring-boot-starter-samples/oracle-spring-boot-sample-ucp-jpa/src/test/java/com/oracle/database/spring/sample/UCPSampleApplicationTest.java) shows the same meter and its tags in use.
