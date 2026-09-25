@@ -1,5 +1,11 @@
 ---
-title: Functions
+title: OCI Functions Integration
+sidebar_label: Functions
+description: Invoke deployed OCI Functions from Spring applications with the Spring Cloud OCI Functions integration.
+keywords:
+  - OCI Functions Spring Boot
+  - invoke OCI Functions Java
+  - Spring Cloud Oracle
 sidebar_position: 11
 ---
 

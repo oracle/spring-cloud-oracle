@@ -1,6 +1,7 @@
 ## Docs
 - Use "Oracle AI Database" to refere to Oracle Database
 - Docusaurus website source is in the ./site folder
+- For Docusaurus SEO, keep only the latest released documentation version indexable. Set `noIndex: true` for the current (unreleased) version and every older version in `site/docusaurus.config.ts`, and update the version entries when releases change. Docusaurus excludes noindexed pages from its generated sitemap.
 - Code changes must have an accompanying docs change
 - Feature or bug fixes must have a line in the [changelog](./site/docs/releases/changelog.md)
 

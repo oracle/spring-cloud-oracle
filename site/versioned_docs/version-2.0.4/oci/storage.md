@@ -1,5 +1,11 @@
 ---
-title: Object Storage
+title: OCI Object Storage Integration
+sidebar_label: Object Storage
+description: Read and write OCI Object Storage objects using Spring Cloud Oracle APIs and Spring Resource integration.
+keywords:
+  - OCI Object Storage Spring Boot
+  - Spring Resource OCI
+  - Oracle Cloud object storage Java
 sidebar_position: 4
 ---
 

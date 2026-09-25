@@ -1,9 +1,14 @@
 ---
 title: OCI Generative AI Chat
+description: Build Spring AI chat applications with OCI Generative AI using Oracle's ChatModel, streaming, tool calling, and conversation memory support.
+keywords:
+  - Spring AI OCI Generative AI chat
+  - Oracle ChatModel
+  - OCI chat model Spring Boot
 sidebar_position: 1
 ---
 
-# OCI Generative AI Chat (In Development)
+# OCI Generative AI Chat (Released)
 
 Spring AI Oracle provides a Spring AI `ChatModel` backed by [OCI Generative AI](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm).
 

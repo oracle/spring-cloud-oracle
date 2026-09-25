@@ -1,5 +1,11 @@
 ---
-title: Queues
+title: OCI Queue Integration
+sidebar_label: Queues
+description: Send and receive messages with OCI Queue from Spring Boot using the Spring Cloud Oracle queue integration.
+keywords:
+  - OCI Queue Spring Boot
+  - Oracle Cloud queue Java
+  - Spring Cloud OCI
 sidebar_position: 7
 ---
 

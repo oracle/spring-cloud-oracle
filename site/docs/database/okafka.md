@@ -1,5 +1,10 @@
 ---
 title: OKafka
+description: Use Kafka producer, consumer, and admin APIs with Oracle AI Database Transactional Event Queues through the Spring Boot OKafka starter.
+keywords:
+  - Oracle OKafka Spring Boot
+  - Kafka API Oracle TxEventQ
+  - Oracle AI Database messaging
 sidebar_position: 5
 ---
 

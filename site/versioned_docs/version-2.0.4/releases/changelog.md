@@ -1,5 +1,8 @@
 ---
-title: Database Changelog
+title: Spring Cloud Oracle Release Notes
+description: Release notes and changes for Spring Cloud Oracle, including Oracle AI Database starters, OCI integrations, TxEventQ, and Spring AI Oracle.
+keywords:
+  - Spring Cloud Oracle release notes
 sidebar_position: 1
 ---
 

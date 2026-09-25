@@ -1,5 +1,10 @@
 ---
 title: OCI Core
+description: Configure OCI authentication, region, and compartment access for Spring Boot with the Spring Cloud OCI core starter.
+keywords:
+  - Spring Cloud OCI core starter
+  - OCI authentication Spring Boot
+  - OCI region and compartment
 sidebar_position: 1
 ---
 

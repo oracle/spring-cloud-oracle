@@ -1,5 +1,10 @@
 ---
 title: Oracle Spatial
+description: Build Spring Boot applications with Oracle Spatial SDO_GEOMETRY, GeoJSON conversion, and spatial query helpers.
+keywords:
+  - Oracle Spatial Spring Boot
+  - SDO_GEOMETRY GeoJSON
+  - Oracle spatial queries
 sidebar_position: 6
 ---
 

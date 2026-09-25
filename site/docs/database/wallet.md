@@ -1,5 +1,10 @@
 ---
 title: Oracle AI Database Wallet
+description: Configure Oracle AI Database Wallet and mutual TLS authentication for Spring Boot applications with the Oracle Wallet starter.
+keywords:
+  - Oracle Wallet Spring Boot
+  - Oracle AI Database mTLS
+  - Autonomous Database wallet
 sidebar_position: 2
 ---
 

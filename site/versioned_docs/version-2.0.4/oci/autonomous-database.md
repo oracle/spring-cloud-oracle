@@ -1,5 +1,10 @@
 ---
 title: Autonomous Database
+description: Manage OCI Autonomous Database instances from Spring applications with Spring Cloud Oracle's Autonomous Database integration.
+keywords:
+  - OCI Autonomous Database Spring Boot
+  - Spring Cloud OCI
+  - Autonomous Database lifecycle
 sidebar_position: 3
 ---
 

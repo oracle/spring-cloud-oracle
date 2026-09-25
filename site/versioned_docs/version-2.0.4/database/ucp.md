@@ -1,5 +1,10 @@
 ---
 title: Universal Connection Pool
+description: Configure Oracle Universal Connection Pool for Spring Boot and export pool statistics with the Oracle UCP Micrometer integration.
+keywords:
+  - Oracle UCP Spring Boot
+  - UCP connection pool metrics
+  - Oracle AI Database connection pool
 sidebar_position: 1
 ---
 

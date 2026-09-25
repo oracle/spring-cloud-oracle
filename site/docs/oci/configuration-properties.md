@@ -1,5 +1,11 @@
 ---
-title: Configuration Properties
+title: Spring Cloud OCI Configuration Properties
+sidebar_label: Configuration Properties
+description: Reference Spring Cloud OCI configuration properties for authentication, region, compartment, and runtime refresh.
+keywords:
+  - Spring Cloud OCI properties
+  - OCI Spring Boot configuration
+  - OCI configuration refresh
 sidebar_position: 2
 ---
 
