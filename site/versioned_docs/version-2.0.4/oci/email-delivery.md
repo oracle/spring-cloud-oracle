@@ -1,5 +1,11 @@
 ---
-title: Email Delivery
+title: OCI Email Delivery Integration
+sidebar_label: Email Delivery
+description: Send email through OCI Email Delivery from Spring Boot with MailSender and JavaMailSender integrations.
+keywords:
+  - OCI Email Delivery Spring Boot
+  - OCI JavaMailSender
+  - Oracle Cloud email integration
 sidebar_position: 10
 ---
 

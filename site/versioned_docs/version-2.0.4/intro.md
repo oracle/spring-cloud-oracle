@@ -1,18 +1,29 @@
+---
+title: Spring Cloud Oracle
+description: Spring Boot starters and integrations for Oracle AI Database, OCI, Oracle TxEventQ, and OCI Generative AI.
+keywords:
+  - Spring Cloud Oracle
+  - Spring Boot Oracle AI Database
+  - Spring Cloud OCI
+image: spring-cloud-oracle-overview.png
+---
+
 # Spring Cloud Oracle
 
-Spring Cloud Oracle brings Oracle AI Database, Oracle AI Database-native messaging, and Oracle Cloud Infrastructure (OCI) into the Spring application model. It's a collection of Spring Boot starters, auto-configuration, templates, integrations, and samples for teams building data-intensive and cloud-connected services with Oracle technologies.
+Spring Cloud Oracle brings Oracle AI Database, Oracle AI Database-native messaging, Oracle Cloud Infrastructure (OCI), and OCI Generative AI into the Spring application model. It's a collection of Spring Boot starters, auto-configuration, templates, integrations, and samples for teams building data-intensive, AI-enabled, and cloud-connected services with Oracle technologies.
 
 ## Overview
 
-Spring Cloud Oracle is organized as three complementary subprojects:
+Spring Cloud Oracle is organized as four complementary subprojects:
 
 - Oracle AI Database Spring Boot Starters
 - Spring Cloud Stream Binder for Oracle TxEventQ
 - Spring Cloud OCI
+- Spring AI Oracle
 
-Together, they provide a consistent way to build Spring applications that connect to Oracle AI Database with production-ready connection management, build event-driven services on top of Oracle AI Database Transactional Event Queues (TxEventQ), and extend those applications with managed OCI services such as Vault, Object Storage, Streaming, Functions, and Generative AI.
+Together, they provide a consistent way to build Spring applications that connect to Oracle AI Database with production-ready connection management, build event-driven services on top of Oracle AI Database Transactional Event Queues (TxEventQ), extend those applications with managed OCI services such as Vault, Object Storage, Streaming, and Functions, and use OCI Generative AI through Spring AI model APIs.
 
-![project architecture image](spring-cloud-oracle-overview.png)
+![Spring Cloud Oracle architecture showing database starters, TxEventQ, OCI integrations, and Spring AI Oracle](spring-cloud-oracle-overview.png)
 
 ## Why Spring Cloud Oracle?
 
@@ -23,6 +34,7 @@ Spring Cloud Oracle focuses on that integration layer:
 - Database-first Spring Boot starters for connectivity, messaging, JSON data, and spatial workloads
 - Event-driven architectures built on Oracle AI Database Transactional Event Queues through Spring Cloud Stream
 - OCI integrations exposed through Spring Boot abstractions such as property sources, resources, templates, and auto-configured clients
+- OCI Generative AI chat and embedding models exposed through standard Spring AI APIs
 - Sample applications that show the dependencies, configuration, and usage patterns in context
 
 ## Oracle AI Database Spring Boot Starters
@@ -74,6 +86,15 @@ Supported integrations include:
 
 This lets Spring applications combine Oracle AI Database with surrounding managed services for configuration, messaging, storage, logging, AI features, and runtime integration on OCI.
 
+## Spring AI Oracle
+
+Spring AI Oracle is a released integration that brings OCI Generative AI into Spring AI applications through auto-configured model implementations. Applications can use OCI-backed `ChatModel`, `ChatClient`, and `EmbeddingModel` APIs while keeping the application code aligned with Spring AI conventions.
+
+Start with the dedicated guides for:
+
+- [OCI Generative AI Chat](./spring-ai/oci-genai-chat.md) for chat models, streaming, tool calling, and chat memory integration
+- [OCI Generative AI Embeddings](./spring-ai/oci-genai-embeddings.md) for embedding models and vector-generation workloads
+
 ## How the Pieces Fit Together
 
 A typical adoption path starts with the database starters. Teams use UCP, Wallet support, JSON features, AQ/JMS, or OKafka to build Spring Boot services directly on Oracle AI Database. From there, they can add the TxEventQ binder for Spring Cloud Stream workloads and bring in Spring Cloud OCI starters when the application needs managed cloud services such as Vault, Object Storage, Functions, or Generative AI.
@@ -85,13 +106,14 @@ The result is a project that supports both database-centered application design 
 Start with the repository and project overview:
 
 - GitHub repository: [oracle/spring-cloud-oracle](https://github.com/oracle/spring-cloud-oracle)
-- Project introduction: [Spring Cloud Oracle intro docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro)
 
 Explore each subproject:
 
 - [Database starters overview](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters)
-- [TxEventQ binder overview](https://oracle.github.io/spring-cloud-oracle/site/docs/stream-binder/overview)
-- [Spring Cloud OCI overview](https://oracle.github.io/spring-cloud-oracle/site/docs/oci/core)
+- [TxEventQ binder overview](./stream-binder/overview.md)
+- [Spring Cloud OCI overview](./oci/core.md)
+- [Spring AI Oracle chat documentation](./spring-ai/oci-genai-chat.md)
+- [Spring AI Oracle embeddings documentation](./spring-ai/oci-genai-embeddings.md)
 
 ## Samples and Resources
 

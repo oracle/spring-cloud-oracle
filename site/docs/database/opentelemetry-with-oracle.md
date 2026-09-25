@@ -1,5 +1,10 @@
 ---
 title: OpenTelemetry with Oracle AI Database
+description: Instrument Oracle JDBC calls with OpenTelemetry in Spring Boot applications using the Oracle OpenTelemetry starter.
+keywords:
+  - Oracle JDBC OpenTelemetry
+  - Spring Boot database tracing
+  - Oracle AI Database observability
 sidebar_position: 6
 ---
 

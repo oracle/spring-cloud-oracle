@@ -1,5 +1,11 @@
 ---
-title: Notifications
+title: OCI Notifications Integration
+sidebar_label: Notifications
+description: Publish notifications to OCI Notifications topics from Spring applications using the Spring Cloud OCI starter.
+keywords:
+  - OCI Notifications Spring Boot
+  - OCI notification topics Java
+  - Spring Cloud OCI
 sidebar_position: 8
 ---
 

@@ -1,5 +1,9 @@
 ---
-title: Project Overview
+title: Spring Cloud Oracle Project Overview
+description: Spring Boot integrations for Oracle AI Database, Oracle Cloud Infrastructure, and Oracle AI Database native messaging.
+keywords:
+  - Spring Cloud Oracle
+  - Spring Boot Oracle AI Database
 sidebar_position: 1
 ---
 

@@ -1,5 +1,11 @@
 ---
-title: Streaming
+title: OCI Streaming Integration
+sidebar_label: Streaming
+description: Produce and consume OCI Streaming messages in Spring applications using Spring Cloud OCI.
+keywords:
+  - OCI Streaming Spring Boot
+  - Oracle Cloud streaming Java
+  - Spring Cloud OCI
 sidebar_position: 6
 ---
 

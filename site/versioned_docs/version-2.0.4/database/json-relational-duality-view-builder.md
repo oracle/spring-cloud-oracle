@@ -1,5 +1,10 @@
 ---
 title: JSON Relational Duality View Builder
+description: Generate Oracle AI Database JSON Relational Duality View DDL from Java classes or JPA entities using the Spring Boot builder.
+keywords:
+  - JSON Relational Duality View Java
+  - Oracle AI Database Spring Boot
+  - JPA duality view builder
 sidebar_position: 5
 ---
 

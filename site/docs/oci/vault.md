@@ -1,5 +1,11 @@
 ---
-title: Vault
+title: OCI Vault Integration
+sidebar_label: Vault
+description: Load secrets from OCI Vault as Spring configuration properties or retrieve them with VaultTemplate.
+keywords:
+  - OCI Vault Spring Boot
+  - Oracle Cloud secrets configuration
+  - VaultTemplate
 sidebar_position: 5
 ---
 

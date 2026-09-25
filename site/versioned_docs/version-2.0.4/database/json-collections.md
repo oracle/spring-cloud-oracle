@@ -1,5 +1,10 @@
 ---
 title: JSON Collections and Duality Views
+description: Use the Oracle AI Database JSON starter for JSON data, JSON Relational Duality Views, and OSON serialization in Spring Boot applications.
+keywords:
+  - Oracle AI Database JSON Spring Boot
+  - JSON Relational Duality Views
+  - OSON serialization
 sidebar_position: 4
 ---
 

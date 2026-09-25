@@ -14,7 +14,6 @@ const config: Config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
-  // TODO: Set the production url of your site here
   url: 'https://oracle.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -49,7 +48,14 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/oracle/spring-cloud-oracle/tree/main/site/',
+          versions: {
+            current: {noIndex: true},
+            '2.0.2': {noIndex: true},
+            '2.0.1': {noIndex: true},
+            '2.0.0': {noIndex: true},
+          },
         },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -58,8 +64,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/logo.png',
+    image: 'img/spring_cloud.png',
     navbar: {
       title: 'Spring Cloud Oracle',
       logo: {

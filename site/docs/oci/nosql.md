@@ -1,5 +1,10 @@
 ---
 title: Oracle NoSQL Database
+description: Connect Spring Boot applications to Oracle NoSQL Database using the Spring Cloud Oracle NoSQL integration.
+keywords:
+  - Oracle NoSQL Spring Boot
+  - Spring Data Oracle NoSQL
+  - Oracle NoSQL Database integration
 sidebar_position: 12
 ---
 

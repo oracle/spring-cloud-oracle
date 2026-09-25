@@ -1,5 +1,11 @@
 ---
-title: Generative AI
+title: OCI Generative AI Integration
+sidebar_label: Generative AI
+description: Use OCI Generative AI chat and embedding APIs through Spring Cloud OCI's Spring Boot integration.
+keywords:
+  - OCI Generative AI Spring Boot
+  - OCI chat and embeddings
+  - Spring Cloud OCI
 sidebar_position: 13
 ---
 

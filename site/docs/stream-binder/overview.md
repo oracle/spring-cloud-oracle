@@ -1,5 +1,11 @@
 ---
-title: Overview
+title: Spring Cloud Stream Binder for Oracle TxEventQ
+sidebar_label: Overview
+description: Build event-driven Spring Cloud Stream applications with Oracle AI Database Transactional Event Queues (TxEventQ).
+keywords:
+  - Spring Cloud Stream Oracle TxEventQ
+  - Oracle AI Database messaging
+  - transactional event queues Spring
 sidebar_position: 1
 ---
 

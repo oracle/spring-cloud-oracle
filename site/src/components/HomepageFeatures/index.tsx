@@ -1,3 +1,6 @@
+// Copyright (c) 2026, 2026, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 import type {ReactNode} from 'react';
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
@@ -49,7 +52,7 @@ function Feature({title, Svg, description}: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <Svg className={styles.featureSvg} aria-hidden="true" focusable="false" />
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>

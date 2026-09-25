@@ -1,5 +1,8 @@
 ---
-title: Database Changelog
+title: Spring Cloud Oracle Release Notes
+description: Release notes and changes for Spring Cloud Oracle, including Oracle AI Database starters, OCI integrations, TxEventQ, and Spring AI Oracle.
+keywords:
+  - Spring Cloud Oracle release notes
 sidebar_position: 1
 ---
 
@@ -9,7 +12,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Next, TBD
 
-TBD!
+- Improved search metadata, version indexing controls, and internal documentation links across the site.
 
 #### 2.0.4, September 21st, 2026
 

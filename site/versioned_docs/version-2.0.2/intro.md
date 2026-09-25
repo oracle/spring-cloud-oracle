@@ -1,3 +1,13 @@
+---
+title: Spring Cloud Oracle
+description: Spring Boot starters and integrations for Oracle AI Database, OCI, Oracle TxEventQ, and OCI Generative AI.
+keywords:
+  - Spring Cloud Oracle
+  - Spring Boot Oracle AI Database
+  - Spring Cloud OCI
+image: spring-cloud-oracle-overview.png
+---
+
 # Spring Cloud Oracle
 
 Spring Cloud Oracle brings Oracle AI Database, Oracle AI Database-native messaging, and Oracle Cloud Infrastructure (OCI) into the Spring application model. It's a collection of Spring Boot starters, auto-configuration, templates, integrations, and samples for teams building data-intensive and cloud-connected services with Oracle technologies.
@@ -12,7 +22,7 @@ Spring Cloud Oracle is organized as three complementary subprojects:
 
 Together, they provide a consistent way to build Spring applications that connect to Oracle AI Database with production-ready connection management, build event-driven services on top of Oracle AI Database Transactional Event Queues (TxEventQ), and extend those applications with managed OCI services such as Vault, Object Storage, Streaming, Functions, and Generative AI.
 
-![project architecture image](spring-cloud-oracle-overview.png)
+![Spring Cloud Oracle architecture showing database starters, TxEventQ, OCI integrations, and Spring AI Oracle](spring-cloud-oracle-overview.png)
 
 ## Why Spring Cloud Oracle?
 
@@ -85,13 +95,12 @@ The result is a project that supports both database-centered application design 
 Start with the repository and project overview:
 
 - GitHub repository: [oracle/spring-cloud-oracle](https://github.com/oracle/spring-cloud-oracle)
-- Project introduction: [Spring Cloud Oracle intro docs](https://oracle.github.io/spring-cloud-oracle/site/docs/intro)
 
 Explore each subproject:
 
 - [Database starters overview](https://github.com/oracle/spring-cloud-oracle/tree/main/database/starters)
-- [TxEventQ binder overview](https://oracle.github.io/spring-cloud-oracle/site/docs/stream-binder/overview)
-- [Spring Cloud OCI overview](https://oracle.github.io/spring-cloud-oracle/site/docs/oci/core)
+- [TxEventQ binder overview](./stream-binder/overview.md)
+- [Spring Cloud OCI overview](./oci/core.md)
 
 ## Samples and Resources
 

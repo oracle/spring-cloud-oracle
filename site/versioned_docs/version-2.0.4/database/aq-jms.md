@@ -1,5 +1,9 @@
 ---
 title: AQ/JMS
+description: Add Spring JMS support for Oracle AI Database Advanced Queuing and Transactional Event Queues (TxEventQ) with the Oracle Spring Boot AQ/JMS starter.
+keywords:
+  - Spring JMS Oracle TxEventQ
+  - Oracle AI Database AQ JMS
 sidebar_position: 3
 ---
 

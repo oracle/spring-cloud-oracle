@@ -1,5 +1,11 @@
 ---
-title: Logging
+title: OCI Logging Integration
+sidebar_label: Logging
+description: Send application logs to OCI Logging with the Spring Cloud OCI logging integration.
+keywords:
+  - OCI Logging Spring Boot
+  - Oracle Cloud application logs
+  - Spring Cloud OCI
 sidebar_position: 9
 ---
 

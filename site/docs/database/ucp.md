@@ -1,5 +1,10 @@
 ---
 title: Universal Connection Pool
+description: Configure Oracle Universal Connection Pool for Spring Boot and export pool statistics with the Oracle UCP Micrometer integration.
+keywords:
+  - Oracle UCP Spring Boot
+  - UCP connection pool metrics
+  - Oracle AI Database connection pool
 sidebar_position: 1
 ---
 
@@ -85,7 +90,7 @@ The [UCP JPA sample](https://github.com/oracle/spring-cloud-oracle/tree/main/dat
 
 After starting the sample, open Grafana at `http://localhost:3000` and select **Dashboards > Oracle AI Database > Oracle UCP Metrics**. The dashboard includes pool state and capacity, utilization and pending requests, borrow and return throughput, acquisition outcomes and latency, connection inventory, and lifecycle signals.
 
-![Oracle UCP Metrics Grafana dashboard](/img/ucp-metrics-grafana-dashboard.png)
+![Oracle UCP Metrics Grafana dashboard showing pool capacity, utilization, acquisition latency, and connection lifecycle](/img/ucp-metrics-grafana-dashboard.png)
 
 ## UCP Metric Example
 

@@ -1,5 +1,11 @@
 ---
-title: Get Started
+title: Get Started with the Oracle TxEventQ Stream Binder
+sidebar_label: Get Started
+description: Add the Spring Cloud Stream binder for Oracle TxEventQ and configure a Spring Boot application to publish and consume messages.
+keywords:
+  - Spring Cloud Stream TxEventQ quickstart
+  - Oracle TxEventQ Spring Boot
+  - Oracle database messaging tutorial
 sidebar_position: 2
 ---
 

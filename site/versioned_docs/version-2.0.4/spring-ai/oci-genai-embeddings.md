@@ -1,9 +1,14 @@
 ---
 title: OCI Generative AI Embeddings
+description: Generate text embeddings in Spring AI applications with OCI Generative AI and Oracle's EmbeddingModel integration.
+keywords:
+  - Spring AI OCI embeddings
+  - Oracle EmbeddingModel
+  - OCI Generative AI vectors
 sidebar_position: 2
 ---
 
-# OCI Generative AI Embeddings (In Development)
+# OCI Generative AI Embeddings (Released)
 
 Spring AI Oracle provides a Spring AI `EmbeddingModel` backed by [OCI Generative AI](https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm).
 
