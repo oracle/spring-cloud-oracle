@@ -12,7 +12,21 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Next, TBD
 
-- Improved search metadata, version indexing controls, and internal documentation links across the site.
+#### Database Starters
+
+- Refreshed third party dependencies
+
+#### Spring Cloud Stream Binder for TxEventQ
+
+- Refreshed third party dependencies
+
+#### Spring AI Oracle
+
+- Refreshed third party dependencies
+
+#### Spring Cloud OCI
+
+- Refreshed third party dependencies
 
 #### 2.0.4, September 21st, 2026
 
