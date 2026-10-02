@@ -14,6 +14,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Database Starters
 
+- Defaulted the UCP starter's JDBC session program to `SPRING_CLOUD_ORACLE`, preserving explicitly configured connection properties
 - Refreshed third party dependencies
 
 #### Spring Cloud Stream Binder for TxEventQ
