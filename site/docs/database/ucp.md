@@ -43,6 +43,16 @@ spring:
 
 The `oracleucp` block is optional and can be used to fine-tune the pool configuration with Oracle UCP specific properties.
 
+The starter defaults the JDBC connection property `v$session.program` to `SPRING_CLOUD_ORACLE`, identifying its connections in Oracle AI Database's `V$SESSION.PROGRAM` column. Existing connection properties are preserved. To use your own session program, configure:
+
+```yaml
+spring:
+  datasource:
+    oracleucp:
+      connection-properties:
+        "v$session.program": MyApplication
+```
+
 ## Micrometer Metrics
 
 Spring Boot publishes generic `jdbc.connections.*` metrics for UCP when Actuator is enabled. To export UCP-specific runtime statistics as well, add the Spring Boot Actuator and UCP Micrometer dependencies to your project:

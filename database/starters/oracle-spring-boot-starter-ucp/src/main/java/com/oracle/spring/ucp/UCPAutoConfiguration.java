@@ -5,9 +5,11 @@ package com.oracle.spring.ucp;
 import javax.sql.DataSource;
 
 import java.sql.SQLException;
+import java.util.Properties;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.annotation.PostConstruct;
+import oracle.jdbc.OracleConnection;
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.ucp.jdbc.PoolDataSourceImpl;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -33,6 +35,10 @@ public class UCPAutoConfiguration {
                 ds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
                 setIfNull(ds.getConnectionPoolName(), () -> ds.setConnectionPoolName("SpringConnectionPool"));
                 setIfNull(ds.getInitialPoolSize(), () -> ds.setInitialPoolSize(15));
+                Properties connectionProperties = ds.getConnectionProperties();
+                connectionProperties.putIfAbsent(
+                        OracleConnection.CONNECTION_PROPERTY_THIN_VSESSION_PROGRAM, "SPRING_CLOUD_ORACLE");
+                ds.setConnectionProperties(connectionProperties);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
