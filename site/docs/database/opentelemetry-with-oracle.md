@@ -10,7 +10,7 @@ sidebar_position: 6
 
 # OpenTelemetry with Oracle AI Database
 
-The `spring-boot-starter-oracle-otel` starter provides a tools instrumenting Oracle JDBC activity in Spring Boot applications with OpenTelemetry.
+The `spring-boot-starter-oracle-otel` starter instruments Oracle JDBC activity in Spring Boot applications with OpenTelemetry. It uses the Oracle JDBC observability provider, which can export driver events to OpenTelemetry and Java Flight Recorder (JFR).
 
 Use it when you want traces to flow from an incoming Spring Boot HTTP request into Oracle Database JDBC operations so those spans can be exported to an OpenTelemetry backend such as Grafana LGTM or Zipkin-compatible tooling.
 
@@ -33,7 +33,7 @@ This starter is intended to support Oracle JDBC OpenTelemetry instrumentation in
 
 ## Enable the database tracing provider
 
-In your application properties, enable JMX beans (for the tracing provider), and set the `oracle.jdbc.provider.traceEventListener` JDBC connection URL property to `open-telemetry-trace-event-listener-provider` like so:
+In your application properties, enable JMX beans for provider management and set the `oracle.jdbc.provider.traceEventListener` JDBC connection URL property to `observability-trace-event-listener-provider`:
 
 ```yaml
 spring:
@@ -41,15 +41,22 @@ spring:
     enabled: true
   datasource:
     # Docker compose Oracle Free container
-    url: jdbc:oracle:thin:@localhost:1522/freepdb1?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider
+    url: jdbc:oracle:thin:@localhost:1522/freepdb1?oracle.jdbc.provider.traceEventListener=observability-trace-event-listener-provider
 ```
 
-## Configuration Notes
+## Configuration
 
-The Oracle JDBC OpenTelemetry provider supports system properties such as:
+The provider supports OpenTelemetry and JFR tracers. Configure the enabled tracers with the `oracle.jdbc.provider.observability.enabledTracers` system property. For example, to enable both tracers:
 
-- `oracle.jdbc.provider.opentelemetry.enabled` to enable or disable the provider
-- `oracle.jdbc.provider.opentelemetry.sensitive-enabled` to control export of sensitive values such as SQL text
+```shell
+java -Doracle.jdbc.provider.observability.enabledTracers=OTEL,JFR -jar app.jar
+```
+
+Sensitive attributes such as SQL text are disabled by default. To enable them, set `oracle.jdbc.provider.observability.sensitiveDataEnabled=true`. Review your data handling requirements before enabling sensitive attributes.
+
+The provider emits legacy Oracle JDBC semantic conventions by default. To emit the stable OpenTelemetry database conventions, set `OTEL_SEMCONV_STABILITY_OPT_IN=database`. Use `database/dup` to emit both legacy and stable attributes during a migration.
+
+The previous `open-telemetry-trace-event-listener-provider` name and these settings remain available for compatibility: `oracle.jdbc.provider.opentelemetry.enabled` and `oracle.jdbc.provider.opentelemetry.sensitive-enabled`. When the legacy provider name or settings are used, only the OpenTelemetry tracer is enabled.
 
 When tracing is configured in the application, a request that performs JDBC work can be viewed as a single trace spanning the HTTP layer and the database layer.
 
@@ -62,4 +69,4 @@ See the sample application:
 ## References
 
 - [Spring Boot tracing](https://docs.spring.io/spring-boot/reference/actuator/tracing.html)
-- [OJDBC OpenTelemetry provider](https://github.com/oracle/ojdbc-extensions/tree/main/ojdbc-provider-opentelemetry)
+- [OJDBC observability provider](https://github.com/oracle/ojdbc-extensions/tree/main/ojdbc-provider-observability)

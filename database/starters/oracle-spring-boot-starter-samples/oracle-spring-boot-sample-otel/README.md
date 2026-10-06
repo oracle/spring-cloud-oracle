@@ -5,22 +5,22 @@ This example application demonstrates how to instrument Oracle Database JDBC con
 ## References
 
 - [Spring Boot tracing](https://docs.spring.io/spring-boot/reference/actuator/tracing.html)
-- [OJDBC OpenTelemetry provider](https://github.com/oracle/ojdbc-extensions/tree/main/ojdbc-provider-opentelemetry)
+- [OJDBC observability provider](https://github.com/oracle/ojdbc-extensions/tree/main/ojdbc-provider-observability)
 
 ## Prerequisites
 
 - Java 21+, Maven
 - Docker compatible environment with docker-compose
 
-## Setup Oracle Database Free and Grafana LGTM with docker-compose
+## Setup Oracle Database Free and Grafana LGTM
 
-Start the Oracle Database Free and Zipkin containers with docker-compose:
+From this directory, start the Oracle Database Free and Grafana LGTM containers:
 
 ```bash
-docker-compose -d
+docker compose up -d
 ```
 
-When the database starts, the [grant_permissions.sql](./oracle/grant_permissions.sql) is run, creating a test user and a table.
+When the database starts, it runs [grant_permissions.sql](./oracle/grant_permissions.sql), which creates the sample user and table.
 
 ## Run the sample
 
@@ -46,12 +46,6 @@ curl -X POST http://localhost:8080/flavors \
 2. Click "Traces" to find all traces, or search for a specific trace ID
 3. View the trace! You can see HTTP request down to database query from a single trace
 
-## Configure OJDBC Tracing System Properties
+## Configure JDBC tracing
 
-##### oracle.jdbc.provider.opentelemetry.enabled
-
-Set this property to `true` to enable the provider. Enabled by default.
-
-##### oracle.jdbc.provider.opentelemetry.sensitive-enabled
-
-Set this property to `true` to export sensitive data, like SQL query text. Disabled by default.
+The sample selects the `observability-trace-event-listener-provider` through its JDBC URL. For provider options such as enabling JFR, exporting sensitive attributes, or migrating to stable OpenTelemetry database semantic conventions, see the [OpenTelemetry with Oracle AI Database guide](https://oracle.github.io/spring-cloud-oracle/site/docs/database/opentelemetry-with-oracle).
