@@ -4,6 +4,7 @@
 - For Docusaurus SEO, keep only the latest released documentation version indexable. Set `noIndex: true` for the current (unreleased) version and every older version in `site/docusaurus.config.ts`, and update the version entries when releases change. Docusaurus excludes noindexed pages from its generated sitemap.
 - Code changes must have an accompanying docs change
 - Feature or bug fixes must have a line in the [changelog](./site/docs/releases/changelog.md)
+- When linking to docs, use the live docs link https://oracle.github.io/spring-cloud-oracle/site/
 
 ## Projects
 - database/starters: spring boot starters for Oracle AI Database

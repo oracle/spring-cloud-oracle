@@ -48,4 +48,4 @@ curl -X POST http://localhost:8080/flavors \
 
 ## Configure JDBC tracing
 
-The sample selects the `observability-trace-event-listener-provider` through its JDBC URL. For provider options such as enabling JFR, exporting sensitive attributes, or migrating to stable OpenTelemetry database semantic conventions, see the [OpenTelemetry with Oracle AI Database guide](../../../../site/docs/database/opentelemetry-with-oracle.md).
+The sample selects the `observability-trace-event-listener-provider` through its JDBC URL. For provider options such as enabling JFR, exporting sensitive attributes, or migrating to stable OpenTelemetry database semantic conventions, see the [OpenTelemetry with Oracle AI Database guide](https://oracle.github.io/spring-cloud-oracle/site/docs/database/opentelemetry-with-oracle).
