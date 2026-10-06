@@ -37,13 +37,13 @@
     "http-proxy-middleware": "2.0.10",
     "colord": "2.10.0",
     "image-size": "2.0.4",
-    "joi": "17.13.7",
+    "joi": "17.13.8",
     "js-yaml": "4.3.2",
     "launch-editor": "2.14.1",
     "nanoid": "3.3.18",
     "qs": "6.16.0",
     "serialize-javascript": "7.0.6",
-    "shell-quote": "1.9.0",
+    "shell-quote": "1.12.0",
     "sockjs": {
       "uuid": "14.0.1"
     },
@@ -51,7 +51,9 @@
     "webpack-bundle-analyzer": {
       "ws": "7.5.11"
     },
-    "webpack-dev-server": "5.2.6"
+    "webpack-dev-server": "5.2.6",
+    "postcss-selector-parser": "7.1.6",
+    "tinypool": "2.2.0"
   },
   "browserslist": {
     "production": [
