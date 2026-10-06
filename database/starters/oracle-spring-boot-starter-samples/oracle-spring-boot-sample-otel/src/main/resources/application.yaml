@@ -32,7 +32,7 @@ spring:
     username: testuser
     password: testpwd
     # Docker compose Oracle Free container
-    url: jdbc:oracle:thin:@localhost:1522/freepdb1?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider
+    url: jdbc:oracle:thin:@localhost:1522/freepdb1?oracle.jdbc.provider.traceEventListener=observability-trace-event-listener-provider
     # Set these to use UCP over Hikari.
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSourceImpl
