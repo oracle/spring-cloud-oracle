@@ -69,12 +69,11 @@
   </modules>
 
   <properties>
-    <java.version>21</java.version>
+    <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.root>${basedir}</project.root>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
+	<maven.compiler.release>${java.version}</maven.compiler.release>
 
     <okafka.version>23.26.1.0</okafka.version>
     <jackson.version>3.2.3</jackson.version>
