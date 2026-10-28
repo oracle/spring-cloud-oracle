@@ -12,7 +12,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
     <parent>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-parent</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2</version>
         <relativePath/>
     </parent>
 
@@ -70,7 +70,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <spring-boot.version>4.1.1</spring-boot.version>
+        <spring-boot.version>4.1.2</spring-boot.version>
         <jackson.version>3.2.3</jackson.version>
         <jackson.annotations.version>2.22</jackson.annotations.version>
         <oci-sdk.version>3.97.1</oci-sdk.version>
