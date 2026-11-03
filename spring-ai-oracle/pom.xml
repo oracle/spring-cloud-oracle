@@ -73,7 +73,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <spring-boot.version>4.1.2</spring-boot.version>
         <jackson.version>3.2.3</jackson.version>
         <jackson.annotations.version>2.22</jackson.annotations.version>
-        <oci-sdk.version>3.97.1</oci-sdk.version>
+        <oci-sdk.version>3.97.2</oci-sdk.version>
 
         <!-- Distribution management -->
         <repository.id>artifactory</repository.id>

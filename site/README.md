@@ -5,12 +5,12 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 The `content` directory contains the built, static site.
 
 Requirements:
-- latest version of Node.js
+- Node.js 20 or 22 and later (use a supported LTS release)
 
 ## Installation
 
 ```bash
-npm
+npm ci
 ```
 
 ## Local Development
