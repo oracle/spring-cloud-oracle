@@ -45,7 +45,7 @@
         <txeventq.streambinder.version>0.21.0</txeventq.streambinder.version>
         <spring.boot.version>4.1.2</spring.boot.version>
         <spring.framework.version>7.0.10</spring.framework.version>
-        <org.springframework.cloud.version>5.0.2</org.springframework.cloud.version>
+        <org.springframework.cloud.version>5.0.4</org.springframework.cloud.version>
         <oracle-spring-boot.version>26.3.0</oracle-spring-boot.version>
         <oracle-database.version>23.26.4.0.0</oracle-database.version>
         <oracle.database.security.version>21.24.0.0</oracle.database.security.version>
@@ -53,7 +53,7 @@
         <testcontainers.version>2.0.5</testcontainers.version>
 		<oracle-spring-boot-testcontainers.version>26.3.0</oracle-spring-boot-testcontainers.version>
         <jackson.annotations.version>2.22</jackson.annotations.version>
-        <jackson.version>3.2.3</jackson.version>
+        <jackson.version>3.2.4</jackson.version>
     </properties>
 
     <dependencyManagement>
@@ -181,7 +181,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.6</version>
+                <version>3.6.1</version>
                 <configuration>
                     <argLine>-XX:+EnableDynamicAgentLoading</argLine>
                 </configuration>
