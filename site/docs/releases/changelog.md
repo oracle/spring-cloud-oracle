@@ -12,23 +12,27 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 #### Next, TBD
 
+#### Documentation
+
+- Refreshed website dependencies to patch security vulnerabilities and removed obsolete dependency overrides; documented remaining upstream audit findings
+
 #### Database Starters
 
 - Replaced the legacy Oracle JDBC OpenTelemetry provider with the Oracle JDBC observability provider in the OpenTelemetry starter
 - Defaulted the UCP starter's JDBC session program to `SPRING_CLOUD_ORACLE`, preserving explicitly configured connection properties
-- Refreshed third party dependencies
+- Updated third-party dependencies
 
 #### Spring Cloud Stream Binder for TxEventQ
 
-- Refreshed third party dependencies
+- Updated third-party dependencies
 
 #### Spring AI Oracle
 
-- Refreshed third party dependencies
+- Updated third-party dependencies
 
 #### Spring Cloud OCI
 
-- Refreshed third party dependencies
+- Updated third-party dependencies
 
 #### 2.0.4, September 21st, 2026
 
