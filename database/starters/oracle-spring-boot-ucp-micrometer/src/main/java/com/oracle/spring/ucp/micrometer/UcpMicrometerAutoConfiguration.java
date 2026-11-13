@@ -4,13 +4,14 @@ package com.oracle.spring.ucp.micrometer;
 
 import javax.sql.DataSource;
 
-import io.micrometer.core.instrument.binder.MeterBinder;
-import oracle.ucp.jdbc.PoolDataSource;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.jdbc.DataSourceUnwrapper;
 import org.springframework.context.annotation.Bean;
+
+import io.micrometer.core.instrument.binder.MeterBinder;
+import oracle.ucp.jdbc.PoolDataSource;
 
 /**
  * Auto-configuration for UCP Micrometer metrics.
@@ -22,7 +23,8 @@ public class UcpMicrometerAutoConfiguration {
     @Bean
     MeterBinder ucpMeterBinder(ListableBeanFactory beanFactory) {
         return registry -> beanFactory.getBeansOfType(DataSource.class).forEach((beanName, dataSource) -> {
-            if (dataSource instanceof PoolDataSource poolDataSource) {
+            final PoolDataSource poolDataSource = DataSourceUnwrapper.unwrap(dataSource, PoolDataSource.class);
+            if (poolDataSource != null) {
                 new UcpMetrics(poolDataSource, beanName).bindTo(registry);
             }
         });

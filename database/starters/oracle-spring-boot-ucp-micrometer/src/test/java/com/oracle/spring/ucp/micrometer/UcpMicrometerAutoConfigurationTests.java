@@ -8,17 +8,20 @@ import java.lang.reflect.Proxy;
 
 import javax.sql.DataSource;
 
+import org.junit.jupiter.api.Test;
+import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.micrometer.metrics.autoconfigure.MeterRegistryCustomizer;
+import org.springframework.boot.micrometer.metrics.autoconfigure.MetricsAutoConfiguration;
+import org.springframework.boot.micrometer.metrics.autoconfigure.export.simple.SimpleMetricsExportAutoConfiguration;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.jdbc.datasource.DelegatingDataSource;
+
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.micrometer.metrics.autoconfigure.MeterRegistryCustomizer;
-import org.springframework.boot.micrometer.metrics.autoconfigure.MetricsAutoConfiguration;
-import org.springframework.boot.micrometer.metrics.autoconfigure.export.simple.SimpleMetricsExportAutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 class UcpMicrometerAutoConfigurationTests {
 
@@ -36,9 +39,13 @@ class UcpMicrometerAutoConfigurationTests {
     void bindsEveryUcpPool() throws Exception {
         PoolDataSource firstPool = pool("orders");
         PoolDataSource secondPool = pool("billing");
+        PoolDataSource proxiedPool = (PoolDataSource) new ProxyFactory(pool("proxied")).getProxy();
+        DataSource delegatedPool = new DelegatingDataSource(pool("delegated"));
 
         contextRunner.withBean("ordersDataSource", DataSource.class, () -> firstPool)
                 .withBean("billingDataSource", DataSource.class, () -> secondPool)
+                .withBean("proxiedDataSource", DataSource.class, () -> proxiedPool)
+                .withBean("delegatedDataSource", DataSource.class, () -> delegatedPool)
                 .withBean(MeterRegistry.class, SimpleMeterRegistry::new)
                 .run(context -> {
                     MeterRegistry registry = context.getBean(MeterRegistry.class);
@@ -52,7 +59,15 @@ class UcpMicrometerAutoConfigurationTests {
                             .tag(POOL_NAME_ATTRIBUTE, "billing")
                             .tag(STATE_ATTRIBUTE, "idle")
                             .gauge()).isNotNull();
-                    assertThat(registry.find("db.client.connection.count").meters()).hasSize(4);
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "proxied")
+                            .tag(STATE_ATTRIBUTE, "idle")
+                            .gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count")
+                            .tag(POOL_NAME_ATTRIBUTE, "delegated")
+                            .tag(STATE_ATTRIBUTE, "idle")
+                            .gauge()).isNotNull();
+                    assertThat(registry.find("db.client.connection.count").meters()).hasSize(8);
                 });
     }
 
