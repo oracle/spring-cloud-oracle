@@ -1,6 +1,6 @@
 /*
  ** TxEventQ Support for Spring Cloud Stream
- ** Copyright (c) 2023, 2026 Oracle and/or its affiliates.
+ ** Copyright (c) 2023, 2026, Oracle and/or its affiliates.
  **
  ** This file has been modified by Oracle Corporation.
  */
@@ -44,6 +44,11 @@ import org.springframework.util.SerializationUtils;
 @SuppressFBWarnings(value = "EI2",
         justification = "The JMS connection is intentionally retained as message metadata for binder callbacks.")
 public class SpecCompliantJmsHeaderMapper extends DefaultJmsHeaderMapper {
+
+    public SpecCompliantJmsHeaderMapper() {
+        // Preserve application and binder metadata without accepting remote routing or type hints.
+        super("!replyChannel", "!errorChannel", "!routingSlip", "!json__*", "*");
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(
             SpecCompliantJmsHeaderMapper.class
