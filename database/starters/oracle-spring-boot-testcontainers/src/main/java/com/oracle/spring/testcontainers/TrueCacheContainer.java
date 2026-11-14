@@ -123,7 +123,7 @@ public class TrueCacheContainer extends OracleFreeContainer<TrueCacheContainer> 
         if (services.isEmpty()) {
             throw new IllegalStateException("Configure at least one True Cache service before requesting its JDBC URL");
         }
-        return "jdbc:oracle:thin:@//" + getHost() + ":" + getOraclePort() + "/" + services.getFirst().trueCacheService();
+        return "jdbc:oracle:thin:@//" + getHost() + ":" + getOraclePort() + "/" + services.get(0).trueCacheService();
     }
 
     @Override
