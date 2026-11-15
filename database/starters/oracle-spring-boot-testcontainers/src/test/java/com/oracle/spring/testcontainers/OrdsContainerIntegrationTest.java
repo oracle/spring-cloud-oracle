@@ -129,7 +129,7 @@ class OrdsContainerIntegrationTest {
         assertNotNull(databaseVersion.instanceName(), "Expected instance metadata in ORDS response");
         assertNotNull(databaseVersion.instanceVersion(), "Expected instance version metadata in ORDS response");
         assertFalse(databaseVersion.instanceVersion().isEmpty(), "Expected at least one instance version entry");
-        assertNotNull(databaseVersion.instanceVersion().getFirst().banner(),
+        assertNotNull(databaseVersion.instanceVersion().get(0).banner(),
                 "Expected version banner in ORDS response");
     }
 
