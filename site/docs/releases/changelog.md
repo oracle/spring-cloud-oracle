@@ -20,6 +20,7 @@ List of upcoming and historic changes to Spring Cloud Oracle.
 
 - Replaced the legacy Oracle JDBC OpenTelemetry provider with the Oracle JDBC observability provider in the OpenTelemetry starter
 - Defaulted the UCP starter's JDBC session program to `SPRING_CLOUD_ORACLE`, preserving explicitly configured connection properties
+- Fixed the JSON Relational Duality View builder to use the simple class name, not the fully qualified class name, as the default table and view name for classes without `@Table`
 - Updated third-party dependencies
 
 #### Spring Cloud Stream Binder for TxEventQ

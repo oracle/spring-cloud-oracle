@@ -91,6 +91,8 @@ create force editionable json relational duality view actor_dv as actor @insert 
 }
 ```
 
+The view name is taken from `@JsonRelationalDualityView(name = ...)` and the table name from `@Table(name = ...)`. If the class has no `@Table` name, the lower case simple class name is used for the table, and the view is named `<table>_dv`. For example, a plain `com.example.Customer` class without `@Table` produces `customer_dv as customer`.
+
 ## Control generation through Spring properties
 
 We can configure duality view generation in Spring JPA settings. The same ddl-auto values for JPA can be used for duality views:

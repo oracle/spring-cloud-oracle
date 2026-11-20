@@ -1,4 +1,4 @@
-// Copyright (c) 2025, Oracle and/or its affiliates.
+// Copyright (c) 2025, 2026, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 package com.oracle.spring.json.duality.builder;
@@ -62,14 +62,14 @@ public final class Annotations {
         if (tableAnnotation != null && StringUtils.hasText(tableAnnotation.name())) {
             return tableAnnotation.name().toLowerCase() + suffix;
         }
-        return javaType.getName().toLowerCase() + suffix;
+        return javaType.getSimpleName().toLowerCase() + suffix;
     }
 
     static String getTableName(Class<?> javaType, Table tableAnnotation) {
         if (tableAnnotation != null && StringUtils.hasText(tableAnnotation.name())) {
             return tableAnnotation.name().toLowerCase();
         }
-        return javaType.getName().toLowerCase();
+        return javaType.getSimpleName().toLowerCase();
     }
 
     static boolean isFieldIncluded(Field f) {
